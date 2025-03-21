@@ -1,0 +1,80 @@
+{
+  "C_Cpp_Runner.cCompilerPath": "gcc",
+  "C_Cpp_Runner.cppCompilerPath": "g++",
+  "C_Cpp_Runner.debuggerPath": "gdb",
+  "C_Cpp_Runner.cStandard": "",
+  "C_Cpp_Runner.cppStandard": "",
+  "C_Cpp_Runner.msvcBatchPath": "C:/Program Files/Microsoft Visual Studio/VR_NR/Community/VC/Auxiliary/Build/vcvarsall.bat",
+  "C_Cpp_Runner.useMsvc": false,
+  "C_Cpp_Runner.warnings": [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wshadow",
+    "-Wformat=2",
+    "-Wcast-align",
+    "-Wconversion",
+    "-Wsign-conversion",
+    "-Wnull-dereference"
+  ],
+  "C_Cpp_Runner.msvcWarnings": [
+    "/W4",
+    "/permissive-",
+    "/w14242",
+    "/w14287",
+    "/w14296",
+    "/w14311",
+    "/w14826",
+    "/w44062",
+    "/w44242",
+    "/w14905",
+    "/w14906",
+    "/w14263",
+    "/w44265",
+    "/w14928"
+  ],
+  "C_Cpp_Runner.enableWarnings": true,
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.compilerArgs": [],
+  "C_Cpp_Runner.linkerArgs": [],
+  "C_Cpp_Runner.includePaths": [
+    "c:\\Users\\34118\\Desktop\\new\\FATFS\\Target",
+    "c:\\Users\\34118\\Desktop\\new\\FATFS\\App",
+    "c:\\Users\\34118\\Desktop\\new\\Core\\Inc",
+    "c:\\Users\\34118\\Desktop\\new\\Drivers\\STM32F4xx_HAL_Driver\\Inc",
+    "c:\\Users\\34118\\Desktop\\new\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
+    "c:\\Users\\34118\\Desktop\\new\\Middlewares\\Third_Party\\FatFs\\src",
+    "c:\\Users\\34118\\Desktop\\new\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
+    "c:\\Users\\34118\\Desktop\\new\\Drivers\\CMSIS\\Include",
+    "C:\\Users\\34118\\AppData\\Local\\Keil_v5\\ARM\\ARMCC\\include",
+    "C:\\Users\\34118\\AppData\\Local\\Keil_v5\\ARM\\ARMCC\\include\\arm_linux",
+    "C:\\Users\\34118\\AppData\\Local\\Keil_v5\\ARM\\ARMCC\\include\\arm_linux_compat",
+    "C:\\Users\\34118\\AppData\\Local\\Keil_v5\\ARM\\ARMCC\\include\\rw",
+    "c:\\Users\\34118\\Desktop\\new\\MDK-ARM",
+    "c:\\Users\\34118\\Desktop\\new\\Core\\Src",
+    "c:\\Users\\34118\\Desktop\\new\\Drivers\\STM32F4xx_HAL_Driver\\Src",
+    "c:\\Users\\34118\\Desktop\\new\\Middlewares\\Third_Party\\FatFs\\src\\option"
+  ],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ],
+  "C_Cpp_Runner.useAddressSanitizer": false,
+  "C_Cpp_Runner.useUndefinedSanitizer": false,
+  "C_Cpp_Runner.useLeakSanitizer": false,
+  "C_Cpp_Runner.showCompilationTime": false,
+  "C_Cpp_Runner.useLinkTimeOptimization": false,
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "files.associations": {
+    "fatfs.h": "c",
+    "ff.h": "c"
+  }
+}
