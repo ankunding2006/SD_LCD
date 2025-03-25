@@ -81,6 +81,7 @@ void led3_off(void);
 void all_leds_on(void);
 void all_leds_off(void);
 void all_leds_toggle(void);
+void Before_Main(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -138,6 +139,7 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216,YELLOW, BLACK);
+  Before_Main();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -284,7 +286,7 @@ void led_off(void)
 }
 
 // 添加app_main函数的实现
-void app_main(void)
+void Before_Main(void)
 {
   printf("App main started\r\n");
   
@@ -300,9 +302,6 @@ void app_main(void)
   led3_on();
   HAL_Delay(500);
   led3_off();
-  
-  // 启动舵机PWM输出
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 }
 /* USER CODE END 4 */
 

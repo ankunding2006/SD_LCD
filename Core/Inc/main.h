@@ -40,8 +40,6 @@ extern "C" {
 extern lcd lcd_desc;
 extern lcd_io lcd_io_desc;
 extern uint16_t line_buffer[320];
-extern uint8_t angle; // 添加舵机角度变量声明
-extern TIM_HandleTypeDef htim2; // 添加定时器句柄声明
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

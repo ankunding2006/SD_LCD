@@ -27,71 +27,11 @@ Project File Date:  03/25/2025
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Downloads'
-compiling syscall.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Middlewares/Third_Party/FatFs/src/option/syscall.c: 0 warnings, 1 error
-compiling dma.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/dma.c: 0 warnings, 1 error
-compiling sdio.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/sdio.c: 0 warnings, 1 error
-compiling stm32f4xx_it.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/stm32f4xx_it.c: 0 warnings, 1 error
-compiling spi.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/spi.c: 0 warnings, 1 error
-compiling stm32f4xx_hal_msp.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/stm32f4xx_hal_msp.c: 0 warnings, 1 error
-compiling usart.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/usart.c: 0 warnings, 1 error
-compiling gpio.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/gpio.c: 0 warnings, 1 error
 compiling main.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Core/Src/main.c(305): warning:  #223-D: function "HAL_TIM_PWM_Start" declared implicitly
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-../Core/Src/main.c(305): error:  #20: identifier "TIM_CHANNEL_1" is undefined
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-../Core/Src/main.c: 1 warning, 2 errors
-compiling diskio.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Middlewares/Third_Party/FatFs/src/diskio.c: 0 warnings, 1 error
-compiling ff_gen_drv.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Middlewares/Third_Party/FatFs/src/ff_gen_drv.c: 0 warnings, 1 error
-compiling sd_diskio.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../FATFS/Target/sd_diskio.c: 0 warnings, 1 error
-compiling ff.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../Middlewares/Third_Party/FatFs/src/ff.c: 0 warnings, 1 error
-compiling lcd_port.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-..\Drivers\BSP\LCD_ST7789\lcd_port.c: 0 warnings, 1 error
-compiling fatfs.c...
-../Core/Inc/main.h(44): error:  #20: identifier "TIM_HandleTypeDef" is undefined
-  extern TIM_HandleTypeDef htim2; // 添加定时器句柄声�?
-../FATFS/App/fatfs.c: 0 warnings, 1 error
-"Downloads\Downloads.axf" - 16 Error(s), 1 Warning(s).
+linking...
+Program Size: Code=23332 RO-data=14044 RW-data=268 ZI-data=5732  
+FromELF: creating hex file...
+"Downloads\Downloads.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -114,8 +54,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Target not created.
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
