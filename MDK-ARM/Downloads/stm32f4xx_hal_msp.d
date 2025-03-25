@@ -37,3 +37,4 @@ downloads\stm32f4xx_hal_msp.o: ../Drivers/BSP/LCD_ST7789/lcd.h
 downloads\stm32f4xx_hal_msp.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\stm32f4xx_hal_msp.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\stm32f4xx_hal_msp.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\stm32f4xx_hal_msp.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

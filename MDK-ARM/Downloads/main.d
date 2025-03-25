@@ -37,6 +37,7 @@ downloads\main.o: ../Drivers/BSP/LCD_ST7789/lcd.h
 downloads\main.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\main.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\main.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\main.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\main.o: ../Core/Inc/dma.h
 downloads\main.o: ../FATFS/App/fatfs.h
 downloads\main.o: ../Middlewares/Third_Party/FatFs/src/ff.h

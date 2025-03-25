@@ -140,7 +140,7 @@ int main(void)
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   memset(rx_buffer, 0, BUFFER_SIZE);  // 清空缓冲区
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // 确保IDLE中断使能
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // IDLE中断使能
   HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE);
   Before_Main();
   /* USER CODE END 2 */
@@ -149,19 +149,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (recv_end_flag == 1) // 接收完成标志
-    {
-
-      DMA_Usart_Send(rx_buffer, rx_len);
-      rx_len = 0;        // 清除计数
-      recv_end_flag = 0; // 清除接收结束标志位
-      //			for(uint8_t i=0;i<rx_len;i++)
-      //				{
-      //					rx_buffer[i]=0;//清接收缓存
-      //				}
-      memset(rx_buffer, 0, rx_len);
-      HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE); //重新使能DMA接收
-    }
+    DMA_Usart1_Echo(); // 串口回显函数
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

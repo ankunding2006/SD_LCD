@@ -217,7 +217,7 @@ void USART1_IRQHandler(void)
 		//temp = huart1.Instance->SR;  //清除状态寄存器SR,读取SR寄存器可以实现清除SR寄存器的功能
 		//temp = huart1.Instance->DR; //读取数据寄存器中的数据
 		//这两句和上面那句等效
-		HAL_UART_DMAStop(&huart1); //
+		HAL_UART_DMAStop(&huart1); 
 		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);// 获取DMA中未传输的数据个数   
 		//temp  = hdma_usart1_rx.Instance->NDTR;//读取NDTR寄存器 获取DMA中未传输的数据个数，
 		//这句和上面那句等效

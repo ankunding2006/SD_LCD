@@ -45,6 +45,7 @@ void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void DMA_Usart_Send(uint8_t *buf,uint8_t len);//串口发送封装
+void DMA_Usart1_Echo(void);//串口回显函数
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

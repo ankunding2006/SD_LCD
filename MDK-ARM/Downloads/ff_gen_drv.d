@@ -42,5 +42,6 @@ downloads\ff_gen_drv.o: ../Drivers/BSP/LCD_ST7789/lcd.h
 downloads\ff_gen_drv.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\ff_gen_drv.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\ff_gen_drv.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\ff_gen_drv.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\ff_gen_drv.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\ff_gen_drv.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

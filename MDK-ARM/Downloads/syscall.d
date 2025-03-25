@@ -40,5 +40,6 @@ downloads\syscall.o: ../Drivers/BSP/LCD_ST7789/lcd.h
 downloads\syscall.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\syscall.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\syscall.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\syscall.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\syscall.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\syscall.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

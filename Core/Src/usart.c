@@ -1,29 +1,29 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    usart.c
-  * @brief   This file provides code for the configuration
-  *          of the USART instances.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    usart.c
+ * @brief   This file provides code for the configuration
+ *          of the USART instances.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-volatile uint8_t rx_len = 0;  //接收一帧数据的长度
-volatile uint8_t recv_end_flag = 0; //一帧数据接收完成标志
-uint8_t rx_buffer[100]={0};  //接收数据缓存数组
+volatile uint8_t rx_len = 0;        // 接收一帧数据的长度
+volatile uint8_t recv_end_flag = 0; // 一帧数据接收完成标志
+uint8_t rx_buffer[100] = {0};       // 接收数据缓存数组
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -55,20 +55,19 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // 使能IDLE中断
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); // 使能IDLE中断
   /* USER CODE END USART1_Init 2 */
-
 }
 
-void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
+void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(uartHandle->Instance==USART1)
+  if (uartHandle->Instance == USART1)
   {
-  /* USER CODE BEGIN USART1_MspInit 0 */
+    /* USER CODE BEGIN USART1_MspInit 0 */
 
-  /* USER CODE END USART1_MspInit 0 */
+    /* USER CODE END USART1_MspInit 0 */
     /* USART1 clock enable */
     __HAL_RCC_USART1_CLK_ENABLE();
 
@@ -77,7 +76,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PA9     ------> USART1_TX
     PA10     ------> USART1_RX
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+    GPIO_InitStruct.Pin = GPIO_PIN_9 | GPIO_PIN_10;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -101,7 +100,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
       Error_Handler();
     }
 
-    __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart1_tx);
+    __HAL_LINKDMA(uartHandle, hdmatx, hdma_usart1_tx);
 
     /* USART1_RX Init */
     hdma_usart1_rx.Instance = DMA2_Stream2;
@@ -119,25 +118,25 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
       Error_Handler();
     }
 
-    __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart1_rx);
+    __HAL_LINKDMA(uartHandle, hdmarx, hdma_usart1_rx);
 
     /* USART1 interrupt Init */
     HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
-  /* USER CODE BEGIN USART1_MspInit 1 */
+    /* USER CODE BEGIN USART1_MspInit 1 */
 
-  /* USER CODE END USART1_MspInit 1 */
+    /* USER CODE END USART1_MspInit 1 */
   }
 }
 
-void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
+void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 {
 
-  if(uartHandle->Instance==USART1)
+  if (uartHandle->Instance == USART1)
   {
-  /* USER CODE BEGIN USART1_MspDeInit 0 */
+    /* USER CODE BEGIN USART1_MspDeInit 0 */
 
-  /* USER CODE END USART1_MspDeInit 0 */
+    /* USER CODE END USART1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_USART1_CLK_DISABLE();
 
@@ -145,7 +144,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA9     ------> USART1_TX
     PA10     ------> USART1_RX
     */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9 | GPIO_PIN_10);
 
     /* USART1 DMA DeInit */
     HAL_DMA_DeInit(uartHandle->hdmatx);
@@ -153,9 +152,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
     /* USART1 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART1_IRQn);
-  /* USER CODE BEGIN USART1_MspDeInit 1 */
+    /* USER CODE BEGIN USART1_MspDeInit 1 */
 
-  /* USER CODE END USART1_MspDeInit 1 */
+    /* USER CODE END USART1_MspDeInit 1 */
   }
 }
 
@@ -168,16 +167,13 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 * 返 回 值: 无
 *********************************************************************************************************
 */
-void DMA_Usart_Send(uint8_t *buf,uint8_t len)//串口发送封装
+void DMA_Usart_Send(uint8_t *buf, uint8_t len) // 串口发送封装
 {
- if(HAL_UART_Transmit_DMA(&huart1, buf,len)!= HAL_OK) //判断是否发送正常，如果出现异常则进入异常中断函数
+  if (HAL_UART_Transmit_DMA(&huart1, buf, len) != HAL_OK) // 判断是否发送正常，如果出现异常则进入异常中断函数
   {
-   Error_Handler();
+    Error_Handler();
   }
-
 }
-
-
 
 /*
 *********************************************************************************************************
@@ -187,9 +183,33 @@ void DMA_Usart_Send(uint8_t *buf,uint8_t len)//串口发送封装
 * 返 回 值: 无
 *********************************************************************************************************
 */
-void DMA_Usart1_Read(uint8_t *Data,uint8_t len)//串口接收封装
+void DMA_Usart1_Read(uint8_t *Data, uint8_t len) // 串口接收封装
 {
-	HAL_UART_Receive_DMA(&huart1,Data,len);//重新打开DMA接收
+  HAL_UART_Receive_DMA(&huart1, Data, len); // 重新打开DMA接收
+}
+
+/**
+ * @brief 串口回显函数
+ * @param 无
+ * @retval 无
+ *
+ */
+
+void DMA_Usart1_Echo(void)
+{
+  if (recv_end_flag == 1) // 接收完成标志
+  {
+
+    DMA_Usart_Send(rx_buffer, rx_len);
+    rx_len = 0;        // 清除计数
+    recv_end_flag = 0; // 清除接收结束标志位
+    //			for(uint8_t i=0;i<rx_len;i++)
+    //				{
+    //					rx_buffer[i]=0;//清接收缓存
+    //				}
+    memset(rx_buffer, 0, rx_len);
+    HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE); // 重新使能DMA接收
+  }
 }
 
 /* USER CODE END 1 */

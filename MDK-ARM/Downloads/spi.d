@@ -38,3 +38,4 @@ downloads\spi.o: ../Drivers/BSP/LCD_ST7789/lcd.h
 downloads\spi.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\spi.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\spi.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\spi.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
