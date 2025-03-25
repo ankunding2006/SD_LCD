@@ -62,5 +62,6 @@
     "main.h": "c",
     "lcd_port.h": "c",
     "lcd.h": "c"
-  }
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }

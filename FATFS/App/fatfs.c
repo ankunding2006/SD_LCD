@@ -127,7 +127,7 @@ void app_fatfs(void)
             /*##-8- Read data from the text file ###########################*/
             res = f_read(&MyFile, rtext, sizeof(rtext), (UINT *)&bytesread);
 
-            //lcd显示读取的内容
+            //lcd显示读取的内�?
             lcd_set_font(&lcd_desc, FONT_1608,BLUE, BLACK);
             lcd_print(&lcd_desc, 0, 150, "Read from file: %s", rtext);
 
