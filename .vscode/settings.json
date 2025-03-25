@@ -61,7 +61,8 @@
     "fatfs.h": "c",
     "main.h": "c",
     "lcd_port.h": "c",
-    "lcd.h": "c"
+    "lcd.h": "c",
+    "usart.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

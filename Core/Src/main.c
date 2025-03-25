@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,9 +95,9 @@ int fputc(int ch, FILE *f)
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -138,7 +138,10 @@ int main(void)
 
   led_off();
   app_main();
-  lcd_set_font(&lcd_desc, FONT_3216,YELLOW, BLACK);
+  lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
+  memset(rx_buffer, 0, BUFFER_SIZE);  // 清空缓冲区
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // 确保IDLE中断使能
+  HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE);
   Before_Main();
   /* USER CODE END 2 */
 
@@ -146,6 +149,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if (recv_end_flag == 1) // 接收完成标志
+    {
+
+      DMA_Usart_Send(rx_buffer, rx_len);
+      rx_len = 0;        // 清除计数
+      recv_end_flag = 0; // 清除接收结束标志位
+      //			for(uint8_t i=0;i<rx_len;i++)
+      //				{
+      //					rx_buffer[i]=0;//清接收缓存
+      //				}
+      memset(rx_buffer, 0, rx_len);
+      HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE); //重新使能DMA接收
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -154,22 +170,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -184,9 +200,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -285,12 +300,12 @@ void led_off(void)
   led1_off();
 }
 
-// 添加app_main函数的实现
+// 添加app_main函数的实�?
 void Before_Main(void)
 {
   printf("App main started\r\n");
-  
-  // 初始化演示 - 循环点亮所有LED
+
+  // 初始化演�? - 循环点亮�?有LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();
@@ -306,9 +321,9 @@ void Before_Main(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -320,14 +335,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

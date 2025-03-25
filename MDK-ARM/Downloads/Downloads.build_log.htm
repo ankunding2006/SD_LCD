@@ -28,10 +28,13 @@ Project File Date:  03/25/2025
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Downloads'
 compiling main.c...
+../Core/Src/main.c(142): warning:  #223-D: function "memset" declared implicitly
+    memset(rx_buffer, 0, BUFFER_SIZE);  // 清空缓冲�?
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=23332 RO-data=14044 RW-data=268 ZI-data=5732  
+Program Size: Code=24500 RO-data=14044 RW-data=268 ZI-data=5924  
 FromELF: creating hex file...
-"Downloads\Downloads.axf" - 0 Error(s), 0 Warning(s).
+"Downloads\Downloads.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
