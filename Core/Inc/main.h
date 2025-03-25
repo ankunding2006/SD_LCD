@@ -40,6 +40,8 @@ extern "C" {
 extern lcd lcd_desc;
 extern lcd_io lcd_io_desc;
 extern uint16_t line_buffer[320];
+extern uint8_t angle; // 添加舵机角度变量声明
+extern TIM_HandleTypeDef htim2; // 添加定时器句柄声明
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,14 +61,30 @@ void Error_Handler(void);
 void led_toggle(void);
 void led_off(void);
 void led_on(void);
+void led1_toggle(void);
+void led1_on(void);
+void led1_off(void);
+void led2_toggle(void);
+void led2_on(void);
+void led2_off(void);
+void led3_toggle(void);
+void led3_on(void);
+void led3_off(void);
+void all_leds_on(void);
+void all_leds_off(void);
+void all_leds_toggle(void);
 void app_main(void);
 void app_fatfs(void);
 int fputc(int ch, FILE *f);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin GPIO_PIN_0
-#define LED_GPIO_Port GPIOC
+#define LED1_Pin GPIO_PIN_0
+#define LED1_GPIO_Port GPIOC
+#define LED2_Pin GPIO_PIN_1
+#define LED2_GPIO_Port GPIOC
+#define LED3_Pin GPIO_PIN_2
+#define LED3_GPIO_Port GPIOC
 #define LCD_SCK_Pin GPIO_PIN_5
 #define LCD_SCK_GPIO_Port GPIOA
 #define LCD_DC_Pin GPIO_PIN_6

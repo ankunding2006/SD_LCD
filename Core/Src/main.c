@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
@@ -68,9 +69,18 @@ lcd lcd_desc = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void led_toggle(void);
-void led_on(void);
-void led_off(void);
+void led1_toggle(void);
+void led1_on(void);
+void led1_off(void);
+void led2_toggle(void);
+void led2_on(void);
+void led2_off(void);
+void led3_toggle(void);
+void led3_on(void);
+void led3_off(void);
+void all_leds_on(void);
+void all_leds_off(void);
+void all_leds_toggle(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -112,6 +122,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_USART1_UART_Init();
   MX_FATFS_Init();
@@ -186,20 +197,112 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-// LED toggle function
+// LED1 控制函数
+void led1_toggle(void)
+{
+  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+}
+
+void led1_on(void)
+{
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+}
+
+void led1_off(void)
+{
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+}
+
+// LED2 控制函数
+void led2_toggle(void)
+{
+  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+}
+
+void led2_on(void)
+{
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+}
+
+void led2_off(void)
+{
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
+}
+
+// LED3 控制函数
+void led3_toggle(void)
+{
+  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+}
+
+void led3_on(void)
+{
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
+}
+
+void led3_off(void)
+{
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
+}
+
+// 全部LED控制函数
+void all_leds_on(void)
+{
+  led1_on();
+  led2_on();
+  led3_on();
+}
+
+void all_leds_off(void)
+{
+  led1_off();
+  led2_off();
+  led3_off();
+}
+
+void all_leds_toggle(void)
+{
+  led1_toggle();
+  led2_toggle();
+  led3_toggle();
+}
+
+// 为了兼容原来的函数，保留这些函数但修改为使用LED1
 void led_toggle(void)
 {
-  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+  led1_toggle();
 }
-// LED on function
-void led_off(void)
-{
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-}
-// LED off function
+
 void led_on(void)
 {
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  led1_on();
+}
+
+void led_off(void)
+{
+  led1_off();
+}
+
+// 添加app_main函数的实现
+void app_main(void)
+{
+  printf("App main started\r\n");
+  
+  // 初始化演示 - 循环点亮所有LED
+  all_leds_off();
+  HAL_Delay(500);
+  led1_on();
+  HAL_Delay(500);
+  led1_off();
+  led2_on();
+  HAL_Delay(500);
+  led2_off();
+  led3_on();
+  HAL_Delay(500);
+  led3_off();
+  
+  // 启动舵机PWM输出
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 }
 /* USER CODE END 4 */
 
