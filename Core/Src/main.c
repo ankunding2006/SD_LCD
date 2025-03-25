@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
@@ -49,6 +48,7 @@
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
+uint8_t angle = 0; // 添加舵机角度变量
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
@@ -68,7 +68,9 @@ lcd lcd_desc = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void led_toggle(void);
+void led_on(void);
+void led_off(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -110,7 +112,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_USART1_UART_Init();
   MX_FATFS_Init();
@@ -126,15 +127,12 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216,YELLOW, BLACK);
-  int count = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    lcd_print(&lcd_desc, 0, 120, "> count:%d", count++);
-    HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -2,6 +2,7 @@
 "downloads\startup_stm32f407xx.o"
 "downloads\main.o"
 "downloads\gpio.o"
+"downloads\dma.o"
 "downloads\sdio.o"
 "downloads\spi.o"
 "downloads\usart.o"
