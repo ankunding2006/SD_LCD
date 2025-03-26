@@ -31,6 +31,8 @@ downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_
 downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h
 downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h
 downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
+downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 downloads\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 downloads\stm32f4xx_it.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 downloads\stm32f4xx_it.o: ../Drivers/BSP/LCD_ST7789/lcd.h
@@ -41,4 +43,3 @@ downloads\stm32f4xx_it.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\
 downloads\stm32f4xx_it.o: ../Core/Inc/LED.h
 downloads\stm32f4xx_it.o: ../Core/Inc/main.h
 downloads\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
-downloads\stm32f4xx_it.o: ../Core/Inc/usart.h

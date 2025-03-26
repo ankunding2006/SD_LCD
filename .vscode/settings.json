@@ -62,7 +62,10 @@
     "main.h": "c",
     "lcd_port.h": "c",
     "lcd.h": "c",
-    "usart.h": "c"
+    "usart.h": "c",
+    "usmart_port.h": "c",
+    "usmart.h": "c",
+    "sys.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

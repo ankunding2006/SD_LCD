@@ -18,12 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
-#include "usart.h"
+#include "tim.h"
 #include "gpio.h"
+#include "delay.h"
+#include "usart.h"
+#include "usmart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -74,12 +76,7 @@ void Before_Main(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// fputc function for printf
-int fputc(int ch, FILE *f)
-{
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
-  return ch;
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -111,12 +108,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_SDIO_SD_Init();
-  MX_USART1_UART_Init();
   MX_FATFS_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  delay_init(168);     /* 延时初始化 */
+  usart_init(115200);  /* 串口初始化为115200 */
+  usmart_dev.init(84); /* USMART初始化 */
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
@@ -127,9 +126,6 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  memset(rx_buffer, 0, BUFFER_SIZE);  // 清空缓冲区
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // IDLE中断使能
-  HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE);
   Before_Main();
   /* USER CODE END 2 */
 
@@ -137,7 +133,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    DMA_Usart1_Echo(); // 串口回显函数
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -196,7 +191,7 @@ void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // 初始化演�? - 循环点亮�?有LED
+  // 初始化演�?? - 循环点亮�??有LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();
