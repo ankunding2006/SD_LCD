@@ -39,3 +39,5 @@ downloads\dma.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\dma.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\dma.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\dma.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\dma.o: ../Core/Inc/LED.h
+downloads\dma.o: ../Core/Inc/main.h

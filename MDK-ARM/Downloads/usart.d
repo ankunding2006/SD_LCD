@@ -39,3 +39,5 @@ downloads\usart.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\usart.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\usart.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\usart.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\usart.o: ../Core/Inc/LED.h
+downloads\usart.o: ../Core/Inc/main.h

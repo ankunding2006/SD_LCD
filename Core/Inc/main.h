@@ -34,6 +34,7 @@ extern "C" {
 #include <stdio.h>
 #include "lcd.h"
 #include <string.h>
+#include "LED.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

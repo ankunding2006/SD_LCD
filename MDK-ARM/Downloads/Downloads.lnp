@@ -8,6 +8,7 @@
 "downloads\usart.o"
 "downloads\stm32f4xx_it.o"
 "downloads\stm32f4xx_hal_msp.o"
+"downloads\led.o"
 "downloads\bsp_driver_sd.o"
 "downloads\sd_diskio.o"
 "downloads\fatfs.o"

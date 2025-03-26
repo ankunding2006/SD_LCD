@@ -42,6 +42,8 @@ downloads\fatfs.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\fatfs.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\fatfs.o: ../Core/Inc/LED.h
+downloads\fatfs.o: ../Core/Inc/main.h
 downloads\fatfs.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 downloads\fatfs.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
