@@ -231,7 +231,7 @@ void MX_TIM9_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM9_Init 2 */
-  //开启PWM输出
+  //�?启PWM输出
   HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_2);
   /* USER CODE END TIM9_Init 2 */

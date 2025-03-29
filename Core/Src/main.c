@@ -30,31 +30,32 @@
 #include <stdlib.h>
 #include "encoder.h" 
 #include "control.h" 
+// ÄãºÃµÄ
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-u8 Way_Angle = 1;                                                                                                   // èŽ·å–è§’åº¦çš„ç®—æ³•ï¼Œ1ï¼šå››å…ƒæ•°  2ï¼šå¡å°”æ›¼  3ï¼šäº’è¡¥æ»¤ï¿½?
-u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // è“ç‰™é¥æŽ§ç›¸å…³çš„å˜ï¿½?
-u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // ç”µæœºåœæ­¢æ ‡å¿—ä½å’Œæ˜¾ç¤ºæ ‡å¿—ï¿½?  é»˜è®¤åœæ­¢ æ˜¾ç¤ºæ‰“å¼€
-int Motor_Left, Motor_Right;                                                                                        // ç”µæœºPWMå˜é‡ åº”æ˜¯Motorï¿½? å‘Motoè‡´æ•¬
-int Temperature;                                                                                                    // æ¸©åº¦å˜é‡
-int Voltage, Middle_angle;                                                                                          // ç”µæ± ç”µåŽ‹é‡‡æ ·ç›¸å…³çš„å˜ï¿½?
-float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // å¹³è¡¡å€¾è§’ å¹³è¡¡ï¿½?èžºä»ª è½¬å‘ï¿½?èžºä»ª
-u8 LD_Successful_Receive_flag;                                                                                      // é›·è¾¾æˆåŠŸæŽ¥æ”¶æ•°æ®æ ‡å¿—ï¿½?
-u8 Mode = 0;                                                                                                        // æ¨¡å¼é€‰æ‹©ï¼Œé»˜è®¤æ˜¯æ™®ï¿½?ï¿½çš„æŽ§åˆ¶æ¨¡å¼
-u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCDä¸­ï¿½?ï¿½å’Œé˜ˆï¿½??
-u16 ADV[128] = {0};                                                                                                 // å­˜æ”¾CCDçš„æ•°æ®çš„æ•°ç»„
-u16 determine;                                                                                                      // é›·è¾¾è·Ÿéšæ¨¡å¼çš„ä¸€ä¸ªæ ‡å¿—ä½
-float Move_X, Move_Z;                                                                                               // é¥æŽ§æŽ§åˆ¶çš„ï¿½?ï¿½åº¦
-u32 Distance;                                                                                                       // è¶…å£°æ³¢æµ‹ï¿½?
-u8 PID_Send;                                                                                                        // è°ƒå‚ç›¸å…³å˜é‡
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // è¶…å£°æ³¢è·Ÿéšï¿½?ï¿½è¶…å£°æ³¢å£éšœæ ‡å¿—ï¿½?
-float Acceleration_Z;                                                                                               // Zè½´åŠ é€Ÿåº¦ï¿½?
-volatile u8 delay_flag, delay_50;                                                                                   // æä¾›å»¶æ—¶çš„å˜ï¿½?
-float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PIDå‚æ•°ï¼ˆæ”¾ï¿½?100å€ï¼‰
-u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // ä¼ æ„Ÿå™¨çŠ¶ï¿½?
-float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // ä¼ æ„Ÿå™¨çš„PIDå‚æ•°ï¼ˆæ”¾ï¿½?100å€ï¼‰
+u8 Way_Angle = 1;                                                                                                   // »ñÈ¡½Ç¶ÈµÄËã·¨£¬1£ºËÄÔªÊý  2£º¿¨¶ûÂü  3£º»¥²¹ÂË??
+u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // À¶ÑÀÒ£¿ØÏà¹ØµÄ±ä??
+u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // µç»úÍ£Ö¹±êÖ¾Î»ºÍÏÔÊ¾±êÖ¾??  Ä¬ÈÏÍ£Ö¹ ÏÔÊ¾´ò¿ª
+int Motor_Left, Motor_Right;                                                                                        // µç»úPWM±äÁ¿ Ó¦ÊÇMotor?? ÏòMotoÖÂ¾´
+int Temperature;                                                                                                    // ÎÂ¶È±äÁ¿
+int Voltage, Middle_angle;                                                                                          // µç³ØµçÑ¹²ÉÑùÏà¹ØµÄ±ä??
+float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // Æ½ºâÇã½Ç Æ½ºâ??ÂÝÒÇ ×ªÏò??ÂÝÒÇ
+u8 LD_Successful_Receive_flag;                                                                                      // À×´ï³É¹¦½ÓÊÕÊý¾Ý±êÖ¾??
+u8 Mode = 0;                                                                                                        // Ä£Ê½Ñ¡Ôñ£¬Ä¬ÈÏÊÇÆÕ???µÄ¿ØÖÆÄ£Ê½
+u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCDÖÐ???ºÍãÐ???
+u16 ADV[128] = {0};                                                                                                 // ´æ·ÅCCDµÄÊý¾ÝµÄÊý×é
+u16 determine;                                                                                                      // À×´ï¸úËæÄ£Ê½µÄÒ»¸ö±êÖ¾Î»
+float Move_X, Move_Z;                                                                                               // Ò£¿Ø¿ØÖÆµÄ???¶È
+u32 Distance;                                                                                                       // ³¬Éù²¨²â??
+u8 PID_Send;                                                                                                        // µ÷²ÎÏà¹Ø±äÁ¿
+u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // ³¬Éù²¨¸úËæ???³¬Éù²¨±ÚÕÏ±êÖ¾??
+float Acceleration_Z;                                                                                               // ZÖá¼ÓËÙ¶È??
+volatile u8 delay_flag, delay_50;                                                                                   // Ìá¹©ÑÓÊ±µÄ±ä??
+float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID²ÎÊý£¨·Å??100±¶£©
+u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // ´«¸ÐÆ÷×´??
+float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // ´«¸ÐÆ÷µÄPID²ÎÊý£¨·Å??100±¶£©
 float Target_Velocity = 16;     
 u16 ZoomRatio=1000;           
 /* USER CODE END PTD */
@@ -73,7 +74,7 @@ u16 ZoomRatio=1000;
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
-uint8_t angle = 0; // æ·»åŠ èˆµæœºè§’åº¦å˜é‡
+uint8_t angle = 0; // Ìí¼Ó¶æ»ú½Ç¶È±äÁ¿
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
@@ -141,19 +142,19 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM9_Init();
   /* USER CODE BEGIN 2 */
-  delay_init(168);     /* å»¶æ—¶åˆå§‹*/
-  usart_init(115200);  /* ä¸²å£åˆå§‹åŒ–ä¸º115200 */
-  usmart_dev.init(84); /* USMARTåˆå§‹*/
+  delay_init(168);     /* ÑÓÊ±³õÊ¼*/
+  usart_init(115200);  /* ´®¿Ú³õÊ¼»¯Îª115200 */
+  usmart_dev.init(84); /* USMART³õÊ¼*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
   
-  // åˆå§‹åŒ–ç¼–ç å™¨
-  Encoder_Init_TIM3();  // æ‰“å¼€å·¦è½®ç¼–ç å™¨?
-  Encoder_Init_TIM5();  // æ‰“å¼€å³è½®ç¼–ç å™¨?
+  // ³õÊ¼»¯±àÂëÆ÷
+  Encoder_Init_TIM3();  // ´ò¿ª×óÂÖ±àÂëÆ÷?
+  Encoder_Init_TIM5();  // ´ò¿ªÓÒÂÖ±àÂëÆ÷?
 
-  // è®¾ç½®é»˜è®¤æŽ§åˆ¶å‚æ•°
-  Middle_angle = 0;    // åˆå§‹å¹³è¡¡è§’åº¦è®¾å®š
-  Target_Velocity = 16; // ç›®æ ‡é€Ÿåº¦
-  ZoomRatio = 1000;     // è½¬å‘ç¼©æ”¾æ¯”ä¾‹
+  // ÉèÖÃÄ¬ÈÏ¿ØÖÆ²ÎÊý
+  Middle_angle = 0;    // ³õÊ¼Æ½ºâ½Ç¶ÈÉè¶¨
+  Target_Velocity = 16; // Ä¿±êËÙ¶È
+  ZoomRatio = 1000;     // ×ªÏòËõ·Å±ÈÀý
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -174,7 +175,7 @@ int main(void)
   while (1)
   {
 
-    HAL_Delay(100); // æ·»åŠ å»¶æ—¶é˜²æ­¢åˆ·æ–°è¿‡å¿«
+    HAL_Delay(100); // Ìí¼ÓÑÓÊ±·ÀÖ¹Ë¢ÐÂ¹ý¿ì
     
     
     /* USER CODE END WHILE */
@@ -231,7 +232,7 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-// æ·»åŠ app_mainå‡½æ•°
+// Ìí¼Óapp_mainº¯Êý
 void Before_Main(void)
 {
   printf("App main started\r\n");

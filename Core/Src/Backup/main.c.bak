@@ -28,33 +28,34 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
-#include "encoder.h" // 娣诲姞缂栫爜鍣ㄥご鏂囦欢
-#include "control.h" // 纭繚鍖呭惈鎺у埗妯″潡澶存枃浠?
+#include "encoder.h" 
+#include "control.h" 
+// 你好的
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-u8 Way_Angle = 1;                                                                                                   // 鑾峰彇瑙掑害鐨勭畻娉曪紝1锛氬洓鍏冩暟  2锛氬崱灏旀浖  3锛氫簰琛ユ护娉?
-u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 钃濈墮閬ユ帶鐩稿叧鐨勫彉閲?
-u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 鐢垫満鍋滄鏍囧織浣嶅拰鏄剧ず鏍囧織浣?  榛樿鍋滄 鏄剧ず鎵撳紑
-int Motor_Left, Motor_Right;                                                                                        // 鐢垫満PWM鍙橀噺 搴旀槸Motor鐨? 鍚慚oto鑷存暚
-int Temperature;                                                                                                    // 娓╁害鍙橀噺
-int Voltage, Middle_angle;                                                                                          // 鐢垫睜鐢靛帇閲囨牱鐩稿叧鐨勫彉閲?
-float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 骞宠　鍊捐 骞宠　闄?铻轰华 杞悜闄?铻轰华
-u8 LD_Successful_Receive_flag;                                                                                      // 闆疯揪鎴愬姛鎺ユ敹鏁版嵁鏍囧織浣?
-u8 Mode = 0;                                                                                                        // 妯″紡閫夋嫨锛岄粯璁ゆ槸鏅?氱殑鎺у埗妯″紡
-u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD涓?煎拰闃堝??
-u16 ADV[128] = {0};                                                                                                 // 瀛樻斁CCD鐨勬暟鎹殑鏁扮粍
-u16 determine;                                                                                                      // 闆疯揪璺熼殢妯″紡鐨勪竴涓爣蹇椾綅
-float Move_X, Move_Z;                                                                                               // 閬ユ帶鎺у埗鐨勯?熷害
-u32 Distance;                                                                                                       // 瓒呭０娉㈡祴璺?
-u8 PID_Send;                                                                                                        // 璋冨弬鐩稿叧鍙橀噺
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 瓒呭０娉㈣窡闅忋?佽秴澹版尝澹侀殰鏍囧織浣?
-float Acceleration_Z;                                                                                               // Z杞村姞閫熷害璁?
-volatile u8 delay_flag, delay_50;                                                                                   // 鎻愪緵寤舵椂鐨勫彉閲?
-float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID鍙傛暟锛堟斁澶?100鍊嶏級
-u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 浼犳劅鍣ㄧ姸鎬?
-float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 浼犳劅鍣ㄧ殑PID鍙傛暟锛堟斁澶?100鍊嶏級
+u8 Way_Angle = 1;                                                                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤??
+u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变??
+u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志??  默认停止 显示打开
+int Motor_Left, Motor_Right;                                                                                        // 电机PWM变量 应是Motor?? 向Moto致敬
+int Temperature;                                                                                                    // 温度变量
+int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变??
+float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡??螺仪 转向??螺仪
+u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志??
+u8 Mode = 0;                                                                                                        // 模式选择，默认是普???的控制模式
+u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中???和阈???
+u16 ADV[128] = {0};                                                                                                 // 存放CCD的数据的数组
+u16 determine;                                                                                                      // 雷达跟随模式的一个标志位
+float Move_X, Move_Z;                                                                                               // 遥控控制的???度
+u32 Distance;                                                                                                       // 超声波测??
+u8 PID_Send;                                                                                                        // 调参相关变量
+u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随???超声波壁障标志??
+float Acceleration_Z;                                                                                               // Z轴加速度??
+volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变??
+float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID参数（放??100倍）
+u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状??
+float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 传感器的PID参数（放??100倍）
 float Target_Velocity = 16;     
 u16 ZoomRatio=1000;           
 /* USER CODE END PTD */
@@ -73,7 +74,7 @@ u16 ZoomRatio=1000;
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
-uint8_t angle = 0; // 娣诲姞鑸垫満瑙掑害鍙橀噺
+uint8_t angle = 0; // 添加舵机角度变量
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
@@ -141,19 +142,19 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM9_Init();
   /* USER CODE BEGIN 2 */
-  delay_init(168);     /* 寤舵椂鍒濆*/
-  usart_init(115200);  /* 涓插彛鍒濆鍖栦负115200 */
-  usmart_dev.init(84); /* USMART鍒濆*/
+  delay_init(168);     /* 延时初始*/
+  usart_init(115200);  /* 串口初始化为115200 */
+  usmart_dev.init(84); /* USMART初始*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
   
-  // 鍒濆鍖栫紪鐮佸櫒
-  Encoder_Init_TIM3();  // 鎵撳紑宸﹁疆缂栫爜鍣?
-  Encoder_Init_TIM5();  // 鎵撳紑鍙宠疆缂栫爜鍣?
+  // 初始化编码器
+  Encoder_Init_TIM3();  // 打开左轮编码器?
+  Encoder_Init_TIM5();  // 打开右轮编码器?
 
-  // 璁剧疆榛樿鎺у埗鍙傛暟
-  Middle_angle = 0;    // 鍒濆骞宠　瑙掑害璁惧畾
-  Target_Velocity = 16; // 鐩爣閫熷害
-  ZoomRatio = 1000;     // 杞悜缂╂斁姣斾緥
+  // 设置默认控制参数
+  Middle_angle = 0;    // 初始平衡角度设定
+  Target_Velocity = 16; // 目标速度
+  ZoomRatio = 1000;     // 转向缩放比例
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -165,7 +166,7 @@ int main(void)
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Before_Main();
   
-  // 鍚姩瀹氭椂鍣?6浠ュ紑濮嬫帶鍒跺惊鐜?
+
   HAL_TIM_Base_Start_IT(&htim6);   
   /* USER CODE END 2 */
 
@@ -173,13 +174,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // 鍦ㄤ富寰幆涓彲浠ユ坊鍔犵姸鎬佹樉绀轰唬鐮?
-    // 渚嬪锛氭樉绀虹紪鐮佸櫒褰撳墠鍊煎拰閫熷害绛変俊鎭?
-    HAL_Delay(100); // 娣诲姞寤舵椂闃叉鍒锋柊杩囧揩
+
+    HAL_Delay(100); // 添加延时防止刷新过快
     
-    // 鍙互娣诲姞LCD鏄剧ず浠ｇ爜
-    // 渚嬪锛氭樉绀哄乏鍙宠疆鐨勭紪鐮佸櫒璇绘暟鎴栭?熷害
-    // ...
     
     /* USER CODE END WHILE */
 
@@ -235,12 +232,11 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-// 娣诲姞app_main鍑芥暟
+// 添加app_main函数
 void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // 鍒濆鍖栨紨锟?????? - 寰幆鐐逛寒锟??????鏈塋ED
   all_leds_off();
   HAL_Delay(500);
   led1_on();

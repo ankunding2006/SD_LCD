@@ -50,26 +50,26 @@ typedef unsigned int   u32;
 extern lcd lcd_desc;
 extern lcd_io lcd_io_desc;
 extern uint16_t line_buffer[320];
-extern u8 Way_Angle;                                                   // 鑾峰彇瑙掑害鐨勭畻娉曪紝1锛氬洓鍏冩暟  2锛氬崱灏旀浖  3锛氫簰琛ユ护娉?
-extern u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity; // 钃濈墮閬ユ帶鐩稿叧鐨勫彉閲?
-extern u8 Flag_Stop, Flag_Show;                                        // 鐢垫満鍋滄鏍囧織浣嶅拰鏄剧ず鏍囧織浣?  榛樿鍋滄 鏄剧ず鎵撳紑
-extern int Motor_Left, Motor_Right;                                    // 鐢垫満PWM鍙橀噺 搴旀槸Motor鐨? 鍚慚oto鑷存暚
-extern int Temperature;                                                // 娓╁害鍙橀噺
-extern int Voltage, Middle_angle;                                      // 鐢垫睜鐢靛帇閲囨牱鐩稿叧鐨勫彉閲?
-extern u8 Mode, CCD_Zhongzhi, CCD_Yuzhi, Lidar_Detect;                 // 妯″紡閫夋嫨锛岄粯璁ゆ槸鏅?氱殑鎺у埗妯″紡
+extern u8 Way_Angle;                                                   
+extern u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity; 
+extern u8 Flag_Stop, Flag_Show;                                        
+extern int Motor_Left, Motor_Right;                                    
+extern int Temperature;                                                
+extern int Voltage, Middle_angle;                                      
+extern u8 Mode, CCD_Zhongzhi, CCD_Yuzhi, Lidar_Detect;                 
 extern u16 ADV[128];
-extern u16 determine; // 闆疯揪璺熼殢妯″紡鐨勪竴涓爣蹇椾綅
+extern u16 determine; 
 extern float Move_X, Move_Z;
-extern u8 LD_Successful_Receive_flag;                                            // 闆疯揪鎴愬姛鎺ユ敹鏁版嵁鏍囧織浣?
-extern float Angle_Balance, Gyro_Balance, Gyro_Turn;                             // 骞宠　鍊捐 骞宠　闄?铻轰华 杞悜闄?铻轰华
-extern u32 Distance;                                                             // 瓒呭０娉㈡祴璺?
-extern u8 PID_Send;                                                              // 璋冨弬鐩稿叧鍙橀噺
-extern u8 Flag_follow, Flag_avoid;                                               // 瓒呭０娉㈣窡闅忋?佽秴澹版尝澹侀殰鏍囧織浣?
-extern float Acceleration_Z;                                                     // Z杞村姞閫熷害璁?
-extern volatile u8 delay_flag, delay_50;                                         // 鎻愪緵寤舵椂鐨勫彉閲?
-extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; // PID鍙傛暟锛堟斁澶?100鍊嶏級
+extern u8 LD_Successful_Receive_flag;                                            
+extern float Angle_Balance, Gyro_Balance, Gyro_Turn;                            
+extern u32 Distance;                                                             
+extern u8 PID_Send;                                                              
+extern u8 Flag_follow, Flag_avoid;                                               
+extern float Acceleration_Z;                                                     
+extern volatile u8 delay_flag, delay_50;                                         
+extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
 extern u16 ZoomRatio;
-extern float Target_Velocity; // 鐩爣閫熷害(鍗曚釜鐢垫満姣?5ms缂栫爜鍣ㄧ殑璇讳功),瀹為檯杞??=缂栫爜鍣ㄨ鏁帮紙5ms姣忔锛?*璇诲彇棰戠巼/鍊嶉鏁?/鍑忛?熸瘮/缂栫爜鍣ㄧ簿搴?
+extern float Target_Velocity; 
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -79,7 +79,7 @@ extern float Target_Velocity; // 鐩爣閫熷害(鍗曚釜鐢垫満姣?5ms缂栫爜鍣ㄧ殑璇讳
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-// 瀹氫箟涓?浜涘父鐢ㄧ殑鏁版嵁绫诲瀷鐭叧閿瓧
+// 定义???些常用的数据类型??关键??
 
 typedef int32_t s32;
 typedef int16_t s16;
@@ -113,13 +113,12 @@ typedef __I uint32_t vuc32;
 typedef __I uint16_t vuc16;
 typedef __I uint8_t vuc8;
 
-// 浣嶅甫鎿嶄綔,瀹炵幇51绫讳技鐨凣PIO鎺у埗鍔熻兘
-// 鍏蜂綋瀹炵幇鎬濇兂,鍙傝??<<CM3鏉冨▉鎸囧崡>>绗簲绔?(87椤祣92椤?).
-// IO鍙ｆ搷浣滃畯瀹氫箟
+// 位带操作,实现51类似的GPIO控制功能
+// IO口操作宏定义
 #define BITBAND(addr, bitnum) ((addr & 0xF0000000) + 0x2000000 + ((addr & 0xFFFFF) << 5) + (bitnum << 2))
 #define MEM_ADDR(addr) *((volatile unsigned long *)(addr))
 #define BIT_ADDR(addr, bitnum) MEM_ADDR(BITBAND(addr, bitnum))
-// IO鍙ｅ湴鍧?鏄犲皠
+// IO口地???映射
 #define GPIOA_ODR_Addr (GPIOA_BASE + 12) // 0x4001080C
 #define GPIOB_ODR_Addr (GPIOB_BASE + 12) // 0x40010C0C
 #define GPIOC_ODR_Addr (GPIOC_BASE + 12) // 0x4001100C
@@ -136,28 +135,27 @@ typedef __I uint8_t vuc8;
 #define GPIOF_IDR_Addr (GPIOF_BASE + 8) // 0x40011A08
 #define GPIOG_IDR_Addr (GPIOG_BASE + 8) // 0x40011E08
 
-// IO鍙ｆ搷浣?,鍙鍗曚竴鐨処O鍙?!
-// 纭繚n鐨勫?煎皬浜?16!
-#define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) // 杈撳嚭
-#define PAin(n) BIT_ADDR(GPIOA_IDR_Addr, n)  // 杈撳叆
 
-#define PBout(n) BIT_ADDR(GPIOB_ODR_Addr, n) // 杈撳嚭
-#define PBin(n) BIT_ADDR(GPIOB_IDR_Addr, n)  // 杈撳叆
+#define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) // 输出
+#define PAin(n) BIT_ADDR(GPIOA_IDR_Addr, n)  // 输入
 
-#define PCout(n) BIT_ADDR(GPIOC_ODR_Addr, n) // 杈撳嚭
-#define PCin(n) BIT_ADDR(GPIOC_IDR_Addr, n)  // 杈撳叆
+#define PBout(n) BIT_ADDR(GPIOB_ODR_Addr, n) // 输出
+#define PBin(n) BIT_ADDR(GPIOB_IDR_Addr, n)  // 输入
 
-#define PDout(n) BIT_ADDR(GPIOD_ODR_Addr, n) // 杈撳嚭
-#define PDin(n) BIT_ADDR(GPIOD_IDR_Addr, n)  // 杈撳叆
+#define PCout(n) BIT_ADDR(GPIOC_ODR_Addr, n) // 输出
+#define PCin(n) BIT_ADDR(GPIOC_IDR_Addr, n)  // 输入
 
-#define PEout(n) BIT_ADDR(GPIOE_ODR_Addr, n) // 杈撳嚭
-#define PEin(n) BIT_ADDR(GPIOE_IDR_Addr, n)  // 杈撳叆
+#define PDout(n) BIT_ADDR(GPIOD_ODR_Addr, n) // 输出
+#define PDin(n) BIT_ADDR(GPIOD_IDR_Addr, n)  // 输入
 
-#define PFout(n) BIT_ADDR(GPIOF_ODR_Addr, n) // 杈撳嚭
-#define PFin(n) BIT_ADDR(GPIOF_IDR_Addr, n)  // 杈撳叆
+#define PEout(n) BIT_ADDR(GPIOE_ODR_Addr, n) // 输出
+#define PEin(n) BIT_ADDR(GPIOE_IDR_Addr, n)  // 输入
 
-#define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) // 杈撳嚭
-#define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  // 杈撳叆
+#define PFout(n) BIT_ADDR(GPIOF_ODR_Addr, n) // 输出
+#define PFin(n) BIT_ADDR(GPIOF_IDR_Addr, n)  // 输入
+
+#define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) // 输出
+#define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  // 输入
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
