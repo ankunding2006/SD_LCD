@@ -164,6 +164,7 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
+  LineTracking_Init();
   Before_Main();
   
 

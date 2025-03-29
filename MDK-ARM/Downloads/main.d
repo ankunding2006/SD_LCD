@@ -51,6 +51,7 @@ downloads\main.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\main.o: ../Hardware/ENCODER/encoder.h
 downloads\main.o: ../Core/Inc/tim.h
 downloads\main.o: ../Core/Inc/usart.h
+downloads\main.o: ..\control\LineTracking\LineTracking.h
 downloads\main.o: ../FATFS/App/fatfs.h
 downloads\main.o: ../Middlewares/Third_Party/FatFs/src/ff.h
 downloads\main.o: ../Middlewares/Third_Party/FatFs/src/integer.h

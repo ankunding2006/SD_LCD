@@ -25,7 +25,7 @@
 
 #include "./SYSTEM/sys/sys.h"
 #include "./SYSTEM/usart/usart.h"
-
+#include "LineTracking.h"
 
 /* 如果使用os,则包括下面的头文件即可 */
 #if SYS_SUPPORT_OS
@@ -198,6 +198,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                 }
             }
         }
+    else if(huart->Instance == USART2)       /* 如果是串口2 - 巡线摄像头 */
+    {
+        // 处理来自MaixPy的巡线数据
+        LineTracking_ProcessData(g_uart2_rx_buffer[0]);
+        
+        // 继续接收USART2数据
+        HAL_UART_Receive_IT(&huart2, (uint8_t *)g_uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+    }
         
         HAL_UART_Receive_IT(&g_uart1_handle, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
     }

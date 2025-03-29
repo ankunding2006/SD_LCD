@@ -54,7 +54,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	    Velocity(Encoder_Left, Encoder_Right);
 
 		// TODO : 转向控制
-		Turn_Pwm = 0;
+		Turn_Pwm = LineTracking_CalculateTurn();
 
 		// 使用计算出的实际速度，不修改Target_Velocity
 		Motor_Left = actual_velocity - (float)ZoomRatio / 1000 * Turn_Pwm;

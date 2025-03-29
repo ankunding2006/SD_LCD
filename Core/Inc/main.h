@@ -40,6 +40,7 @@ extern "C" {
 #include "encoder.h"
 #include "tim.h"
 #include "usart.h"
+#include "LineTracking.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

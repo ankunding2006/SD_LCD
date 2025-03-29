@@ -52,3 +52,4 @@ downloads\gpio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\gpio.o: ../Hardware/ENCODER/encoder.h
 downloads\gpio.o: ../Core/Inc/tim.h
 downloads\gpio.o: ../Core/Inc/usart.h
+downloads\gpio.o: ..\control\LineTracking\LineTracking.h
