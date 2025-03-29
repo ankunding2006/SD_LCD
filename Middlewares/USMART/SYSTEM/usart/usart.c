@@ -171,7 +171,23 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
+/**
+ * @brief       串口1中断服务函数
+ * @param       无
+ * @retval      无
+ */
+void USART_UX_IRQHandler(void)
+{ 
+#if SYS_SUPPORT_OS                              /* 使用OS */
+    OSIntEnter();    
+#endif
 
+    HAL_UART_IRQHandler(&g_uart1_handle);       /* 调用HAL库中断处理公用函数 */
+
+#if SYS_SUPPORT_OS                              /* 使用OS */
+    OSIntExit();
+#endif
+}
 
 #endif
 
@@ -179,7 +195,3 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  
 
  
-
-
-
-
