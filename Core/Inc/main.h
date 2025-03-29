@@ -35,6 +35,7 @@ extern "C" {
 #include "lcd.h"
 #include <string.h>
 #include "LED.h"
+#include "usmart.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -79,6 +80,7 @@ int fputc(int ch, FILE *f);
 void delay_init(uint16_t sysclk);
 void delay_ms(uint16_t nms);
 void delay_us(uint32_t nus);
+void usart_init(uint32_t bound);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

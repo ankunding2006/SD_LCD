@@ -47,6 +47,11 @@ downloads\sd_diskio.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\sd_diskio.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\sd_diskio.o: ../Core/Inc/LED.h
 downloads\sd_diskio.o: ../Core/Inc/main.h
+downloads\sd_diskio.o: ../Middlewares/USMART/usmart.h
+downloads\sd_diskio.o: ../Middlewares/USMART/./USMART/usmart_port.h
+downloads\sd_diskio.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
+downloads\sd_diskio.o: ../Drivers/CMSIS/Include/core_cm4.h
+downloads\sd_diskio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\sd_diskio.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\sd_diskio.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 downloads\sd_diskio.o: ../FATFS/Target/sd_diskio.h

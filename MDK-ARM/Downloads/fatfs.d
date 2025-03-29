@@ -46,6 +46,11 @@ downloads\fatfs.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\fatfs.o: ../Core/Inc/LED.h
 downloads\fatfs.o: ../Core/Inc/main.h
+downloads\fatfs.o: ../Middlewares/USMART/usmart.h
+downloads\fatfs.o: ../Middlewares/USMART/./USMART/usmart_port.h
+downloads\fatfs.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
+downloads\fatfs.o: ../Drivers/CMSIS/Include/core_cm4.h
+downloads\fatfs.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\fatfs.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 downloads\fatfs.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h

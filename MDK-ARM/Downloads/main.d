@@ -42,6 +42,11 @@ downloads\main.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\main.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\main.o: ../Core/Inc/LED.h
 downloads\main.o: ../Core/Inc/main.h
+downloads\main.o: ../Middlewares/USMART/usmart.h
+downloads\main.o: ../Middlewares/USMART/./USMART/usmart_port.h
+downloads\main.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
+downloads\main.o: ../Drivers/CMSIS/Include/core_cm4.h
+downloads\main.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\main.o: ../FATFS/App/fatfs.h
 downloads\main.o: ../Middlewares/Third_Party/FatFs/src/ff.h
 downloads\main.o: ../Middlewares/Third_Party/FatFs/src/integer.h
@@ -54,10 +59,5 @@ downloads\main.o: ../FATFS/Target/sd_diskio.h
 downloads\main.o: ../Core/Inc/sdio.h
 downloads\main.o: ../Core/Inc/spi.h
 downloads\main.o: ../Core/Inc/tim.h
+downloads\main.o: ../Core/Inc/usart.h
 downloads\main.o: ../Core/Inc/gpio.h
-downloads\main.o: ..\Middlewares\USMART\SYSTEM\delay\delay.h
-downloads\main.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
-downloads\main.o: ../Drivers/CMSIS/Include/core_cm4.h
-downloads\main.o: ..\Middlewares\USMART\SYSTEM\usart\usart.h
-downloads\main.o: ../Middlewares/USMART/usmart.h
-downloads\main.o: ../Middlewares/USMART/./USMART/usmart_port.h

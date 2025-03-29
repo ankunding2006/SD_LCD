@@ -42,4 +42,9 @@ downloads\stm32f4xx_it.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
 downloads\stm32f4xx_it.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 downloads\stm32f4xx_it.o: ../Core/Inc/LED.h
 downloads\stm32f4xx_it.o: ../Core/Inc/main.h
+downloads\stm32f4xx_it.o: ../Middlewares/USMART/usmart.h
+downloads\stm32f4xx_it.o: ../Middlewares/USMART/./USMART/usmart_port.h
+downloads\stm32f4xx_it.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
+downloads\stm32f4xx_it.o: ../Drivers/CMSIS/Include/core_cm4.h
+downloads\stm32f4xx_it.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
