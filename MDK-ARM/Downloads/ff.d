@@ -51,7 +51,7 @@ downloads\ff.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\ff.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\ff.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\ff.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\ff.o: ..\Hardware\ENCODER\encoder.h
+downloads\ff.o: ../Hardware/ENCODER/encoder.h
 downloads\ff.o: ../Core/Inc/tim.h
 downloads\ff.o: ../Core/Inc/usart.h
 downloads\ff.o: ../FATFS/Target/bsp_driver_sd.h

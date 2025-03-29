@@ -51,7 +51,7 @@ downloads\syscall.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\syscall.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\syscall.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\syscall.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\syscall.o: ..\Hardware\ENCODER\encoder.h
+downloads\syscall.o: ../Hardware/ENCODER/encoder.h
 downloads\syscall.o: ../Core/Inc/tim.h
 downloads\syscall.o: ../Core/Inc/usart.h
 downloads\syscall.o: ../FATFS/Target/bsp_driver_sd.h

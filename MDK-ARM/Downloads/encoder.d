@@ -49,6 +49,6 @@ downloads\encoder.o: ../Middlewares/USMART/usmart.h
 downloads\encoder.o: ../Middlewares/USMART/./USMART/usmart_port.h
 downloads\encoder.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\encoder.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\encoder.o: ..\Hardware\ENCODER\encoder.h
+downloads\encoder.o: ../Hardware/ENCODER/encoder.h
 downloads\encoder.o: ../Core/Inc/tim.h
 downloads\encoder.o: ../Core/Inc/usart.h

@@ -50,26 +50,26 @@ typedef unsigned int   u32;
 extern lcd lcd_desc;
 extern lcd_io lcd_io_desc;
 extern uint16_t line_buffer[320];
-extern u8 Way_Angle;                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤波
-extern u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity; // 蓝牙遥控相关的变量
-extern u8 Flag_Stop, Flag_Show;                                        // 电机停止标志位和显示标志位  默认停止 显示打开
-extern int Motor_Left, Motor_Right;                                    // 电机PWM变量 应是Motor的 向Moto致敬
+extern u8 Way_Angle;                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤�?
+extern u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity; // 蓝牙遥控相关的变�?
+extern u8 Flag_Stop, Flag_Show;                                        // 电机停止标志位和显示标志�?  默认停止 显示打开
+extern int Motor_Left, Motor_Right;                                    // 电机PWM变量 应是Motor�? 向Moto致敬
 extern int Temperature;                                                // 温度变量
-extern int Voltage, Middle_angle;                                      // 电池电压采样相关的变量
-extern u8 Mode, CCD_Zhongzhi, CCD_Yuzhi, Lidar_Detect;                 // 模式选择，默认是普通的控制模式
+extern int Voltage, Middle_angle;                                      // 电池电压采样相关的变�?
+extern u8 Mode, CCD_Zhongzhi, CCD_Yuzhi, Lidar_Detect;                 // 模式选择，默认是普�?�的控制模式
 extern u16 ADV[128];
 extern u16 determine; // 雷达跟随模式的一个标志位
 extern float Move_X, Move_Z;
-extern u8 LD_Successful_Receive_flag;                                            // 雷达成功接收数据标志位
-extern float Angle_Balance, Gyro_Balance, Gyro_Turn;                             // 平衡倾角 平衡陀螺仪 转向陀螺仪
-extern u32 Distance;                                                             // 超声波测距
+extern u8 LD_Successful_Receive_flag;                                            // 雷达成功接收数据标志�?
+extern float Angle_Balance, Gyro_Balance, Gyro_Turn;                             // 平衡倾角 平衡�?螺仪 转向�?螺仪
+extern u32 Distance;                                                             // 超声波测�?
 extern u8 PID_Send;                                                              // 调参相关变量
-extern u8 Flag_follow, Flag_avoid;                                               // 超声波跟随、超声波壁障标志位
-extern float Acceleration_Z;                                                     // Z轴加速度计
-extern volatile u8 delay_flag, delay_50;                                         // 提供延时的变量
-extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; // PID参数（放大100倍）
+extern u8 Flag_follow, Flag_avoid;                                               // 超声波跟随�?�超声波壁障标志�?
+extern float Acceleration_Z;                                                     // Z轴加速度�?
+extern volatile u8 delay_flag, delay_50;                                         // 提供延时的变�?
+extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; // PID参数（放�?100倍）
 extern u16 ZoomRatio;
-extern float Target_Velocity; // 目标速度(单个电机每5ms编码器的读书),实际转速=编码器读数（5ms每次）*读取频率/倍频数/减速比/编码器精度
+extern float Target_Velocity; // 目标速度(单个电机�?5ms编码器的读书),实际转�??=编码器读数（5ms每次�?*读取频率/倍频�?/减�?�比/编码器精�?
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -79,7 +79,7 @@ extern float Target_Velocity; // 目标速度(单个电机每5ms编码器的读�
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-// 定义一些常用的数据类型短关键字
+// 定义�?些常用的数据类型短关键字
 
 typedef int32_t s32;
 typedef int16_t s16;
@@ -114,12 +114,12 @@ typedef __I uint16_t vuc16;
 typedef __I uint8_t vuc8;
 
 // 位带操作,实现51类似的GPIO控制功能
-// 具体实现思想,参考<<CM3权威指南>>第五章(87页~92页).
+// 具体实现思想,参�??<<CM3权威指南>>第五�?(87页~92�?).
 // IO口操作宏定义
 #define BITBAND(addr, bitnum) ((addr & 0xF0000000) + 0x2000000 + ((addr & 0xFFFFF) << 5) + (bitnum << 2))
 #define MEM_ADDR(addr) *((volatile unsigned long *)(addr))
 #define BIT_ADDR(addr, bitnum) MEM_ADDR(BITBAND(addr, bitnum))
-// IO口地址映射
+// IO口地�?映射
 #define GPIOA_ODR_Addr (GPIOA_BASE + 12) // 0x4001080C
 #define GPIOB_ODR_Addr (GPIOB_BASE + 12) // 0x40010C0C
 #define GPIOC_ODR_Addr (GPIOC_BASE + 12) // 0x4001100C
@@ -136,8 +136,8 @@ typedef __I uint8_t vuc8;
 #define GPIOF_IDR_Addr (GPIOF_BASE + 8) // 0x40011A08
 #define GPIOG_IDR_Addr (GPIOG_BASE + 8) // 0x40011E08
 
-// IO口操作,只对单一的IO口!
-// 确保n的值小于16!
+// IO口操�?,只对单一的IO�?!
+// 确保n的�?�小�?16!
 #define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) // 输出
 #define PAin(n) BIT_ADDR(GPIOA_IDR_Addr, n)  // 输入
 

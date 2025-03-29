@@ -53,7 +53,7 @@ downloads\diskio.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\diskio.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\diskio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\diskio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\diskio.o: ..\Hardware\ENCODER\encoder.h
+downloads\diskio.o: ../Hardware/ENCODER/encoder.h
 downloads\diskio.o: ../Core/Inc/tim.h
 downloads\diskio.o: ../Core/Inc/usart.h
 downloads\diskio.o: ../FATFS/Target/bsp_driver_sd.h

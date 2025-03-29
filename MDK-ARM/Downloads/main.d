@@ -48,7 +48,7 @@ downloads\main.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\main.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\main.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\main.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\main.o: ..\Hardware\ENCODER\encoder.h
+downloads\main.o: ../Hardware/ENCODER/encoder.h
 downloads\main.o: ../Core/Inc/tim.h
 downloads\main.o: ../Core/Inc/usart.h
 downloads\main.o: ../FATFS/App/fatfs.h
@@ -63,4 +63,4 @@ downloads\main.o: ../FATFS/Target/sd_diskio.h
 downloads\main.o: ../Core/Inc/sdio.h
 downloads\main.o: ../Core/Inc/spi.h
 downloads\main.o: ../Core/Inc/gpio.h
-downloads\main.o: ..\control\CONTROL\control.h
+downloads\main.o: ../control/CONTROL/control.h

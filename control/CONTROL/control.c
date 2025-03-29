@@ -222,7 +222,7 @@ int Sensor_PID(void)
     return 0;  // 返回转向控制量
 }
 
-// TODO: 完成传感器状态的获取
+// TODO: 完成按钮状态的获取
 
 // 修复函数的外部声明
 int click(void)

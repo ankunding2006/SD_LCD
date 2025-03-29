@@ -49,6 +49,6 @@ downloads\spi.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\spi.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\spi.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\spi.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\spi.o: ..\Hardware\ENCODER\encoder.h
+downloads\spi.o: ../Hardware/ENCODER/encoder.h
 downloads\spi.o: ../Core/Inc/tim.h
 downloads\spi.o: ../Core/Inc/usart.h

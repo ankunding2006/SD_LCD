@@ -48,7 +48,7 @@ downloads\stm32f4xx_it.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\stm32f4xx_it.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\stm32f4xx_it.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\stm32f4xx_it.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
-downloads\stm32f4xx_it.o: ..\Hardware\ENCODER\encoder.h
+downloads\stm32f4xx_it.o: ../Hardware/ENCODER/encoder.h
 downloads\stm32f4xx_it.o: ../Core/Inc/tim.h
 downloads\stm32f4xx_it.o: ../Core/Inc/usart.h
 downloads\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
