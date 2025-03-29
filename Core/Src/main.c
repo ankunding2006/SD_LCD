@@ -114,7 +114,7 @@ int main(void)
   MX_TIM5_Init();
   MX_TIM6_Init();
   MX_USART2_UART_Init();
-  //MX_USART1_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   delay_init(168);     /* 延时初始*/
   usart_init(115200);  /* 串口初始化为115200 */
@@ -195,7 +195,7 @@ void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // 初始化演�???? - 循环点亮�????有LED
+  // 初始化演�????? - 循环点亮�?????有LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();

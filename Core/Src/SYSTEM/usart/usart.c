@@ -227,7 +227,3 @@ void USART_UX_IRQHandler(void)
  
 
  
-
-
-
-
