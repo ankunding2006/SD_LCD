@@ -52,6 +52,10 @@ downloads\sd_diskio.o: ../Middlewares/USMART/./USMART/usmart_port.h
 downloads\sd_diskio.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\sd_diskio.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\sd_diskio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
+downloads\sd_diskio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
+downloads\sd_diskio.o: ..\Hardware\ENCODER\encoder.h
+downloads\sd_diskio.o: ../Core/Inc/tim.h
+downloads\sd_diskio.o: ../Core/Inc/usart.h
 downloads\sd_diskio.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\sd_diskio.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 downloads\sd_diskio.o: ../FATFS/Target/sd_diskio.h

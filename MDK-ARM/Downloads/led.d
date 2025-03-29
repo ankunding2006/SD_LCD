@@ -47,3 +47,8 @@ downloads\led.o: ../Middlewares/USMART/./USMART/usmart_port.h
 downloads\led.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\led.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\led.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
+downloads\led.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
+downloads\led.o: ..\Hardware\ENCODER\encoder.h
+downloads\led.o: ../Core/Inc/main.h
+downloads\led.o: ../Core/Inc/tim.h
+downloads\led.o: ../Core/Inc/usart.h

@@ -41,6 +41,13 @@ extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN Private defines */
+// TODO : 完成电机驱动模块的定义以及引脚的配置和初始化
+#define PWMB   TIM1->CCR4  //PA11
+#define BIN2   PBout(12)
+#define BIN1   PBout(13)
+#define AIN2   PBout(15)
+#define AIN1   PBout(14)
+#define PWMA   TIM1->CCR1  //PA8
 
 /* USER CODE END Private defines */
 
@@ -60,4 +67,3 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 #endif
 
 #endif /* __TIM_H__ */
-

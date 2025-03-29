@@ -48,3 +48,7 @@ downloads\gpio.o: ../Middlewares/USMART/./USMART/usmart_port.h
 downloads\gpio.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\gpio.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\gpio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
+downloads\gpio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
+downloads\gpio.o: ..\Hardware\ENCODER\encoder.h
+downloads\gpio.o: ../Core/Inc/tim.h
+downloads\gpio.o: ../Core/Inc/usart.h

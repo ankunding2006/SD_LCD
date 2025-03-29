@@ -28,11 +28,35 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
+#include "encoder.h" // 添加编码器头文件
+#include "control.h" // 确保包含控制模块头文件
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+u8 Way_Angle = 1;                                                                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤波
+u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变量
+u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志位  默认停止 显示打开
+int Motor_Left, Motor_Right;                                                                                        // 电机PWM变量 应是Motor的 向Moto致敬
+int Temperature;                                                                                                    // 温度变量
+int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变量
+float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡陀螺仪 转向陀螺仪
+u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志位
+u8 Mode = 0;                                                                                                        // 模式选择，默认是普通的控制模式
+u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中值和阈值
+u16 ADV[128] = {0};                                                                                                 // 存放CCD的数据的数组
+u16 determine;                                                                                                      // 雷达跟随模式的一个标志位
+float Move_X, Move_Z;                                                                                               // 遥控控制的速度
+u32 Distance;                                                                                                       // 超声波测距
+u8 PID_Send;                                                                                                        // 调参相关变量
+u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随、超声波壁障标志位
+float Acceleration_Z;                                                                                               // Z轴加速度计
+volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变量
+float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID参数（放大100倍）
+u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状态
+float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 传感器的PID参数（放大100倍）
+float Target_Velocity = 16;     
+u16 ZoomRatio=1000;           
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -120,6 +144,15 @@ int main(void)
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
+  
+  // 初始化编码器
+  Encoder_Init_TIM3();  // 打开左轮编码器
+  Encoder_Init_TIM5();  // 打开右轮编码器
+
+  // 设置默认控制参数
+  Middle_angle = 0;    // 初始平衡角度设定
+  Target_Velocity = 16; // 目标速度
+  ZoomRatio = 1000;     // 转向缩放比例
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -130,12 +163,23 @@ int main(void)
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Before_Main();
+  
+  // 启动定时器6以开始控制循环
+  HAL_TIM_Base_Start_IT(&htim6);   
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // 在主循环中可以添加状态显示代码
+    // 例如：显示编码器当前值和速度等信息
+    HAL_Delay(100); // 添加延时防止刷新过快
+    
+    // 可以添加LCD显示代码
+    // 例如：显示左右轮的编码器读数或速度
+    // ...
+    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -195,7 +239,7 @@ void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // 初始化演�????? - 循环点亮�?????有LED
+  // 初始化演�????? - 循环点亮�?????有LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();
