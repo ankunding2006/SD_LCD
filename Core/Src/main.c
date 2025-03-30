@@ -30,7 +30,9 @@
 #include <stdlib.h>
 #include "encoder.h" 
 #include "control.h" 
-// 你好的
+#include "cot_menu.h"
+#include "lcd.h"
+#include "my_menu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -165,6 +167,7 @@ int main(void)
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   LineTracking_Init();
+  Menu_Init(); // 初始化菜单系统
   Before_Main();
   
 
@@ -175,6 +178,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    Lcd_MenuTask();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

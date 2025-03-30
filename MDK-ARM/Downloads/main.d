@@ -65,3 +65,5 @@ downloads\main.o: ../Core/Inc/sdio.h
 downloads\main.o: ../Core/Inc/spi.h
 downloads\main.o: ../Core/Inc/gpio.h
 downloads\main.o: ../control/CONTROL/control.h
+downloads\main.o: ..\Middlewares\my_menu\cot_menu-v1.3.0\cot_menu.h
+downloads\main.o: ..\Middlewares\my_menu\app\my_menu.h

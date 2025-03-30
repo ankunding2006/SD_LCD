@@ -1,32 +1,20 @@
+// my_menu.h
 #ifndef __MY_MENU_H
 #define __MY_MENU_H
 
 #include "cot_menu.h"
-#include "lcd.h"
+#include "main.h"
 
-// 菜单颜色定义
-#define MENU_BG_COLOR        WHITE
-#define MENU_TEXT_COLOR      BLACK
-#define MENU_SELECT_BG_COLOR BLUE
-#define MENU_SELECT_COLOR    WHITE
-
-// 菜单项定义 (示例)
-typedef enum {
-    MENU_MAIN = 0,
-    MENU_PARAM,
-    MENU_SENSOR,
-    MENU_SYSTEM,
-    // 可按需添加更多菜单项
-} MENU_ID;
-
-// 用于菜单项的函数原型
 void Menu_Init(void);
-void Menu_Handler(void);
+uint8_t Get_Key(void);
+void Key_Handler(uint8_t key);
+void Lcd_MenuTask(void);
 
-// 菜单按键操作函数
-void Menu_KeyUp(void);
-void Menu_KeyDown(void);
-void Menu_KeyEnter(void);
-void Menu_KeyBack(void);
+// 定义按键值
+#define KEY_NONE    0
+#define KEY_UP      1
+#define KEY_DOWN    2
+#define KEY_ENTER   3
+#define KEY_BACK    4
 
 #endif

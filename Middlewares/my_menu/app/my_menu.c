@@ -1,148 +1,234 @@
+// 在一个新文件(my_menu.c)中实现
+#include "cot_menu.h"
 #include "my_menu.h"
-#include <stdio.h>
+#include "lcd.h"
 #include <string.h>
 
-// 为菜单项定义的回调函数
-static void OnMainMenuEnter(const cotMenuItemInfo_t *pItemInfo);
-static void OnMainMenuExit(const cotMenuItemInfo_t *pItemInfo);
-static void OnMainMenuLoad(const cotMenuItemInfo_t *pItemInfo);
-static void OnMainMenuTask(const cotMenuItemInfo_t *pItemInfo);
+extern lcd lcd_desc; // 使用main.c中已经初始化的LCD对象
 
-// 子菜单回调函数
-static void OnParamMenuEnter(const cotMenuItemInfo_t *pItemInfo);
-static void OnParamMenuExit(const cotMenuItemInfo_t *pItemInfo);
-static void OnParamMenuLoad(const cotMenuItemInfo_t *pItemInfo);
-
-// 主菜单配置
-static cotMainMenuCfg_t sg_tMainMenu = COT_MENU_ITEM_BIND("主菜单", OnMainMenuEnter, OnMainMenuExit, OnMainMenuLoad, OnMainMenuTask, NULL);
-
-// 主菜单项列表
-cotMenuList_t sg_MainMenuTable[] = 
-{
-    COT_MENU_ITEM_BIND("参数设置", OnParamMenuEnter, OnParamMenuExit, OnParamMenuLoad, NULL, NULL),
-    COT_MENU_ITEM_BIND("传感器状态", NULL, NULL, NULL, NULL, NULL),
-    COT_MENU_ITEM_BIND("系统信息", NULL, NULL, NULL, NULL, NULL),
-};
-
-// 参数菜单项列表
-cotMenuList_t sg_ParamMenuTable[] = 
-{
-    COT_MENU_ITEM_BIND("电机速度", NULL, NULL, NULL, NULL, NULL),
-    COT_MENU_ITEM_BIND("平衡角度", NULL, NULL, NULL, NULL, NULL),
-    COT_MENU_ITEM_BIND("PID参数", NULL, NULL, NULL, NULL, NULL),
-};
-
-// 菜单显示函数
 static void ShowMenu(cotMenuShow_t *ptShowInfo)
 {
-    uint8_t showNum = 5; // 屏幕可显示的菜单项数量
-    menusize_t tmpselect;
+    static menusize_t lastSelectItem = 0xFF;
+    static menusize_t lastShowBaseItem = 0xFF;
+    static char lastTitle[32] = {0};
     
-    // 根据屏幕高度调整可显示的菜单项数
+    uint8_t showNum = 4; // 一次显示的菜单项数量
+    menusize_t tmpselect;
+    bool needFullRedraw = false;
+    
+    // 检查是否需要完全重绘
+    if (lastShowBaseItem != ptShowInfo->showBaseItem || 
+        strcmp(lastTitle, ptShowInfo->uMenuDesc.pTextString) != 0) {
+        needFullRedraw = true;
+    }
+    
+    // 限制显示的菜单项数量
     cotMenu_LimitShowListNum(ptShowInfo, &showNum);
     
-    // 清屏
-    lcd_clear(&lcd_desc, MENU_BG_COLOR);
-    
-    // 显示菜单标题
-    lcd_set_font(&lcd_desc, FONT_1608, MENU_TEXT_COLOR, MENU_BG_COLOR);
-    char title[32] = {0};
-    sprintf(title, "-- %s --", (char*)ptShowInfo->uMenuDesc.pTextString);
-    uint16_t title_x = (lcd_desc.hw->width - strlen(title)*8) / 2;
-    lcd_print(&lcd_desc, title_x, 5, title);
-    
-    // 绘制分隔线
-    lcd_draw_line(&lcd_desc, 0, 25, lcd_desc.hw->width, 25, BLUE);
-    
-    // 显示菜单项
-    for (int i = 0; i < showNum; i++)
-    {
-        tmpselect = i + ptShowInfo->showBaseItem;
+    if (needFullRedraw) {
+        // 完全重绘 - 先清除显示区域
+        lcd_clear(&lcd_desc, BLACK);
         
-        // 设置选中项的颜色
-        if (tmpselect == ptShowInfo->selectItem)
-        {
-            lcd_set_font(&lcd_desc, FONT_1608, MENU_SELECT_COLOR, MENU_SELECT_BG_COLOR);
-            lcd_fill(&lcd_desc, 0, 30+i*20, lcd_desc.hw->width, 30+(i+1)*20-2, MENU_SELECT_BG_COLOR);
+        // 显示菜单标题
+        lcd_set_font(&lcd_desc, FONT_1608, YELLOW, BLACK);
+        lcd_print(&lcd_desc, 5, 5, "%s", ptShowInfo->uMenuDesc.pTextString);
+        
+        // 显示所有菜单项
+        for (int i = 0; i < showNum; i++) {
+            tmpselect = i + ptShowInfo->showBaseItem;
+            
+            if (tmpselect == ptShowInfo->selectItem) {
+                // 选中项使用不同的颜色
+                lcd_fill(&lcd_desc, 0, 30 + i * 30, lcd_desc.hw->width, 30 + (i + 1) * 30 - 2, YELLOW);
+                lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
+            } else {
+                lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+            }
+            
+            lcd_print(&lcd_desc, 10, 30 + i * 30, "%s", ptShowInfo->uItemsListDesc[tmpselect].pTextString);
         }
-        else
-        {
-            lcd_set_font(&lcd_desc, FONT_1608, MENU_TEXT_COLOR, MENU_BG_COLOR);
+    } else if (lastSelectItem != ptShowInfo->selectItem) {
+        // 只有选中项发生变化时才更新相关项
+        
+        // 找出上一个选中项和当前选中项的显示索引
+        int lastIndex = -1;
+        int currIndex = -1;
+        
+        for (int i = 0; i < showNum; i++) {
+            tmpselect = i + ptShowInfo->showBaseItem;
+            
+            if (tmpselect == lastSelectItem)
+                lastIndex = i;
+                
+            if (tmpselect == ptShowInfo->selectItem)
+                currIndex = i;
         }
         
-        // 显示菜单项内容
-        lcd_print(&lcd_desc, 10, 30+i*20, "%s", (char*)ptShowInfo->uItemsListDesc[tmpselect].pTextString);
+        // 只更新变化的项
+        if (lastIndex >= 0) {
+            // 恢复上一个选中项为普通显示
+            lcd_fill(&lcd_desc, 0, 30 + lastIndex * 30, lcd_desc.hw->width, 30 + (lastIndex + 1) * 30 - 2, BLACK);
+            lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+            lcd_print(&lcd_desc, 10, 30 + lastIndex * 30, "%s", 
+                      ptShowInfo->uItemsListDesc[lastIndex + ptShowInfo->showBaseItem].pTextString);
+        }
+        
+        if (currIndex >= 0) {
+            // 将当前选中项设置为高亮显示
+            lcd_fill(&lcd_desc, 0, 30 + currIndex * 30, lcd_desc.hw->width, 30 + (currIndex + 1) * 30 - 2, YELLOW);
+            lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
+            lcd_print(&lcd_desc, 10, 30 + currIndex * 30, "%s", 
+                      ptShowInfo->uItemsListDesc[currIndex + ptShowInfo->showBaseItem].pTextString);
+        }
     }
+    
+    // 保存当前状态用于下次比较
+    lastSelectItem = ptShowInfo->selectItem;
+    lastShowBaseItem = ptShowInfo->showBaseItem;
+    strncpy(lastTitle, ptShowInfo->uMenuDesc.pTextString, sizeof(lastTitle)-1);
+}
+
+// 在my_menu.c中继续添加
+
+// 前向声明
+void MainMenu_Enter(const cotMenuItemInfo_t *pItemInfo);
+void Settings_Enter(const cotMenuItemInfo_t *pItemInfo);
+void Info_Enter(const cotMenuItemInfo_t *pItemInfo);
+void About_Enter(const cotMenuItemInfo_t *pItemInfo);
+
+// 主菜单配置
+static cotMainMenuCfg_t sg_tMainMenu = {"Main Menu", MainMenu_Enter, NULL, NULL, NULL};
+
+// 主菜单项
+cotMenuList_t sg_MainMenuTable[] =
+    {
+        COT_MENU_ITEM_BIND("Settings", Settings_Enter, NULL, NULL, NULL, NULL),
+        COT_MENU_ITEM_BIND("Info", Info_Enter, NULL, NULL, NULL, NULL),
+        COT_MENU_ITEM_BIND("About", About_Enter, NULL, NULL, NULL, NULL),
+};
+
+// 设置子菜单项
+cotMenuList_t sg_SettingsMenuTable[] =
+    {
+        COT_MENU_ITEM_BIND("Brightness", NULL, NULL, NULL, NULL, NULL),
+        COT_MENU_ITEM_BIND("Contrast", NULL, NULL, NULL, NULL, NULL),
+        COT_MENU_ITEM_BIND("Language", NULL, NULL, NULL, NULL, NULL),
+};
+
+// 菜单回调函数实现
+void MainMenu_Enter(const cotMenuItemInfo_t *pItemInfo)
+{
+    cotMenu_Bind(sg_MainMenuTable, COT_GET_MENU_NUM(sg_MainMenuTable), ShowMenu);
+}
+
+void Settings_Enter(const cotMenuItemInfo_t *pItemInfo)
+{
+    cotMenu_Bind(sg_SettingsMenuTable, COT_GET_MENU_NUM(sg_SettingsMenuTable), ShowMenu);
+}
+
+void Info_Enter(const cotMenuItemInfo_t *pItemInfo)
+{
+    // 显示信息页面
+    lcd_fill(&lcd_desc, 0, 0, lcd_desc.hw->width, lcd_desc.hw->height, BLACK);
+    lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+    lcd_print(&lcd_desc, 10, 10, "Info Page");
+    lcd_print(&lcd_desc, 10, 40, "STM32F4 Project");
+    lcd_print(&lcd_desc, 10, 60, "LCD: ST7789 2.0\"");
+}
+
+void About_Enter(const cotMenuItemInfo_t *pItemInfo)
+{
+    // 显示关于页面
+    lcd_fill(&lcd_desc, 0, 0, lcd_desc.hw->width, lcd_desc.hw->height, BLACK);
+    lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+    lcd_print(&lcd_desc, 10, 10, "About");
+    lcd_print(&lcd_desc, 10, 40, "Version: 1.0");
+    lcd_print(&lcd_desc, 10, 60, "Date: 2024/09");
 }
 
 // 初始化菜单系统
 void Menu_Init(void)
 {
     cotMenu_Init(&sg_tMainMenu);
+    cotMenu_MainEnter(); // 进入主菜单
 }
 
-// 菜单处理函数，在主循环中定期调用
-void Menu_Handler(void)
+// 示例：按键处理函数
+void Key_Handler(uint8_t key)
 {
-    cotMenu_Task();
+    switch (key)
+    {
+    case KEY_UP:
+        cotMenu_SelectPrevious(true); // 向上选择
+        break;
+
+    case KEY_DOWN:
+        cotMenu_SelectNext(true); // 向下选择
+        break;
+
+    case KEY_ENTER:
+        cotMenu_Enter(); // 进入选中的菜单项
+        break;
+
+    case KEY_BACK:
+        cotMenu_Exit(true); // 返回上级菜单
+        break;
+    }
 }
 
-// 菜单按键处理函数
-void Menu_KeyUp(void)
+uint8_t Get_Key(void)
 {
-    cotMenu_SelectPrevious(true);
+    static uint8_t key_up = 1; // 按键松开标志
+    
+    // 检查是否有按键被按下（低电平有效）
+    if (key_up && 
+        (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
+         HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
+         HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+         HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET))
+    {
+        HAL_Delay(10); // 延时消抖
+        
+        // 二次确认，确保不是抖动
+        if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
+            HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
+            HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+            HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
+        {
+            key_up = 0; // 标记按键已按下
+            
+            // 返回具体按下的按键
+            if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET)
+                return KEY_UP;
+            else if (HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET)
+                return KEY_DOWN;
+            else if (HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET)
+                return KEY_ENTER;
+            else if (HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
+                return KEY_BACK;
+        }
+    }
+    else if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_SET && 
+             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_SET && 
+             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET && 
+             HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_SET)
+    {
+        key_up = 1; // 所有按键都松开了
+    }
+    
+    return KEY_NONE; // 没有按键按下或者按键未松开
 }
 
-void Menu_KeyDown(void)
+void Lcd_MenuTask(void)
 {
-    cotMenu_SelectNext(true);
-}
+    uint8_t key;
 
-void Menu_KeyEnter(void)
-{
-    cotMenu_Enter();
-}
-
-void Menu_KeyBack(void)
-{
-    cotMenu_Exit(false);
-}
-
-// 主菜单回调函数实现
-static void OnMainMenuEnter(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 进入主菜单时的操作
-}
-
-static void OnMainMenuExit(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 退出主菜单时的操作
-}
-
-static void OnMainMenuLoad(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 绑定主菜单列表和显示函数
-    cotMenu_Bind(sg_MainMenuTable, sizeof(sg_MainMenuTable)/sizeof(cotMenuList_t), ShowMenu);
-}
-
-static void OnMainMenuTask(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 主菜单周期性任务
-}
-
-// 参数菜单回调函数实现
-static void OnParamMenuEnter(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 进入参数菜单时的操作
-    cotMenu_Bind(sg_ParamMenuTable, sizeof(sg_ParamMenuTable)/sizeof(cotMenuList_t), ShowMenu);
-}
-
-static void OnParamMenuExit(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 退出参数菜单时的操作
-}
-
-static void OnParamMenuLoad(const cotMenuItemInfo_t *pItemInfo)
-{
-    // 参数菜单加载时的操作
+    key = Get_Key();
+    if (key != KEY_NONE)
+    {
+        //反转LED灯
+        led_toggle();
+        Key_Handler(key);
+    }
+    cotMenu_Task(); // 菜单任务处理
 }
