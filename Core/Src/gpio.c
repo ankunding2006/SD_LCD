@@ -77,14 +77,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LCD_DC_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MENU_Pin DOWN_Pin */
-  GPIO_InitStruct.Pin = MENU_Pin|DOWN_Pin;
+  /*Configure GPIO pins : MENU_Pin UP_Pin */
+  GPIO_InitStruct.Pin = MENU_Pin|UP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ENTER_Pin UP_Pin */
-  GPIO_InitStruct.Pin = ENTER_Pin|UP_Pin;
+  /*Configure GPIO pins : ENTER_Pin DOWN_Pin */
+  GPIO_InitStruct.Pin = ENTER_Pin|DOWN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
