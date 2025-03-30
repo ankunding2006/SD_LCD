@@ -51,5 +51,5 @@ downloads\stm32f4xx_it.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\stm32f4xx_it.o: ../Hardware/ENCODER/encoder.h
 downloads\stm32f4xx_it.o: ../Core/Inc/tim.h
 downloads\stm32f4xx_it.o: ../Core/Inc/usart.h
-downloads\stm32f4xx_it.o: ..\control\LineTracking\LineTracking.h
+downloads\stm32f4xx_it.o: ../control/LineTracking/LineTracking.h
 downloads\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h

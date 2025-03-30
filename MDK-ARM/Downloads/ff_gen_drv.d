@@ -56,6 +56,6 @@ downloads\ff_gen_drv.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\ff_gen_drv.o: ../Hardware/ENCODER/encoder.h
 downloads\ff_gen_drv.o: ../Core/Inc/tim.h
 downloads\ff_gen_drv.o: ../Core/Inc/usart.h
-downloads\ff_gen_drv.o: ..\control\LineTracking\LineTracking.h
+downloads\ff_gen_drv.o: ../control/LineTracking/LineTracking.h
 downloads\ff_gen_drv.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\ff_gen_drv.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

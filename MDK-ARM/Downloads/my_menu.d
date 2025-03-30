@@ -1,5 +1,5 @@
 downloads\my_menu.o: ..\Middlewares\my_menu\app\my_menu.c
-downloads\my_menu.o: ..\Middlewares\my_menu\cot_menu-v1.3.0\cot_menu.h
+downloads\my_menu.o: ../Middlewares/my_menu/cot_menu-v1.3.0/cot_menu.h
 downloads\my_menu.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 downloads\my_menu.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 downloads\my_menu.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
@@ -53,4 +53,4 @@ downloads\my_menu.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\my_menu.o: ../Hardware/ENCODER/encoder.h
 downloads\my_menu.o: ../Core/Inc/tim.h
 downloads\my_menu.o: ../Core/Inc/usart.h
-downloads\my_menu.o: ..\control\LineTracking\LineTracking.h
+downloads\my_menu.o: ../control/LineTracking/LineTracking.h

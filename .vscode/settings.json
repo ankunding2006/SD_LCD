@@ -71,7 +71,8 @@
     "tim.h": "c",
     "lcd_font.h": "c",
     "cot_menu.h": "c",
-    "my_menu.h": "c"
+    "my_menu.h": "c",
+    "encoder.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

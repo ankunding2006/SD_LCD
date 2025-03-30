@@ -44,10 +44,10 @@ extern TIM_HandleTypeDef htim9;
 
 /* USER CODE BEGIN Private defines */
 #define PWMB   TIM1->CCR4  //PA11
-#define BIN2   PBout(12)
-#define BIN1   PBout(13)
-#define AIN2   PBout(15)
-#define AIN1   PBout(14)
+#define BIN2   PEout(13)
+#define BIN1   PEout(14)
+#define AIN2   PEout(15)
+#define AIN1   PBout(10)
 #define PWMA   TIM1->CCR1  //PA8
 
 /* USER CODE END Private defines */
