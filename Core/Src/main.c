@@ -128,6 +128,7 @@ int main(void)
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Menu_Init();
+  cotMenu_Task();
   Before_Main();
   /* USER CODE END 2 */
 

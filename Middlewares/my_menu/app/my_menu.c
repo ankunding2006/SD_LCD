@@ -185,5 +185,6 @@ void Lcd_MenuTask(void)
         //反转LED灯
         led_toggle();
         Key_Handler(key);
+        cotMenu_Task();
     }
 }
