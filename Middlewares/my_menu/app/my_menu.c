@@ -2,46 +2,90 @@
 #include "cot_menu.h"
 #include "my_menu.h"
 #include "lcd.h"
+#include <string.h>
 
 extern lcd lcd_desc; // 使用main.c中已经初始化的LCD对象
 
-
 static void ShowMenu(cotMenuShow_t *ptShowInfo)
 {
+    static menusize_t lastSelectItem = 0xFF;
+    static menusize_t lastShowBaseItem = 0xFF;
+    static char lastTitle[32] = {0};
+    
     uint8_t showNum = 4; // 一次显示的菜单项数量
     menusize_t tmpselect;
-
-    // 清除显示区域
-    lcd_fill(&lcd_desc, 0, 0, lcd_desc.hw->width, lcd_desc.hw->height, BLACK);
-
-    // 显示菜单标题
-    lcd_set_font(&lcd_desc, FONT_1608, YELLOW, BLACK);
-    lcd_print(&lcd_desc, 5, 5, "%s", ptShowInfo->uMenuDesc.pTextString);
-
+    bool needFullRedraw = false;
+    
+    // 检查是否需要完全重绘
+    if (lastShowBaseItem != ptShowInfo->showBaseItem || 
+        strcmp(lastTitle, ptShowInfo->uMenuDesc.pTextString) != 0) {
+        needFullRedraw = true;
+    }
+    
     // 限制显示的菜单项数量
     cotMenu_LimitShowListNum(ptShowInfo, &showNum);
-
-    // 显示菜单项 - 修复字段名
-    lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
-    for (int i = 0; i < showNum; i++)
-    {
-        tmpselect = i + ptShowInfo->showBaseItem;
-
-        // 当前选中项使用不同颜色
-        if (tmpselect == ptShowInfo->selectItem)
-        {
-            lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
-            // 绘制选中项背景
-            lcd_fill(&lcd_desc, 0, 30 + i * 30, lcd_desc.hw->width, 30 + (i + 1) * 30 - 2, YELLOW);
+    
+    if (needFullRedraw) {
+        // 完全重绘 - 先清除显示区域
+        lcd_clear(&lcd_desc, BLACK);
+        
+        // 显示菜单标题
+        lcd_set_font(&lcd_desc, FONT_1608, YELLOW, BLACK);
+        lcd_print(&lcd_desc, 5, 5, "%s", ptShowInfo->uMenuDesc.pTextString);
+        
+        // 显示所有菜单项
+        for (int i = 0; i < showNum; i++) {
+            tmpselect = i + ptShowInfo->showBaseItem;
+            
+            if (tmpselect == ptShowInfo->selectItem) {
+                // 选中项使用不同的颜色
+                lcd_fill(&lcd_desc, 0, 30 + i * 30, lcd_desc.hw->width, 30 + (i + 1) * 30 - 2, YELLOW);
+                lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
+            } else {
+                lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+            }
+            
+            lcd_print(&lcd_desc, 10, 30 + i * 30, "%s", ptShowInfo->uItemsListDesc[tmpselect].pTextString);
         }
-        else
-        {
-            lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+    } else if (lastSelectItem != ptShowInfo->selectItem) {
+        // 只有选中项发生变化时才更新相关项
+        
+        // 找出上一个选中项和当前选中项的显示索引
+        int lastIndex = -1;
+        int currIndex = -1;
+        
+        for (int i = 0; i < showNum; i++) {
+            tmpselect = i + ptShowInfo->showBaseItem;
+            
+            if (tmpselect == lastSelectItem)
+                lastIndex = i;
+                
+            if (tmpselect == ptShowInfo->selectItem)
+                currIndex = i;
         }
         
-        // 显示菜单项文本 - 修复字段名 (pItemsDesc 改为 uItemsListDesc)
-        lcd_print(&lcd_desc, 10, 30 + i * 30, "%s", ptShowInfo->uItemsListDesc[tmpselect].pTextString);
+        // 只更新变化的项
+        if (lastIndex >= 0) {
+            // 恢复上一个选中项为普通显示
+            lcd_fill(&lcd_desc, 0, 30 + lastIndex * 30, lcd_desc.hw->width, 30 + (lastIndex + 1) * 30 - 2, BLACK);
+            lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
+            lcd_print(&lcd_desc, 10, 30 + lastIndex * 30, "%s", 
+                      ptShowInfo->uItemsListDesc[lastIndex + ptShowInfo->showBaseItem].pTextString);
+        }
+        
+        if (currIndex >= 0) {
+            // 将当前选中项设置为高亮显示
+            lcd_fill(&lcd_desc, 0, 30 + currIndex * 30, lcd_desc.hw->width, 30 + (currIndex + 1) * 30 - 2, YELLOW);
+            lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
+            lcd_print(&lcd_desc, 10, 30 + currIndex * 30, "%s", 
+                      ptShowInfo->uItemsListDesc[currIndex + ptShowInfo->showBaseItem].pTextString);
+        }
     }
+    
+    // 保存当前状态用于下次比较
+    lastSelectItem = ptShowInfo->selectItem;
+    lastShowBaseItem = ptShowInfo->showBaseItem;
+    strncpy(lastTitle, ptShowInfo->uMenuDesc.pTextString, sizeof(lastTitle)-1);
 }
 
 // 在my_menu.c中继续添加
@@ -185,6 +229,6 @@ void Lcd_MenuTask(void)
         //反转LED灯
         led_toggle();
         Key_Handler(key);
-        cotMenu_Task();
     }
+    cotMenu_Task(); // 菜单任务处理
 }
