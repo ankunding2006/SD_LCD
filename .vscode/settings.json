@@ -65,7 +65,8 @@
     "usart.h": "c",
     "usmart_port.h": "c",
     "usmart.h": "c",
-    "sys.h": "c"
+    "sys.h": "c",
+    "cot_menu.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

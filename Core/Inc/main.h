@@ -94,6 +94,16 @@ void delay_us(uint32_t nus);
 #define LCD_DC_GPIO_Port GPIOA
 #define LCD_SDA_Pin GPIO_PIN_7
 #define LCD_SDA_GPIO_Port GPIOA
+#define MENU_Pin GPIO_PIN_13
+#define MENU_GPIO_Port GPIOB
+#define DOWN_Pin GPIO_PIN_15
+#define DOWN_GPIO_Port GPIOB
+#define ENTER_Pin GPIO_PIN_9
+#define ENTER_GPIO_Port GPIOD
+#define GND_Pin GPIO_PIN_11
+#define GND_GPIO_Port GPIOD
+#define UP_Pin GPIO_PIN_13
+#define UP_GPIO_Port GPIOD
 #define LCD_RST_Pin GPIO_PIN_3
 #define LCD_RST_GPIO_Port GPIOB
 #define LCD_BLK_Pin GPIO_PIN_4

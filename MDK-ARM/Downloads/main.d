@@ -55,9 +55,11 @@ downloads\main.o: ../Core/Inc/sdio.h
 downloads\main.o: ../Core/Inc/spi.h
 downloads\main.o: ../Core/Inc/tim.h
 downloads\main.o: ../Core/Inc/gpio.h
-downloads\main.o: ..\Middlewares\USMART\SYSTEM\delay\delay.h
+downloads\main.o: ../Middlewares/my_menu/app/my_menu.h
+downloads\main.o: ../Middlewares/my_menu/cot_menu-v1.3.0/cot_menu.h
+downloads\main.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\main.o: ../Middlewares/USMART/./SYSTEM/sys/sys.h
 downloads\main.o: ../Drivers/CMSIS/Include/core_cm4.h
-downloads\main.o: ..\Middlewares\USMART\SYSTEM\usart\usart.h
+downloads\main.o: ../Middlewares/USMART/SYSTEM/usart/usart.h
 downloads\main.o: ../Middlewares/USMART/usmart.h
 downloads\main.o: ../Middlewares/USMART/./USMART/usmart_port.h
