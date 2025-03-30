@@ -1,4 +1,8 @@
 {
+  "files.associations": {
+    "hmi_music.h": "c",
+    "windows.h": "c"
+  },
   "C_Cpp_Runner.cCompilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
   "C_Cpp_Runner.cppCompilerPath": "C:/msys64/ucrt64/bin/g++.exe",
   "C_Cpp_Runner.debuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
@@ -55,21 +59,5 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "C_Cpp.errorSquiggles": "disabled",
-  "files.associations": {
-    "fatfs.h": "c",
-    "main.h": "c",
-    "lcd_port.h": "c",
-    "lcd.h": "c",
-    "usart.h": "c",
-    "usmart_port.h": "c",
-    "usmart.h": "c",
-    "sys.h": "c",
-    "ioi2c.h": "c",
-    "control.h": "c",
-    "tim.h": "c",
-    "lcd_font.h": "c"
-  },
-  "cmake.ignoreCMakeListsMissing": true
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }

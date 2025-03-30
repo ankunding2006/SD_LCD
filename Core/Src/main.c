@@ -175,10 +175,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-    HAL_Delay(100); // 添加延时防止刷新过快
-    
-    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Hardware/ENCODER;../Hardware/IIC;../control/CONTROL;..\control\LineTracking</IncludePath>
+              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Hardware/ENCODER;../Hardware/IIC;../control/CONTROL;..\control\LineTracking;..\Middlewares\my_menu\app;..\Middlewares\my_menu\cot_menu-v1.3.0</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1126,6 +1126,21 @@
               <FileName>LineTracking.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\control\LineTracking\LineTracking.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>menu</GroupName>
+          <Files>
+            <File>
+              <FileName>my_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\my_menu\app\my_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>cot_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\my_menu\cot_menu-v1.3.0\cot_menu.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -56,20 +56,12 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "C_Cpp.errorSquiggles": "disabled",
-  "files.associations": {
-    "fatfs.h": "c",
-    "main.h": "c",
-    "lcd_port.h": "c",
-    "lcd.h": "c",
-    "usart.h": "c",
-    "usmart_port.h": "c",
-    "usmart.h": "c",
-    "sys.h": "c",
-    "ioi2c.h": "c",
-    "control.h": "c",
-    "tim.h": "c",
-    "lcd_font.h": "c"
-  },
-  "cmake.ignoreCMakeListsMissing": true
+  "cmake.sourceDirectory": "C:/Users/34118/Downloads/Compressed/cot_menu-v1.3.0/examples",
+  "makefile.launchConfigurations": [
+    {
+      "cwd": "c:\\Users\\34118\\Downloads\\Compressed\\cot_menu-v1.3.0\\examples",
+      "binaryPath": "c:\\Users\\34118\\Downloads\\Compressed\\cot_menu-v1.3.0\\examples\\demo",
+      "binaryArgs": []
+    }
+  ]
 }
