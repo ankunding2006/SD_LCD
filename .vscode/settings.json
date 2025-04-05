@@ -65,7 +65,9 @@
     "usart.h": "c",
     "usmart_port.h": "c",
     "usmart.h": "c",
-    "sys.h": "c"
+    "sys.h": "c",
+    "stdio.h": "c",
+    "*.tcc": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

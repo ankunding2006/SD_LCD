@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;..\Middlewares\USMART\SYSTEM\usart;..\Middlewares\USMART\SYSTEM\sys;..\Middlewares\USMART\SYSTEM\delay;..\Middlewares\USMART\USMART</IncludePath>
+              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;..\Middlewares\USMART\SYSTEM\usart;..\Middlewares\USMART\SYSTEM\sys;..\Middlewares\USMART\SYSTEM\delay;..\Middlewares\USMART\USMART;..\Middlewares\lvgl_Library;..\Middlewares\lvgl_Library\src;..\Middlewares\lvgl_Library\examples\porting</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

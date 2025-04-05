@@ -4,13 +4,13 @@
  */
 
 /*Copy this file as "lv_port_indev.c" and set this value to "1" to enable content*/
-#if 0
+#if 1
 
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_port_indev_template.h"
-
+#include "lv_port_indev.h"
+#include "lvgl.h"
 /*********************
  *      DEFINES
  *********************/
@@ -84,42 +84,42 @@ void lv_port_indev_init(void)
      * Touchpad
      * -----------------*/
 
-    /*Initialize your touchpad if you have*/
-    touchpad_init();
+    // /*Initialize your touchpad if you have*/
+    // touchpad_init();
 
-    /*Register a touchpad input device*/
-    indev_touchpad = lv_indev_create();
-    lv_indev_set_type(indev_touchpad, LV_INDEV_TYPE_POINTER);
-    lv_indev_set_read_cb(indev_touchpad, touchpad_read);
+    // /*Register a touchpad input device*/
+    // indev_touchpad = lv_indev_create();
+    // lv_indev_set_type(indev_touchpad, LV_INDEV_TYPE_POINTER);
+    // lv_indev_set_read_cb(indev_touchpad, touchpad_read);
 
     /*------------------
      * Mouse
      * -----------------*/
 
     /*Initialize your mouse if you have*/
-    mouse_init();
+    // mouse_init();
 
-    /*Register a mouse input device*/
-    indev_mouse = lv_indev_create();
-    lv_indev_set_type(indev_mouse, LV_INDEV_TYPE_POINTER);
-    lv_indev_set_read_cb(indev_mouse, mouse_read);
+    // /*Register a mouse input device*/
+    // indev_mouse = lv_indev_create();
+    // lv_indev_set_type(indev_mouse, LV_INDEV_TYPE_POINTER);
+    // lv_indev_set_read_cb(indev_mouse, mouse_read);
 
-    /*Set cursor. For simplicity set a HOME symbol now.*/
-    lv_obj_t * mouse_cursor = lv_image_create(lv_screen_active());
-    lv_image_set_src(mouse_cursor, LV_SYMBOL_HOME);
-    lv_indev_set_cursor(indev_mouse, mouse_cursor);
+    // /*Set cursor. For simplicity set a HOME symbol now.*/
+    // lv_obj_t * mouse_cursor = lv_image_create(lv_screen_active());
+    // lv_image_set_src(mouse_cursor, LV_SYMBOL_HOME);
+    // lv_indev_set_cursor(indev_mouse, mouse_cursor);
 
     /*------------------
      * Keypad
      * -----------------*/
 
-    /*Initialize your keypad or keyboard if you have*/
-    keypad_init();
+    // /*Initialize your keypad or keyboard if you have*/
+    // keypad_init();
 
-    /*Register a keypad input device*/
-    indev_keypad = lv_indev_create();
-    lv_indev_set_type(indev_keypad, LV_INDEV_TYPE_KEYPAD);
-    lv_indev_set_read_cb(indev_keypad, keypad_read);
+    // /*Register a keypad input device*/
+    // indev_keypad = lv_indev_create();
+    // lv_indev_set_type(indev_keypad, LV_INDEV_TYPE_KEYPAD);
+    // lv_indev_set_read_cb(indev_keypad, keypad_read);
 
     /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
      *add objects to the group with `lv_group_add_obj(group, obj)`
@@ -130,13 +130,13 @@ void lv_port_indev_init(void)
      * Encoder
      * -----------------*/
 
-    /*Initialize your encoder if you have*/
-    encoder_init();
+    // /*Initialize your encoder if you have*/
+    // encoder_init();
 
-    /*Register a encoder input device*/
-    indev_encoder = lv_indev_create();
-    lv_indev_set_type(indev_encoder, LV_INDEV_TYPE_ENCODER);
-    lv_indev_set_read_cb(indev_encoder, encoder_read);
+    // /*Register a encoder input device*/
+    // indev_encoder = lv_indev_create();
+    // lv_indev_set_type(indev_encoder, LV_INDEV_TYPE_ENCODER);
+    // lv_indev_set_read_cb(indev_encoder, encoder_read);
 
     /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
      *add objects to the group with `lv_group_add_obj(group, obj)`

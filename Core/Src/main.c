@@ -23,13 +23,16 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "delay.h"
 #include "usart.h"
-#include "usmart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
+#include "usmart.h"
+#include "delay.h"
+#include "lvgl.h"
+#include "lv_port_disp.h"
+#include "lv_port_indev.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,7 +119,8 @@ int main(void)
   delay_init(168);     /* 延时初始化 */
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始化 */
-  lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
+  HAL_Delay(10);     /* 延时1秒 */
+  lv_port_disp_init();  // 初始化显示驱动
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -126,6 +130,8 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
+  lv_init();            // 初始化LVGL库
+  lv_port_indev_init(); // 初始化输入设备
   Before_Main();
   /* USER CODE END 2 */
 

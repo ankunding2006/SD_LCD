@@ -11,7 +11,8 @@
  *********************/
 #include "lv_port_disp.h"
 #include <stdbool.h>
-
+#include "lcd.h"
+extern lcd lcd_desc;
 /*********************
  *      DEFINES
  *********************/
@@ -72,22 +73,22 @@ void lv_port_disp_init(void)
     /* Example 2
      * Two buffers for partial rendering
      * In flush_cb DMA or similar hardware should be used to update the display in the background.*/
-    LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_2_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
+    // LV_ATTRIBUTE_MEM_ALIGN
+    // static uint8_t buf_2_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
 
-    LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_2_2[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
-    lv_display_set_buffers(disp, buf_2_1, buf_2_2, sizeof(buf_2_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
+    // LV_ATTRIBUTE_MEM_ALIGN
+    // static uint8_t buf_2_2[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
+    // lv_display_set_buffers(disp, buf_2_1, buf_2_2, sizeof(buf_2_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     /* Example 3
      * Two buffers screen sized buffer for double buffering.
      * Both LV_DISPLAY_RENDER_MODE_DIRECT and LV_DISPLAY_RENDER_MODE_FULL works, see their comments*/
-    LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES * BYTE_PER_PIXEL];
+    // LV_ATTRIBUTE_MEM_ALIGN
+    // static uint8_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES * BYTE_PER_PIXEL];
 
-    LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES * BYTE_PER_PIXEL];
-    lv_display_set_buffers(disp, buf_3_1, buf_3_2, sizeof(buf_3_1), LV_DISPLAY_RENDER_MODE_DIRECT);
+    // LV_ATTRIBUTE_MEM_ALIGN
+    // static uint8_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES * BYTE_PER_PIXEL];
+    // lv_display_set_buffers(disp, buf_3_1, buf_3_2, sizeof(buf_3_1), LV_DISPLAY_RENDER_MODE_DIRECT);
 
 }
 
@@ -99,6 +100,7 @@ void lv_port_disp_init(void)
 static void disp_init(void)
 {
     /*You code here*/
+    lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
 }
 
 volatile bool disp_flush_enabled = true;
@@ -124,21 +126,17 @@ void disp_disable_update(void)
 static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t * px_map)
 {
     if(disp_flush_enabled) {
-        /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
-
-        int32_t x;
-        int32_t y;
-        for(y = area->y1; y <= area->y2; y++) {
-            for(x = area->x1; x <= area->x2; x++) {
-                /*Put a pixel to the display. For example:*/
-                /*put_px(x, y, *px_map)*/
-                px_map++;
-            }
-        }
+        // 为LCD设置显示区域
+        lcd_set_address(&lcd_desc, area->x1, area->y1, area->x2, area->y2);
+        
+        // 计算要刷新的区域大小
+        uint32_t size = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) * BYTE_PER_PIXEL;
+        
+        // 直接使用批量写入函数将整个缓冲区写入LCD
+        lcd_write_bulk(lcd_desc.io, px_map, size);
     }
 
-    /*IMPORTANT!!!
-     *Inform the graphics library that you are ready with the flushing*/
+    // 通知LVGL刷新完成
     lv_display_flush_ready(disp_drv);
 }
 
