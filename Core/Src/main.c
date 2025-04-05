@@ -23,7 +23,6 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -33,6 +32,7 @@
 #include "lvgl.h"
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,7 +54,7 @@
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
-uint8_t angle = 0; // æ·»åŠ èˆµæœºè§’åº¦å˜é‡
+uint8_t angle = 0; // Ìí¼Ó¶æ»ú½Ç¶È±äÁ¿
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
@@ -116,11 +116,11 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  delay_init(168);     /* å»¶æ—¶åˆå§‹åŒ– */
-  usart_init(115200);  /* ä¸²å£åˆå§‹åŒ–ä¸º115200 */
-  usmart_dev.init(84); /* USMARTåˆå§‹åŒ– */
-  HAL_Delay(10);     /* å»¶æ—¶1ç§’ */
-  lv_port_disp_init();  // åˆå§‹åŒ–æ˜¾ç¤ºé©±åŠ¨
+  delay_init(168);     /* ÑÓÊ±³õÊ¼»¯ */
+  usart_init(115200);  /* ´®¿Ú³õÊ¼»¯Îª115200 */
+  usmart_dev.init(84); /* USMART³õÊ¼»¯ */
+  HAL_Delay(10);       /* ÑÓÊ±1Ãë */
+  lv_port_disp_init(); // ³õÊ¼»¯ÏÔÊ¾Çı¶¯
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -130,8 +130,8 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  lv_init();            // åˆå§‹åŒ–LVGLåº“
-  lv_port_indev_init(); // åˆå§‹åŒ–è¾“å…¥è®¾å¤‡
+  lv_init();            // ³õÊ¼»¯LVGL¿â
+  lv_port_indev_init(); // ³õÊ¼»¯ÊäÈëÉè±¸
   Before_Main();
   /* USER CODE END 2 */
 
@@ -139,6 +139,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    lv_task_handler(); // ´¦ÀíLVGLÈÎÎñ
+    HAL_Delay(2);     // ÑÓÊ±5ms
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -192,12 +194,12 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-// æ·»åŠ app_mainå‡½æ•°
+// Ìí¼Óapp_mainº¯Êı
 void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // åˆå§‹åŒ–æ¼”ï¿½?? - å¾ªç¯ç‚¹äº®ï¿½??æœ‰LED
+  // ³õÊ¼»¯Ñİ??? - Ñ­»·µãÁÁ???ÓĞLED
   all_leds_off();
   HAL_Delay(500);
   led1_on();

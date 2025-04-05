@@ -76,6 +76,9 @@ void all_leds_toggle(void);
 void app_main(void);
 void app_fatfs(void);
 int fputc(int ch, FILE *f);
+void delay_init(uint16_t sysclk);
+void delay_ms(uint16_t nms);
+void delay_us(uint32_t nus);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

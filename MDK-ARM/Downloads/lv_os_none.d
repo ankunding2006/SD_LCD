@@ -1,0 +1,16 @@
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_os_none.c
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../lv_conf_internal.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../lv_conf_kconfig.h
+downloads\lv_os_none.o: ../Middlewares/lvgl_Library/examples/porting/../../lv_conf.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_os.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../misc/lv_types.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+downloads\lv_os_none.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_os_none.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../misc/lv_timer.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../misc/../tick/lv_tick.h
+downloads\lv_os_none.o: C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/../misc/lv_ll.h
