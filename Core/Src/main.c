@@ -132,7 +132,6 @@ int main(void)
 
   led_off();
   app_main();
-  lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   lv_port_indev_init(); // 初始化输入设备
   lv_tick_set_cb(HAL_GetTick); // 设置LVGL的tick回调函数
   Before_Main();
@@ -221,7 +220,7 @@ void create_demo_ui(void) {
     lv_obj_set_size(btn, 100, 50);
     
     lv_obj_t * label = lv_label_create(btn);
-    lv_label_set_text(label, "bottom");
+    lv_label_set_text(label, "botton");
     lv_obj_center(label);
 }
 /* USER CODE END 4 */
