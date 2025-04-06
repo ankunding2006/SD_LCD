@@ -1,4 +1,3 @@
-
 /**
  * @file lv_port_indev_templ.h
  *
@@ -39,6 +38,9 @@ void lv_port_indev_init(void);
 /**********************
  *      MACROS
  **********************/
+
+// 导出按键输入设备以供其他文件使用
+extern lv_indev_t *indev_button;
 
 #ifdef __cplusplus
 } /*extern "C"*/

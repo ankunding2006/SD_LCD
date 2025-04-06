@@ -145,28 +145,17 @@ void lv_port_indev_init(void)
      *`lv_indev_set_group(indev_encoder, group);`*/
 
     /*------------------
-     * Button
+     * Button as Keypad
      * -----------------*/
 
     /*Initialize your button if you have*/
     button_init();
 
-    /*Register a button input device*/
+    /*Register a button input device as keypad*/
     indev_button = lv_indev_create();
-    lv_indev_set_type(indev_button, LV_INDEV_TYPE_BUTTON);
+    lv_indev_set_type(indev_button, LV_INDEV_TYPE_KEYPAD);  // 键盘类型
     lv_indev_set_read_cb(indev_button, button_read);
 
-    #define BUTTON_COUNT 5
-
-    /*Assign buttons to points on the screen*/
-    static const lv_point_t btn_points[BUTTON_COUNT] = {
-        {40, 40},   // KEY1 -> 屏幕位置 x:40; y:40
-        {120, 40},  // KEY2 -> 屏幕位置 x:120; y:40
-        {200, 40},  // KEY3 -> 屏幕位置 x:200; y:40
-        {80, 200},  // KEY4 -> 屏幕位置 x:80; y:200
-        {160, 200}, // KEY5 -> 屏幕位置 x:160; y:200
-    };
-    lv_indev_set_button_points(indev_button, btn_points);
 }
 
 /**********************
@@ -366,35 +355,85 @@ static void button_init(void)
 }
 
 /*Will be called by the library to read the button*/
+/**
+ * 按键读取函数 - 检测物理按键并将其映射为LVGL导航键
+ * 包含LED指示灯反馈
+ */
 static void button_read(lv_indev_t *indev_drv, lv_indev_data_t *data)
 {
-
-    static uint8_t last_btn = 0;
-
-    /*Get the pressed button's ID*/
-    int8_t btn_act = button_get_pressed_id();
-
-    if (btn_act >= 0)
-    {
-        data->state = LV_INDEV_STATE_PRESSED;
-        last_btn = btn_act;
+    static uint32_t last_key = 0;           // 存储上一次的键值
+    static uint8_t last_btn_state = 0;      // 存储上一次的按键状态
+    uint8_t current_btn_state = 0;          // 当前按键状态
+    
+    // 检测所有按键的当前状态
+    if (HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_UP;
+        led1_on();  // KEY1按下，点亮LED1
+        led2_off();
+        led3_off();
     }
-    else
-    {
-        data->state = LV_INDEV_STATE_RELEASED;
+    else if (HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_DOWN;
+        led1_off();
+        led2_on();  // KEY2按下，点亮LED2
+        led3_off();
     }
-
-    /*Save the last pressed button's ID*/
-    data->btn_id = last_btn;
+    else if (HAL_GPIO_ReadPin(KEY3_GPIO_Port, KEY3_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_LEFT;
+        led1_off();
+        led2_off();
+        led3_on();  // KEY3按下，点亮LED3
+    }
+    else if (HAL_GPIO_ReadPin(KEY4_GPIO_Port, KEY4_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_RIGHT;
+        led1_on();
+        led2_on();  // KEY4按下，点亮LED1和LED2
+        led3_off();
+    }
+    else if (HAL_GPIO_ReadPin(KEY5_GPIO_Port, KEY5_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_ENTER;
+        led1_on();
+        led2_off();
+        led3_on();  // KEY5按下，点亮LED1和LED3
+    }
+    else {
+        current_btn_state = 0;
+        // 没有按键按下，关闭所有LED
+        led1_off();
+        led2_off();
+        led3_off();
+        
+        // 重要：在没有按键按下时，将last_key重置为0
+        // 这确保LVGL不会继续处理之前的按键
+        if (last_btn_state != 0) {  // 只有当按键状态从按下变为释放时才重置
+            last_key = 0;
+        }
+    }
+    
+    // 更新按键状态
+    if (current_btn_state != 0) {
+        data->state = LV_INDEV_STATE_PRESSED;  // 按下状态
+    } else {
+        data->state = LV_INDEV_STATE_RELEASED; // 释放状态
+    }
+    
+    // 返回当前的键值
+    data->key = last_key;
+    
+    // 保存当前状态为上一次状态，用于下次比较
+    last_btn_state = current_btn_state;
 }
 
 /*Get ID  (0, 1, 2 ..) of the pressed button*/
 static int8_t button_get_pressed_id(void)
 {
-    uint8_t i;
-
-    /*Check to buttons see which is being pressed (assume there are 2 buttons)*/
-    for (i = 0; i < 2; i++)
+    /*Check all buttons to see which is being pressed*/
+    for (uint8_t i = 0; i < 5; i++) // 支持全部5个按键
     {
         /*Return the pressed button's ID*/
         if (button_is_pressed(i))
@@ -412,8 +451,7 @@ static bool button_is_pressed(uint8_t id)
 {
     bool pressed = false;
     
-    // 注意：这里假设按键按下时GPIO读为低电平
-    // 如果你的硬件按键按下时为高电平，则需要反转逻辑
+    // 注意：按键按下时GPIO读为低电平
     
     switch(id) {
         case 0: // KEY1

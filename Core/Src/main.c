@@ -122,7 +122,7 @@ int main(void)
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始化 */
   HAL_Delay(10);       /* 延时1秒 */
-  lv_init();            // 初始化LVGL库
+  lv_init();           // 初始化LVGL库
   lv_port_disp_init(); // 初始化显示驱动
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
@@ -132,7 +132,7 @@ int main(void)
 
   led_off();
   app_main();
-  lv_port_indev_init(); // 初始化输入设备
+  lv_port_indev_init();        // 初始化输入设备
   lv_tick_set_cb(HAL_GetTick); // 设置LVGL的tick回调函数
   Before_Main();
   /* USER CODE END 2 */
@@ -142,6 +142,7 @@ int main(void)
   while (1)
   {
     lv_task_handler(); // 处理LVGL任务
+    HAL_Delay(1);    // 延时1ms
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -214,14 +215,33 @@ void Before_Main(void)
   create_demo_ui(); // 创建演示UI
 }
 
-void create_demo_ui(void) {
-    lv_obj_t * btn = lv_btn_create(lv_screen_active());
-    lv_obj_set_pos(btn, 120, 100);
-    lv_obj_set_size(btn, 100, 50);
-    
-    lv_obj_t * label = lv_label_create(btn);
-    lv_label_set_text(label, "botton");
-    lv_obj_center(label);
+void create_demo_ui(void)
+{
+  // 创建按钮
+  lv_obj_t *btn = lv_btn_create(lv_screen_active());
+  lv_obj_set_pos(btn, 120, 100);
+  lv_obj_set_size(btn, 100, 50);
+
+  lv_obj_t *label = lv_label_create(btn);
+  lv_label_set_text(label, "button 1");
+  lv_obj_center(label);
+
+  lv_obj_t *btn2 = lv_btn_create(lv_screen_active());
+  lv_obj_set_pos(btn2, 120, 160);
+  lv_obj_set_size(btn2, 100, 50);
+
+  lv_obj_t *label2 = lv_label_create(btn2);
+  lv_label_set_text(label2, "button 2");
+  lv_obj_center(label2);
+
+  // 创建一个组并添加对象
+  lv_group_t *g = lv_group_create();
+  lv_group_add_obj(g, btn);
+  lv_group_add_obj(g, btn2);
+  // 给第一个按钮设置初始焦点
+  lv_obj_add_state(btn, LV_STATE_FOCUS_KEY);
+  // 将外部输入设备与组关联
+  lv_indev_set_group(indev_button, g);
 }
 /* USER CODE END 4 */
 
