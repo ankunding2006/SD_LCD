@@ -75,6 +75,8 @@ lcd lcd_desc = {
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void Before_Main(void);
+void create_demo_ui(void);
+void app_main(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -120,6 +122,7 @@ int main(void)
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始化 */
   HAL_Delay(10);       /* 延时1秒 */
+  lv_init();            // 初始化LVGL库
   lv_port_disp_init(); // 初始化显示驱动
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
@@ -130,8 +133,8 @@ int main(void)
   led_off();
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  lv_init();            // 初始化LVGL库
   lv_port_indev_init(); // 初始化输入设备
+  lv_tick_set_cb(HAL_GetTick); // 设置LVGL的tick回调函数
   Before_Main();
   /* USER CODE END 2 */
 
@@ -140,7 +143,6 @@ int main(void)
   while (1)
   {
     lv_task_handler(); // 处理LVGL任务
-    HAL_Delay(2);     // 延时5ms
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -199,7 +201,6 @@ void Before_Main(void)
 {
   printf("App main started\r\n");
 
-  // 初始化演??? - 循环点亮???有LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();
@@ -211,6 +212,17 @@ void Before_Main(void)
   led3_on();
   HAL_Delay(500);
   led3_off();
+  create_demo_ui(); // 创建演示UI
+}
+
+void create_demo_ui(void) {
+    lv_obj_t * btn = lv_btn_create(lv_screen_active());
+    lv_obj_set_pos(btn, 120, 100);
+    lv_obj_set_size(btn, 100, 50);
+    
+    lv_obj_t * label = lv_label_create(btn);
+    lv_label_set_text(label, "bottom");
+    lv_obj_center(label);
 }
 /* USER CODE END 4 */
 
