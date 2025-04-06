@@ -13,9 +13,10 @@
 /Debug/
 /Release/
 /build/
-/RTE/
+**/RTE/
 /Templates/
 /Examples/
+**/.vscode/
 
 #####################
 # 用户特定 uVision 文件 #
@@ -28,6 +29,7 @@
 *.uvguix.*
 *.scvd
 *.uvguix
+*.log
 
 ################
 # 编译生成的文件 #
