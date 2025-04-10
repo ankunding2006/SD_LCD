@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file lv_windows.c
  *
  */
@@ -12,7 +12,6 @@
 #if LV_USE_OS == LV_OS_WINDOWS
 
 #include <process.h>
-#include "../misc/lv_timer.h"
 
 /*********************
  *      DEFINES
@@ -47,13 +46,11 @@ static unsigned __stdcall thread_start_routine(void * parameter);
 
 lv_result_t lv_thread_init(
     lv_thread_t * thread,
-    const char * const name,
     lv_thread_prio_t prio,
     void (*callback)(void *),
     size_t stack_size,
     void * user_data)
 {
-    LV_UNUSED(name);
     if(!thread) {
         return LV_RESULT_INVALID;
     }
@@ -205,11 +202,6 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * sync)
 {
     LV_UNUSED(sync);
     return LV_RESULT_INVALID;
-}
-
-uint32_t lv_os_get_idle_percent(void)
-{
-    return lv_timer_get_idle();
 }
 
 /**********************

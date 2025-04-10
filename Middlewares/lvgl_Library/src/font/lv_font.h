@@ -19,6 +19,7 @@ extern "C" {
 #include "lv_symbol_def.h"
 #include "../draw/lv_draw_buf.h"
 #include "../misc/lv_area.h"
+#include "../misc/cache/lv_cache.h"
 
 /*********************
  *      DEFINES
@@ -36,24 +37,17 @@ extern "C" {
 typedef enum {
     LV_FONT_GLYPH_FORMAT_NONE   = 0, /**< Maybe not visible*/
 
-    /**< Legacy simple formats with no byte padding at end of the lines*/
+    /**< Legacy simple formats*/
     LV_FONT_GLYPH_FORMAT_A1     = 0x01, /**< 1 bit per pixel*/
     LV_FONT_GLYPH_FORMAT_A2     = 0x02, /**< 2 bit per pixel*/
-    LV_FONT_GLYPH_FORMAT_A3     = 0x03, /**< 3 bit per pixel*/
     LV_FONT_GLYPH_FORMAT_A4     = 0x04, /**< 4 bit per pixel*/
     LV_FONT_GLYPH_FORMAT_A8     = 0x08, /**< 8 bit per pixel*/
 
-    /**< Legacy simple formats with byte padding at end of the lines*/
-    LV_FONT_GLYPH_FORMAT_A1_ALIGNED = 0x011, /**< 1 bit per pixel*/
-    LV_FONT_GLYPH_FORMAT_A2_ALIGNED = 0x012, /**< 2 bit per pixel*/
-    LV_FONT_GLYPH_FORMAT_A4_ALIGNED = 0x014, /**< 4 bit per pixel*/
-    LV_FONT_GLYPH_FORMAT_A8_ALIGNED = 0x018, /**< 8 bit per pixel*/
-
-    LV_FONT_GLYPH_FORMAT_IMAGE  = 0x19, /**< Image format*/
+    LV_FONT_GLYPH_FORMAT_IMAGE  = 0x09, /**< Image format*/
 
     /**< Advanced formats*/
-    LV_FONT_GLYPH_FORMAT_VECTOR = 0x1A, /**< Vectorial format*/
-    LV_FONT_GLYPH_FORMAT_SVG    = 0x1B, /**< SVG format*/
+    LV_FONT_GLYPH_FORMAT_VECTOR = 0x0A, /**< Vectorial format*/
+    LV_FONT_GLYPH_FORMAT_SVG    = 0x0B, /**< SVG format*/
     LV_FONT_GLYPH_FORMAT_CUSTOM = 0xFF, /**< Custom format*/
 } lv_font_glyph_format_t;
 
@@ -68,11 +62,6 @@ typedef struct {
     int16_t ofs_y;  /**< y offset of the bounding box*/
     lv_font_glyph_format_t format;  /**< Font format of the glyph see lv_font_glyph_format_t */
     uint8_t is_placeholder: 1;      /**< Glyph is missing. But placeholder will still be displayed*/
-    int32_t outline_stroke_width;   /**< used with freetype vector fonts - width of the letter outline */
-
-    /** 0: Get bitmap should return an A8 or ARGB8888 image.
-     * 1: return the bitmap as it is (Maybe A1/2/4 or any proprietary formats). */
-    uint8_t req_raw_bitmap: 1;
 
     union {
         uint32_t index;       /**< Unicode code point*/
@@ -96,7 +85,7 @@ typedef enum {
 } lv_font_kerning_t;
 
 /** Describe the properties of a font*/
-struct _lv_font_t {
+struct lv_font_t {
     /** Get a glyph's descriptor from a font*/
     bool (*get_glyph_dsc)(const lv_font_t *, lv_font_glyph_dsc_t *, uint32_t letter, uint32_t letter_next);
 
@@ -174,12 +163,6 @@ int32_t lv_font_get_line_height(const lv_font_t * font);
  * @param kerning `LV_FONT_KERNING_NORMAL` (default) or `LV_FONT_KERNING_NONE`
  */
 void lv_font_set_kerning(lv_font_t * font, lv_font_kerning_t kerning);
-
-/**
- * Get the default font, defined by LV_FONT_DEFAULT
- * @return  return      pointer to the default font
- */
-const lv_font_t * lv_font_get_default(void);
 
 /**********************
  *      MACROS
@@ -301,9 +284,10 @@ LV_FONT_CUSTOM_DECLARE
 #endif
 
 /**
- * Set to LV_FONT_DEFAULT as macros might not be available in bindings or other places
+ * Just a wrapper around LV_FONT_DEFAULT because it might be more convenient to use a function in some cases
+ * @return  pointer to LV_FONT_DEFAULT
  */
-extern const lv_font_t * const lv_font_default;
+const lv_font_t * lv_font_default(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -31,12 +31,6 @@
  **********************/
 
 /**********************
- *  GLOBAL VARIABLES
- **********************/
-
-const lv_font_t * const lv_font_default = LV_FONT_DEFAULT;
-
-/**********************
  * GLOBAL PROTOTYPES
  **********************/
 
@@ -57,11 +51,6 @@ const void * lv_font_get_glyph_bitmap(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t
 
 void lv_font_glyph_release_draw_data(lv_font_glyph_dsc_t * g_dsc)
 {
-    LV_ASSERT_NULL(g_dsc);
-    if(!g_dsc->entry) {
-        return;
-    }
-
     const lv_font_t * font = g_dsc->resolved_font;
 
     if(font != NULL && font->release_glyph) {
@@ -82,7 +71,7 @@ bool lv_font_get_glyph_dsc(const lv_font_t * font_p, lv_font_glyph_dsc_t * dsc_o
 
     const lv_font_t * f = font_p;
 
-    lv_memzero(dsc_out, sizeof(lv_font_glyph_dsc_t));
+    dsc_out->resolved_font = NULL;
 
     while(f) {
         bool found = f->get_glyph_dsc(f, dsc_out, letter, f->kerning == LV_FONT_KERNING_NONE ? 0 : letter_next);
@@ -150,10 +139,9 @@ int32_t lv_font_get_line_height(const lv_font_t * font)
     return font->line_height;
 }
 
-
-const lv_font_t * lv_font_get_default(void)
+const lv_font_t * lv_font_default(void)
 {
-    return lv_font_default;
+    return LV_FONT_DEFAULT;
 }
 
 /**********************

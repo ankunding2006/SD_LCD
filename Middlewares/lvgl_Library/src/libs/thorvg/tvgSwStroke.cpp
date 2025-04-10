@@ -61,10 +61,8 @@ static void _growBorder(SwStrokeBorder* border, uint32_t newPts)
     while (maxCur < maxNew)
         maxCur += (maxCur >> 1) + 16;
     //OPTIMIZE: use mempool!
-    border->pts = static_cast<SwPoint*>(lv_realloc(border->pts, maxCur * sizeof(SwPoint)));
-    LV_ASSERT_MALLOC(border->pts);
-    border->tags = static_cast<uint8_t*>(lv_realloc(border->tags, maxCur * sizeof(uint8_t)));
-    LV_ASSERT_MALLOC(border->tags);
+    border->pts = static_cast<SwPoint*>(realloc(border->pts, maxCur * sizeof(SwPoint)));
+    border->tags = static_cast<uint8_t*>(realloc(border->tags, maxCur * sizeof(uint8_t)));
     border->maxPts = maxCur;
 }
 
@@ -243,7 +241,7 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
     } else {
         //this is a mitered (pointed) or beveled (truncated) corner
         auto rotate = SIDE_TO_ROTATE(side);
-        auto bevel = stroke.join == StrokeJoin::Bevel;
+        auto bevel = (stroke.join == StrokeJoin::Bevel) ? true : false;
         SwFixed phi = 0;
         SwFixed thcos = 0;
 
@@ -446,23 +444,13 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
         //initialize with current direction
         angleIn = angleOut = angleMid = stroke.angleIn;
 
-        auto valid = mathCubicAngle(arc, angleIn, angleMid, angleOut);
-
-        //valid size
-        if (valid > 0 && arc < limit) {
+        if (arc < limit && !mathSmallCubic(arc, angleIn, angleMid, angleOut)) {
             if (stroke.firstPt) stroke.angleIn = angleIn;
             mathSplitCubic(arc);
             arc += 3;
             continue;
         }
 
-        //ignoreable size
-        if (valid < 0 && arc == bezStack) {
-            stroke.center = to;
-            return;
-        }
-
-        //small size
         if (firstArc) {
             firstArc = false;
             //process corner if necessary
@@ -808,25 +796,30 @@ void strokeFree(SwStroke* stroke)
     if (!stroke) return;
 
     //free borders
-    if (stroke->borders[0].pts) lv_free(stroke->borders[0].pts);
-    if (stroke->borders[0].tags) lv_free(stroke->borders[0].tags);
-    if (stroke->borders[1].pts) lv_free(stroke->borders[1].pts);
-    if (stroke->borders[1].tags) lv_free(stroke->borders[1].tags);
+    if (stroke->borders[0].pts) free(stroke->borders[0].pts);
+    if (stroke->borders[0].tags) free(stroke->borders[0].tags);
+    if (stroke->borders[1].pts) free(stroke->borders[1].pts);
+    if (stroke->borders[1].tags) free(stroke->borders[1].tags);
 
     fillFree(stroke->fill);
     stroke->fill = nullptr;
 
-    lv_free(stroke);
+    free(stroke);
 }
 
 
-void strokeReset(SwStroke* stroke, const RenderShape* rshape, const Matrix& transform)
+void strokeReset(SwStroke* stroke, const RenderShape* rshape, const Matrix* transform)
 {
-    stroke->sx = sqrtf(powf(transform.e11, 2.0f) + powf(transform.e21, 2.0f));
-    stroke->sy = sqrtf(powf(transform.e12, 2.0f) + powf(transform.e22, 2.0f));
+    if (transform) {
+        stroke->sx = sqrtf(powf(transform->e11, 2.0f) + powf(transform->e21, 2.0f));
+        stroke->sy = sqrtf(powf(transform->e12, 2.0f) + powf(transform->e22, 2.0f));
+    } else {
+        stroke->sx = stroke->sy = 1.0f;
+    }
+
     stroke->width = HALF_STROKE(rshape->strokeWidth());
     stroke->cap = rshape->strokeCap();
-    stroke->miterlimit = static_cast<SwFixed>(rshape->strokeMiterlimit() * 65536.0f);
+    stroke->miterlimit = static_cast<SwFixed>(rshape->strokeMiterlimit()) << 16;
 
     //Save line join: it can be temporarily changed when stroking curves...
     stroke->joinSaved = stroke->join = rshape->strokeJoin();
@@ -860,25 +853,31 @@ bool strokeParseOutline(SwStroke* stroke, const SwOutline& outline)
 
         //A contour cannot start with a cubic control point
         if (type == SW_CURVE_TYPE_CUBIC) return false;
-        ++types;
 
         auto closed =  outline.closed.data ? outline.closed.data[i]: false;
 
         _beginSubPath(*stroke, start, closed);
 
         while (pt < limit) {
+            ++pt;
+            ++types;
+
             //emit a single line_to
             if (types[0] == SW_CURVE_TYPE_POINT) {
-                ++pt;
-                ++types;
                 _lineTo(*stroke, *pt);
             //types cubic
             } else {
-                pt += 3;
-                types += 3;
-                if (pt <= limit) _cubicTo(*stroke, pt[-2], pt[-1], pt[0]);
-                else if (pt - 1 == limit) _cubicTo(*stroke, pt[-2], pt[-1], start);
-                else goto close;
+                if (pt + 1 > limit || types[1] != SW_CURVE_TYPE_CUBIC) return false;
+
+                pt += 2;
+                types += 2;
+
+                if (pt <= limit) {
+                    _cubicTo(*stroke, pt[-2], pt[-1], pt[0]);
+                    continue;
+                }
+                _cubicTo(*stroke, pt[-2], pt[-1], start);
+                goto close;
             }
         }
     close:

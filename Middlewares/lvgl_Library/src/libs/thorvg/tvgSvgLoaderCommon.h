@@ -218,7 +218,6 @@ enum class SvgParserLengthType
 {
     Vertical,
     Horizontal,
-    Diagonal,
     //In case of, for example, radius of radial gradient
     Other
 };
@@ -378,14 +377,6 @@ struct SvgCssStyleNode
 {
 };
 
-struct SvgTextNode
-{
-    char* text;
-    char* fontFamily;
-    float x, y;
-    float fontSize;
-};
-
 struct SvgLinearGradient
 {
     float x1;
@@ -459,11 +450,11 @@ struct SvgStyleGradient
     void clear()
     {
         stops.reset();
-        lv_free(transform);
-        lv_free(radial);
-        lv_free(linear);
-        lv_free(ref);
-        lv_free(id);
+        free(transform);
+        free(radial);
+        free(linear);
+        free(ref);
+        free(id);
     }
 };
 
@@ -530,7 +521,6 @@ struct SvgNode
         SvgClipNode clip;
         SvgCssStyleNode cssStyle;
         SvgSymbolNode symbol;
-        SvgTextNode text;
     } node;
     ~SvgNode();
 };
@@ -558,18 +548,11 @@ struct SvgNodeIdPair
     char *id;
 };
 
-enum class OpenedTagType : uint8_t
-{
-    Other = 0,
-    Style,
-    Text
-};
-
 struct SvgLoaderData
 {
     Array<SvgNode*> stack;
     SvgNode* doc = nullptr;
-    SvgNode* def = nullptr; //also used to store nested graphic nodes
+    SvgNode* def = nullptr;
     SvgNode* cssStyle = nullptr;
     Array<SvgStyleGradient*> gradients;
     SvgStyleGradient* latestGradient = nullptr; //For stops
@@ -579,7 +562,7 @@ struct SvgLoaderData
     Array<char*> images;        //embedded images
     int level = 0;
     bool result = false;
-    OpenedTagType openedTag = OpenedTagType::Other;
+    bool style = false;
     SvgNode* currentGraphicsNode = nullptr;
 };
 

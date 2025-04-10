@@ -399,9 +399,6 @@ void lv_obj_set_id(lv_obj_t * obj, void * id);
 void * lv_obj_get_id(const lv_obj_t * obj);
 
 /**
- * DEPRECATED IDs are used only to print the widget trees.
- * To find a widget use `lv_obj_find_by_name`
- *
  * Get the child object by its id.
  * It will check children and grandchildren recursively.
  * Function `lv_obj_id_compare` is used to matched obj id with given id.
@@ -410,7 +407,7 @@ void * lv_obj_get_id(const lv_obj_t * obj);
  * @param id        the id of the child object
  * @return          pointer to the child object or NULL if not found
  */
-lv_obj_t * lv_obj_find_by_id(const lv_obj_t * obj, const void * id);
+lv_obj_t * lv_obj_get_child_by_id(const lv_obj_t * obj, const void * id);
 
 /**
  * Assign id to object if not previously assigned.
@@ -473,7 +470,7 @@ void lv_objid_builtin_destroy(void);
         LV_ASSERT_MSG(lv_obj_is_valid(obj_p)  == true, "The object is invalid, deleted or corrupted?"); \
     } while(0)
 # else
-#  define LV_ASSERT_OBJ(obj_p, obj_class) LV_ASSERT_NULL(obj_p)
+#  define LV_ASSERT_OBJ(obj_p, obj_class) do{}while(0)
 #endif
 
 #if LV_USE_LOG && LV_LOG_TRACE_OBJ_CREATE

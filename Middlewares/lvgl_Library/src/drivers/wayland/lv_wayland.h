@@ -27,7 +27,6 @@ extern "C" {
 
 #include "../../display/lv_display.h"
 #include "../../indev/lv_indev.h"
-#include "../../indev/lv_indev_gesture.h"
 
 #if LV_USE_WAYLAND
 

@@ -89,7 +89,7 @@ bool LookaheadParserHandler::nextArrayValue()
 
 int LookaheadParserHandler::getInt()
 {
-    if (state != kHasNumber) {
+    if (state != kHasNumber || !val.IsInt()) {
         Error();
         return 0;
     }
@@ -126,7 +126,7 @@ const char* LookaheadParserHandler::getString()
 char* LookaheadParserHandler::getStringCopy()
 {
     auto str = getString();
-    if (str) return lv_strdup(str);
+    if (str) return strdup(str);
     return nullptr;
 }
 

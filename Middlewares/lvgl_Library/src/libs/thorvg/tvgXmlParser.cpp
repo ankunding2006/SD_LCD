@@ -301,8 +301,7 @@ bool isIgnoreUnsupportedLogElements(TVG_UNUSED const char* tagName)
 bool simpleXmlParseAttributes(const char* buf, unsigned bufLength, simpleXMLAttributeCb func, const void* data)
 {
     const char *itr = buf, *itrEnd = buf + bufLength;
-    char* tmpBuf = (char*)lv_malloc(bufLength + 1);
-    LV_ASSERT_MALLOC(tmpBuf);
+    char* tmpBuf = (char*)malloc(bufLength + 1);
 
     if (!buf || !func || !tmpBuf) goto error;
 
@@ -367,11 +366,11 @@ bool simpleXmlParseAttributes(const char* buf, unsigned bufLength, simpleXMLAttr
     }
 
 success:
-    lv_free(tmpBuf);
+    free(tmpBuf);
     return true;
 
 error:
-    lv_free(tmpBuf);
+    free(tmpBuf);
     return false;
 }
 
@@ -496,13 +495,13 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
         key[0] = '\0';
         val[0] = '\0';
 
-        if (sep != nullptr && next == nullptr) {
+        if (next == nullptr && sep != nullptr) {
             memcpy(key, buf, sep - buf);
             key[sep - buf] = '\0';
 
             memcpy(val, sep + 1, end - sep - 1);
             val[end - sep - 1] = '\0';
-        } else if (sep != nullptr && sep < next) {
+        } else if (sep < next && sep != nullptr) {
             memcpy(key, buf, sep - buf);
             key[sep - buf] = '\0';
 
@@ -526,9 +525,8 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
             }
         }
 
-        if (!next) break;
         buf = next + 1;
-    } while (true);
+    } while (next != nullptr);
 
     return true;
 }
@@ -565,7 +563,7 @@ const char* simpleXmlParseCSSAttribute(const char* buf, unsigned bufLength, char
         if (*p == '.') break;
     }
 
-    if (p == itr) *tag = lv_strdup("all");
+    if (p == itr) *tag = strdup("all");
     else *tag = strDuplicate(itr, p - itr);
 
     if (p == itrEnd) *name = nullptr;

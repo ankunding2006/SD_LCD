@@ -19,8 +19,6 @@ extern "C" {
  *      DEFINES
  *********************/
 
-#define LV_FS_MAX_PATH_LEN 256
-
 /**********************
  *      TYPEDEFS
  **********************/
@@ -61,10 +59,6 @@ void lv_fs_arduino_esp_littlefs_init(void);
 
 #if LV_USE_FS_ARDUINO_SD
 void lv_fs_arduino_sd_init(void);
-#endif
-
-#if LV_USE_FS_UEFI
-void lv_fs_uefi_init(void);
 #endif
 
 /**********************

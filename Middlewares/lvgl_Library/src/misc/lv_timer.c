@@ -77,7 +77,7 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
         return 1;
     }
 
-    LV_PROFILER_TIMER_BEGIN;
+    LV_PROFILER_BEGIN;
     lv_lock();
 
     uint32_t handler_start = lv_tick_get();
@@ -143,7 +143,8 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
     LV_TRACE_TIMER("finished (%" LV_PRIu32 " ms until the next timer call)", time_until_next);
     lv_unlock();
 
-    LV_PROFILER_TIMER_END;
+    LV_PROFILER_END;
+
     return time_until_next;
 }
 
@@ -322,11 +323,7 @@ static bool lv_timer_exec(lv_timer_t * timer)
         timer->last_run = lv_tick_get();
         LV_TRACE_TIMER("calling timer callback: %p", *((void **)&timer->timer_cb));
 
-        if(timer->timer_cb && original_repeat_count != 0) {
-            LV_PROFILER_TIMER_BEGIN_TAG("timer_cb");
-            timer->timer_cb(timer);
-            LV_PROFILER_TIMER_END_TAG("timer_cb");
-        }
+        if(timer->timer_cb && original_repeat_count != 0) timer->timer_cb(timer);
 
         if(!state.timer_deleted) {
             LV_TRACE_TIMER("timer callback %p finished", *((void **)&timer->timer_cb));

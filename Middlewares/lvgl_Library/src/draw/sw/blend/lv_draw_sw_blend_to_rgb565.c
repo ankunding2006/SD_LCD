@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file lv_draw_sw_blend_to_rgb565.c
  *
  */
@@ -54,7 +54,7 @@
 
 static void /* LV_ATTRIBUTE_FAST_MEM */ rgb565_image_blend(lv_draw_sw_blend_image_dsc_t * dsc);
 
-#if LV_DRAW_SW_SUPPORT_RGB888 || LV_DRAW_SW_SUPPORT_XRGB8888
+#if LV_DRAW_SW_SUPPORT_RGB888
 static void /* LV_ATTRIBUTE_FAST_MEM */ rgb888_image_blend(lv_draw_sw_blend_image_dsc_t * dsc,
                                                            const uint8_t src_px_size);
 #endif
@@ -495,10 +495,6 @@ static void LV_ATTRIBUTE_FAST_MEM i1_image_blend(lv_draw_sw_blend_image_dsc_t * 
                               ((((dest_buf_u16[dest_x] >> 5) & 0x3F) * ((l8_to_rgb565(chan_val) >> 2) & 0x3F) >> 6) << 5) |
                               (((dest_buf_u16[dest_x] & 0x1F) * (l8_to_rgb565(chan_val) & 0x1F)) >> 5);
                         break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        /*Difference blending mode*/
-                        res = (LV_ABS(dest_buf_u16[dest_x] - l8_to_rgb565(chan_val)));
-                        break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);
                         return;
@@ -617,11 +613,6 @@ static void LV_ATTRIBUTE_FAST_MEM al88_image_blend(lv_draw_sw_blend_image_dsc_t 
                         res += ((dest_buf_c16[dest_x].green * g) >> 6) << 5;
                         res += (dest_buf_c16[dest_x].blue * rb) >> 5;
                         break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        res = (LV_ABS(dest_buf_c16[dest_x].red - rb)) << 11;
-                        res += (LV_ABS(dest_buf_c16[dest_x].green - g)) << 5;
-                        res += LV_ABS(dest_buf_c16[dest_x].blue - rb);
-                        break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);
                         return;
@@ -737,11 +728,6 @@ static void LV_ATTRIBUTE_FAST_MEM l8_image_blend(lv_draw_sw_blend_image_dsc_t * 
                         res += ((dest_buf_c16[dest_x].green * g) >> 6) << 5;
                         res += (dest_buf_c16[dest_x].blue * rb) >> 5;
                         break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        res = (LV_ABS(dest_buf_c16[dest_x].red - rb)) << 11;
-                        res += (LV_ABS(dest_buf_c16[dest_x].green - g)) << 5;
-                        res += LV_ABS(dest_buf_c16[dest_x].blue - rb);
-                        break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);
                         return;
@@ -855,11 +841,6 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                         res += ((dest_buf_c16[x].green * src_buf_c16[x].green) >> 6) << 5;
                         res += (dest_buf_c16[x].blue * src_buf_c16[x].blue) >> 5;
                         break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        res = (LV_ABS(dest_buf_c16[x].red - src_buf_c16[x].red)) << 11;
-                        res += (LV_ABS(dest_buf_c16[x].green - src_buf_c16[x].green)) << 5;
-                        res += LV_ABS(dest_buf_c16[x].blue - src_buf_c16[x].blue);
-                        break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);
                         return;
@@ -881,7 +862,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
     }
 }
 
-#if LV_DRAW_SW_SUPPORT_RGB888 || LV_DRAW_SW_SUPPORT_XRGB8888
+#if LV_DRAW_SW_SUPPORT_RGB888
 
 static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_t * dsc, const uint8_t src_px_size)
 {
@@ -969,11 +950,6 @@ static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_
                         res = ((dest_buf_c16[dest_x].red * (src_buf_u8[src_x + 2] >> 3)) >> 5) << 11;
                         res += ((dest_buf_c16[dest_x].green * (src_buf_u8[src_x + 1] >> 2)) >> 6) << 5;
                         res += (dest_buf_c16[dest_x].blue * (src_buf_u8[src_x + 0] >> 3)) >> 5;
-                        break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        res = (LV_ABS(dest_buf_c16[dest_x].red - (src_buf_u8[src_x + 2] >> 3))) << 11;
-                        res += (LV_ABS(dest_buf_c16[dest_x].green - (src_buf_u8[src_x + 1] >> 2))) << 5;
-                        res += LV_ABS(dest_buf_c16[dest_x].blue - (src_buf_u8[src_x + 0] >> 3));
                         break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);
@@ -1087,11 +1063,6 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                         res = ((dest_buf_c16[dest_x].red * (src_buf_u8[src_x + 2] >> 3)) >> 5) << 11;
                         res += ((dest_buf_c16[dest_x].green * (src_buf_u8[src_x + 1] >> 2)) >> 6) << 5;
                         res += (dest_buf_c16[dest_x].blue * (src_buf_u8[src_x + 0] >> 3)) >> 5;
-                        break;
-                    case LV_BLEND_MODE_DIFFERENCE:
-                        res = (LV_ABS(dest_buf_c16[dest_x].red - (src_buf_u8[src_x + 2] >> 3))) << 11;
-                        res += (LV_ABS(dest_buf_c16[dest_x].green - (src_buf_u8[src_x + 1] >> 2))) << 5;
-                        res += LV_ABS(dest_buf_c16[dest_x].blue - (src_buf_u8[src_x + 0] >> 3));
                         break;
                     default:
                         LV_LOG_WARN("Not supported blend mode: %d", dsc->blend_mode);

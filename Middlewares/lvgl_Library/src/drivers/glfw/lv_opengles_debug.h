@@ -19,14 +19,12 @@ extern "C" {
 
 void GLClearError(void);
 
-void GLLogCall(const char * function, const char * file, int line);
+bool GLLogCall(const char * function, const char * file, int line);
 
 #if LV_USE_OPENGLES_DEBUG
-#define GL_CALL(x) do {\
-        GLClearError();\
-        x;\
-        GLLogCall(#x, __FILE__, __LINE__);\
-    } while(0)
+#define GL_CALL(x) GLClearError();\
+    x;\
+    GLLogCall(#x, __FILE__, __LINE__)
 #else
 #define GL_CALL(x) x
 #endif

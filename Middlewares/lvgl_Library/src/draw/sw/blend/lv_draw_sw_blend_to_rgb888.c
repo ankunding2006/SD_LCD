@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file lv_draw_sw_blend_to_rgb888.c
  *
  */
@@ -9,7 +9,7 @@
 #include "lv_draw_sw_blend_to_rgb888.h"
 #if LV_USE_DRAW_SW
 
-#if LV_DRAW_SW_SUPPORT_RGB888 || LV_DRAW_SW_SUPPORT_XRGB8888
+#if LV_DRAW_SW_SUPPORT_RGB888
 
 #include "lv_draw_sw_blend_private.h"
 #include "../../../misc/lv_math.h"
@@ -922,11 +922,6 @@ static inline void LV_ATTRIBUTE_FAST_MEM blend_non_normal_pixel(uint8_t * dest, 
             res[1] = (dest[1] * src.green) >> 8;
             res[2] = (dest[2] * src.red) >> 8;
             break;
-        case LV_BLEND_MODE_DIFFERENCE:
-            res[0] = LV_ABS((int16_t)dest[0] - src.blue);
-            res[1] = LV_ABS((int16_t)dest[1] - src.green);
-            res[2] = LV_ABS((int16_t)dest[2] - src.red);
-            break;
         default:
             LV_LOG_WARN("Not supported blend mode: %d", mode);
             return;
@@ -985,6 +980,6 @@ static inline void * LV_ATTRIBUTE_FAST_MEM drawbuf_next_row(const void * buf, ui
     return (void *)((uint8_t *)buf + stride);
 }
 
-#endif /*LV_DRAW_SW_SUPPORT_RGB888 || LV_DRAW_SW_SUPPORT_XRGB8888*/
+#endif
 
-#endif /*LV_USE_DRAW_SW*/
+#endif

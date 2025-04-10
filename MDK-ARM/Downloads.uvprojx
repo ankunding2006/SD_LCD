@@ -1237,31 +1237,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/display/lv_display_private.h</FilePath>
             </File>
             <File>
-              <FileName>lv_draw_dma2d.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/dma2d/lv_draw_dma2d.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_dma2d.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/dma2d/lv_draw_dma2d.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_dma2d_fill.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/dma2d/lv_draw_dma2d_fill.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_dma2d_img.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/dma2d/lv_draw_dma2d_img.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_dma2d_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/dma2d/lv_draw_dma2d_private.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/lv_draw.c</FilePath>
@@ -1422,126 +1397,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/lv_image_dsc.h</FilePath>
             </File>
             <File>
-              <FileName>lv_draw_nema_gfx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_arc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_arc.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_border.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_border.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_fill.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_fill.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_img.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_img.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_label.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_label.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_layer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_layer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_line.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_line.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_stm32_hal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_stm32_hal.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_triangle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_triangle.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_nema_gfx_utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_draw_nema_gfx_utils.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_nema_gfx_path.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_nema_gfx_path.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_nema_gfx_path.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nema_gfx/lv_nema_gfx_path.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_buf_g2d.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_draw_buf_g2d.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_g2d.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_draw_g2d.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_g2d.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_draw_g2d.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_g2d_fill.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_draw_g2d_fill.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_g2d_img.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_draw_g2d_img.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_g2d_buf_map.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_g2d_buf_map.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_g2d_buf_map.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_g2d_buf_map.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_g2d_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_g2d_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_g2d_utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/g2d/lv_g2d_utils.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_draw_buf_pxp.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/pxp/lv_draw_buf_pxp.c</FilePath>
@@ -1695,16 +1550,6 @@
               <FileName>lv_vglite_utils.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/nxp/vglite/lv_vglite_utils.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_opengles.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/opengles/lv_draw_opengles.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_opengles.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/opengles/lv_draw_opengles.h</FilePath>
             </File>
             <File>
               <FileName>lv_draw_dave2d.c</FileName>
@@ -1917,14 +1762,19 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_fill.c</FilePath>
             </File>
             <File>
-              <FileName>lv_draw_sw_grad.c</FileName>
+              <FileName>lv_draw_sw_gradient.c</FileName>
               <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_grad.c</FilePath>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_gradient.c</FilePath>
             </File>
             <File>
-              <FileName>lv_draw_sw_grad.h</FileName>
+              <FileName>lv_draw_sw_gradient.h</FileName>
               <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_grad.h</FilePath>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_gradient.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_draw_sw_gradient_private.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_gradient_private.h</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_img.c</FileName>
@@ -1975,16 +1825,6 @@
               <FileName>lv_draw_sw_triangle.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_triangle.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_sw_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_draw_sw_utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/draw/sw/lv_draw_sw_utils.h</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_vector.c</FileName>
@@ -2217,16 +2057,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/display/st7796/lv_st7796.h</FilePath>
             </File>
             <File>
-              <FileName>lv_st_ltdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/display/st_ltdc/lv_st_ltdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_st_ltdc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/display/st_ltdc/lv_st_ltdc.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_tft_espi.cpp</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/display/tft_espi/lv_tft_espi.cpp</FilePath>
@@ -2245,11 +2075,6 @@
               <FileName>lv_evdev.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/evdev/lv_evdev.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_evdev_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/evdev/lv_evdev_private.h</FilePath>
             </File>
             <File>
               <FileName>lv_glfw_window.c</FileName>
@@ -2470,76 +2295,6 @@
               <FileName>lv_sdl_window.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/sdl/lv_sdl_window.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_context.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_context.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_context.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_context.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_display.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_display.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_display.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_display.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_edk2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_edk2.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_gnu_efi.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_gnu_efi.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_indev.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_indev.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_indev_keyboard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_indev_keyboard.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_indev_pointer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_indev_pointer.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_indev_touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_indev_touch.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_private.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_private.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_uefi_std_wrapper.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/drivers/uefi/lv_uefi_std_wrapper.h</FilePath>
             </File>
             <File>
               <FileName>lv_wayland.c</FileName>
@@ -2797,21 +2552,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/indev/lv_indev.h</FilePath>
             </File>
             <File>
-              <FileName>lv_indev_gesture.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/indev/lv_indev_gesture.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_indev_gesture.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/indev/lv_indev_gesture.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_indev_gesture_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/indev/lv_indev_gesture_private.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_indev_private.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/indev/lv_indev_private.h</FilePath>
@@ -2872,11 +2612,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/barcode/code128.h</FilePath>
             </File>
             <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/barcode/LICENSE.txt</FilePath>
-            </File>
-            <File>
               <FileName>lv_barcode.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/barcode/lv_barcode.c</FilePath>
@@ -2912,116 +2647,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/bmp/lv_bmp.h</FilePath>
             </File>
             <File>
-              <FileName>add_lvgl_if.sh</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/add_lvgl_if.sh</FilePath>
-            </File>
-            <File>
-              <FileName>ascii.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/ascii.h</FilePath>
-            </File>
-            <File>
-              <FileName>asciitab.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/asciitab.h</FilePath>
-            </File>
-            <File>
-              <FileName>expat.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/expat.h</FilePath>
-            </File>
-            <File>
-              <FileName>expat_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/expat_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>expat_external.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/expat_external.h</FilePath>
-            </File>
-            <File>
-              <FileName>iasciitab.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/iasciitab.h</FilePath>
-            </File>
-            <File>
-              <FileName>internal.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/internal.h</FilePath>
-            </File>
-            <File>
-              <FileName>latin1tab.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/latin1tab.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/LICENSE.txt</FilePath>
-            </File>
-            <File>
-              <FileName>nametab.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/nametab.h</FilePath>
-            </File>
-            <File>
-              <FileName>siphash.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/siphash.h</FilePath>
-            </File>
-            <File>
-              <FileName>utf8tab.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/utf8tab.h</FilePath>
-            </File>
-            <File>
-              <FileName>winconfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/winconfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>xmlparse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmlparse.c</FilePath>
-            </File>
-            <File>
-              <FileName>xmlrole.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmlrole.c</FilePath>
-            </File>
-            <File>
-              <FileName>xmlrole.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmlrole.h</FilePath>
-            </File>
-            <File>
-              <FileName>xmltok.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmltok.c</FilePath>
-            </File>
-            <File>
-              <FileName>xmltok.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmltok.h</FilePath>
-            </File>
-            <File>
-              <FileName>xmltok_impl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmltok_impl.c</FilePath>
-            </File>
-            <File>
-              <FileName>xmltok_impl.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmltok_impl.h</FilePath>
-            </File>
-            <File>
-              <FileName>xmltok_ns.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/expat/xmltok_ns.c</FilePath>
-            </File>
-            <File>
               <FileName>lv_ffmpeg.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/ffmpeg/lv_ffmpeg.c</FilePath>
@@ -3050,11 +2675,6 @@
               <FileName>ftoption.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/freetype/ftoption.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/freetype/LICENSE.txt</FilePath>
             </File>
             <File>
               <FileName>lv_freetype.c</FileName>
@@ -3132,11 +2752,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/fsdrv/lv_fs_stdio.c</FilePath>
             </File>
             <File>
-              <FileName>lv_fs_uefi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/fsdrv/lv_fs_uefi.c</FilePath>
-            </File>
-            <File>
               <FileName>lv_fs_win32.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/fsdrv/lv_fs_win32.c</FilePath>
@@ -3160,11 +2775,6 @@
               <FileName>gifdec_mve.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/gif/gifdec_mve.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/gif/LICENSE.txt</FilePath>
             </File>
             <File>
               <FileName>lv_gif.c</FileName>
@@ -3202,11 +2812,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/libpng/lv_libpng.h</FilePath>
             </File>
             <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lodepng/LICENSE.txt</FilePath>
-            </File>
-            <File>
               <FileName>lodepng.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lodepng/lodepng.c</FilePath>
@@ -3227,9 +2832,9 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lodepng/lv_lodepng.h</FilePath>
             </File>
             <File>
-              <FileName>LICENSE.txt</FileName>
+              <FileName>LICENSE</FileName>
               <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lz4/LICENSE.txt</FilePath>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lz4/LICENSE</FilePath>
             </File>
             <File>
               <FileName>lz4.c</FileName>
@@ -3240,11 +2845,6 @@
               <FileName>lz4.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/lz4/lz4.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/qrcode/LICENSE.txt</FilePath>
             </File>
             <File>
               <FileName>lv_qrcode.c</FileName>
@@ -3297,56 +2897,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/rlottie/lv_rlottie_private.h</FilePath>
             </File>
             <File>
-              <FileName>lv_svg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_decoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_decoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_decoder.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_decoder.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_render.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_render.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_render.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_render.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_token.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_token.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_svg_token.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/svg/lv_svg_token.h</FilePath>
-            </File>
-            <File>
               <FileName>add_lvgl_if.sh</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/add_lvgl_if.sh</FilePath>
@@ -3355,11 +2905,6 @@
               <FileName>config.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/config.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/LICENSE.txt</FilePath>
             </File>
             <File>
               <FileName>allocators.h</FileName>
@@ -3657,6 +3202,16 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgIteratorAccessor.h</FilePath>
             </File>
             <File>
+              <FileName>tvgLines.cpp</FileName>
+              <FileType>0</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLines.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>tvgLines.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLines.h</FilePath>
+            </File>
+            <File>
               <FileName>tvgLoader.cpp</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLoader.cpp</FilePath>
@@ -3690,11 +3245,6 @@
               <FileName>tvgLottieBuilder.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieBuilder.h</FilePath>
-            </File>
-            <File>
-              <FileName>tvgLottieCommon.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieCommon.h</FilePath>
             </File>
             <File>
               <FileName>tvgLottieExpressions.cpp</FileName>
@@ -3737,16 +3287,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieModel.h</FilePath>
             </File>
             <File>
-              <FileName>tvgLottieModifier.cpp</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieModifier.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>tvgLottieModifier.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieModifier.h</FilePath>
-            </File>
-            <File>
               <FileName>tvgLottieParser.cpp</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieParser.cpp</FilePath>
@@ -3770,11 +3310,6 @@
               <FileName>tvgLottieProperty.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieProperty.h</FilePath>
-            </File>
-            <File>
-              <FileName>tvgLottieRenderPooler.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgLottieRenderPooler.h</FilePath>
             </File>
             <File>
               <FileName>tvgMath.cpp</FileName>
@@ -3952,11 +3487,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgSwMemPool.cpp</FilePath>
             </File>
             <File>
-              <FileName>tvgSwPostEffect.cpp</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgSwPostEffect.cpp</FilePath>
-            </File>
-            <File>
               <FileName>tvgSwRaster.cpp</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgSwRaster.cpp</FilePath>
@@ -4042,11 +3572,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/thorvg/tvgXmlParser.h</FilePath>
             </File>
             <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/tiny_ttf/LICENSE.txt</FilePath>
-            </File>
-            <File>
               <FileName>lv_tiny_ttf.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/tiny_ttf/lv_tiny_ttf.c</FilePath>
@@ -4065,11 +3590,6 @@
               <FileName>stb_truetype_htcw.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/tiny_ttf/stb_truetype_htcw.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/libs/tjpgd/LICENSE.txt</FilePath>
             </File>
             <File>
               <FileName>lv_tjpgd.c</FileName>
@@ -4282,16 +3802,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_bidi_private.h</FilePath>
             </File>
             <File>
-              <FileName>lv_circle_buf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_circle_buf.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_circle_buf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_circle_buf.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_color.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_color.c</FilePath>
@@ -4345,26 +3855,6 @@
               <FileName>lv_fs_private.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_fs_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_grad.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_grad.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_grad.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_grad.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_iter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_iter.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_iter.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_iter.h</FilePath>
             </File>
             <File>
               <FileName>lv_ll.c</FileName>
@@ -4537,16 +4027,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_timer_private.h</FilePath>
             </File>
             <File>
-              <FileName>lv_tree.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_tree.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_tree.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_tree.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_types.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/misc/lv_types.h</FilePath>
@@ -4580,16 +4060,6 @@
               <FileName>lv_freertos.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_freertos.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_linux.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_linux.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_linux_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_linux_private.h</FilePath>
             </File>
             <File>
               <FileName>lv_mqx.c</FileName>
@@ -4647,16 +4117,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_rtthread.h</FilePath>
             </File>
             <File>
-              <FileName>lv_sdl2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_sdl2.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_sdl2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_sdl2.h</FilePath>
-            </File>
-            <File>
               <FileName>lv_windows.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/osal/lv_windows.c</FilePath>
@@ -4680,36 +4140,6 @@
               <FileName>lv_file_explorer_private.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/file_explorer/lv_file_explorer_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager_recycle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager_recycle.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager_recycle.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager_recycle.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_manager_utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/font_manager/lv_font_manager_utils.h</FilePath>
             </File>
             <File>
               <FileName>lv_fragment.c</FileName>
@@ -4827,66 +4257,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/sysmon/lv_sysmon_private.h</FilePath>
             </File>
             <File>
-              <FileName>lv_test.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_display.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_display.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_display.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_display.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_helpers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_helpers.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_helpers.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_helpers.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_indev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_indev.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_indev.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_indev.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_indev_gesture.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_indev_gesture.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_indev_gesture.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_indev_gesture.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_screenshot_compare.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_screenshot_compare.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_test_screenshot_compare.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/test/lv_test_screenshot_compare.h</FilePath>
-            </File>
-            <File>
               <FileName>vg_lite.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/vg_lite_tvg/vg_lite.h</FilePath>
@@ -4900,266 +4270,6 @@
               <FileName>vg_lite_tvg.cpp</FileName>
               <FileType>0</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/vg_lite_tvg/vg_lite_tvg.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_base_types.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_base_types.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_base_types.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_base_types.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_component.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_component.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_component.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_component.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_component_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_component_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_private.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_private.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_style.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_style.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_style.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_style.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_utils.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_widget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_widget.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_widget.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/lv_xml_widget.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_bar_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_bar_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_bar_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_bar_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_button_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_button_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_button_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_button_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_buttonmatrix_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_buttonmatrix_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_buttonmatrix_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_buttonmatrix_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_chart_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_chart_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_chart_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_chart_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_dropdown_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_dropdown_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_dropdown_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_dropdown_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_event_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_event_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_event_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_event_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_image_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_image_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_image_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_image_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_keyboard_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_keyboard_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_keyboard_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_keyboard_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_label_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_label_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_label_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_label_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_obj_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_obj_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_obj_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_obj_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_roller_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_roller_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_roller_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_roller_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_scale_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_scale_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_scale_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_scale_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_slider_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_slider_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_slider_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_slider_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_spangroup_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_spangroup_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_spangroup_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_spangroup_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_table_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_table_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_table_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_table_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_tabview_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_tabview_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_tabview_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_tabview_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_textarea_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_textarea_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_xml_textarea_parser.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/others/xml/parsers/lv_xml_textarea_parser.h</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE_SPRINTF.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/stdlib/builtin/LICENSE_SPRINTF.txt</FilePath>
-            </File>
-            <File>
-              <FileName>LICENSE_TLSF.txt</FileName>
-              <FileType>0</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/stdlib/builtin/LICENSE_TLSF.txt</FilePath>
             </File>
             <File>
               <FileName>lv_mem_core_builtin.c</FileName>
@@ -5250,11 +4360,6 @@
               <FileName>lv_string_rtthread.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/stdlib/rtthread/lv_string_rtthread.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_mem_core_uefi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/stdlib/uefi/lv_mem_core_uefi.c</FilePath>
             </File>
             <File>
               <FileName>lv_theme_default.c</FileName>
@@ -5410,6 +4515,11 @@
               <FileName>lv_calendar_chinese.h</FileName>
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/calendar/lv_calendar_chinese.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_calendar_chinese_private.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/calendar/lv_calendar_chinese_private.h</FilePath>
             </File>
             <File>
               <FileName>lv_calendar_header_arrow.c</FileName>
@@ -5652,11 +4762,6 @@
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/objx_templ/lv_objx_templ.h</FilePath>
             </File>
             <File>
-              <FileName>lv_animimage_properties.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/property/lv_animimage_properties.c</FilePath>
-            </File>
-            <File>
               <FileName>lv_dropdown_properties.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/property/lv_dropdown_properties.c</FilePath>
@@ -5690,11 +4795,6 @@
               <FileName>lv_roller_properties.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/property/lv_roller_properties.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_slider_properties.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/lvgl_Library/src/widgets/property/lv_slider_properties.c</FilePath>
             </File>
             <File>
               <FileName>lv_style_properties.c</FileName>

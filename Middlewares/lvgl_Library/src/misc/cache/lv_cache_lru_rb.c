@@ -48,8 +48,6 @@
 #include "../../stdlib/lv_string.h"
 #include "../lv_ll.h"
 #include "../lv_rb_private.h"
-#include "../lv_rb.h"
-#include "../lv_iter.h"
 
 /*********************
  *      DEFINES
@@ -60,7 +58,7 @@
  **********************/
 typedef uint32_t (get_data_size_cb_t)(const void * data);
 
-struct _lv_lru_rb_t {
+struct lv_lru_rb_t {
     lv_cache_t cache;
 
     lv_rb_t rb;
@@ -68,7 +66,7 @@ struct _lv_lru_rb_t {
 
     get_data_size_cb_t * get_data_size_cb;
 };
-typedef struct _lv_lru_rb_t lv_lru_rb_t_;
+typedef struct lv_lru_rb_t lv_lru_rb_t_;
 /**********************
  *  STATIC PROTOTYPES
  **********************/
@@ -93,9 +91,6 @@ inline static void ** get_lru_node(lv_lru_rb_t_ * lru, lv_rb_node_t * node);
 static uint32_t cnt_get_data_size_cb(const void * data);
 static uint32_t size_get_data_size_cb(const void * data);
 
-static lv_iter_t * cache_iter_create_cb(lv_cache_t * cache);
-static lv_result_t cache_iter_next_cb(void * instance, void * context, void * elem);
-
 /**********************
  *  GLOBAL VARIABLES
  **********************/
@@ -110,8 +105,7 @@ const lv_cache_class_t lv_cache_class_lru_rb_count = {
     .drop_cb = drop_cb,
     .drop_all_cb = drop_all_cb,
     .get_victim_cb = get_victim_cb,
-    .reserve_cond_cb = reserve_cond_cb,
-    .iter_create_cb = cache_iter_create_cb,
+    .reserve_cond_cb = reserve_cond_cb
 };
 
 const lv_cache_class_t lv_cache_class_lru_rb_size = {
@@ -125,8 +119,7 @@ const lv_cache_class_t lv_cache_class_lru_rb_size = {
     .drop_cb = drop_cb,
     .drop_all_cb = drop_all_cb,
     .get_victim_cb = get_victim_cb,
-    .reserve_cond_cb = reserve_cond_cb,
-    .iter_create_cb = cache_iter_create_cb,
+    .reserve_cond_cb = reserve_cond_cb
 };
 /**********************
  *  STATIC VARIABLES
@@ -466,30 +459,4 @@ static uint32_t size_get_data_size_cb(const void * data)
 {
     lv_cache_slot_size_t * slot = (lv_cache_slot_size_t *)data;
     return slot->size;
-}
-
-static lv_iter_t * cache_iter_create_cb(lv_cache_t * cache)
-{
-    return lv_iter_create(cache, lv_cache_entry_get_size(cache->node_size), sizeof(void *), cache_iter_next_cb);
-}
-
-static lv_result_t cache_iter_next_cb(void * instance, void * context, void * elem)
-{
-    lv_lru_rb_t_ * lru = (lv_lru_rb_t_ *)instance;
-    lv_rb_node_t *** ll_node = context;
-
-    LV_ASSERT_NULL(ll_node);
-
-    if(*ll_node == NULL) *ll_node = lv_ll_get_head(&lru->ll);
-    else *ll_node = lv_ll_get_next(&lru->ll, *ll_node);
-
-    lv_rb_node_t ** node = *ll_node;
-
-    if(node == NULL) return LV_RESULT_INVALID;
-
-    uint32_t node_size = lru->cache.node_size;
-    void * search_key = (*node)->data;
-    lv_memcpy(elem, search_key, lv_cache_entry_get_size(node_size));
-
-    return LV_RESULT_OK;
 }

@@ -40,16 +40,16 @@
 
 void lv_draw_triangle_dsc_init(lv_draw_triangle_dsc_t * dsc)
 {
-    LV_PROFILER_DRAW_BEGIN;
+    LV_PROFILER_BEGIN;
     lv_memzero(dsc, sizeof(lv_draw_triangle_dsc_t));
-    dsc->color = lv_color_white();
-    dsc->grad.stops[0].color = lv_color_white();
-    dsc->grad.stops[1].color = lv_color_black();
-    dsc->grad.stops[1].frac = 0xFF;
-    dsc->grad.stops_count = 2;
-    dsc->opa = LV_OPA_COVER;
+    dsc->bg_color = lv_color_white();
+    dsc->bg_grad.stops[0].color = lv_color_white();
+    dsc->bg_grad.stops[1].color = lv_color_black();
+    dsc->bg_grad.stops[1].frac = 0xFF;
+    dsc->bg_grad.stops_count = 2;
+    dsc->bg_opa = LV_OPA_COVER;
     dsc->base.dsc_size = sizeof(lv_draw_triangle_dsc_t);
-    LV_PROFILER_DRAW_END;
+    LV_PROFILER_END;
 }
 
 lv_draw_triangle_dsc_t * lv_draw_task_get_triangle_dsc(lv_draw_task_t * task)
@@ -59,10 +59,9 @@ lv_draw_triangle_dsc_t * lv_draw_task_get_triangle_dsc(lv_draw_task_t * task)
 
 void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * dsc)
 {
-    if(dsc->opa <= LV_OPA_MIN) return;
+    if(dsc->bg_opa <= LV_OPA_MIN) return;
 
-    LV_PROFILER_DRAW_BEGIN;
-
+    LV_PROFILER_BEGIN;
     lv_area_t a;
     a.x1 = (int32_t)LV_MIN3(dsc->p[0].x, dsc->p[1].x, dsc->p[2].x);
     a.y1 = (int32_t)LV_MIN3(dsc->p[0].y, dsc->p[1].y, dsc->p[2].y);
@@ -72,12 +71,11 @@ void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * dsc)
     lv_draw_task_t * t = lv_draw_add_task(layer, &a);
 
     t->draw_dsc = lv_malloc(sizeof(*dsc));
-    LV_ASSERT_MALLOC(t->draw_dsc);
     lv_memcpy(t->draw_dsc, dsc, sizeof(*dsc));
     t->type = LV_DRAW_TASK_TYPE_TRIANGLE;
 
     lv_draw_finalize_task_creation(layer, t);
-    LV_PROFILER_DRAW_END;
+    LV_PROFILER_END;
 }
 
 /**********************

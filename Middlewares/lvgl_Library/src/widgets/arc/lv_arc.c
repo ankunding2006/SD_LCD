@@ -60,7 +60,7 @@ const lv_obj_class_t lv_arc_class  = {
     .instance_size = sizeof(lv_arc_t),
     .editable = LV_OBJ_CLASS_EDITABLE_TRUE,
     .base_class = &lv_obj_class,
-    .name = "lv_arc",
+    .name = "arc",
 };
 
 /**********************
@@ -721,7 +721,6 @@ static void lv_arc_draw(lv_event_t * e)
     lv_draw_arc_dsc_t arc_dsc;
     if(arc_r > 0) {
         lv_draw_arc_dsc_init(&arc_dsc);
-        arc_dsc.base.layer = layer;
         lv_obj_init_draw_arc_dsc(obj, LV_PART_MAIN, &arc_dsc);
         arc_dsc.center = center;
         arc_dsc.start_angle = arc->bg_angle_start + arc->rotation;
@@ -739,7 +738,6 @@ static void lv_arc_draw(lv_event_t * e)
 
     if(indic_r > 0) {
         lv_draw_arc_dsc_init(&arc_dsc);
-        arc_dsc.base.layer = layer;
         lv_obj_init_draw_arc_dsc(obj, LV_PART_INDICATOR, &arc_dsc);
         arc_dsc.center = center;
         arc_dsc.start_angle = arc->indic_angle_start + arc->rotation;
@@ -755,7 +753,6 @@ static void lv_arc_draw(lv_event_t * e)
 
     lv_draw_rect_dsc_t knob_rect_dsc;
     lv_draw_rect_dsc_init(&knob_rect_dsc);
-    knob_rect_dsc.base.layer = layer;
     lv_obj_init_draw_rect_dsc(obj, LV_PART_KNOB, &knob_rect_dsc);
     lv_draw_rect(layer, &knob_rect_dsc, &knob_area);
 }

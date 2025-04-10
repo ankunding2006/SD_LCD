@@ -86,19 +86,16 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
 
     const lv_font_fmt_txt_glyph_dsc_t * gdsc = &fdsc->glyph_dsc[gid];
 
-    if(g_dsc->req_raw_bitmap) return &fdsc->glyph_bitmap[gdsc->bitmap_index];
-
     int32_t gsize = (int32_t) gdsc->box_w * gdsc->box_h;
     if(gsize == 0) return NULL;
 
-    bool byte_aligned = fdsc->bitmap_format == LV_FONT_FMT_PLAIN_ALIGNED;
-
-    if(fdsc->bitmap_format == LV_FONT_FMT_TXT_PLAIN || fdsc->bitmap_format == LV_FONT_FMT_PLAIN_ALIGNED) {
+    if(fdsc->bitmap_format == LV_FONT_FMT_TXT_PLAIN) {
         const uint8_t * bitmap_in = &fdsc->glyph_bitmap[gdsc->bitmap_index];
         uint8_t * bitmap_out_tmp = bitmap_out;
         int32_t i = 0;
         int32_t x, y;
         uint32_t stride = lv_draw_buf_width_to_stride(gdsc->box_w, LV_COLOR_FORMAT_A8);
+
         if(fdsc->bpp == 1) {
             for(y = 0; y < gdsc->box_h; y ++) {
                 for(x = 0; x < gdsc->box_w; x++, i++) {
@@ -115,12 +112,6 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                         bitmap_in++;
                     }
                 }
-                /*Go to the next byte if stopped in the middle of a byte and
-                 *the next line is byte aligned*/
-                if(byte_aligned && i != 0) {
-                    i = 0;
-                    bitmap_in++;
-                }
                 bitmap_out_tmp += stride;
             }
         }
@@ -136,14 +127,6 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                         bitmap_in++;
                     }
                 }
-
-                /*Go to the next byte if stopped in the middle of a byte and
-                 *the next line is byte aligned*/
-                if(byte_aligned && i != 0) {
-                    i = 0;
-                    bitmap_in++;
-                }
-
                 bitmap_out_tmp += stride;
             }
 
@@ -159,23 +142,6 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                         bitmap_out_tmp[x] = opa4_table[(*bitmap_in) & 0xF];
                         bitmap_in++;
                     }
-                }
-
-                /*Go to the next byte if stopped in the middle of a byte and
-                 *the next line is byte aligned*/
-                if(byte_aligned && i != 0) {
-                    i = 0;
-                    bitmap_in++;
-                }
-
-                bitmap_out_tmp += stride;
-            }
-        }
-        else if(fdsc->bpp == 8) {
-            for(y = 0; y < gdsc->box_h; y ++) {
-                for(x = 0; x < gdsc->box_w; x++, i++) {
-                    bitmap_out_tmp[x] = *bitmap_in;
-                    bitmap_in++;
                 }
                 bitmap_out_tmp += stride;
             }
@@ -236,10 +202,6 @@ bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t *
     dsc_out->ofs_x = gdsc->ofs_x;
     dsc_out->ofs_y = gdsc->ofs_y;
     dsc_out->format = (uint8_t)fdsc->bpp;
-    if(fdsc->bitmap_format == LV_FONT_FMT_PLAIN_ALIGNED) {
-        /*Offset in the enum to the ALIGNED values */
-        dsc_out->format += LV_FONT_GLYPH_FORMAT_A1_ALIGNED - LV_FONT_GLYPH_FORMAT_A1;
-    }
     dsc_out->is_placeholder = false;
     dsc_out->gid.index = gid;
 
@@ -270,10 +232,6 @@ static uint32_t get_glyph_dsc_id(const lv_font_t * font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL) {
             const uint8_t * gid_ofs_8 = fdsc->cmaps[i].glyph_id_ofs_list;
-            /* The first character is always valid and should have offset = 0
-             * However if a character is missing it also has offset=0.
-             * So if there is a 0 not on the first position then it's a missing character */
-            if(gid_ofs_8[rcp] == 0 && letter != fdsc->cmaps[i].range_start) continue;
             glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_8[rcp];
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_TINY) {

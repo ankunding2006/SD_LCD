@@ -26,11 +26,11 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct _lv_color_filter_dsc_t;
+struct lv_color_filter_dsc_t;
 
-typedef lv_color_t (*lv_color_filter_cb_t)(const struct _lv_color_filter_dsc_t *, lv_color_t, lv_opa_t);
+typedef lv_color_t (*lv_color_filter_cb_t)(const struct lv_color_filter_dsc_t *, lv_color_t, lv_opa_t);
 
-struct _lv_color_filter_dsc_t {
+struct lv_color_filter_dsc_t {
     lv_color_filter_cb_t filter_cb;
     void * user_data;
 };
@@ -66,14 +66,6 @@ lv_color32_t lv_color_mix32(lv_color32_t fg, lv_color32_t bg);
 uint8_t lv_color_brightness(lv_color_t c);
 
 void lv_color_filter_dsc_init(lv_color_filter_dsc_t * dsc, lv_color_filter_cb_t cb);
-
-/**
- * Blend two colors that have not been pre-multiplied using their alpha values
- * @param fg the foreground color
- * @param bg the background color
- * @return result color
- */
-lv_color32_t lv_color_over32(lv_color32_t fg, lv_color32_t bg);
 
 /**********************
  *  PREDEFINED COLORS

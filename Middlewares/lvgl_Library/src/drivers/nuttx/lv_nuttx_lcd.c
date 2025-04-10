@@ -138,23 +138,20 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area_p,
                      uint8_t * color_p)
 {
     lv_nuttx_lcd_t * lcd = disp->driver_data;
-    lv_color_format_t cf = lv_display_get_color_format(disp);
 
     lcd->area.row_start = area_p->y1;
     lcd->area.row_end = area_p->y2;
     lcd->area.col_start = area_p->x1;
     lcd->area.col_end = area_p->x2;
-    lcd->area.stride = lv_draw_buf_width_to_stride(lcd->area.col_end - lcd->area.col_start + 1, cf);
-    lcd->area.data = (uint8_t *)color_p + (LV_COLOR_FORMAT_IS_INDEXED(cf) ?
-                                           LV_COLOR_INDEXED_PALETTE_SIZE(cf) * 4 : 0);
+    lcd->area.data = (uint8_t *)color_p;
     ioctl(lcd->fd, LCDDEVIO_PUTAREA, (unsigned long) & (lcd->area));
     lv_display_flush_ready(disp);
 }
 
 static lv_display_t * lcd_init(int fd, int hor_res, int ver_res)
 {
-    lv_draw_buf_t * draw_buf = NULL;
-    lv_draw_buf_t * draw_buf_2 = NULL;
+    uint8_t * draw_buf = NULL;
+    uint8_t * draw_buf_2 = NULL;
     lv_nuttx_lcd_t * lcd = lv_malloc_zeroed(sizeof(lv_nuttx_lcd_t));
     LV_ASSERT_MALLOC(lcd);
     if(lcd == NULL) {
@@ -168,26 +165,28 @@ static lv_display_t * lcd_init(int fd, int hor_res, int ver_res)
         return NULL;
     }
 
-    lv_color_format_t cf = lv_display_get_color_format(disp);   /* Use default cf */
+    uint32_t px_size = lv_color_format_get_size(lv_display_get_color_format(disp));
 #if LV_NUTTX_LCD_BUFFER_COUNT > 0
+    uint32_t buf_size = hor_res * ver_res * px_size;
     lv_display_render_mode_t render_mode = LV_DISPLAY_RENDER_MODE_FULL;
 #else
+    uint32_t buf_size = hor_res * LV_NUTTX_LCD_BUFFER_SIZE * px_size;
     lv_display_render_mode_t render_mode = LV_DISPLAY_RENDER_MODE_PARTIAL;
 #endif
 
-    draw_buf = lv_draw_buf_create(hor_res, ver_res, cf, LV_STRIDE_AUTO);
+    draw_buf = lv_malloc(buf_size);
     if(draw_buf == NULL) {
-        LV_LOG_ERROR("display draw_buf create failed");
+        LV_LOG_ERROR("display draw_buf malloc failed");
         lv_free(lcd);
         return NULL;
     }
 
 #if LV_NUTTX_LCD_BUFFER_COUNT == 2
-    draw_buf_2 = lv_draw_buf_create(hor_res, ver_res, cf, LV_STRIDE_AUTO);
+    draw_buf_2 = lv_malloc(buf_size);
     if(draw_buf_2 == NULL) {
         LV_LOG_ERROR("display draw_buf_2 malloc failed");
         lv_free(lcd);
-        lv_draw_buf_destroy(draw_buf);
+        lv_free(draw_buf);
         return NULL;
     }
 #endif
@@ -198,8 +197,7 @@ static lv_display_t * lcd_init(int fd, int hor_res, int ver_res)
     }
 
     lcd->disp = disp;
-    lv_display_set_draw_buffers(lcd->disp, draw_buf, draw_buf_2);
-    lv_display_set_render_mode(lcd->disp, render_mode);
+    lv_display_set_buffers(lcd->disp, draw_buf, draw_buf_2, buf_size, render_mode);
     lv_display_set_flush_cb(lcd->disp, flush_cb);
     lv_display_add_event_cb(lcd->disp, rounder_cb, LV_EVENT_INVALIDATE_AREA, lcd);
     lv_display_add_event_cb(lcd->disp, display_release_cb, LV_EVENT_DELETE, lcd->disp);
@@ -218,11 +216,11 @@ static void display_release_cb(lv_event_t * e)
 
         /* clear display buffer */
         if(disp->buf_1) {
-            lv_draw_buf_destroy(disp->buf_1);
+            lv_free(disp->buf_1->data);
             disp->buf_1 = NULL;
         }
         if(disp->buf_2) {
-            lv_draw_buf_destroy(disp->buf_2);
+            lv_free(disp->buf_2->data);
             disp->buf_2 = NULL;
         }
 

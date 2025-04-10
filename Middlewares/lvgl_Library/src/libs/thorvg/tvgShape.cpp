@@ -37,6 +37,7 @@
 
 Shape :: Shape() : pImpl(new Impl(this))
 {
+    Paint::pImpl->id = TVG_CLASS_ID_SHAPE;
 }
 
 
@@ -54,13 +55,7 @@ unique_ptr<Shape> Shape::gen() noexcept
 
 uint32_t Shape::identifier() noexcept
 {
-    return (uint32_t) Type::Shape;
-}
-
-
-Type Shape::type() const noexcept
-{
-    return Type::Shape;
+    return TVG_CLASS_ID_SHAPE;
 }
 
 
@@ -96,8 +91,6 @@ Result Shape::appendPath(const PathCommand *cmds, uint32_t cmdCnt, const Point* 
     pImpl->grow(cmdCnt, ptsCnt);
     pImpl->append(cmds, cmdCnt, pts, ptsCnt);
 
-    pImpl->flag |= RenderUpdateFlag::Path;
-
     return Result::Success;
 }
 
@@ -114,8 +107,6 @@ Result Shape::lineTo(float x, float y) noexcept
 {
     pImpl->lineTo(x, y);
 
-    pImpl->flag |= RenderUpdateFlag::Path;
-
     return Result::Success;
 }
 
@@ -124,8 +115,6 @@ Result Shape::cubicTo(float cx1, float cy1, float cx2, float cy2, float x, float
 {
     pImpl->cubicTo(cx1, cy1, cx2, cy2, x, y);
 
-    pImpl->flag |= RenderUpdateFlag::Path;
-
     return Result::Success;
 }
 
@@ -133,8 +122,6 @@ Result Shape::cubicTo(float cx1, float cy1, float cx2, float cy2, float x, float
 Result Shape::close() noexcept
 {
     pImpl->close();
-
-    pImpl->flag |= RenderUpdateFlag::Path;
 
     return Result::Success;
 }
@@ -153,11 +140,8 @@ Result Shape::appendCircle(float cx, float cy, float rx, float ry) noexcept
     pImpl->cubicTo(cx + rxKappa, cy - ry, cx + rx, cy - ryKappa, cx + rx, cy);
     pImpl->close();
 
-    pImpl->flag |= RenderUpdateFlag::Path;
-
     return Result::Success;
 }
-
 
 Result Shape::appendArc(float cx, float cy, float radius, float startAngle, float sweep, bool pie) noexcept
 {
@@ -165,8 +149,8 @@ Result Shape::appendArc(float cx, float cy, float radius, float startAngle, floa
     if (sweep >= 360.0f || sweep <= -360.0f) return appendCircle(cx, cy, radius, radius);
 
     const float arcPrecision = 1e-5f;
-    startAngle = deg2rad(startAngle);
-    sweep = deg2rad(sweep);
+    startAngle = mathDeg2Rad(startAngle);
+    sweep = mathDeg2Rad(sweep);
 
     auto nCurves = static_cast<int>(fabsf(sweep / MATH_PI2));
     if (fabsf(sweep / MATH_PI2) - nCurves > arcPrecision) ++nCurves;
@@ -215,8 +199,6 @@ Result Shape::appendArc(float cx, float cy, float radius, float startAngle, floa
 
     if (pie) pImpl->close();
 
-    pImpl->flag |= RenderUpdateFlag::Path;
-
     return Result::Success;
 }
 
@@ -254,8 +236,6 @@ Result Shape::appendRect(float x, float y, float w, float h, float rx, float ry)
         pImpl->cubicTo(x, y + ry - hry, x + rx - hrx, y, x + rx, y);
         pImpl->close();
     }
-
-    pImpl->flag |= RenderUpdateFlag::Path;
 
     return Result::Success;
 }
@@ -310,14 +290,16 @@ const Fill* Shape::fill() const noexcept
 
 Result Shape::order(bool strokeFirst) noexcept
 {
-    pImpl->strokeFirst(strokeFirst);
+    if (!pImpl->strokeFirst(strokeFirst)) return Result::FailedAllocation;
+
     return Result::Success;
 }
 
 
 Result Shape::stroke(float width) noexcept
 {
-    pImpl->strokeWidth(width);
+    if (!pImpl->strokeWidth(width)) return Result::FailedAllocation;
+
     return Result::Success;
 }
 
@@ -330,7 +312,8 @@ float Shape::strokeWidth() const noexcept
 
 Result Shape::stroke(uint8_t r, uint8_t g, uint8_t b, uint8_t a) noexcept
 {
-    pImpl->strokeColor(r, g, b, a);
+    if (!pImpl->strokeColor(r, g, b, a)) return Result::FailedAllocation;
+
     return Result::Success;
 }
 
@@ -369,25 +352,27 @@ uint32_t Shape::strokeDash(const float** dashPattern) const noexcept
 
 Result Shape::stroke(StrokeCap cap) noexcept
 {
-    pImpl->strokeCap(cap);
+    if (!pImpl->strokeCap(cap)) return Result::FailedAllocation;
+
     return Result::Success;
 }
 
 
 Result Shape::stroke(StrokeJoin join) noexcept
 {
-    pImpl->strokeJoin(join);
+    if (!pImpl->strokeJoin(join)) return Result::FailedAllocation;
+
     return Result::Success;
 }
-
 
 Result Shape::strokeMiterlimit(float miterlimit) noexcept
 {
     // https://www.w3.org/TR/SVG2/painting.html#LineJoin
     // - A negative value for stroke-miterlimit must be treated as an illegal value.
-    if (miterlimit < 0.0f) return Result::InvalidArguments;
+    if (miterlimit < 0.0f) return Result::NonSupport;
     // TODO Find out a reasonable max value.
-    pImpl->strokeMiterlimit(miterlimit);
+    if (!pImpl->strokeMiterlimit(miterlimit)) return Result::FailedAllocation;
+
     return Result::Success;
 }
 
@@ -403,17 +388,9 @@ StrokeJoin Shape::strokeJoin() const noexcept
     return pImpl->rs.strokeJoin();
 }
 
-
 float Shape::strokeMiterlimit() const noexcept
 {
     return pImpl->rs.strokeMiterlimit();
-}
-
-
-Result Shape::strokeTrim(float begin, float end, bool simultaneous) noexcept
-{
-    pImpl->strokeTrim(begin, end, simultaneous);
-    return Result::Success;
 }
 
 

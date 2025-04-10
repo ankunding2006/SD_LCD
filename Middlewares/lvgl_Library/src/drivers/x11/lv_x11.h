@@ -16,7 +16,6 @@ extern "C" {
 
 #include "../../display/lv_display.h"
 #include "../../indev/lv_indev.h"
-#include "../../draw/lv_image_dsc.h"
 
 #if LV_USE_X11
 

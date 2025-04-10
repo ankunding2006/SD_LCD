@@ -38,14 +38,10 @@
 
 #define FRAME_DEF_REFR_PERIOD   33  /*[ms]*/
 
-#define DECODER_BUFFER_SIZE (8 * 1024)
-
 /**********************
  *      TYPEDEFS
  **********************/
 struct ffmpeg_context_s {
-    AVIOContext * io_ctx;
-    lv_fs_file_t lv_file;
     AVFormatContext * fmt_ctx;
     AVCodecContext * video_dec_ctx;
     AVStream * video_stream;
@@ -64,7 +60,7 @@ struct ffmpeg_context_s {
 
 #pragma pack(1)
 
-struct _lv_image_pixel_color_s {
+struct lv_image_pixel_color_s {
     lv_color_t c;
     uint8_t alpha;
 };
@@ -79,15 +75,12 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc);
 static void decoder_close(lv_image_decoder_t * dec, lv_image_decoder_dsc_t * dsc);
 
-static int ffmpeg_lvfs_read(void * ptr, uint8_t * buf, int buf_size);
-static int64_t ffmpeg_lvfs_seek(void * ptr, int64_t pos, int whence);
-static AVIOContext * ffmpeg_open_io_context(lv_fs_file_t * file);
-static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_fs_path);
+static struct ffmpeg_context_s * ffmpeg_open_file(const char * path);
 static void ffmpeg_close(struct ffmpeg_context_s * ffmpeg_ctx);
 static void ffmpeg_close_src_ctx(struct ffmpeg_context_s * ffmpeg_ctx);
 static void ffmpeg_close_dst_ctx(struct ffmpeg_context_s * ffmpeg_ctx);
 static int ffmpeg_image_allocate(struct ffmpeg_context_s * ffmpeg_ctx);
-static int ffmpeg_get_image_header(lv_image_decoder_dsc_t * dsc, lv_image_header_t * header);
+static int ffmpeg_get_image_header(const char * path, lv_image_header_t * header);
 static int ffmpeg_get_frame_refr_period(struct ffmpeg_context_s * ffmpeg_ctx);
 static uint8_t * ffmpeg_get_image_data(struct ffmpeg_context_s * ffmpeg_ctx);
 static int ffmpeg_update_next_frame(struct ffmpeg_context_s * ffmpeg_ctx);
@@ -107,7 +100,7 @@ const lv_obj_class_t lv_ffmpeg_player_class = {
     .destructor_cb = lv_ffmpeg_player_destructor,
     .instance_size = sizeof(lv_ffmpeg_player_t),
     .base_class = &lv_image_class,
-    .name = "lv_ffmpeg_player",
+    .name = "ffmpeg-player",
 };
 
 /**********************
@@ -135,7 +128,7 @@ void lv_ffmpeg_init(void)
 int lv_ffmpeg_get_frame_num(const char * path)
 {
     int ret = -1;
-    struct ffmpeg_context_s * ffmpeg_ctx = ffmpeg_open_file(path, LV_FFMPEG_PLAYER_USE_LV_FS);
+    struct ffmpeg_context_s * ffmpeg_ctx = ffmpeg_open_file(path);
 
     if(ffmpeg_ctx) {
         ret = ffmpeg_ctx->video_stream->nb_frames;
@@ -166,7 +159,7 @@ lv_result_t lv_ffmpeg_player_set_src(lv_obj_t * obj, const char * path)
 
     lv_timer_pause(player->timer);
 
-    player->ffmpeg_ctx = ffmpeg_open_file(path, LV_FFMPEG_PLAYER_USE_LV_FS);
+    player->ffmpeg_ctx = ffmpeg_open_file(path);
 
     if(!player->ffmpeg_ctx) {
         LV_LOG_ERROR("ffmpeg file open failed: %s", path);
@@ -185,17 +178,13 @@ lv_result_t lv_ffmpeg_player_set_src(lv_obj_t * obj, const char * path)
     uint32_t data_size = 0;
 
     data_size = width * height * 4;
-    uint8_t * data = ffmpeg_get_image_data(player->ffmpeg_ctx);
-    lv_color_format_t cf = has_alpha ? LV_COLOR_FORMAT_ARGB8888 : LV_COLOR_FORMAT_NATIVE;
-    uint32_t stride = width * lv_color_format_get_size(cf);
-    lv_memzero(data, stride * height);
 
     player->imgdsc.header.w = width;
     player->imgdsc.header.h = height;
     player->imgdsc.data_size = data_size;
-    player->imgdsc.header.cf = cf;
-    player->imgdsc.header.stride = stride;
-    player->imgdsc.data = data;
+    player->imgdsc.header.cf = has_alpha ? LV_COLOR_FORMAT_ARGB8888 : LV_COLOR_FORMAT_NATIVE;
+    player->imgdsc.header.stride = width * lv_color_format_get_size(player->imgdsc.header.cf);
+    player->imgdsc.data = ffmpeg_get_image_data(player->ffmpeg_ctx);
 
     lv_image_set_src(&player->img.obj, &(player->imgdsc));
 
@@ -271,10 +260,13 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
     LV_UNUSED(decoder);
 
     /* Get the source type */
+    const void * src = dsc->src;
     lv_image_src_t src_type = dsc->src_type;
 
     if(src_type == LV_IMAGE_SRC_FILE) {
-        if(ffmpeg_get_image_header(dsc, header) < 0) {
+        const char * fn = src;
+
+        if(ffmpeg_get_image_header(fn, header) < 0) {
             LV_LOG_ERROR("ffmpeg can't get image header");
             return LV_RESULT_INVALID;
         }
@@ -299,7 +291,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * path = dsc->src;
 
-        struct ffmpeg_context_s * ffmpeg_ctx = ffmpeg_open_file(path, true);
+        struct ffmpeg_context_s * ffmpeg_ctx = ffmpeg_open_file(path);
 
         if(ffmpeg_ctx == NULL) {
             return LV_RESULT_INVALID;
@@ -572,33 +564,18 @@ static int ffmpeg_open_codec_context(int * stream_idx,
     return 0;
 }
 
-static int ffmpeg_get_image_header(lv_image_decoder_dsc_t * dsc,
+static int ffmpeg_get_image_header(const char * filepath,
                                    lv_image_header_t * header)
 {
     int ret = -1;
 
     AVFormatContext * fmt_ctx = NULL;
     AVCodecContext * video_dec_ctx = NULL;
-    AVIOContext * io_ctx = NULL;
     int video_stream_idx;
 
-    io_ctx = ffmpeg_open_io_context(&dsc->file);
-    if(io_ctx == NULL) {
-        LV_LOG_ERROR("io_ctx malloc failed");
-        return ret;
-    }
-
-    fmt_ctx = avformat_alloc_context();
-    if(fmt_ctx == NULL) {
-        LV_LOG_ERROR("fmt_ctx malloc failed");
-        goto failed;
-    }
-    fmt_ctx->pb = io_ctx;
-    fmt_ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
-
     /* open input file, and allocate format context */
-    if(avformat_open_input(&fmt_ctx, (const char *)dsc->src, NULL, NULL) < 0) {
-        LV_LOG_ERROR("Could not open source file %s", (const char *)dsc->src);
+    if(avformat_open_input(&fmt_ctx, filepath, NULL, NULL) < 0) {
+        LV_LOG_ERROR("Could not open source file %s", filepath);
         goto failed;
     }
 
@@ -625,10 +602,7 @@ static int ffmpeg_get_image_header(lv_image_decoder_dsc_t * dsc,
 failed:
     avcodec_free_context(&video_dec_ctx);
     avformat_close_input(&fmt_ctx);
-    if(io_ctx != NULL) {
-        av_free(io_ctx->buffer);
-        av_free(io_ctx);
-    }
+
     return ret;
 }
 
@@ -684,48 +658,7 @@ static int ffmpeg_update_next_frame(struct ffmpeg_context_s * ffmpeg_ctx)
     return ret;
 }
 
-static int ffmpeg_lvfs_read(void * ptr, uint8_t * buf, int buf_size)
-{
-    lv_fs_file_t * file = ptr;
-    uint32_t bytesRead = 0;
-    lv_fs_res_t res = lv_fs_read(file, buf, buf_size, &bytesRead);
-    if(bytesRead == 0)
-        return AVERROR_EOF;  /* Let FFmpeg know that we have reached eof */
-    if(res != LV_FS_RES_OK)
-        return AVERROR_EOF;
-    return bytesRead;
-}
-
-static int64_t ffmpeg_lvfs_seek(void * ptr, int64_t pos, int whence)
-{
-    lv_fs_file_t * file = ptr;
-    if(whence == SEEK_SET && lv_fs_seek(file, pos, SEEK_SET) == LV_FS_RES_OK) {
-        return pos;
-    }
-    return -1;
-}
-
-static AVIOContext * ffmpeg_open_io_context(lv_fs_file_t * file)
-{
-    uint8_t * iBuffer = av_malloc(DECODER_BUFFER_SIZE);
-    if(iBuffer == NULL) {
-        LV_LOG_ERROR("iBuffer malloc failed");
-        return NULL;
-    }
-    AVIOContext * pIOCtx = avio_alloc_context(iBuffer, DECODER_BUFFER_SIZE,   /* internal Buffer and its size */
-                                              0,                                   /* bWriteable (1=true,0=false) */
-                                              file,                                /* user data ; will be passed to our callback functions */
-                                              ffmpeg_lvfs_read,                    /* Read callback function */
-                                              0,                                   /* Write callback function */
-                                              ffmpeg_lvfs_seek);                   /* Seek callback function */
-    if(pIOCtx == NULL) {
-        av_free(iBuffer);
-        return NULL;
-    }
-    return pIOCtx;
-}
-
-static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_fs_path)
+struct ffmpeg_context_s * ffmpeg_open_file(const char * path)
 {
     if(path == NULL || lv_strlen(path) == 0) {
         LV_LOG_ERROR("file path is empty");
@@ -737,25 +670,6 @@ static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_
     if(ffmpeg_ctx == NULL) {
         LV_LOG_ERROR("ffmpeg_ctx malloc failed");
         goto failed;
-    }
-
-    if(is_lv_fs_path) {
-        lv_fs_open(&(ffmpeg_ctx->lv_file), path, LV_FS_MODE_RD);    /* image_decoder_get_info says the file truly exists. */
-
-        ffmpeg_ctx->io_ctx = ffmpeg_open_io_context(&(ffmpeg_ctx->lv_file));     /* Save the buffer pointer to free it later */
-
-        if(ffmpeg_ctx->io_ctx == NULL) {
-            LV_LOG_ERROR("io_ctx malloc failed");
-            goto failed;
-        }
-
-        ffmpeg_ctx->fmt_ctx = avformat_alloc_context();
-        if(ffmpeg_ctx->fmt_ctx == NULL) {
-            LV_LOG_ERROR("fmt_ctx malloc failed");
-            goto failed;
-        }
-        ffmpeg_ctx->fmt_ctx->pb = ffmpeg_ctx->io_ctx;
-        ffmpeg_ctx->fmt_ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
     }
 
     /* open input file, and allocate format context */
@@ -860,7 +774,6 @@ static void ffmpeg_close_src_ctx(struct ffmpeg_context_s * ffmpeg_ctx)
 {
     avcodec_free_context(&(ffmpeg_ctx->video_dec_ctx));
     avformat_close_input(&(ffmpeg_ctx->fmt_ctx));
-    av_packet_free(&ffmpeg_ctx->pkt);
     av_frame_free(&(ffmpeg_ctx->frame));
     if(ffmpeg_ctx->video_src_data[0] != NULL) {
         av_free(ffmpeg_ctx->video_src_data[0]);
@@ -886,11 +799,6 @@ static void ffmpeg_close(struct ffmpeg_context_s * ffmpeg_ctx)
     sws_freeContext(ffmpeg_ctx->sws_ctx);
     ffmpeg_close_src_ctx(ffmpeg_ctx);
     ffmpeg_close_dst_ctx(ffmpeg_ctx);
-    if(ffmpeg_ctx->io_ctx != NULL) {
-        av_free(ffmpeg_ctx->io_ctx->buffer);
-        av_free(ffmpeg_ctx->io_ctx);
-        lv_fs_close(&(ffmpeg_ctx->lv_file));
-    }
     free(ffmpeg_ctx);
 
     LV_LOG_INFO("ffmpeg_ctx closed");
@@ -909,9 +817,6 @@ static void lv_ffmpeg_player_frame_update_cb(lv_timer_t * timer)
 
     if(has_next < 0) {
         lv_ffmpeg_player_set_cmd(obj, player->auto_restart ? LV_FFMPEG_PLAYER_CMD_START : LV_FFMPEG_PLAYER_CMD_STOP);
-        if(!player->auto_restart) {
-            lv_obj_send_event((lv_obj_t *)player, LV_EVENT_READY, NULL);
-        }
         return;
     }
 

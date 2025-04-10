@@ -12,9 +12,6 @@
 #include "../../draw/lv_draw_private.h"
 #include "../../core/lv_obj_event_private.h"
 #include "../../core/lv_obj_class_private.h"
-#include "../../core/lv_obj_class_private.h"
-#include "../../core/lv_obj_draw_private.h"
-
 #if LV_USE_IMAGE != 0
 
 #include "../../stdlib/lv_string.h"
@@ -113,7 +110,7 @@ const lv_obj_class_t lv_image_class = {
     .height_def = LV_SIZE_CONTENT,
     .instance_size = sizeof(lv_image_t),
     .base_class = &lv_obj_class,
-    .name = "lv_image",
+    .name = "image",
 #if LV_USE_OBJ_PROPERTY
     .prop_index_start = LV_PROPERTY_IMAGE_START,
     .prop_index_end = LV_PROPERTY_IMAGE_END,
@@ -175,7 +172,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
 
     /*If the new source type is unknown free the memories of the old source*/
     if(src_type == LV_IMAGE_SRC_UNKNOWN) {
-        if(src) LV_LOG_WARN("unknown image type");
+        LV_LOG_WARN("unknown image type");
         if(img->src_type == LV_IMAGE_SRC_SYMBOL || img->src_type == LV_IMAGE_SRC_FILE) {
             lv_free((void *)img->src);
         }
@@ -197,15 +194,6 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
 
     /*Save the source*/
     if(src_type == LV_IMAGE_SRC_VARIABLE) {
-        if(header.flags & LV_IMAGE_FLAGS_ALLOCATED) {
-            lv_draw_buf_t * buf = (lv_draw_buf_t *)src;
-            if(!buf->unaligned_data || !buf->handlers) {
-                LV_LOG_ERROR("Invalid draw buffer, unaligned_data: %p, handlers: %p",
-                             buf->unaligned_data, (void *)buf->handlers);
-                return;
-            }
-        }
-
         /*If memory was allocated because of the previous `src_type` then free it*/
         if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_free((void *)img->src);
@@ -661,14 +649,6 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
             *s = LV_MAX(*s, a.y2 - h);
         }
     }
-    else if(code == LV_EVENT_SIZE_CHANGED) {
-        if(img->align == LV_IMAGE_ALIGN_STRETCH) {
-            update_align(obj);
-            if(img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE) {
-                lv_obj_refresh_ext_draw_size(obj);
-            }
-        }
-    }
     else if(code == LV_EVENT_HIT_TEST) {
         lv_hit_test_info_t * info = lv_event_get_param(e);
 
@@ -676,7 +656,7 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
          *perform hit test on its transformed area*/
         if(img->w == lv_obj_get_width(obj) && img->h == lv_obj_get_height(obj) &&
            (img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE ||
-            img->rotation != 0)) {
+            img->rotation != 0 || img->pivot.x != img->w / 2 || img->pivot.y != img->h / 2)) {
 
             int32_t w = lv_obj_get_width(obj);
             int32_t h = lv_obj_get_height(obj);
@@ -772,7 +752,6 @@ static void draw_image(lv_event_t * e)
         if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_VARIABLE) {
             lv_draw_image_dsc_t draw_dsc;
             lv_draw_image_dsc_init(&draw_dsc);
-            draw_dsc.base.layer = layer;
             lv_obj_init_draw_image_dsc(obj, LV_PART_MAIN, &draw_dsc);
 
             lv_area_t clip_area_ori = layer->_clip_area;
@@ -814,11 +793,11 @@ static void draw_image(lv_event_t * e)
 
             lv_draw_image(layer, &draw_dsc, &coords);
             layer->_clip_area = clip_area_ori;
+
         }
         else if(img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_draw_label_dsc_t label_dsc;
             lv_draw_label_dsc_init(&label_dsc);
-            label_dsc.base.layer = layer;
             lv_obj_init_draw_label_dsc(obj, LV_PART_MAIN, &label_dsc);
             label_dsc.text = img->src;
             lv_draw_label(layer, &label_dsc, &obj->coords);
@@ -876,7 +855,6 @@ static void update_align(lv_obj_t * obj)
         lv_image_set_rotation(obj, 0);
         lv_image_set_pivot(obj, 0, 0);
         if(img->w != 0 && img->h != 0) {
-            lv_obj_update_layout(obj);
             int32_t scale_x = lv_obj_get_width(obj) * LV_SCALE_NONE / img->w;
             int32_t scale_y = lv_obj_get_height(obj) * LV_SCALE_NONE / img->h;
             scale_update(obj, scale_x, scale_y);
@@ -886,6 +864,7 @@ static void update_align(lv_obj_t * obj)
         lv_image_set_rotation(obj, 0);
         lv_image_set_pivot(obj, 0, 0);
         scale_update(obj, LV_SCALE_NONE, LV_SCALE_NONE);
+
     }
 }
 

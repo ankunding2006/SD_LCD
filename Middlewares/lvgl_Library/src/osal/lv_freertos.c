@@ -26,6 +26,9 @@
  *********************/
 
 #define ulMAX_COUNT 10U
+#ifndef pcTASK_NAME
+    #define pcTASK_NAME "lvglDraw"
+#endif
 
 #define globals LV_GLOBAL_DEFAULT()
 
@@ -58,7 +61,7 @@ static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
  *  STATIC VARIABLES
  **********************/
 
-#ifdef ESP_PLATFORM
+#if (ESP_PLATFORM)
     static portMUX_TYPE critSectionMux = portMUX_INITIALIZER_UNLOCKED;
 #endif
 
@@ -66,7 +69,7 @@ static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
  *      MACROS
  **********************/
 
-#ifdef ESP_PLATFORM
+#if (ESP_PLATFORM)
     #define _enter_critical()   taskENTER_CRITICAL(&critSectionMux);
     #define _exit_critical()    taskEXIT_CRITICAL(&critSectionMux);
     #define _enter_critical_isr() taskENTER_CRITICAL_FROM_ISR();
@@ -82,8 +85,7 @@ static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_result_t lv_thread_init(lv_thread_t * pxThread,  const char * const name,
-                           lv_thread_prio_t xSchedPriority,
+lv_result_t lv_thread_init(lv_thread_t * pxThread, lv_thread_prio_t xSchedPriority,
                            void (*pvStartRoutine)(void *), size_t usStackSize,
                            void * xAttr)
 {
@@ -92,7 +94,7 @@ lv_result_t lv_thread_init(lv_thread_t * pxThread,  const char * const name,
 
     BaseType_t xTaskCreateStatus = xTaskCreate(
                                        prvRunThread,
-                                       name,
+                                       pcTASK_NAME,
                                        (configSTACK_DEPTH_TYPE)(usStackSize / sizeof(StackType_t)),
                                        (void *)pxThread,
                                        tskIDLE_PRIORITY + xSchedPriority,
@@ -127,7 +129,7 @@ lv_result_t lv_mutex_lock(lv_mutex_t * pxMutex)
     /* If mutex in uninitialized, perform initialization. */
     prvCheckMutexInit(pxMutex);
 
-    BaseType_t xMutexTakeStatus = xSemaphoreTakeRecursive(pxMutex->xMutex, portMAX_DELAY);
+    BaseType_t xMutexTakeStatus = xSemaphoreTake(pxMutex->xMutex, portMAX_DELAY);
     if(xMutexTakeStatus != pdTRUE) {
         LV_LOG_ERROR("xSemaphoreTake failed!");
         return LV_RESULT_INVALID;
@@ -163,7 +165,7 @@ lv_result_t lv_mutex_unlock(lv_mutex_t * pxMutex)
     /* If mutex in uninitialized, perform initialization. */
     prvCheckMutexInit(pxMutex);
 
-    BaseType_t xMutexGiveStatus = xSemaphoreGiveRecursive(pxMutex->xMutex);
+    BaseType_t xMutexGiveStatus = xSemaphoreGive(pxMutex->xMutex);
     if(xMutexGiveStatus != pdTRUE) {
         LV_LOG_ERROR("xSemaphoreGive failed!");
         return LV_RESULT_INVALID;
@@ -174,8 +176,6 @@ lv_result_t lv_mutex_unlock(lv_mutex_t * pxMutex)
 
 lv_result_t lv_mutex_delete(lv_mutex_t * pxMutex)
 {
-    if(pxMutex->xIsInitialized == pdFALSE)
-        return LV_RESULT_INVALID;
     vSemaphoreDelete(pxMutex->xMutex);
     pxMutex->xIsInitialized = pdFALSE;
 

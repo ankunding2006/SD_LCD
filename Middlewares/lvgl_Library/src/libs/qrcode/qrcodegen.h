@@ -26,9 +26,9 @@
 #include "../../../lvgl.h"
 #ifdef LV_USE_QRCODE
 
-#include LV_STDBOOL_INCLUDE
-#include LV_STDDEF_INCLUDE
-#include LV_STDINT_INCLUDE
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 
 #ifdef __cplusplus

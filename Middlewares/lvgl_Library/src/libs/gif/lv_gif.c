@@ -6,11 +6,10 @@
 /*********************
  *      INCLUDES
  *********************/
+#include "../../misc/lv_timer_private.h"
+#include "../../core/lv_obj_class_private.h"
 #include "lv_gif_private.h"
 #if LV_USE_GIF
-#include "../../misc/lv_timer_private.h"
-#include "../../misc/cache/lv_image_cache.h"
-#include "../../core/lv_obj_class_private.h"
 
 #include "gifdec.h"
 
@@ -39,7 +38,7 @@ const lv_obj_class_t lv_gif_class = {
     .destructor_cb = lv_gif_destructor,
     .instance_size = sizeof(lv_gif_t),
     .base_class = &lv_image_class,
-    .name = "lv_gif",
+    .name = "gif",
 };
 
 /**********************
