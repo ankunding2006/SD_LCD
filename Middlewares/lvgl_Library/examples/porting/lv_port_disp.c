@@ -130,10 +130,27 @@ static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t 
         lcd_set_address(&lcd_desc, area->x1, area->y1, area->x2, area->y2);
         
         // 计算要刷新的区域大小
-        uint32_t size = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) * BYTE_PER_PIXEL;
+        uint32_t width = (area->x2 - area->x1 + 1);
+        uint32_t height = (area->y2 - area->y1 + 1);
+        uint32_t size = width * height * BYTE_PER_PIXEL;
         
-        // 直接使用批量写入函数将整个缓冲区写入LCD
-        lcd_write_bulk(lcd_desc.io, px_map, size);
+        // 创建临时缓冲区用于字节序转换
+        // 注意：为避免栈溢出，每次处理一行数据
+        uint16_t line_buf[width];
+        uint16_t* src = (uint16_t*)px_map;
+        
+        // 按行处理，对每行数据进行字节序转换
+        for(uint32_t y = 0; y < height; y++) {
+            // 对当前行的每个像素进行字节序转换
+            for(uint32_t x = 0; x < width; x++) {
+                uint16_t color = src[y * width + x];
+                line_buf[x] = (color << 8) | (color >> 8); // 交换高低字节
+            }
+            
+            // 发送转换后的一行数据到LCD
+            lcd_io_dc(lcd_desc.io, 1);
+            lcd_spi_transmit(lcd_desc.io->spi, (uint8_t *)line_buf, width * 2);
+        }
     }
 
     // 通知LVGL刷新完成

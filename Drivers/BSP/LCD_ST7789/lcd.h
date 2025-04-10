@@ -49,6 +49,7 @@ extern lcd_hw lcd_hw_2_00;
 void lcd_init_dev(lcd* plcd, lcd_type type, lcd_rotate rotate);
 void lcd_init_hw(lcd* plcd);
 void lcd_clear(lcd* plcd, uint16_t color);
+void lcd_spi_transmit(void* spi, uint8_t* data, uint32_t len);
 
 void lcd_draw_point(lcd* plcd, uint16_t x, uint16_t y, uint16_t color);
 void lcd_show_char(lcd* plcd, uint16_t x, uint16_t y, uint16_t chr);
@@ -89,7 +90,3 @@ void lcd_write_reg_data(lcd_io* lcdio, int len, ...);
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
 #endif
-
-
-
-

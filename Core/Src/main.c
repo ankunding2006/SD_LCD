@@ -33,6 +33,7 @@
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
 #include "usart.h"
+#include "ui.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -212,37 +213,10 @@ void Before_Main(void)
   led3_on();
   HAL_Delay(500);
   led3_off();
-  create_demo_ui(); // 创建演示UI
+  ui_init();
 }
 
-void create_demo_ui(void)
-{
-  // 创建按钮
-  lv_obj_t *btn = lv_btn_create(lv_screen_active());
-  lv_obj_set_pos(btn, 120, 100);
-  lv_obj_set_size(btn, 100, 50);
 
-  lv_obj_t *label = lv_label_create(btn);
-  lv_label_set_text(label, "button 1");
-  lv_obj_center(label);
-
-  lv_obj_t *btn2 = lv_btn_create(lv_screen_active());
-  lv_obj_set_pos(btn2, 120, 160);
-  lv_obj_set_size(btn2, 100, 50);
-
-  lv_obj_t *label2 = lv_label_create(btn2);
-  lv_label_set_text(label2, "button 2");
-  lv_obj_center(label2);
-
-  // 创建一个组并添加对象
-  lv_group_t *g = lv_group_create();
-  lv_group_add_obj(g, btn);
-  lv_group_add_obj(g, btn2);
-  // 给第一个按钮设置初始焦点
-  lv_obj_add_state(btn, LV_STATE_FOCUS_KEY);
-  // 将外部输入设备与组关联
-  lv_indev_set_group(indev_button, g);
-}
 /* USER CODE END 4 */
 
 /**

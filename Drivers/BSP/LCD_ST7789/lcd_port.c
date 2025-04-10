@@ -14,7 +14,7 @@ static void lcd_io_ctrl(gpio_io* io, bool flag)
         HAL_GPIO_WritePin(io->port, io->pin, (GPIO_PinState)((flag ^ io->invert) ? GPIO_PIN_SET : GPIO_PIN_RESET));
 }
 
-static void lcd_spi_transmit(void* spi, uint8_t* data, uint32_t len)
+void lcd_spi_transmit(void* spi, uint8_t* data, uint32_t len)
 {
     while(spi && len) {
         if(len > 0xffff) {
