@@ -10401,10 +10401,118 @@
 
   <Group>
     <GroupName>LVGL_myGUI</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>841</FileNumber>
+      <FileType>0</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/CMakeLists.txt</PathWithFileName>
+      <FilenameWithoutPath>CMakeLists.txt</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>842</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/components/ui_comp_hook.c</PathWithFileName>
+      <FilenameWithoutPath>ui_comp_hook.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>843</FileNumber>
+      <FileType>0</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/filelist.txt</PathWithFileName>
+      <FilenameWithoutPath>filelist.txt</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>844</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/screens/ui_Screen1.c</PathWithFileName>
+      <FilenameWithoutPath>ui_Screen1.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>845</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui.c</PathWithFileName>
+      <FilenameWithoutPath>ui.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>846</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui.h</PathWithFileName>
+      <FilenameWithoutPath>ui.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>847</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui_events.h</PathWithFileName>
+      <FilenameWithoutPath>ui_events.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>848</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui_helpers.c</PathWithFileName>
+      <FilenameWithoutPath>ui_helpers.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>849</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui_helpers.h</PathWithFileName>
+      <FilenameWithoutPath>ui_helpers.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -10415,7 +10523,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>841</FileNumber>
+      <FileNumber>850</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -10427,7 +10535,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>842</FileNumber>
+      <FileNumber>851</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -10447,7 +10555,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>843</FileNumber>
+      <FileNumber>852</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -10459,7 +10567,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>844</FileNumber>
+      <FileNumber>853</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -10471,7 +10579,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>845</FileNumber>
+      <FileNumber>854</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -10483,7 +10591,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>846</FileNumber>
+      <FileNumber>855</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
