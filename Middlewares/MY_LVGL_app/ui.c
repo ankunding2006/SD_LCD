@@ -39,16 +39,25 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Screen1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        ui_screen_loaded_cb(e);
+    }
+}
+
 void ui_event_Button1(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_KEY && lv_event_get_key(e) == LV_KEY_ENTER) {
-        lv_scr_load_anim(ui_Screen2, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, false);
+    if(event_code == LV_EVENT_KEY &&  lv_event_get_key(e) == LV_KEY_ENTER) {
+        _ui_screen_change(&ui_Screen2, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Screen2_screen_init);
     }
 }
 
-void ui_event_Screen1(lv_event_t * e)
+void ui_event_Screen2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -61,17 +70,8 @@ void ui_event_Button4(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_KEY && lv_event_get_key(e) == LV_KEY_ENTER) {
-        lv_scr_load_anim(ui_Screen1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, false);
-    }
-}
-
-void ui_event_Screen2(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_SCREEN_LOADED) {
-        ui_screen_loaded_cb(e);
+    if(event_code == LV_EVENT_KEY &&  lv_event_get_key(e) == LV_KEY_ENTER) {
+        _ui_screen_change(&ui_Screen1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Screen1_screen_init);
     }
 }
 
