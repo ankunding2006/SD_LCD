@@ -13,10 +13,23 @@ void ui_Screen1_screen_init(void)
     ui_Button1 = lv_button_create(ui_Screen1);
     lv_obj_set_width(ui_Button1, 100);
     lv_obj_set_height(ui_Button1, 50);
-    lv_obj_set_x(ui_Button1, 4);
-    lv_obj_set_y(ui_Button1, -41);
+    lv_obj_set_x(ui_Button1, -59);
+    lv_obj_set_y(ui_Button1, -59);
     lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
+    lv_obj_add_state(ui_Button1, LV_STATE_FOCUSED);       /// States
     lv_obj_add_flag(ui_Button1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_remove_flag(ui_Button1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_remove_flag(ui_Button1, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
+                       LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE);     /// Flags
+    lv_obj_set_style_bg_color(ui_Button1, lv_color_hex(0x38EF34), LV_PART_MAIN | LV_STATE_FOCUSED);
+    lv_obj_set_style_bg_opa(ui_Button1, 255, LV_PART_MAIN | LV_STATE_FOCUSED);
+
+    ui_Label1 = lv_label_create(ui_Button1);
+    lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label1, "ToScreen2");
+
+    lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Screen1, ui_event_Screen1, LV_EVENT_ALL, NULL);
 
 }

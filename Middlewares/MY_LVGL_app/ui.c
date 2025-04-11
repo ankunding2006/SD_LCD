@@ -10,23 +10,70 @@
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
-lv_obj_t *ui_Screen1;
-lv_obj_t *ui_Button1;
+void ui_event_Screen1(lv_event_t * e);
+lv_obj_t * ui_Screen1;
+void ui_event_Button1(lv_event_t * e);
+lv_obj_t * ui_Button1;
+lv_obj_t * ui_Label1;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Screen2
+void ui_Screen2_screen_init(void);
+void ui_event_Screen2(lv_event_t * e);
+lv_obj_t * ui_Screen2;
+void ui_event_Button4(lv_event_t * e);
+lv_obj_t * ui_Button4;
+lv_obj_t * ui_Label4;
 // CUSTOM VARIABLES
 
 // EVENTS
-lv_obj_t *ui____initial_actions0;
+lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
-#error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Button1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_KEY && lv_event_get_key(e) == LV_KEY_ENTER) {
+        lv_scr_load_anim(ui_Screen2, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, false);
+    }
+}
+
+void ui_event_Screen1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        ui_screen_loaded_cb(e);
+    }
+}
+
+void ui_event_Button4(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_KEY && lv_event_get_key(e) == LV_KEY_ENTER) {
+        lv_scr_load_anim(ui_Screen1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, false);
+    }
+}
+
+void ui_event_Screen2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        ui_screen_loaded_cb(e);
+    }
+}
 
 ///////////////////// SCREENS ////////////////////
 
@@ -37,6 +84,7 @@ void ui_init(void)
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_Screen1_screen_init();
+    ui_Screen2_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Screen1);
 }

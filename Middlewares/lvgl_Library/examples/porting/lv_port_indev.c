@@ -286,7 +286,14 @@ static void button_read(lv_indev_t *indev_drv, lv_indev_data_t *data)
     uint8_t current_btn_state = 0;          // 当前按键状态
     
     // 检测所有按键的当前状态
-    if (HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET) {
+    if (HAL_GPIO_ReadPin(KEY5_GPIO_Port, KEY5_Pin) == GPIO_PIN_RESET) {
+        current_btn_state = 1;
+        last_key = LV_KEY_ENTER;
+        led1_on();
+        led2_off();
+        led3_on();  // KEY5按下，点亮LED1和LED3
+    }
+    else if (HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET) {
         current_btn_state = 1;
         last_key = LV_KEY_UP;
         led1_on();  // KEY1按下，点亮LED1
@@ -314,25 +321,12 @@ static void button_read(lv_indev_t *indev_drv, lv_indev_data_t *data)
         led2_on();  // KEY4按下，点亮LED1和LED2
         led3_off();
     }
-    else if (HAL_GPIO_ReadPin(KEY5_GPIO_Port, KEY5_Pin) == GPIO_PIN_RESET) {
-        current_btn_state = 1;
-        last_key = LV_KEY_ENTER;
-        led1_on();
-        led2_off();
-        led3_on();  // KEY5按下，点亮LED1和LED3
-    }
     else {
         current_btn_state = 0;
         // 没有按键按下，关闭所有LED
         led1_off();
         led2_off();
         led3_off();
-        
-        // 重要：在没有按键按下时，将last_key重置为0
-        // 这确保LVGL不会继续处理之前的按键
-        if (last_btn_state != 0) {  // 只有当按键状态从按下变为释放时才重置
-            last_key = 0;
-        }
     }
     
     // 更新按键状态

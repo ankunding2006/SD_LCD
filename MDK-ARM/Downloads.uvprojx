@@ -5036,6 +5036,16 @@
               <FileType>5</FileType>
               <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui_helpers.h</FilePath>
             </File>
+            <File>
+              <FileName>ui_Screen2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/screens/ui_Screen2.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_events.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>C:/Users/34118/Desktop/SD_LCD/Middlewares/MY_LVGL_app/ui_events.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
