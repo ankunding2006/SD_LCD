@@ -34,6 +34,7 @@
 #include "lv_port_indev.h"
 #include "usart.h"
 #include "ui.h"
+#include "initial.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,7 +56,6 @@
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
-uint8_t angle = 0; // 添加舵机角度变量
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
@@ -75,9 +75,7 @@ lcd lcd_desc = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void Before_Main(void);
-void create_demo_ui(void);
-void app_main(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -118,60 +116,20 @@ int main(void)
   MX_FATFS_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
+  
   /* USER CODE BEGIN 2 */
-  delay_init(168);     /* 延时初始化 */
-  usart_init(115200);  /* 串口初始化为115200 */
-  usmart_dev.init(84); /* USMART初始化 */
-  HAL_Delay(10);       /* 延时10ms */
-  
-  /* 按正确顺序初始化LVGL */
-  lv_init();                  // 初始化LVGL库
-  lv_port_disp_init();        // 初始化显示驱动
-  lv_port_indev_init();       // 初始化输入设备
-  lv_tick_set_cb(HAL_GetTick); // 设置LVGL的tick回调函数
-  
-  /* LED测试动画 */
-  all_leds_off();
-  HAL_Delay(500);
-  led1_on();
-  HAL_Delay(500);
-  led1_off();
-  led2_on();
-  HAL_Delay(500);
-  led2_off();
-  led3_on();
-  HAL_Delay(500);
-  led3_off();
-  
-  /* 初始化UI */
-  ui_init();
-  
-  /* 创建导航组并添加所有控件 */
-  lv_group_t *g = lv_group_create();
-  
-  /* 添加所有按钮到导航组中，无论在哪个屏幕 */
-  lv_group_add_obj(g, ui_Button1);  // Screen1的按钮
-  lv_group_add_obj(g, ui_Button4);  // Screen2的按钮
-  
-  /* 让按钮1获得初始焦点 */
-  lv_group_focus_obj(ui_Button1);
-  
-  /* 设置为默认导航组 */
-  lv_group_set_default(g);
-  
-  /* 将输入设备与导航组关联 */
-  lv_indev_set_group(indev_button, g);
-  
-  /* 强制刷新显示 */
-  lv_refr_now(NULL);
-  
+  // 初始化所有系统组件
+  init_hardware();    // 初始化底层硬件
+  init_lvgl();        // 初始化LVGL库
+  init_led_animation(); // LED测试动画
+  init_ui_and_navigation(); // 初始化UI和导航组
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    lv_timer_handler(); // 处理LVGL任务 (注意函数名称更新)
+    lv_timer_handler(); // 处理LVGL任务
     HAL_Delay(5);      // 延时5ms，降低CPU占用
     /* USER CODE END WHILE */
 
