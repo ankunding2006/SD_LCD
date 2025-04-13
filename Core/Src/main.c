@@ -76,7 +76,6 @@ u16 ZoomRatio=1000;
 
 /* USER CODE BEGIN PV */
 static uint16_t line_buffer[320];
-uint8_t angle = 0; // 添加舵机角度变量
 
 lcd_io lcd_io_desc = {
     .spi = &hspi1,
