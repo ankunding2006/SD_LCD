@@ -17,7 +17,6 @@ extern lcd lcd_desc; // 使用main.c中已经初始化的LCD对象
 static menusize_t g_lastSelectItem = 0xFF;
 static menusize_t g_lastShowBaseItem = 0xFF;
 static char g_lastTitle[32] = {0};
-static uint8_t g_lastMenuDepth = 0;
 static bool g_menuNeedFullRedraw = false;
 
 static void ShowMenu(cotMenuShow_t *ptShowInfo)
@@ -45,6 +44,13 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
     if (g_lastShowBaseItem != ptShowInfo->showBaseItem || needFullRedraw) {
         needFullRedraw = true;
     }
+
+    // 检查是否发生了从最后一项到第一项(或反之)的循环
+    if (g_lastSelectItem == ptShowInfo->itemsNum - 1 && ptShowInfo->selectItem == 0) {
+        needFullRedraw = true;
+    } else if (g_lastSelectItem == 0 && ptShowInfo->selectItem == ptShowInfo->itemsNum - 1) {
+        needFullRedraw = true;
+    }
     
     // 限制显示的菜单项数量
     cotMenu_LimitShowListNum(ptShowInfo, &showNum);
@@ -67,12 +73,14 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
         for (int i = 0; i < showNum; i++) {
             tmpselect = i + ptShowInfo->showBaseItem;
             
+            // 先清除该位置的背景
+            lcd_fill(&lcd_desc, 0, MENU_ITEMS_START_Y + i * MENU_ITEM_HEIGHT, 
+                     lcd_desc.hw->width, MENU_ITEMS_START_Y + (i + 1) * MENU_ITEM_HEIGHT - 2, BLACK);
+            
             if (tmpselect == ptShowInfo->selectItem) {
-                // 选中项使用不同的颜色并添加边框
+                // 选中项使用不同的颜色
                 lcd_fill(&lcd_desc, 0, MENU_ITEMS_START_Y + i * MENU_ITEM_HEIGHT, 
                          lcd_desc.hw->width, MENU_ITEMS_START_Y + (i + 1) * MENU_ITEM_HEIGHT - 2, YELLOW);
-                lcd_draw_rectangle(&lcd_desc, 2, MENU_ITEMS_START_Y + i * MENU_ITEM_HEIGHT + 2, 
-                                 lcd_desc.hw->width - 2, MENU_ITEMS_START_Y + (i + 1) * MENU_ITEM_HEIGHT - 4, RED);
                 lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
             } else {
                 lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
@@ -84,20 +92,16 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
         
         // 显示滚动指示器
         if (ptShowInfo->showBaseItem > 0) {
-            // 显示向上箭头指示器
             lcd_set_font(&lcd_desc, FONT_1608, CYAN, BLACK);
             lcd_print(&lcd_desc, lcd_desc.hw->width - 20, 10, "^");
         }
 
         if (ptShowInfo->showBaseItem + showNum < ptShowInfo->itemsNum) {
-            // 显示向下箭头指示器
             lcd_set_font(&lcd_desc, FONT_1608, CYAN, BLACK);
             lcd_print(&lcd_desc, lcd_desc.hw->width - 20, MENU_ITEMS_START_Y + (showNum - 1) * MENU_ITEM_HEIGHT, "v");
         }
         
     } else if (g_lastSelectItem != ptShowInfo->selectItem) {
-        // 只有选中项发生变化时才更新相关项
-        
         // 找出上一个选中项和当前选中项的显示索引
         int lastIndex = -1;
         int currIndex = -1;
@@ -113,9 +117,9 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
             currIndex = ptShowInfo->selectItem - ptShowInfo->showBaseItem;
         }
         
-        // 只更新变化的项
+        // 确保清除旧的高亮显示
         if (lastIndex >= 0) {
-            // 恢复上一个选中项为普通显示
+            // 完全清除上一个选中项的区域
             lcd_fill(&lcd_desc, 0, MENU_ITEMS_START_Y + lastIndex * MENU_ITEM_HEIGHT, 
                      lcd_desc.hw->width, MENU_ITEMS_START_Y + (lastIndex + 1) * MENU_ITEM_HEIGHT - 2, BLACK);
             lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
@@ -123,12 +127,14 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
                       ptShowInfo->uItemsListDesc[lastIndex + ptShowInfo->showBaseItem].pTextString);
         }
         
+        // 绘制新的高亮显示
         if (currIndex >= 0) {
-            // 将当前选中项设置为高亮显示
+            // 先清除当前选中项的区域
+            lcd_fill(&lcd_desc, 0, MENU_ITEMS_START_Y + currIndex * MENU_ITEM_HEIGHT, 
+                     lcd_desc.hw->width, MENU_ITEMS_START_Y + (currIndex + 1) * MENU_ITEM_HEIGHT - 2, BLACK);
+            // 再绘制高亮背景
             lcd_fill(&lcd_desc, 0, MENU_ITEMS_START_Y + currIndex * MENU_ITEM_HEIGHT, 
                      lcd_desc.hw->width, MENU_ITEMS_START_Y + (currIndex + 1) * MENU_ITEM_HEIGHT - 2, YELLOW);
-            lcd_draw_rectangle(&lcd_desc, 2, MENU_ITEMS_START_Y + currIndex * MENU_ITEM_HEIGHT + 2, 
-                             lcd_desc.hw->width - 2, MENU_ITEMS_START_Y + (currIndex + 1) * MENU_ITEM_HEIGHT - 4, RED);
             lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
             lcd_print(&lcd_desc, MENU_ITEM_TEXT_OFFSET, MENU_ITEMS_START_Y + currIndex * MENU_ITEM_HEIGHT, "%s", 
                       ptShowInfo->uItemsListDesc[currIndex + ptShowInfo->showBaseItem].pTextString);
@@ -159,17 +165,23 @@ void Settings_Enter(const cotMenuItemInfo_t *pItemInfo);
 void Info_Enter(const cotMenuItemInfo_t *pItemInfo);
 void About_Enter(const cotMenuItemInfo_t *pItemInfo);
 void Settings_Exit(const cotMenuItemInfo_t *pItemInfo);
+void LED_Menu_Enter(const cotMenuItemInfo_t *pItemInfo);
+void LED1_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo);
+void LED2_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo);
+void LED3_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo);
+void All_LEDs_On_Handler(const cotMenuItemInfo_t *pItemInfo);
+void All_LEDs_Off_Handler(const cotMenuItemInfo_t *pItemInfo);
 
 // 主菜单配置
 static cotMainMenuCfg_t sg_tMainMenu = {"Main Menu", MainMenu_Enter, NULL, NULL, NULL};
 
 // 主菜单项
-cotMenuList_t sg_MainMenuTable[] =
-    {
-        COT_MENU_ITEM_BIND("Settings", Settings_Enter, NULL, NULL, NULL, NULL),
-        COT_MENU_ITEM_BIND("Info", Info_Enter, NULL, NULL, NULL, NULL),
-        COT_MENU_ITEM_BIND("About", About_Enter, NULL, NULL, NULL, NULL),
-    };
+cotMenuList_t sg_MainMenuTable[] = {
+    COT_MENU_ITEM_BIND("LED Control", LED_Menu_Enter, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("Settings", Settings_Enter, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("Info", Info_Enter, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("About", About_Enter, NULL, NULL, NULL, NULL),
+};
 
 // 设置子菜单项
 cotMenuList_t sg_SettingsMenuTable[] =
@@ -178,6 +190,15 @@ cotMenuList_t sg_SettingsMenuTable[] =
         COT_MENU_ITEM_BIND("Contrast", NULL, NULL, NULL, NULL, NULL),
         COT_MENU_ITEM_BIND("Language", NULL, NULL, NULL, NULL, NULL),
     };
+
+// LED控制菜单项
+cotMenuList_t sg_LEDMenuTable[] = {
+    COT_MENU_ITEM_BIND("LED1 Toggle", LED1_Toggle_Handler, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("LED2 Toggle", LED2_Toggle_Handler, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("LED3 Toggle", LED3_Toggle_Handler, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("All LEDs On", All_LEDs_On_Handler, NULL, NULL, NULL, NULL),
+    COT_MENU_ITEM_BIND("All LEDs Off", All_LEDs_Off_Handler, NULL, NULL, NULL, NULL),
+};
 
 // 菜单回调函数实现
 void MainMenu_Enter(const cotMenuItemInfo_t *pItemInfo)
@@ -215,6 +236,43 @@ void About_Enter(const cotMenuItemInfo_t *pItemInfo)
     lcd_print(&lcd_desc, 10, 10, "About");
     lcd_print(&lcd_desc, 10, 40, "Version: 1.0");
     lcd_print(&lcd_desc, 10, 60, "Date: 2024/09");
+}
+
+// LED控制菜单回调函数
+void LED1_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo)
+{
+    led1_toggle();
+    cotMenu_Exit(false); // 执行完LED操作后返回上一级菜单
+}
+
+void LED2_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo)
+{
+    led2_toggle();
+    cotMenu_Exit(false); // 执行完LED操作后返回上一级菜单
+}
+
+void LED3_Toggle_Handler(const cotMenuItemInfo_t *pItemInfo)
+{
+    led3_toggle();
+    cotMenu_Exit(false); // 执行完LED操作后返回上一级菜单
+}
+
+void All_LEDs_On_Handler(const cotMenuItemInfo_t *pItemInfo)
+{
+    all_leds_on();
+    cotMenu_Exit(false); // 执行完LED操作后返回上一级菜单
+}
+
+void All_LEDs_Off_Handler(const cotMenuItemInfo_t *pItemInfo)
+{
+    all_leds_off();
+    cotMenu_Exit(false); // 执行完LED操作后返回上一级菜单
+}
+
+void LED_Menu_Enter(const cotMenuItemInfo_t *pItemInfo)
+{
+    g_menuNeedFullRedraw = true;
+    cotMenu_Bind(sg_LEDMenuTable, COT_GET_MENU_NUM(sg_LEDMenuTable), ShowMenu);
 }
 
 // 初始化菜单系统

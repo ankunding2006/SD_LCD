@@ -4,6 +4,7 @@
 
 #include "cot_menu.h"
 #include "main.h"
+#include "LED.h"  // 添加LED控制头文件
 
 void Menu_Init(void);
 uint8_t Get_Key(void);
