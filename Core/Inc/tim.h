@@ -43,7 +43,7 @@ extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim9;
 
 /* USER CODE BEGIN Private defines */
-// 定义PWM通道宏
+// 定义PWM通道�?
 #define PWMB   TIM9->CCR1  
 #define PWMA   TIM9->CCR2  
 
@@ -77,3 +77,4 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 #endif
 
 #endif /* __TIM_H__ */
+

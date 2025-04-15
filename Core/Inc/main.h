@@ -193,7 +193,7 @@ int click(void);
 #define AIN2_GPIO_Port GPIOE
 #define AIN1_Pin GPIO_PIN_10
 #define AIN1_GPIO_Port GPIOB
-#define AUTO_Pin GPIO_PIN_11  
+#define AUTO_Pin GPIO_PIN_11
 #define AUTO_GPIO_Port GPIOB
 #define MENU_Pin GPIO_PIN_13
 #define MENU_GPIO_Port GPIOB
@@ -205,6 +205,10 @@ int click(void);
 #define GND_GPIO_Port GPIOD
 #define DOWN_Pin GPIO_PIN_13
 #define DOWN_GPIO_Port GPIOD
+#define I2C_CLK_Pin GPIO_PIN_6
+#define I2C_CLK_GPIO_Port GPIOD
+#define I2C_Data_Pin GPIO_PIN_7
+#define I2C_Data_GPIO_Port GPIOD
 #define LCD_RST_Pin GPIO_PIN_3
 #define LCD_RST_GPIO_Port GPIOB
 #define LCD_BLK_Pin GPIO_PIN_4
