@@ -6,10 +6,10 @@
  * 这下面要包含所用到的函数所申明的头文件(用户自己添加)
  */
 
+#include "control.h" // 控制函数头文件
+#include "encoder.h" // 编码器函数头文件
 
 
-extern void led_set(uint8_t sta);
-extern void test_fun(void(*ledset)(uint8_t), uint8_t sta);
 
 /* 函数名列表初始化(用户自己添加)
  * 用户直接在这里输入要执行的函数名及其查找串
@@ -20,8 +20,8 @@ struct _m_usmart_nametab usmart_nametab[] =
     (void *)read_addr, "uint32_t read_addr(uint32_t addr)",
     (void *)write_addr, "void write_addr(uint32_t addr, uint32_t val)",
 #endif
-
-
+    (void*)Set_Pwm, "void Set_Pwm(int motor_left, int motor_right)",
+    (int *)Read_Encoder, "int Read_Encoder(uint8_t TIMX)",
 
 };
 

@@ -18,8 +18,8 @@
 float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 
 /**************************************************************************
-Function: Control function
-Input   : none
+函数功能：Control function
+入口参数：none
 Output  : none
 函数功能：所有的控制代码都在这里面
 		 5ms外部中断由定时器TIM6产生，严格保证采样和数据处理的时间同步
@@ -30,7 +30,7 @@ Output  : none
 **************************************************************************/
 
 volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
-volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm;
+volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm=0;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -54,35 +54,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	    Velocity(Encoder_Left, Encoder_Right);
 
 		// TODO : 转向控制
-		Turn_Pwm = LineTracking_CalculateTurn();
+		//Turn_Pwm = LineTracking_CalculateTurn();
 
 		// 使用计算出的实际速度，不修改Target_Velocity
 		Motor_Left = actual_velocity - (float)ZoomRatio / 1000 * Turn_Pwm;
 		Motor_Right = actual_velocity + (float)ZoomRatio / 1000 * Turn_Pwm;
-		if (Flag_Stop == 1)
+		if (Flag_Stop == 1) 
 			Set_Pwm(0, 0);
 		else
 			Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
 	}
 }
 
-/**************************************************************************
-Function: Vertical PD control
-Input   : Angle:angle；Gyro：angular velocity
-Output  : balance：Vertical control PWM
-函数功能：直立PD控制
-入口参数：Angle:角度；Gyro：角速度
-返回  值：balance：直立控制PWM
-**************************************************************************/
-int Balance(float Angle, float Gyro)
-{
-	float Angle_bias, Gyro_bias;
-	int balance;
-	Angle_bias = Middle_angle - Angle; // 求出平衡的角度中值 和机械相关
-	Gyro_bias = 0 - Gyro;
-	balance = -Balance_Kp / 100 * Angle_bias - Gyro_bias * Balance_Kd / 100; // 计算平衡控制的电机PWM  PD控制   kp是P系数 kd是D系数
-	return balance;
-}
 
 /**************************************************************************
 Function: Speed PI control
@@ -117,7 +100,7 @@ int Velocity(int encoder_left, int encoder_right)
 
 
 /**************************************************************************
-Function: Assign to PWM register
+函数功能：Assign to PWM register
 Input   : motor_left：Left wheel PWM；motor_right：Right wheel PWM
 Output  : none
 函数功能：赋值给PWM寄存器
@@ -126,15 +109,23 @@ Output  : none
 **************************************************************************/
 void Set_Pwm(int motor_left, int motor_right)
 {
-	if (motor_left > 0)
-		AIN1 = 0, AIN2 = 1; // 修改为反方向
-	else
-		AIN1 = 1, AIN2 = 0; // 修改为反方向
+	if (motor_left > 0) {
+		// 使用HAL库函数设置GPIO状态，代替位带操作
+		HAL_GPIO_WritePin(AIN1_GPIO_PORT, AIN1_GPIO_PIN, GPIO_PIN_RESET); // AIN1 = 0
+		HAL_GPIO_WritePin(AIN2_GPIO_PORT, AIN2_GPIO_PIN, GPIO_PIN_SET);   // AIN2 = 1
+	} else {
+		HAL_GPIO_WritePin(AIN1_GPIO_PORT, AIN1_GPIO_PIN, GPIO_PIN_SET);   // AIN1 = 1
+		HAL_GPIO_WritePin(AIN2_GPIO_PORT, AIN2_GPIO_PIN, GPIO_PIN_RESET); // AIN2 = 0
+	}
 	PWMA = myabs(motor_left);
-	if (motor_right > 0)
-		BIN1 = 0, BIN2 = 1; // 修改为反方向
-	else
-		BIN1 = 1, BIN2 = 0; // 修改为反方向
+	if (motor_right > 0) {
+		// 使用HAL库函数设置GPIO状态，代替位带操作
+		HAL_GPIO_WritePin(BIN1_GPIO_PORT, BIN1_GPIO_PIN, GPIO_PIN_RESET); // BIN1 = 0
+		HAL_GPIO_WritePin(BIN2_GPIO_PORT, BIN2_GPIO_PIN, GPIO_PIN_SET);   // BIN2 = 1
+	} else {
+		HAL_GPIO_WritePin(BIN1_GPIO_PORT, BIN1_GPIO_PIN, GPIO_PIN_SET);   // BIN1 = 1
+		HAL_GPIO_WritePin(BIN2_GPIO_PORT, BIN2_GPIO_PIN, GPIO_PIN_RESET); // BIN2 = 0
+	}
 	PWMB = myabs(motor_right);
 }
 /**************************************************************************

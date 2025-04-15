@@ -40,3 +40,17 @@ downloads\usmart_config.o: ../Drivers/CMSIS/Include/core_cm4.h
 downloads\usmart_config.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\usmart_config.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 downloads\usmart_config.o: ..\Middlewares\USMART\usmart_str.h
+downloads\usmart_config.o: ../control/CONTROL/control.h
+downloads\usmart_config.o: ../Core/Inc/main.h
+downloads\usmart_config.o: ../Drivers/BSP/LCD_ST7789/lcd.h
+downloads\usmart_config.o: ../Drivers/BSP/LCD_ST7789/lcd_port.h
+downloads\usmart_config.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\usmart_config.o: ../Drivers/BSP/LCD_ST7789/lcd_font.h
+downloads\usmart_config.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\usmart_config.o: ../Core/Inc/LED.h
+downloads\usmart_config.o: ../Core/Inc/main.h
+downloads\usmart_config.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
+downloads\usmart_config.o: ../Hardware/ENCODER/encoder.h
+downloads\usmart_config.o: ../Core/Inc/tim.h
+downloads\usmart_config.o: ../Core/Inc/usart.h
+downloads\usmart_config.o: ../control/LineTracking/LineTracking.h

@@ -149,8 +149,8 @@ int main(void)
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
   
   // 初始化编码器
-  Encoder_Init_TIM3();  // 打开左轮编码器?
-  Encoder_Init_TIM5();  // 打开右轮编码器?
+  Encoder_Init_TIM3();  // 打开左轮编码器
+  Encoder_Init_TIM5();  // 打开右轮编码器
 
   // 设置默认控制参数
   Middle_angle = 0;    // 初始平衡角度设定
@@ -169,9 +169,9 @@ int main(void)
   Menu_Init(); // 初始化菜单系统
   Before_Main();
   
+  //!HAL_TIM_Base_Start_IT(&htim6);   
 
-  HAL_TIM_Base_Start_IT(&htim6);   
-  /* USER CODE END 2 */
+  /* USER CODE END 2 */  
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
