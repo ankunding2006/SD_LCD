@@ -1,12 +1,13 @@
 #include "gray_detection.h"
 
-#define scaleFactor 20 // 比例系数，用于调整转向PWM的灵敏度
+
 #define turn_PWM_Limit 1500 // 转向PWM的限制值，防止过大过小
 
 _gray_state gray_state;
 
 float gray_status[2] = {0}, gray_status_backup[2][20] = {0}; // 灰度传感器状态与历史值
 uint32_t gray_status_worse = 0;								 // 灰度管异常状态计数器
+u16 scaleFactor=100; // 比例系数，用于调整转向PWM的灵敏度
 
 /***************************************************
 函数名: int Calculate_Turn_Pwm(void)
