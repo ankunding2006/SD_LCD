@@ -52,4 +52,3 @@ downloads\tim.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\tim.o: ../Hardware/ENCODER/encoder.h
 downloads\tim.o: ../Core/Inc/tim.h
 downloads\tim.o: ../Core/Inc/usart.h
-downloads\tim.o: ../control/LineTracking/LineTracking.h

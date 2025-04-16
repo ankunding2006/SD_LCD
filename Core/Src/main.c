@@ -27,12 +27,15 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdlib.h>
+#include "gray_detection.h" 
+#include <stdlib.h> 
 #include "encoder.h" 
 #include "control.h" 
 #include "cot_menu.h"
 #include "lcd.h"
 #include "my_menu.h"
+#include "soft_i2c.h"
+#include "nchd12.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,8 +61,7 @@ volatile u8 delay_flag, delay_50;                                               
 float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID参数（放??100倍）
 u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状??
 float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 传感器的PID参数（放??100倍）
-float Target_Velocity = 16;     
-u16 ZoomRatio=1000;           
+float Target_Velocity = 30;                                                                                     // 目标速度
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -147,6 +149,9 @@ int main(void)
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
+
+  //********初始化12路灰度传感器**********//
+  grey_sensor_Init(); // 初始化灰度传感器
   
   // 初始化编码器
   Encoder_Init_TIM3();  // 打开左轮编码器
@@ -155,7 +160,6 @@ int main(void)
   // 设置默认控制参数
   Middle_angle = 0;    // 初始平衡角度设定
   Target_Velocity = 16; // 目标速度
-  ZoomRatio = 1000;     // 转向缩放比例
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -164,12 +168,11 @@ int main(void)
 
   led_off();
   app_main();
-  lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  LineTracking_Init();
+  lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK); 
   Menu_Init(); // 初始化菜单系统
   Before_Main();
   
-  //!HAL_TIM_Base_Start_IT(&htim6);   
+  HAL_TIM_Base_Start_IT(&htim6);   
 
   /* USER CODE END 2 */
 
@@ -178,6 +181,7 @@ int main(void)
   while (1)
   {
     Lcd_MenuTask();
+    ////grey_sensorData_print(); // 打印灰度传感器数据
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

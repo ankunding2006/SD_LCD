@@ -52,4 +52,3 @@ downloads\led.o: ../Hardware/ENCODER/encoder.h
 downloads\led.o: ../Core/Inc/main.h
 downloads\led.o: ../Core/Inc/tim.h
 downloads\led.o: ../Core/Inc/usart.h
-downloads\led.o: ../control/LineTracking/LineTracking.h

@@ -73,7 +73,10 @@
     "cot_menu.h": "c",
     "my_menu.h": "c",
     "encoder.h": "c",
-    "soft_i2c.h": "c"
+    "soft_i2c.h": "c",
+    "delay.h": "c",
+    "gray_detection.h": "c",
+    "cstdint": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

@@ -53,4 +53,4 @@ downloads\usmart_config.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\usmart_config.o: ../Hardware/ENCODER/encoder.h
 downloads\usmart_config.o: ../Core/Inc/tim.h
 downloads\usmart_config.o: ../Core/Inc/usart.h
-downloads\usmart_config.o: ../control/LineTracking/LineTracking.h
+downloads\usmart_config.o: ..\Hardware\LineDetect\gray_detection.h

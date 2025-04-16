@@ -14,6 +14,8 @@
 ***********************************************/
 #include "control.h"
 
+//#define NOLINEDETECT // 调试模式，不使用灰度传感器
+
 // 在文件开头添加全局变量定义
 float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 
@@ -37,28 +39,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM6)
 	{
 		Encoder_Left = Read_Encoder(3);							// 读取左轮编码器的值，前进为正，后退为负
-		Encoder_Right = -Read_Encoder(5);						// 修改为TIM5，前进为正，后退为负
+		Encoder_Right = Read_Encoder(5);						// 修改为TIM5，前进为正，后退为负
 																// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
-		Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）                                       					//10ms控制一次
-		if (delay_flag == 1)
-		{
-			delay_50++;
-			if (delay_50 == 10)
-				delay_50 = 0, delay_flag = 0, LD_Successful_Receive_flag = 0; // 给主函数提供50ms的精准延时，示波器需要50ms高精度延时
-		}
-
-
-		Key(); // 扫描按键状态 单击双击可以改变小车运行状态
-		// 速度控制
-		int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM
+		Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）                                          				
+		int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM,速度控制
 	    Velocity(Encoder_Left, Encoder_Right);
-
-		// TODO : 转向控制
-		//Turn_Pwm = LineTracking_CalculateTurn();
+ 
+		grey_sensor_Read(); // 读取灰度传感器数据
+		#ifdef NOLINEDETECT // 调试模式，不使用灰度传感器
+		Turn_Pwm = 0; // 调试模式，不使用灰度传感器
+		#else
+		Turn_Pwm = Calculate_Turn_Pwm(); // 计算转向PWM值
+		#endif
 
 		// 使用计算出的实际速度，不修改Target_Velocity
-		Motor_Left = actual_velocity - (float)ZoomRatio / 1000 * Turn_Pwm;
-		Motor_Right = actual_velocity + (float)ZoomRatio / 1000 * Turn_Pwm;
+		Motor_Left = actual_velocity - Turn_Pwm;
+		Motor_Right = actual_velocity + Turn_Pwm;
 		if (Flag_Stop == 1) 
 			Set_Pwm(0, 0);
 		else
@@ -86,12 +82,11 @@ int Velocity(int encoder_left, int encoder_right)
 	Encoder_bias *= 0.86f;												  // 添加f后缀，指定为单精度浮点数
 	Encoder_bias += Encoder_Least * 0.14f;								  // 添加f后缀，指定为单精度浮点数
 	Encoder_Integral += Encoder_bias;									  // 积分出位移 积分时间：10ms
-	Encoder_Integral = Encoder_Integral + Movement;						  // 接收遥控器数据，控制前进后退
 	if (Encoder_Integral > 4000)
 		Encoder_Integral = 4000; // 积分限幅
 	if (Encoder_Integral < -4000)
 		Encoder_Integral = -4000;														 // 积分限幅
-	velocity = -Encoder_bias * Velocity_Kp / 100 - Encoder_Integral * Velocity_Ki / 100; // 速度控制
+	velocity = Encoder_bias * Velocity_Kp / 100 + Encoder_Integral * Velocity_Ki / 100; // 速度控制
 	if (Flag_Stop == 1)
 		Encoder_Integral = 0; // 电机关闭后清除积分
 	Velocity_Pwm = velocity;
@@ -109,8 +104,7 @@ Output  : none
 **************************************************************************/
 void Set_Pwm(int motor_left, int motor_right)
 {
-	if (motor_left > 0) {
-		// 使用HAL库函数设置GPIO状态，代替位带操作
+	if (motor_left < 0) {
 		HAL_GPIO_WritePin(AIN1_GPIO_PORT, AIN1_GPIO_PIN, GPIO_PIN_RESET); // AIN1 = 0
 		HAL_GPIO_WritePin(AIN2_GPIO_PORT, AIN2_GPIO_PIN, GPIO_PIN_SET);   // AIN2 = 1
 	} else {
@@ -118,8 +112,7 @@ void Set_Pwm(int motor_left, int motor_right)
 		HAL_GPIO_WritePin(AIN2_GPIO_PORT, AIN2_GPIO_PIN, GPIO_PIN_RESET); // AIN2 = 0
 	}
 	PWMA = myabs(motor_left);
-	if (motor_right > 0) {
-		// 使用HAL库函数设置GPIO状态，代替位带操作
+	if (motor_right < 0) {
 		HAL_GPIO_WritePin(BIN1_GPIO_PORT, BIN1_GPIO_PIN, GPIO_PIN_RESET); // BIN1 = 0
 		HAL_GPIO_WritePin(BIN2_GPIO_PORT, BIN2_GPIO_PIN, GPIO_PIN_SET);   // BIN2 = 1
 	} else {
@@ -145,25 +138,7 @@ int PWM_Limit(int IN, int max, int min)
 		OUT = min;
 	return OUT;
 }
-/**************************************************************************
-Function: Press the key to modify the car running state
-Input   : none
-Output  : none
-函数功能：按键修改小车运行状态
-入口参数：无
-返回  值：无
-**************************************************************************/
-void Key(void)
-{
-	u8 tmp;
-	tmp = click(); // 单击
-	if (tmp == 1)
-	{
-		Flag_Stop = !Flag_Stop;
-		// 打印调试信息
-		printf("Flag_Stop:%d\r\n", Flag_Stop);
-	} // 单击控制小车的启停
-}
+
 
 /**************************************************************************
 Function: Absolute value function
@@ -201,22 +176,41 @@ void Get_Velocity_Form_Encoder(int encoder_left, int encoder_right)
 	Velocity_Right = Rotation_Speed_R * PI * Diameter_67; // 添加f后缀，指定为单精度浮点数
 }
 
-// TODO: 完成传感器状态的获取
-/**************************************************************************
-函数功能：转向PID控制计算
-入口参数：无
-返回  值：转向控制PWM
-**************************************************************************/
-int Sensor_PID(void)
+
+/**
+ * @brief Flag_Stop取反
+ * @retval None
+ */
+void toggle_Flag_Stop(void)
 {
-    
-    return 0;  // 返回转向控制量
+    Flag_Stop = !Flag_Stop;
 }
 
-// TODO: 完成按钮状态的获取
-
-// 修复函数的外部声明
-int click(void)
+/**
+ * @brief 关闭TIM6中断或开启TIM6中断(反转TIM6中断)
+ * @retval None
+ */
+void HAL_TIM6_toggle_IT(void)
 {
-    return 0; // 无按键操作
+	if (HAL_TIM_Base_GetState(&htim6) == HAL_TIM_STATE_READY) {
+		HAL_TIM_Base_Start_IT(&htim6); // 开启TIM6中断
+	} else {
+		HAL_TIM_Base_Stop_IT(&htim6); // 关闭TIM6中断
+	}
+}
+
+
+/**
+ * @brief 速度控制函数
+ * @note 速度控制函数，修改Target_Velocity的值来改变速度
+ * @param Target_Velocity 目标速度
+ * @return None
+ * 
+ */
+void Set_Target_Velocity(int Control_Target_Velocity)
+{
+	// 设置目标速度
+	if (Control_Target_Velocity > 100) Control_Target_Velocity = 100; // 限制最大速度为100
+	if (Control_Target_Velocity < -100) Control_Target_Velocity = -100; // 限制最小速度为-100
+    Target_Velocity = Control_Target_Velocity;
 }

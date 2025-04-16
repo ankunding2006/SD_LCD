@@ -1,4 +1,3 @@
-#include "stm32f10x.h"
 #include "soft_i2c.h"
 #include "nchd12.h"
 
@@ -37,4 +36,3 @@ uint16_t pca9555_read_bit12(uint8_t slave_num)
 	bit12 = (uint16_t)(hdata<<8 | ldata)&0x0fff;
 	return bit12;
 }
-

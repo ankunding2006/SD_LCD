@@ -1,6 +1,6 @@
 #ifndef __GRAY_DETECTION_H
 #define __GRAY_DETECTION_H
-
+#include "main.h"
 
 
 typedef struct
@@ -34,6 +34,11 @@ typedef union
 void gpio_input_init(void);
 void gpio_input_check_channel_12_linewidth_10mm(void);
 void gpio_input_check_channel_12_linewidth_20mm(void);
+void grey_sensor_Read(void);
+void grey_sensor_Init(void);
+void grey_sensorData_print(void);
+uint16_t pca9555_read_bit12(uint8_t slave_num);
+uint8_t i2c_CheckDevice(uint8_t _Address);
 
 extern float gray_status[2],gray_status_backup[2][20];
 extern uint32_t gray_status_worse;

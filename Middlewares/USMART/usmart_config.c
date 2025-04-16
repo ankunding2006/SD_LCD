@@ -8,7 +8,8 @@
 
 #include "control.h" // 控制函数头文件
 #include "encoder.h" // 编码器函数头文件
-
+#include "gray_detection.h" // 添加灰度传感器头文件
+#include "tim.h"
 
 
 /* 函数名列表初始化(用户自己添加)
@@ -17,12 +18,14 @@
 struct _m_usmart_nametab usmart_nametab[] =
 {
 #if USMART_USE_WRFUNS == 1      /* 如果使能了读写操作 */
-    (void *)read_addr, "uint32_t read_addr(uint32_t addr)",
-    (void *)write_addr, "void write_addr(uint32_t addr, uint32_t val)",
+    {(void *)read_addr, "uint32_t read_addr(uint32_t addr)"},
+    {(void *)write_addr, "void write_addr(uint32_t addr, uint32_t val)"}, 
 #endif
-    (void*)Set_Pwm, "void Set_Pwm(int motor_left, int motor_right)",
-    (int *)Read_Encoder, "int Read_Encoder(uint8_t TIMX)",
-
+    {(void*)Set_Pwm, "void Set_Pwm(int motor_left, int motor_right)"},
+    {(void *)Read_Encoder, "int Read_Encoder(uint8_t TIMX)"},
+    {(void *)toggle_Flag_Stop, "void toggle_Flag_Stop(void)"},
+    {(void *)HAL_TIM6_toggle_IT, "void HAL_TIM6_toggle_IT(void)"},
+    {(void *)Set_Target_Velocity, "void Set_Target_Velocity(int Target_Velocity)"}, 
 };
 
 /******************************************************************************************/

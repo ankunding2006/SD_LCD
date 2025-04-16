@@ -25,7 +25,6 @@ extern "C" {
 #include "encoder.h"
 #include "tim.h"
 #include "usart.h"
-#include "LineTracking.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -54,7 +53,6 @@ extern u8 Flag_follow, Flag_avoid;
 extern float Acceleration_Z;                                                     
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
-extern u16 ZoomRatio;
 extern float Target_Velocity; 
 /* USER CODE END ET */
 

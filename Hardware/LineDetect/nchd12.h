@@ -1,6 +1,6 @@
 #ifndef __NCHD12_H
 #define __NCHD12_H
-
+#include "main.h"
 /************************************************************PCA9555 Çý¶¯***********************************************************/
 #define SUCCESS 0
 #define ERROR   1
@@ -37,5 +37,3 @@ uint16_t pcf8575_read_bit12(uint8_t slave_num);
 uint16_t pca9555_read_bit12(uint8_t slave_num);
 
 #endif
-
-

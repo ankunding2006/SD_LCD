@@ -19,6 +19,8 @@ All rights reserved
 #ifndef __CONTROL_H
 #define __CONTROL_H
 #include "main.h"
+#include "gray_detection.h"
+#include "tim.h"
 
 extern u8 Sensor_Left, Sensor_MiddleLeft, Sensor_MiddleRight, Sensor_Right; // 改为 u8 类型
 extern float Target_Velocity; 
@@ -93,5 +95,9 @@ int CCD_turn(u8 CCD,float gyro);//转向控制
 int ELE_turn(float gyro);//转向控制
 void ELE_Mode(void);
 void Select_Zhongzhi(void);
+void toggle_Flag_Stop(void);
+int Calculate_Turn_Pwm(void);
+void HAL_TIM6_toggle_IT(void);
+void Set_Target_Velocity(int Target_Velocity);
 
 #endif
