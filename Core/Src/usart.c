@@ -21,8 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-/* UART2 接收缓冲区配置 */
-#define UART2_RX_BUFFER_SIZE 1
+/* UART2 接收缓冲区定义 */
 uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // 定义UART2接收缓冲区
 /* USER CODE END 0 */
 
