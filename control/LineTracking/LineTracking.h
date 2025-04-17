@@ -11,7 +11,7 @@
 
 // UART2接收缓冲区
 #define UART2_RX_BUFFER_SIZE 1
-extern uint8_t g_uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // UART2接收缓冲区
+extern uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // UART2接收缓冲区
 
 // 路径选择枚举
 typedef enum {

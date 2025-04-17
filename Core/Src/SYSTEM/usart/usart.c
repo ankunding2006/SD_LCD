@@ -25,7 +25,8 @@
 
 #include "./SYSTEM/sys/sys.h"
 #include "./SYSTEM/usart/usart.h"
-#include "LineTracking.h"
+#include "LineTracking.h" 
+#include "wit_c_sdk.h"
 
 /* 如果使用os,则包括下面的头文件即可 */
 #if SYS_SUPPORT_OS
@@ -88,8 +89,9 @@ int fputc(int ch, FILE *f)
     
 #if USART_EN_RX                                     /* 如果使能了接收 */
 
-/* 接收缓冲, 最大USART_REC_LEN个字节. */
-uint8_t g_usart_rx_buf[USART_REC_LEN];
+
+uint8_t g_usart_rx_buf[USART_REC_LEN];                //UART1接收缓冲区,最大USART_REC_LEN个字节
+uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE] = {0};  // UART2独立接收缓冲区 
 
 /*  接收状态
  *  bit15，      接收完成标志
@@ -201,10 +203,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     else if(huart->Instance == USART2)       /* 如果是串口2 - 巡线摄像头 */
     {
         // 处理来自MaixPy的巡线数据
-        LineTracking_ProcessData(g_uart2_rx_buffer[0]);
-        
-        // 继续接收USART2数据
-        HAL_UART_Receive_IT(&huart2, (uint8_t *)g_uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+        WitSerialDataIn(uart2_rx_buffer[0]);
     }
         
         HAL_UART_Receive_IT(&g_uart1_handle, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);

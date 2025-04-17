@@ -9,9 +9,6 @@ uint8_t rxBuffer[LINE_DATA_LENGTH] = {0};
 uint8_t rxIndex = 0;
 uint8_t isReceiving = 0;
 
-// UART2独立接收缓冲区
-uint8_t g_uart2_rx_buffer[UART2_RX_BUFFER_SIZE] = {0};
-
 
 /**
   * @brief  初始化巡线功能

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Hardware/ENCODER;../Hardware/IIC;../control/CONTROL;../control/LineTracking;../Middlewares/my_menu/app;../Middlewares/my_menu/cot_menu-v1.3.0;..\Hardware\LineDetect</IncludePath>
+              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Hardware/ENCODER;../Hardware/IIC;../control/CONTROL;../control/LineTracking;../Middlewares/my_menu/app;../Middlewares/my_menu/cot_menu-v1.3.0;..\Hardware\LineDetect;..\Hardware\JY901</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1151,6 +1151,21 @@
               <FileName>cot_menu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Middlewares\my_menu\cot_menu-v1.3.0\cot_menu.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>JY901</GroupName>
+          <Files>
+            <File>
+              <FileName>UART2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\JY901\UART2.c</FilePath>
+            </File>
+            <File>
+              <FileName>wit_c_sdk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\JY901\wit_c_sdk.c</FilePath>
             </File>
           </Files>
         </Group>

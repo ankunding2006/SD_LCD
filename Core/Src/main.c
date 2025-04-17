@@ -98,6 +98,7 @@ lcd lcd_desc = {
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void Before_Main(void);
+void JY901_init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/

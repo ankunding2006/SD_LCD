@@ -81,7 +81,7 @@ void MX_USART2_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
-  //!HAL_UART_Receive_IT(&huart2, g_uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+  HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
   /* USER CODE END USART2_Init 2 */
 
 }
