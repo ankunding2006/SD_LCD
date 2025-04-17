@@ -98,7 +98,6 @@ lcd lcd_desc = {
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void Before_Main(void);
-void JY901_init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -171,6 +170,7 @@ int main(void)
   app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK); 
   Menu_Init(); // 初始化菜单系统
+  JY901_init(); // 初始化JY901传感器 
   Before_Main();
   
   HAL_TIM_Base_Start_IT(&htim6);   
@@ -182,6 +182,7 @@ int main(void)
   while (1)
   {
     Lcd_MenuTask();
+    JY901_Handler(); // 处理JY901数据
     ////grey_sensorData_print(); // 打印灰度传感器数据
     /* USER CODE END WHILE */
 

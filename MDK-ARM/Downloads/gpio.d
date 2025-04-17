@@ -51,4 +51,6 @@ downloads\gpio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\gpio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\gpio.o: ../Hardware/ENCODER/encoder.h
 downloads\gpio.o: ../Core/Inc/tim.h
+downloads\gpio.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\gpio.o: ..\Hardware\JY901\REG.h
 downloads\gpio.o: ../Core/Inc/usart.h

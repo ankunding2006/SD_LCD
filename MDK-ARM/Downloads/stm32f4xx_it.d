@@ -50,5 +50,7 @@ downloads\stm32f4xx_it.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\stm32f4xx_it.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\stm32f4xx_it.o: ../Hardware/ENCODER/encoder.h
 downloads\stm32f4xx_it.o: ../Core/Inc/tim.h
+downloads\stm32f4xx_it.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\stm32f4xx_it.o: ..\Hardware\JY901\REG.h
 downloads\stm32f4xx_it.o: ../Core/Inc/usart.h
 downloads\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h

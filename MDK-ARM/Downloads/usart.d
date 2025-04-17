@@ -51,5 +51,7 @@ downloads\usart.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\usart.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\usart.o: ../Hardware/ENCODER/encoder.h
 downloads\usart.o: ../Core/Inc/tim.h
+downloads\usart.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\usart.o: ..\Hardware\JY901\REG.h
 downloads\usart.o: ../Core/Inc/usart.h
 downloads\usart.o: ../control/LineTracking/LineTracking.h

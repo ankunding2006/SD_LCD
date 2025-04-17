@@ -76,7 +76,8 @@
     "soft_i2c.h": "c",
     "delay.h": "c",
     "gray_detection.h": "c",
-    "cstdint": "c"
+    "cstdint": "c",
+    "wit_c_sdk.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

@@ -50,4 +50,6 @@ downloads\lcd_port.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\lcd_port.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\lcd_port.o: ../Hardware/ENCODER/encoder.h
 downloads\lcd_port.o: ../Core/Inc/tim.h
+downloads\lcd_port.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\lcd_port.o: ..\Hardware\JY901\REG.h
 downloads\lcd_port.o: ../Core/Inc/usart.h

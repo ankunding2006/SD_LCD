@@ -24,6 +24,7 @@ extern "C" {
 #include "delay.h"
 #include "encoder.h"
 #include "tim.h"
+#include "wit_c_sdk.h" 
 #include "usart.h"
 /* USER CODE END Includes */
 
@@ -54,6 +55,8 @@ extern float Acceleration_Z;
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
 extern float Target_Velocity; 
+extern float fAcc[3], fGyro[3], fAngle[3];
+extern int16_t iMag[3];
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -168,6 +171,7 @@ void delay_ms(uint16_t nms);
 void delay_us(uint32_t nus);
 void usart_init(uint32_t bound);
 int click(void);
+void JY901_init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

@@ -1158,11 +1158,6 @@
           <GroupName>JY901</GroupName>
           <Files>
             <File>
-              <FileName>UART2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Hardware\JY901\UART2.c</FilePath>
-            </File>
-            <File>
               <FileName>wit_c_sdk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\JY901\wit_c_sdk.c</FilePath>

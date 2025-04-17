@@ -51,5 +51,7 @@ downloads\control.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\control.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\control.o: ../Hardware/ENCODER/encoder.h
 downloads\control.o: ../Core/Inc/tim.h
+downloads\control.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\control.o: ..\Hardware\JY901\REG.h
 downloads\control.o: ../Core/Inc/usart.h
 downloads\control.o: ..\Hardware\LineDetect\gray_detection.h

@@ -26,6 +26,17 @@ extern "C" {
 #define WIT_PROTOCOL_CAN    2
 #define WIT_PROTOCOL_I2C    3
 
+#define ACC_UPDATE   0x01
+#define GYRO_UPDATE  0x02
+#define ANGLE_UPDATE 0x04
+#define MAG_UPDATE   0x08
+
+#define ACC_UPDATE		0x01
+#define GYRO_UPDATE		0x02
+#define ANGLE_UPDATE	0x04
+#define MAG_UPDATE		0x08
+#define READ_UPDATE		0x80
+
 
 /* serial function */
 void CopeWitData(uint8_t ucIndex, uint16_t *p_data, uint32_t uiLen);
@@ -98,6 +109,7 @@ int32_t WitWriteReg(uint32_t uiReg, uint16_t usData);
 int32_t WitReadReg(uint32_t uiReg, uint32_t uiReadNum);
 int32_t WitInit(uint32_t uiProtocol, uint8_t ucAddr);
 void WitDeInit(void);
+void JY901_Handler(void);
 
 
 

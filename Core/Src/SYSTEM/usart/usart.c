@@ -25,7 +25,6 @@
 
 #include "./SYSTEM/sys/sys.h"
 #include "./SYSTEM/usart/usart.h"
-#include "LineTracking.h" 
 #include "wit_c_sdk.h"
 
 /* 如果使用os,则包括下面的头文件即可 */
@@ -202,7 +201,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         }
     else if(huart->Instance == USART2)       /* 如果是串口2 - 巡线摄像头 */
     {
-        // 处理来自MaixPy的巡线数据
         WitSerialDataIn(uart2_rx_buffer[0]);
     }
         

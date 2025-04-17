@@ -52,4 +52,6 @@ downloads\my_menu.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\my_menu.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\my_menu.o: ../Hardware/ENCODER/encoder.h
 downloads\my_menu.o: ../Core/Inc/tim.h
+downloads\my_menu.o: ..\Hardware\JY901\wit_c_sdk.h
+downloads\my_menu.o: ..\Hardware\JY901\REG.h
 downloads\my_menu.o: ../Core/Inc/usart.h
