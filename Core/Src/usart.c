@@ -21,8 +21,8 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-/* UART2 接收缓冲区定义 */
-uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // 定义UART2接收缓冲区
+uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  
+uint8_t g_usart_rx_buf[USART_REC_LEN];                //UART1接收缓冲区,最大USART_REC_LEN个字节
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -138,7 +138,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* USART2 interrupt Init */
-    HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
+    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 

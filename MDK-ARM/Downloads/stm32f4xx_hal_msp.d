@@ -50,6 +50,6 @@ downloads\stm32f4xx_hal_msp.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\stm32f4xx_hal_msp.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\stm32f4xx_hal_msp.o: ../Hardware/ENCODER/encoder.h
 downloads\stm32f4xx_hal_msp.o: ../Core/Inc/tim.h
-downloads\stm32f4xx_hal_msp.o: ..\Hardware\JY901\wit_c_sdk.h
-downloads\stm32f4xx_hal_msp.o: ..\Hardware\JY901\REG.h
+downloads\stm32f4xx_hal_msp.o: ../Hardware/JY901/wit_c_sdk.h
+downloads\stm32f4xx_hal_msp.o: ../Hardware/JY901/REG.h
 downloads\stm32f4xx_hal_msp.o: ../Core/Inc/usart.h

@@ -24,7 +24,7 @@
  */
 
 #include "./SYSTEM/sys/sys.h"
-#include "./SYSTEM/usart/usart.h"
+#include "usart.h"
 #include "wit_c_sdk.h"
 
 /* 如果使用os,则包括下面的头文件即可 */
@@ -89,8 +89,6 @@ int fputc(int ch, FILE *f)
 #if USART_EN_RX                                     /* 如果使能了接收 */
 
 
-uint8_t g_usart_rx_buf[USART_REC_LEN];                //UART1接收缓冲区,最大USART_REC_LEN个字节
-uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE] = {0};  // UART2独立接收缓冲区 
 
 /*  接收状态
  *  bit15，      接收完成标志
@@ -126,39 +124,6 @@ void usart_init(uint32_t baudrate)
     HAL_UART_Receive_IT(&g_uart1_handle, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
 }
 
-/**
- * @brief       UART底层初始化函数
- * @param       huart: UART句柄类型指针
- * @note        此函数会被HAL_UART_Init()调用
- *              完成时钟使能，引脚配置，中断配置
- * @retval      无
- */
-void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-{
-    GPIO_InitTypeDef gpio_init_struct;
-    if(huart->Instance == USART_UX)                             /* 如果是串口1，进行串口1 MSP初始化 */
-    {
-        USART_UX_CLK_ENABLE();                                  /* USART1 时钟使能 */
-        USART_TX_GPIO_CLK_ENABLE();                             /* 发送引脚时钟使能 */
-        USART_RX_GPIO_CLK_ENABLE();                             /* 接收引脚时钟使能 */
-
-        gpio_init_struct.Pin = USART_TX_GPIO_PIN;               /* TX引脚 */
-        gpio_init_struct.Mode = GPIO_MODE_AF_PP;                /* 复用推挽输出 */
-        gpio_init_struct.Pull = GPIO_PULLUP;                    /* 上拉 */
-        gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          /* 高速 */
-        gpio_init_struct.Alternate = USART_TX_GPIO_AF;          /* 复用为USART1 */
-        HAL_GPIO_Init(USART_TX_GPIO_PORT, &gpio_init_struct);   /* 初始化发送引脚 */
-
-        gpio_init_struct.Pin = USART_RX_GPIO_PIN;               /* RX引脚 */
-        gpio_init_struct.Alternate = USART_RX_GPIO_AF;          /* 复用为USART1 */
-        HAL_GPIO_Init(USART_RX_GPIO_PORT, &gpio_init_struct);   /* 初始化接收引脚 */
-
-#if USART_EN_RX
-        HAL_NVIC_EnableIRQ(USART_UX_IRQn);                      /* 使能USART1中断通道 */
-        HAL_NVIC_SetPriority(USART_UX_IRQn, 3, 3);              /* 抢占优先级3，子优先级3 */
-#endif
-    }
-}
 
 /**
  * @brief       Rx传输回调函数
@@ -198,13 +163,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                     }
                 }
             }
-        }
-    else if(huart->Instance == USART2)       /* 如果是串口2 - 巡线摄像头 */
+        }  
+        HAL_UART_Receive_IT(&g_uart1_handle, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
+    }
+    else if(huart->Instance == USART2)       
     {
         WitSerialDataIn(uart2_rx_buffer[0]);
-    }
-        
-        HAL_UART_Receive_IT(&g_uart1_handle, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
+        HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE); /* 继续接收 */
     }
 }
 

@@ -55,8 +55,8 @@ downloads\sd_diskio.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\sd_diskio.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\sd_diskio.o: ../Hardware/ENCODER/encoder.h
 downloads\sd_diskio.o: ../Core/Inc/tim.h
-downloads\sd_diskio.o: ..\Hardware\JY901\wit_c_sdk.h
-downloads\sd_diskio.o: ..\Hardware\JY901\REG.h
+downloads\sd_diskio.o: ../Hardware/JY901/wit_c_sdk.h
+downloads\sd_diskio.o: ../Hardware/JY901/REG.h
 downloads\sd_diskio.o: ../Core/Inc/usart.h
 downloads\sd_diskio.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\sd_diskio.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

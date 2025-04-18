@@ -24,8 +24,8 @@ extern "C" {
 #include "delay.h"
 #include "encoder.h"
 #include "tim.h"
+#include "wit_c_sdk.h" 
 #include "usart.h"
-#include "LineTracking.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -54,8 +54,9 @@ extern u8 Flag_follow, Flag_avoid;
 extern float Acceleration_Z;                                                     
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
-extern u16 ZoomRatio;
 extern float Target_Velocity; 
+extern float fAcc[3], fGyro[3], fAngle[3];
+extern int16_t iMag[3];
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -170,6 +171,7 @@ void delay_ms(uint16_t nms);
 void delay_us(uint32_t nus);
 void usart_init(uint32_t bound);
 int click(void);
+void JY901_init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -205,6 +207,10 @@ int click(void);
 #define GND_GPIO_Port GPIOD
 #define DOWN_Pin GPIO_PIN_13
 #define DOWN_GPIO_Port GPIOD
+#define I2C_CLK_Pin GPIO_PIN_6
+#define I2C_CLK_GPIO_Port GPIOD
+#define I2C_Data_Pin GPIO_PIN_7
+#define I2C_Data_GPIO_Port GPIOD
 #define LCD_RST_Pin GPIO_PIN_3
 #define LCD_RST_GPIO_Port GPIOB
 #define LCD_BLK_Pin GPIO_PIN_4

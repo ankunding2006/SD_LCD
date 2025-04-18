@@ -11,7 +11,6 @@ static DelaymsCb p_WitDelaymsFunc = NULL;
 static uint8_t s_ucAddr = 0xff;
 static uint8_t s_ucWitDataBuff[WIT_DATA_BUFF_SIZE];
 static uint32_t s_uiWitDataCnt = 0, s_uiProtoclo = 0, s_uiReadRegIndex = 0;
-static void AutoScanSensor(void);
 int16_t sReg[REGSIZE];
 
 /*****************************************************/
@@ -618,46 +617,12 @@ int32_t WitSetContent(int32_t uiRsw)
     return WIT_HAL_OK;
 }
 
-static void AutoScanSensor(void)
-{
-    int i, iRetry;
-    UART_HandleTypeDef huart2_backup = huart2; // 备份当前UART配置
-
-    for (i = 1; i < 10; i++)
-    {
-        // 修改UART2波特率
-        huart2.Init.BaudRate = c_uiBaud[i];
-        HAL_UART_Init(&huart2);
-
-        iRetry = 2;
-        do
-        {
-            s_cDataUpdate1 = 0;
-            WitReadReg(AX, 3);
-            HAL_Delay(100);
-            if (s_cDataUpdate1 != 0)
-            {
-                printf("%d baud find sensor\r\n\r\n", c_uiBaud[i]);
-                return;
-            }
-            iRetry--;
-        } while (iRetry);
-    }
-
-    // 恢复初始配置
-    HAL_UART_DeInit(&huart2);
-    huart2 = huart2_backup;
-    HAL_UART_Init(&huart2);
-
-    printf("can not find sensor\r\n");
-    printf("please check your connection\r\n");
-}
 
 // 替换UART2发送函数
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
 {
     // 使用HAL库API发送数据
-    HAL_UART_Transmit(&huart2, p_data, uiSize, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart2, p_data, uiSize, 50);
     // TODO:在cubeMX中配置DMA，使用DMA发送数据
     //  HAL_UART_Transmit_DMA(&huart2, p_data, uiSize);
 }
@@ -668,110 +633,90 @@ static void Delayms(uint16_t ucMs)
 }
 
 /**
- * @brief 传感器数据更新回调函数
+ * @brief 传感器数据更新回调函数 - 仅负责数据转换和标志设置
  * @param uiReg - 更新的寄存器起始地址
  * @param uiRegNum - 更新的寄存器数量
  */
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
 {
-    int i;
-
-    // 检查是否为加速度数据更新
-    if ((uiReg <= AX) && (uiReg + uiRegNum > AX))
+	int i;
+    for(i = 0; i < uiRegNum; i++)
     {
-        for (i = 0; i < 3; i++)
+        switch(uiReg)
         {
-            // 确保索引在有效范围内
-            if ((AX + i >= uiReg) && (AX + i < uiReg + uiRegNum))
-            {
-                // 转换原始数据为实际物理值 (±16g范围)
-                fAcc[i] = sReg[AX + i] / 32768.0f * 16.0f;
-            }
+//            case AX:
+//            case AY:
+            case AZ:
+				s_cDataUpdate1 |= ACC_UPDATE;
+            break;
+//            case GX:
+//            case GY:
+            case GZ:
+				s_cDataUpdate2 |= GYRO_UPDATE;
+            break;
+//            case HX:
+//            case HY:
+            case HZ:
+				s_cDataUpdate4 |= MAG_UPDATE;
+            break;
+//            case Roll:
+//            case Pitch:
+            case Yaw:
+				s_cDataUpdate3 |= ANGLE_UPDATE;
+            break;
+//            default:
+//				s_cDataUpdate1 |= READ_UPDATE;
+//			break;
         }
-        g_dataUpdateFlags |= ACC_UPDATE;
-    }
-
-    // 检查是否为陀螺仪数据更新
-    if ((uiReg <= GX) && (uiReg + uiRegNum > GX))
-    {
-        for (i = 0; i < 3; i++)
-        {
-            if ((GX + i >= uiReg) && (GX + i < uiReg + uiRegNum))
-            {
-                // 转换原始数据为实际物理值 (±2000°/s范围)
-                fGyro[i] = sReg[GX + i] / 32768.0f * 2000.0f;
-            }
-        }
-        g_dataUpdateFlags |= GYRO_UPDATE;
-    }
-
-    // 检查是否为角度数据更新
-    if ((uiReg <= Roll) && (uiReg + uiRegNum > Roll))
-    {
-        for (i = 0; i < 3; i++)
-        {
-            if ((Roll + i >= uiReg) && (Roll + i < uiReg + uiRegNum))
-            {
-                // 转换原始数据为实际物理值 (±180°范围)
-                fAngle[i] = sReg[Roll + i] / 32768.0f * 180.0f;
-            }
-        }
-        g_dataUpdateFlags |= ANGLE_UPDATE;
-    }
-
-    // 检查是否为磁力计数据更新
-    if ((uiReg <= HX) && (uiReg + uiRegNum > HX))
-    {
-        for (i = 0; i < 3; i++)
-        {
-            if ((HX + i >= uiReg) && (HX + i < uiReg + uiRegNum))
-            {
-                // 直接保存原始数据
-                iMag[i] = sReg[HX + i];
-            }
-        }
-        g_dataUpdateFlags |= MAG_UPDATE;
+		uiReg++;
     }
 }
 
+/**
+ * @brief JY901传感器初始化
+ */
 void JY901_init(void)
 {
+    huart2.Init.BaudRate = 115200;
+    HAL_UART_Init(&huart2);
     WitInit(WIT_PROTOCOL_NORMAL, 0x50);
     WitSerialWriteRegister(SensorUartSend);
     WitRegisterCallBack(SensorDataUpdata);
     WitDelayMsRegister(Delayms);
-
+	  HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
     printf("\r\nwit-motion normal example\r\n");
-    AutoScanSensor();
 }
 
+/**
+ * @brief JY901处理函数 - 仅负责数据显示
+ */
 void JY901_Handler(void)
 {
-    CopeWitData(ucRegIndex, usRegDataBuff, uiRegDataLen);
-    if (s_cDataUpdate1 || s_cDataUpdate2 || s_cDataUpdate3 || s_cDataUpdate4)
+    CopeWitData(ucRegIndex,usRegDataBuff,uiRegDataLen);
+    if(s_cDataUpdate1 || s_cDataUpdate2 ||s_cDataUpdate3 ||s_cDataUpdate4 )
     {
-        for (int i = 0; i < 3; i++)
+        for(int i = 0; i < 3; i++)
         {
-            fAcc[i] = sReg[AX + i] / 32768.0f * 16.0f;
-            fGyro[i] = sReg[GX + i] / 32768.0f * 2000.0f;
-            fAngle[i] = sReg[Roll + i] / 32768.0f * 180.0f;
+            fAcc[i] = sReg[AX+i] / 32768.0f * 16.0f;
+            fGyro[i] = sReg[GX+i] / 32768.0f * 2000.0f;
+            fAngle[i] = sReg[Roll+i] / 32768.0f * 180.0f;
         }
-        if (s_cDataUpdate1 | ACC_UPDATE)
+        if(s_cDataUpdate1 | ACC_UPDATE)
         {
             printf("acc:%.3f %.3f %.3f\r\n", fAcc[0], fAcc[1], fAcc[2]);
             s_cDataUpdate1 &= ~ACC_UPDATE;
         }
-        if (s_cDataUpdate2 | GYRO_UPDATE)
+        if(s_cDataUpdate2 | GYRO_UPDATE)
         {
             printf("gyro:%.3f %.3f %.3f\r\n", fGyro[0], fGyro[1], fGyro[2]);
             s_cDataUpdate2 &= ~GYRO_UPDATE;
         }
-        if (s_cDataUpdate3 | ANGLE_UPDATE)
+        if(s_cDataUpdate3 | ANGLE_UPDATE)
         {
             printf("angle:%.3f %.3f %.3f\r\n", fAngle[0], fAngle[1], fAngle[2]);
             s_cDataUpdate3 &= ~ANGLE_UPDATE;
         }
-        if (s_cDataUpdate4 | MAG_UPDATE)
+        if(s_cDataUpdate4 | MAG_UPDATE)
         {
             printf("mag:%d %d %d\r\n", sReg[HX], sReg[HY], sReg[HZ]);
             s_cDataUpdate4 &= ~MAG_UPDATE;

@@ -37,7 +37,9 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN Private defines */
-
+/* UART2 接收缓冲区配置 */
+#define UART2_RX_BUFFER_SIZE 1
+extern uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // 声明UART2接收缓冲区
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(void);
@@ -52,4 +54,3 @@ void MX_USART2_UART_Init(void);
 #endif
 
 #endif /* __USART_H__ */
-

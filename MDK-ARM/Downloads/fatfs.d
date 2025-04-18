@@ -54,8 +54,8 @@ downloads\fatfs.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\fatfs.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\fatfs.o: ../Hardware/ENCODER/encoder.h
 downloads\fatfs.o: ../Core/Inc/tim.h
-downloads\fatfs.o: ..\Hardware\JY901\wit_c_sdk.h
-downloads\fatfs.o: ..\Hardware\JY901\REG.h
+downloads\fatfs.o: ../Hardware/JY901/wit_c_sdk.h
+downloads\fatfs.o: ../Hardware/JY901/REG.h
 downloads\fatfs.o: ../Core/Inc/usart.h
 downloads\fatfs.o: ../FATFS/Target/bsp_driver_sd.h
 downloads\fatfs.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

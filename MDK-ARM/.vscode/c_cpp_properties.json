@@ -32,7 +32,8 @@
                 "c:\\Users\\34118\\Desktop\\SD_LCD\\MDK-ARM",
                 "c:\\Users\\34118\\Desktop\\SD_LCD\\Core\\Src",
                 "c:\\Users\\34118\\Desktop\\SD_LCD\\Drivers\\STM32F4xx_HAL_Driver\\Src",
-                "c:\\Users\\34118\\Desktop\\SD_LCD\\Middlewares\\Third_Party\\FatFs\\src\\option"
+                "c:\\Users\\34118\\Desktop\\SD_LCD\\Middlewares\\Third_Party\\FatFs\\src\\option",
+                "c:\\Users\\34118\\Desktop\\SD_LCD\\Core\\Src\\SYSTEM\\usart"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

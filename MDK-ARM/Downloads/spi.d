@@ -51,6 +51,6 @@ downloads\spi.o: ../Middlewares/USMART/./SYSTEM/usart/usart.h
 downloads\spi.o: ../Middlewares/USMART/SYSTEM/delay/delay.h
 downloads\spi.o: ../Hardware/ENCODER/encoder.h
 downloads\spi.o: ../Core/Inc/tim.h
-downloads\spi.o: ..\Hardware\JY901\wit_c_sdk.h
-downloads\spi.o: ..\Hardware\JY901\REG.h
+downloads\spi.o: ../Hardware/JY901/wit_c_sdk.h
+downloads\spi.o: ../Hardware/JY901/REG.h
 downloads\spi.o: ../Core/Inc/usart.h

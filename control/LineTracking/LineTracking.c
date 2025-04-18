@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 // 定义全局变量
-uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE]; // UART2接收缓冲区
 LineTrackData_t lineData = {0};
 PathChoice_t currentPathChoice = PATH_MIDDLE; // 默认选择中间路径
 uint8_t rxBuffer[LINE_DATA_LENGTH] = {0};
