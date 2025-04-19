@@ -21,6 +21,7 @@ All rights reserved
 #include "main.h"
 #include "gray_detection.h"
 #include "tim.h"
+#include "math.h"
 
 extern u8 Sensor_Left, Sensor_MiddleLeft, Sensor_MiddleRight, Sensor_Right; // 改为 u8 类型
 extern float Target_Velocity; 
@@ -86,18 +87,25 @@ int myabs(int a);
 int Pick_Up(float Acceleration,float Angle,int encoder_left,int encoder_right);
 int Put_Down(float Angle,int encoder_left,int encoder_right);
 void Get_Velocity_Form_Encoder(int encoder_left,int encoder_right);
-u8 Choose(void);
-void Lidar_Avoid(void);
-void Lidar_Straight(void);
-void Lidar_Follow(void);
-void CCD_Mode(void);
-int CCD_turn(u8 CCD,float gyro);//转向控制
-int ELE_turn(float gyro);//转向控制
-void ELE_Mode(void);
-void Select_Zhongzhi(void);
 void toggle_Flag_Stop(void);
 int Calculate_Turn_Pwm(void);
 void HAL_TIM6_toggle_IT(void);
 void Set_Target_Velocity(int Target_Velocity);
+float getHeadingAngle(void);
+int lineTracking_Handler(void);
+u8 localSteeringControl_Handler(float angle);
+void SteeringTest_CyclicRotation(void);
+void Test_Handler(void);
+
+// 转向控制参数调节函数
+void Set_Steering_Kp(u16 kp);
+void Set_Steering_Ki(u16 ki);
+void Set_Steering_Kd(u16 kd);
+void Set_Steering_Error_Threshold(u16 threshold);
+void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold);
+float Get_Steering_Kp(void);
+float Get_Steering_Ki(void);
+float Get_Steering_Kd(void);
+float Get_Steering_Error_Threshold(void);
 
 #endif

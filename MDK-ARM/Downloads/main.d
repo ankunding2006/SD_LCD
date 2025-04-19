@@ -67,6 +67,7 @@ downloads\main.o: ../Core/Inc/spi.h
 downloads\main.o: ../Core/Inc/gpio.h
 downloads\main.o: ../Hardware/LineDetect/gray_detection.h
 downloads\main.o: ../control/CONTROL/control.h
+downloads\main.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 downloads\main.o: ../Middlewares/my_menu/cot_menu-v1.3.0/cot_menu.h
 downloads\main.o: ../Middlewares/my_menu/app/my_menu.h
 downloads\main.o: ../Hardware/LineDetect/soft_i2c.h

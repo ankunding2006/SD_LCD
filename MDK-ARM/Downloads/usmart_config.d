@@ -56,3 +56,4 @@ downloads\usmart_config.o: ../Hardware/JY901/wit_c_sdk.h
 downloads\usmart_config.o: ../Hardware/JY901/REG.h
 downloads\usmart_config.o: ../Core/Inc/usart.h
 downloads\usmart_config.o: ../Hardware/LineDetect/gray_detection.h
+downloads\usmart_config.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

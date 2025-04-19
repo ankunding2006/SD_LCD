@@ -62,6 +62,15 @@ extern int16_t iMag[3];
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 
+// 测试函数声明
+void SteeringTest_CyclicRotation(void);
+// 修改PID参数声明，将float改为u16（放大100倍后使用整数）
+extern u16 Steering_Kp, Steering_Ki, Steering_Kd;
+extern u16 Steering_Error_Threshold;
+extern u16 Steering_Speed;
+extern u8 Steering_Completed;
+extern u16 Steering_Stable_Count;
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

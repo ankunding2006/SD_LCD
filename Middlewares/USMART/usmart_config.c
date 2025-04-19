@@ -26,6 +26,18 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)toggle_Flag_Stop, "void toggle_Flag_Stop(void)"},
     {(void *)HAL_TIM6_toggle_IT, "void HAL_TIM6_toggle_IT(void)"},
     {(void *)Set_Target_Velocity, "void Set_Target_Velocity(int Target_Velocity)"}, 
+    {(void *)getHeadingAngle, "float getHeadingAngle(void)"},
+    
+    // 新增转向控制参数调节函数 - 使用整数参数(放大100倍)
+    {(void *)Set_Steering_Kp, "void Set_Steering_Kp(u16 kp)"},
+    {(void *)Set_Steering_Ki, "void Set_Steering_Ki(u16 ki)"},
+    {(void *)Set_Steering_Kd, "void Set_Steering_Kd(u16 kd)"},
+    {(void *)Set_Steering_Error_Threshold, "void Set_Steering_Error_Threshold(u16 threshold)"},
+    {(void *)Set_All_Steering_Params, "void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold)"},
+    {(void *)Get_Steering_Kp, "float Get_Steering_Kp(void)"},
+    {(void *)Get_Steering_Ki, "float Get_Steering_Ki(void)"},
+    {(void *)Get_Steering_Kd, "float Get_Steering_Kd(void)"},
+    {(void *)Get_Steering_Error_Threshold, "float Get_Steering_Error_Threshold(void)"},
 };
 
 /******************************************************************************************/

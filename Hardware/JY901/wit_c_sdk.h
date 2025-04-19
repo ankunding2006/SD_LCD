@@ -10,6 +10,7 @@ extern "C" {
 #include <string.h>
 #include "REG.h"
 
+//#define printfData            /**< if you want to print data, please define printfData */
 
 #define WIT_HAL_OK      (0)     /**< There is no error */
 #define WIT_HAL_BUSY    (-1)    /**< Busy */
@@ -43,6 +44,7 @@ void CopeWitData(uint8_t ucIndex, uint16_t *p_data, uint32_t uiLen);
 typedef void (*SerialWrite)(uint8_t *p_ucData, uint32_t uiLen);
 int32_t WitSerialWriteRegister(SerialWrite write_func);
 void WitSerialDataIn(uint8_t ucData);
+void JY901_PrintData(void);
 
 /* iic function */
 

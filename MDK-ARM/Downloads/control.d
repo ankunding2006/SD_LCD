@@ -55,3 +55,4 @@ downloads\control.o: ../Hardware/JY901/wit_c_sdk.h
 downloads\control.o: ../Hardware/JY901/REG.h
 downloads\control.o: ../Core/Inc/usart.h
 downloads\control.o: ../Hardware/LineDetect/gray_detection.h
+downloads\control.o: C:\Users\34118\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

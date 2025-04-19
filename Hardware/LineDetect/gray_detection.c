@@ -27,22 +27,22 @@ int Calculate_Turn_Pwm(void)
     
     // 为每个传感器分配权重，从右到左，权重从负到正
     // bit1(最右侧)权重最小(负值)，bit12(最左侧)权重最大(正值)
-    if(gray_state.gray.bit1)  { weighted_sum += -11; active_sensors++; }
-    if(gray_state.gray.bit2)  { weighted_sum += -9;  active_sensors++; }
-    if(gray_state.gray.bit3)  { weighted_sum += -7;  active_sensors++; }
+    if(gray_state.gray.bit1)  { weighted_sum += -16; active_sensors++; }
+    if(gray_state.gray.bit2)  { weighted_sum += -11; active_sensors++; }
+    if(gray_state.gray.bit3)  { weighted_sum += -8;  active_sensors++; }
     if(gray_state.gray.bit4)  { weighted_sum += -5;  active_sensors++; }
     if(gray_state.gray.bit5)  { weighted_sum += -3;  active_sensors++; }
     if(gray_state.gray.bit6)  { weighted_sum += -1;  active_sensors++; }
     if(gray_state.gray.bit7)  { weighted_sum += 1;   active_sensors++; }
     if(gray_state.gray.bit8)  { weighted_sum += 3;   active_sensors++; }
     if(gray_state.gray.bit9)  { weighted_sum += 5;   active_sensors++; }
-    if(gray_state.gray.bit10) { weighted_sum += 7;   active_sensors++; }
-    if(gray_state.gray.bit11) { weighted_sum += 9;   active_sensors++; }
-    if(gray_state.gray.bit12) { weighted_sum += 11;  active_sensors++; }
+    if(gray_state.gray.bit10) { weighted_sum += 8;   active_sensors++; }
+    if(gray_state.gray.bit11) { weighted_sum += 11;  active_sensors++; }
+    if(gray_state.gray.bit12) { weighted_sum += 16;  active_sensors++; }
     
-    // 如果没有传感器检测到黑线，保持上一次的转向值或返回0
+    // 如果没有传感器检测到黑线，返回0
     if(active_sensors == 0) {
-        return 0;
+        return INT16_MIN; // 返回一个极小值，表示没有有效的转向PWM
     }
     
     // 计算加权平均值

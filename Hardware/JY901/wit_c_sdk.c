@@ -701,25 +701,33 @@ void JY901_Handler(void)
             fGyro[i] = sReg[GX+i] / 32768.0f * 2000.0f;
             fAngle[i] = sReg[Roll+i] / 32768.0f * 180.0f;
         }
-        if(s_cDataUpdate1 | ACC_UPDATE)
-        {
-            printf("acc:%.3f %.3f %.3f\r\n", fAcc[0], fAcc[1], fAcc[2]);
-            s_cDataUpdate1 &= ~ACC_UPDATE;
-        }
-        if(s_cDataUpdate2 | GYRO_UPDATE)
-        {
-            printf("gyro:%.3f %.3f %.3f\r\n", fGyro[0], fGyro[1], fGyro[2]);
-            s_cDataUpdate2 &= ~GYRO_UPDATE;
-        }
-        if(s_cDataUpdate3 | ANGLE_UPDATE)
-        {
-            printf("angle:%.3f %.3f %.3f\r\n", fAngle[0], fAngle[1], fAngle[2]);
-            s_cDataUpdate3 &= ~ANGLE_UPDATE;
-        }
-        if(s_cDataUpdate4 | MAG_UPDATE)
-        {
-            printf("mag:%d %d %d\r\n", sReg[HX], sReg[HY], sReg[HZ]);
-            s_cDataUpdate4 &= ~MAG_UPDATE;
-        }
+        #ifdef printfData
+        JY901_PrintData(void);
+        #endif 
+    }
+}
+
+
+void JY901_PrintData(void)
+{
+    if(s_cDataUpdate1 | ACC_UPDATE)
+    {
+        printf("acc:%.3f %.3f %.3f\r\n", fAcc[0], fAcc[1], fAcc[2]);
+        s_cDataUpdate1 &= ~ACC_UPDATE;
+    }
+    if(s_cDataUpdate2 | GYRO_UPDATE)
+    {
+        printf("gyro:%.3f %.3f %.3f\r\n", fGyro[0], fGyro[1], fGyro[2]);
+        s_cDataUpdate2 &= ~GYRO_UPDATE;
+    }
+    if(s_cDataUpdate3 | ANGLE_UPDATE)
+    {
+        printf("angle:%.3f %.3f %.3f\r\n", fAngle[0], fAngle[1], fAngle[2]);
+        s_cDataUpdate3 &= ~ANGLE_UPDATE;
+    }
+    if(s_cDataUpdate4 | MAG_UPDATE)
+    {
+        printf("mag:%d %d %d\r\n", sReg[HX], sReg[HY], sReg[HZ]);
+        s_cDataUpdate4 &= ~MAG_UPDATE;
     }
 }
