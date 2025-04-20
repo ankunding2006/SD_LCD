@@ -14,8 +14,6 @@
 ***********************************************/
 #include "control.h"
 
-//#define NOLINEDETECT // 调试模式，不使用灰度传感器
-
 // 在文件开头添加全局变量定义
 float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 
@@ -39,10 +37,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM6)
 	{
-		#ifndef TEST_MODE // 测试模式
-		lineTracking_Handler();  
-		#else
-			Test_Handler(); // 测试模式下的处理函数
+		#if TEST_MODE==1 // 测试模式
+			Test_Handler();
+        #else
+            normal_Handler(); // 正常模式
 		#endif
 	}
 }
@@ -231,7 +229,7 @@ int lineTracking_Handler(void)
 	Velocity(Encoder_Left, Encoder_Right);
 
 	grey_sensor_Read(); // 读取灰度传感器数据
-	#ifdef NOLINEDETECT // 调试模式，不使用灰度传感器
+	#if NOLINEDETECT==1 // 调试模式，不使用灰度传感器
 	Turn_Pwm = 0; // 调试模式，不使用灰度传感器
 	#else
 	Turn_Pwm = Calculate_Turn_Pwm(); // 计算转向PWM值,如果所有传感器都返回白色，返回1
@@ -383,7 +381,7 @@ int moveForward_Handler(void)
 
 	grey_sensor_Read(); // 读取灰度传感器数据 
 	Turn_Pwm = Calculate_Turn_Pwm(); // 此处并非计算转向PWM值,而是查看当前小车是否有传感器检测到黑线,如果有传感器检测到黑线,则返回1,否则返回0
-	if (Turn_Pwm == INT16_MIN)
+	if (Turn_Pwm != INT16_MIN)
 	{
 		Set_Pwm(0, 0); // 如果没有传感器检测到黑线，停止电机
 		return 1; // 返回1，表示完成直线移动
@@ -451,7 +449,13 @@ void SteeringTest_CyclicRotation(void)
 
 void Test_Handler(void)
 {
-	SteeringTest_CyclicRotation(); // 调用转向测试函数
+    #if TEST_STEERING_ROTATION==1 // 测试转向旋转 
+        SteeringTest_CyclicRotation(); // 调用转向测试函数
+    #elif TEST_TRACKING==1 // 测试循迹
+        lineTracking_Handler(); // 调用循迹函数
+    #elif TEST_MOVE_FORWARD==1 // 测试前进
+        moveForward_Handler(); // 调用前进函数
+    #endif // TEST_MOVE_FORWARD
 }
 
 /**
