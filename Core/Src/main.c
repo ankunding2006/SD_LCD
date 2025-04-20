@@ -179,7 +179,7 @@ float Target_Velocity = 30;                                                     
 // 转向控制PID参数及相关变量（放大100倍）
 u16 Steering_Kp = 200;                                                                                         // 转向控制比例系数（放大100倍）
 u16 Steering_Ki = 180;                                                                                           // 转向控制积分系数（放大100倍）
-u16 Steering_Kd = 40;                                                                                         // 转向控制微分系数（放大100倍）
+u16 Steering_Kd = 100;                                                                                         // 转向控制微分系数（放大100倍）
 u16 Steering_Error_Threshold = 500;                                                                             // 转向控制误差阈值(度)（放大100倍）
 u16 Steering_Speed = 5000;                                                                                      // 转向控制基础速度（放大100倍）
 u8 Steering_Completed = 0;                                                                                         // 转向完成标志
