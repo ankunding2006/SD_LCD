@@ -22,6 +22,7 @@ All rights reserved
 #include "gray_detection.h"
 #include "tim.h"
 #include "math.h"
+#include "car_config.h" 
 
 extern u8 Sensor_Left, Sensor_MiddleLeft, Sensor_MiddleRight, Sensor_Right; // 改为 u8 类型
 extern float Target_Velocity; 

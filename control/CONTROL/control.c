@@ -31,14 +31,6 @@ Output  : none
 返回  值：无
 **************************************************************************/
 
-// 转向控制相关宏定义
-#define STEERING_STABLE_TIME        70    // 转向稳定需要保持的时间计数
-#define STEERING_MAX_OUTPUT        3000    // 转向控制最大PWM输出
-#define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
-#define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
-#define PWM_Base                  1000	   // PWM基准值
-
-#define TEST_MODE    // 测试模式 
 
 volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
 volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm=0;
@@ -64,7 +56,6 @@ Output  : Speed control PWM
 入口参数：encoder_left：左轮编码器读数；encoder_right：右轮编码器读数
 返回  值：速度控制PWM
 **************************************************************************/
-// 修改前进后退速度，请修改Target_Velocity，比如，改成60就比较慢了
 int Velocity(int encoder_left, int encoder_right)
 {
 	volatile static float velocity, Encoder_Least, Encoder_bias, Movement = 0;

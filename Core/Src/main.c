@@ -153,35 +153,35 @@ D (左下) ←——————————— C (右下)
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-u8 Way_Angle = 1;                                                                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤??
-u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变??
-u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志??  默认停止 显示打开
+u8 Way_Angle = WAY_ANGLE_DEFAULT;                                                                                    // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤波
+u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变量
+u8 Flag_Stop = FLAG_STOP_DEFAULT, Flag_Show = FLAG_SHOW_DEFAULT;                                                    // 电机停止标志位和显示标志位  默认停止 显示打开
 int Motor_Left, Motor_Right;                                                                                        // 电机PWM变量 应是Motor?? 向Moto致敬
 int Temperature;                                                                                                    // 温度变量
-int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变??
-float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡??螺仪 转向??螺仪
-u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志??
-u8 Mode = 0;                                                                                                        // 模式选择，默认是普???的控制模式
-u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中???和阈???
+int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变量
+float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡陀螺仪 转向陀螺仪
+u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志位
+u8 Mode = MODE_DEFAULT;                                                                                             // 模式选择，默认是普通的控制模式
+u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中值和阈值
 u16 ADV[128] = {0};                                                                                                 // 存放CCD的数据的数组
 u16 determine;                                                                                                      // 雷达跟随模式的一个标志位
-float Move_X, Move_Z;                                                                                               // 遥控控制的???度
-u32 Distance;                                                                                                       // 超声波测??
+float Move_X, Move_Z;                                                                                               // 遥控控制的速度
+u32 Distance;                                                                                                       // 超声波测距
 u8 PID_Send;                                                                                                        // 调参相关变量
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随???超声波壁障标志??
-float Acceleration_Z;                                                                                               // Z轴加速度??
-volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变??
-float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID参数（放??100倍）
-u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状??
-float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 传感器的PID参数（放??100倍）
-float Target_Velocity = 30;                                                                                     // 目标速度
+u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随、超声波壁障标志位
+float Acceleration_Z;                                                                                               // Z轴加速度值
+volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变量
+float Balance_Kp = BALANCE_KP_DEFAULT, Balance_Kd = BALANCE_KD_DEFAULT, Velocity_Kp = VELOCITY_KP_DEFAULT, Velocity_Ki = VELOCITY_KI_DEFAULT, Turn_Kp = TURN_KP_DEFAULT, Turn_Kd = TURN_KD_DEFAULT; // PID参数（放大100倍）
+u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状态
+float Sensor_Kp = SENSOR_KP_DEFAULT, Sensor_KI = SENSOR_KI_DEFAULT, Sensor_Kd = SENSOR_KD_DEFAULT;                  // 传感器的PID参数（放大100倍）
+float Target_Velocity = TARGET_VELOCITY_DEFAULT;                                                                    // 目标速度
 
 // 转向控制PID参数及相关变量（放大100倍）
-u16 Steering_Kp = 200;                                                                                         // 转向控制比例系数（放大100倍）
-u16 Steering_Ki = 180;                                                                                           // 转向控制积分系数（放大100倍）
-u16 Steering_Kd = 100;                                                                                         // 转向控制微分系数（放大100倍）
-u16 Steering_Error_Threshold = 500;                                                                             // 转向控制误差阈值(度)（放大100倍）
-u16 Steering_Speed = 5000;                                                                                      // 转向控制基础速度（放大100倍）
+u16 Steering_Kp = STEERING_KP_DEFAULT;                                                                             // 转向控制比例系数（放大100倍）
+u16 Steering_Ki = STEERING_KI_DEFAULT;                                                                             // 转向控制积分系数（放大100倍）
+u16 Steering_Kd = STEERING_KD_DEFAULT;                                                                             // 转向控制微分系数（放大100倍）
+u16 Steering_Error_Threshold = STEERING_ERROR_THRESHOLD_DEFAULT;                                                   // 转向控制误差阈值(度)（放大100倍）
+u16 Steering_Speed = STEERING_SPEED_DEFAULT;                                                                       // 转向控制基础速度（放大100倍）
 u8 Steering_Completed = 0;                                                                                         // 转向完成标志
 u16 Steering_Stable_Count = 0;                                                                                     // 转向稳定计数
 

@@ -1,8 +1,6 @@
 #include "gray_detection.h"
 
 
-#define turn_PWM_Limit 1500 // 转向PWM的限制值，防止过大过小
-
 _gray_state gray_state;
 
 float gray_status[2] = {0}, gray_status_backup[2][20] = {0}; // 灰度传感器状态与历史值

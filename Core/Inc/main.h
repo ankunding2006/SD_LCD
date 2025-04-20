@@ -26,6 +26,7 @@ extern "C" {
 #include "tim.h"
 #include "wit_c_sdk.h" 
 #include "usart.h"
+#include "car_config.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
