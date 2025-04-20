@@ -32,11 +32,11 @@ Output  : none
 **************************************************************************/
 
 // 转向控制相关宏定义
-#define STEERING_STABLE_TIME        80    // 转向稳定需要保持的时间计数
-#define STEERING_MAX_OUTPUT        3800    // 转向控制最大PWM输出
-#define STEERING_MIN_OUTPUT       -3800    // 转向控制最小PWM输出
+#define STEERING_STABLE_TIME        150    // 转向稳定需要保持的时间计数
+#define STEERING_MAX_OUTPUT        6000    // 转向控制最大PWM输出
+#define STEERING_MIN_OUTPUT       -6000    // 转向控制最小PWM输出
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
-#define PWM_Base                  1000	   // PWM基准值
+#define PWM_Base                  1100	   // PWM基准值
 
 #define TEST_MODE    // 测试模式 
 
@@ -290,6 +290,8 @@ u8 localSteeringControl_Handler(float angle)
         } else if(targetAngle < -180.0f) {
             targetAngle += 360.0f;
         }
+
+        printf("startAngle: %.2f, targetAngle: %.2f\r\n", startAngle, targetAngle);
         
         lastError = 0;
         integral = 0;
@@ -321,7 +323,7 @@ u8 localSteeringControl_Handler(float angle)
     }
     
     // 如果误差很小，逐渐减小积分项，防止过冲
-    if(fabs(error) < (float)Steering_Error_Threshold/100.0f*0.7f) {
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f) {
         integral *= 0.9f;
     }
     
@@ -346,7 +348,7 @@ u8 localSteeringControl_Handler(float angle)
     // 误差在阈值范围内，计数稳定时间
     if(fabs(error) < (float)Steering_Error_Threshold/100.0f) {
         Steering_Stable_Count++;
-        printf("error: %.2f, output: %.2f\r\n", error, output);
+        printf("error: %.2f, currentAngle: %.2f, startAngle: %.2f\r\n", error, currentAngle, startAngle);
         // 如果稳定计数达到设定时间，认为转向完成
         if(Steering_Stable_Count >= STEERING_STABLE_TIME) {
             // 重置状态，为下一次转向做准备
@@ -404,23 +406,24 @@ int moveForward_Handler(void)
 
 
 /**
- * @brief 转向测试函数 - 循环旋转测试
- * @note 控制小车先逆时针转60度，等待3秒，再顺时针转60度，等待3秒，如此循环
+ * @brief 转向测试函数 - 单方向循环旋转测试
+ * @note 控制小车逆时针转60度，等待3秒，再次逆时针转60度，等待3秒，如此循环
  * @return None
  */
 void SteeringTest_CyclicRotation(void)
 {
-    static uint8_t test_state = 0;  // 测试状态：0-初始化 1-逆时针旋转 2-等待3秒 3-顺时针旋转 4-等待3秒
+    static uint8_t test_state = 0;  // 测试状态：0-初始化 1-逆时针旋转 2-等待3秒
     static uint32_t wait_time = 0;  // 等待时间计数器
     
     // 根据当前状态执行不同操作
     switch(test_state)
     {
         case 0:  // 初始化状态
-            printf("开始转向测试：逆时针60度 -> 等待3秒 -> 顺时针60度 -> 等待3秒 -> 循环\r\n");
+            printf("开始转向测试：逆时针60度 -> 等待3秒 -> 循环\r\n");
             test_state = 1;  // 进入逆时针旋转状态
             led1_on();       // 点亮LED1作为逆时针旋转指示
             led2_off();
+            led3_off();
             break;
             
         case 1:  // 逆时针旋转60度
@@ -438,30 +441,8 @@ void SteeringTest_CyclicRotation(void)
             wait_time++;
             if(wait_time >= 600)  // 5ms中断，600次大约3秒
             {
-                test_state = 3;   // 进入顺时针旋转状态
-                printf("等待结束，开始顺时针旋转60度...\r\n");
-                led3_off();       // 关闭LED3
-                led2_on();        // 点亮LED2作为顺时针旋转指示
-            }
-            break;
-            
-        case 3:  // 顺时针旋转60度
-            if(localSteeringControl_Handler(-60.0f))  // 注意负值表示顺时针
-            {
-                printf("顺时针旋转60度完成，等待3秒...\r\n");
-                test_state = 4;   // 进入等待状态
-                wait_time = 0;    // 清零等待时间计数器
-                led2_off();       // 关闭LED2
-                led3_on();        // 点亮LED3作为等待指示
-            }
-            break;
-            
-        case 4:  // 等待3秒
-            wait_time++;
-            if(wait_time >= 600)  // 5ms中断，600次大约3秒
-            {
                 test_state = 1;   // 返回逆时针旋转状态，形成循环
-                printf("等待结束，重新开始逆时针旋转60度...\r\n");
+                printf("等待结束，再次开始逆时针旋转60度...\r\n");
                 led3_off();       // 关闭LED3
                 led1_on();        // 点亮LED1作为逆时针旋转指示
             }
