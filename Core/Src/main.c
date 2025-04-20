@@ -155,7 +155,7 @@ D (左下) ←——————————— C (右下)
 /* USER CODE BEGIN PTD */
 u8 Way_Angle = 1;                                                                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤??
 u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变??
-u8 Flag_Stop = 0, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志??  默认停止 显示打开
+u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志??  默认停止 显示打开
 int Motor_Left, Motor_Right;                                                                                        // 电机PWM变量 应是Motor?? 向Moto致敬
 int Temperature;                                                                                                    // 温度变量
 int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变??
@@ -177,10 +177,10 @@ float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                        
 float Target_Velocity = 30;                                                                                     // 目标速度
 
 // 转向控制PID参数及相关变量（放大100倍）
-u16 Steering_Kp = 3000;                                                                                         // 转向控制比例系数（放大100倍）
-u16 Steering_Ki = 90;                                                                                           // 转向控制积分系数（放大100倍）
-u16 Steering_Kd = 20;                                                                                         // 转向控制微分系数（放大100倍）
-u16 Steering_Error_Threshold = 1000;                                                                             // 转向控制误差阈值(度)（放大100倍）
+u16 Steering_Kp = 200;                                                                                         // 转向控制比例系数（放大100倍）
+u16 Steering_Ki = 180;                                                                                           // 转向控制积分系数（放大100倍）
+u16 Steering_Kd = 40;                                                                                         // 转向控制微分系数（放大100倍）
+u16 Steering_Error_Threshold = 500;                                                                             // 转向控制误差阈值(度)（放大100倍）
 u16 Steering_Speed = 5000;                                                                                      // 转向控制基础速度（放大100倍）
 u8 Steering_Completed = 0;                                                                                         // 转向完成标志
 u16 Steering_Stable_Count = 0;                                                                                     // 转向稳定计数

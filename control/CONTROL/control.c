@@ -32,11 +32,11 @@ Output  : none
 **************************************************************************/
 
 // 转向控制相关宏定义
-#define STEERING_STABLE_TIME        150    // 转向稳定需要保持的时间计数
-#define STEERING_MAX_OUTPUT        6000    // 转向控制最大PWM输出
-#define STEERING_MIN_OUTPUT       -6000    // 转向控制最小PWM输出
+#define STEERING_STABLE_TIME        70    // 转向稳定需要保持的时间计数
+#define STEERING_MAX_OUTPUT        3000    // 转向控制最大PWM输出
+#define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
-#define PWM_Base                  1100	   // PWM基准值
+#define PWM_Base                  1000	   // PWM基准值
 
 #define TEST_MODE    // 测试模式 
 
@@ -284,14 +284,16 @@ u8 localSteeringControl_Handler(float angle)
         startAngle = currentAngle;
         targetAngle = startAngle + angle;  // 计算目标绝对角度
         
-        // 处理角度跨越±180度的情况
-        if(targetAngle > 180.0f) {
+        // 规范化目标角度到±180度范围内
+        while(targetAngle > 180.0f) {
             targetAngle -= 360.0f;
-        } else if(targetAngle < -180.0f) {
+        }
+        while(targetAngle < -180.0f) {
             targetAngle += 360.0f;
         }
-
-        printf("startAngle: %.2f, targetAngle: %.2f\r\n", startAngle, targetAngle);
+        
+        printf("开始旋转: 起始角度=%.2f, 目标角度=%.2f, 相对角度=%.2f\r\n", 
+               startAngle, targetAngle, angle);
         
         lastError = 0;
         integral = 0;
@@ -305,7 +307,7 @@ u8 localSteeringControl_Handler(float angle)
     // 计算当前误差
     error = targetAngle - currentAngle;
     
-    // 处理误差过大的情况（过±180度）
+    // 处理误差过大的情况（过±180度），确保选择最短路径
     if(error > 180.0f) {
         error -= 360.0f;
     } else if(error < -180.0f) {
@@ -345,16 +347,17 @@ u8 localSteeringControl_Handler(float angle)
     Motor_Left = -(PWM_Base + output);
     Motor_Right = PWM_Base + output;
     
-    // 误差在阈值范围内，计数稳定时间
-    if(fabs(error) < (float)Steering_Error_Threshold/100.0f) {
+    // 误差在阈值范围内且变化率小，计数稳定时间
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f && fabs(derivative) < 0.5f) {
         Steering_Stable_Count++;
-        printf("error: %.2f, currentAngle: %.2f, startAngle: %.2f\r\n", error, currentAngle, startAngle);
+        printf("误差: %.2f, 当前角度: %.2f, 目标角度: %.2f\r\n", error, currentAngle, targetAngle);
         // 如果稳定计数达到设定时间，认为转向完成
         if(Steering_Stable_Count >= STEERING_STABLE_TIME) {
             // 重置状态，为下一次转向做准备
             isInitialized = 0;
             Set_Pwm(0, 0);  // 停止电机
             Steering_Completed = 1;
+            printf("转向完成！最终角度: %.2f\r\n", currentAngle);
             return 1;  // 转向完成
         }
     } else {
