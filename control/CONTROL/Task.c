@@ -2,133 +2,128 @@
 #include "control.h"
 #include "LED.h"
 #include <stdio.h>
-#include "main.h"
 
 /**
- * @brief æµ‹è¯•ä»»åŠ¡2çš„å¤„ç†å‡½æ•°
- * @note å°è½¦ä»Aç‚¹å‡ºå‘ï¼ŒæŒ‰ä»¥ä¸‹è·¯å¾„è¡Œé©¶ï¼š
- * 1. ç›´çº¿è¡Œé©¶è‡³Bç‚¹
- * 2. æ²¿åŠåœ†å¼§é»‘çº¿ä»Bè¡Œé©¶è‡³Cç‚¹
- * 3. ç›´çº¿è¡Œé©¶è‡³Dç‚¹
- * 4. æ²¿å¦ä¸€åŠåœ†å¼§é»‘çº¿ä»Dè¿”å›Aç‚¹åœè½¦
- * @return u8 1:å®Œæˆå…¨ç¨‹ 0:å°è½¦æ­£åœ¨æ‰§è¡Œä»»åŠ¡ä¸­
+ * @brief ²âÊÔÈÎÎñ2µÄ´¦Àíº¯Êı
+ * @note Ğ¡³µ´ÓAµã³ö·¢£¬°´ÒÔÏÂÂ·¾¶ĞĞÊ»£º
+ * 1. Ö±ÏßĞĞÊ»ÖÁBµã
+ * 2. ÑØ°ëÔ²»¡ºÚÏß´ÓBĞĞÊ»ÖÁCµã
+ * 3. Ö±ÏßĞĞÊ»ÖÁDµã
+ * 4. ÑØÁíÒ»°ëÔ²»¡ºÚÏß´ÓD·µ»ØAµãÍ£³µ
+ * @return u8 1:Íê³ÉÈ«³Ì 0:Ğ¡³µÕıÔÚÖ´ĞĞÈÎÎñÖĞ
  */
 u8 Task2_Handler(void)
 {
-    // å®šä¹‰çŠ¶æ€æœºçŠ¶æ€
+    // ¶¨Òå×´Ì¬»ú×´Ì¬
     typedef enum {
-        INIT,              // åˆå§‹åŒ–çŠ¶æ€
-        MOVE_A_TO_B,       // Aåˆ°Bç›´çº¿è¡Œé©¶
-        TRACK_B_TO_C,      // Båˆ°Cæ²¿é»‘çº¿å¾ªè¿¹
-        TURN_AT_C,         // åœ¨Cç‚¹æ—‹è½¬
-        MOVE_C_TO_D,       // Cåˆ°Dç›´çº¿è¡Œé©¶
-        TRACK_D_TO_A,      // Dåˆ°Aæ²¿é»‘çº¿å¾ªè¿¹
-        COMPLETED          // ä»»åŠ¡å®Œæˆ
+        INIT,              // ³õÊ¼»¯×´Ì¬
+        MOVE_A_TO_B,       // Aµ½BÖ±ÏßĞĞÊ»
+        TRACK_B_TO_C,      // Bµ½CÑØºÚÏßÑ­¼£
+        TURN_AT_C,         // ÔÚCµãĞı×ª
+        MOVE_C_TO_D,       // Cµ½DÖ±ÏßĞĞÊ»
+        TRACK_D_TO_A,      // Dµ½AÑØºÚÏßÑ­¼£
+        COMPLETED          // ÈÎÎñÍê³É
     } TestState;
     
-    // ä½¿ç”¨é™æ€å˜é‡ä¿å­˜çŠ¶æ€å’Œèµ·å§‹è§’åº¦
+    // Ê¹ÓÃ¾²Ì¬±äÁ¿±£´æ×´Ì¬ºÍÆğÊ¼½Ç¶È
     static TestState currentState = INIT;
     static float startAngle = 0.0f;
     static float targetAngle = 0.0f;
     
-    // è¯»å–ç¼–ç å™¨æ•°æ®å’Œå¤„ç†è¿åŠ¨è®¡ç®—ï¼ˆè¿™éƒ¨åˆ†åœ¨å„çŠ¶æ€å¤„ç†ä¸­ä½¿ç”¨ï¼‰
-    Encoder_Left = Read_Encoder(3);
-    Encoder_Right = Read_Encoder(5);
-    Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right);
     
-    // çŠ¶æ€æœºå®ç°
+    // ×´Ì¬»úÊµÏÖ
     switch(currentState)
     {
         case INIT:
-            // åˆå§‹åŒ–ï¼šè®°å½•èµ·å§‹è§’åº¦ï¼Œè®¾ç½®åˆå§‹é€Ÿåº¦
+            // ³õÊ¼»¯£º¼ÇÂ¼ÆğÊ¼½Ç¶È£¬ÉèÖÃ³õÊ¼ËÙ¶È
             startAngle = getHeadingAngle();
-            printf("æµ‹è¯•ä»»åŠ¡2å¼€å§‹: åˆå§‹è§’åº¦ = %.2f\r\n", startAngle);
+            printf("²âÊÔÈÎÎñ2¿ªÊ¼: ³õÊ¼½Ç¶È = %.2f\r\n", startAngle);
             
-            // è®¡ç®—ç›®æ ‡åå‘è§’åº¦ï¼ˆèµ·å§‹è§’åº¦+180åº¦ï¼Œå¤„ç†è¾¹ç•Œæƒ…å†µï¼‰
+            // ¼ÆËãÄ¿±ê·´Ïò½Ç¶È£¨ÆğÊ¼½Ç¶È+180¶È£¬´¦Àí±ß½çÇé¿ö£©
             targetAngle = startAngle + 180.0f;
             if(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;
             }
             
-            printf("ç›®æ ‡åå‘è§’åº¦: %.2f\r\n", targetAngle);
-            Set_Target_Velocity(10); // è®¾ç½®é€‚å½“çš„é€Ÿåº¦
-            led1_on(); // ç‚¹äº®LED1è¡¨ç¤ºä»»åŠ¡å¼€å§‹
+            printf("Ä¿±ê·´Ïò½Ç¶È: %.2f\r\n", targetAngle);
+            Set_Target_Velocity(10); // ÉèÖÃÊÊµ±µÄËÙ¶È
+            led1_on(); // µãÁÁLED1±íÊ¾ÈÎÎñ¿ªÊ¼
             
-            // åˆ‡æ¢åˆ°ä¸‹ä¸€çŠ¶æ€
+            // ÇĞ»»µ½ÏÂÒ»×´Ì¬
             currentState = MOVE_A_TO_B;
             return 0;
             
         case MOVE_A_TO_B:
-            // Aç‚¹åˆ°Bç‚¹çš„ç›´çº¿è¡Œé©¶
-            printf("çŠ¶æ€: A->B ç›´çº¿è¡Œé©¶\r\n");
+            // Aµãµ½BµãµÄÖ±ÏßĞĞÊ»
+            printf("×´Ì¬: A->B Ö±ÏßĞĞÊ»\r\n");
             if(moveForward_Handler()) {
-                // moveForward_Handlerè¿”å›1è¡¨ç¤ºæ£€æµ‹åˆ°é»‘çº¿ï¼Œå³åˆ°è¾¾Bç‚¹
-                printf("åˆ°è¾¾Bç‚¹\r\n");
+                // moveForward_Handler·µ»Ø1±íÊ¾¼ì²âµ½ºÚÏß£¬¼´µ½´ïBµã
+                printf("µ½´ïBµã\r\n");
                 led1_off();
-                led2_on(); // åˆ‡æ¢LEDæŒ‡ç¤ºå½“å‰çŠ¶æ€
+                led2_on(); // ÇĞ»»LEDÖ¸Ê¾µ±Ç°×´Ì¬
                 currentState = TRACK_B_TO_C;
             }
             return 0;
             
         case TRACK_B_TO_C:
-            // Bç‚¹åˆ°Cç‚¹æ²¿é»‘çº¿å¾ªè¿¹
-            printf("çŠ¶æ€: B->C æ²¿é»‘çº¿å¾ªè¿¹\r\n");
+            // Bµãµ½CµãÑØºÚÏßÑ­¼£
+            printf("×´Ì¬: B->C ÑØºÚÏßÑ­¼£\r\n");
             if(lineTracking_Handler()) {
-                // lineTracking_Handlerè¿”å›1è¡¨ç¤ºå®Œæˆå¾ªè¿¹ï¼ˆæ‰€æœ‰ä¼ æ„Ÿå™¨éƒ½æ£€æµ‹åˆ°ç™½è‰²ï¼‰
-                printf("åˆ°è¾¾Cç‚¹\r\n");
+                // lineTracking_Handler·µ»Ø1±íÊ¾Íê³ÉÑ­¼££¨ËùÓĞ´«¸ĞÆ÷¶¼¼ì²âµ½°×É«£©
+                printf("µ½´ïCµã\r\n");
                 led2_off();
-                led3_on(); // åˆ‡æ¢LEDæŒ‡ç¤ºå½“å‰çŠ¶æ€
+                led3_on(); // ÇĞ»»LEDÖ¸Ê¾µ±Ç°×´Ì¬
                 currentState = TURN_AT_C;
             }
             return 0;
             
         case TURN_AT_C:
-            // åœ¨Cç‚¹æ—‹è½¬è‡³ç›®æ ‡è§’åº¦ï¼ˆèµ·å§‹è§’åº¦çš„åå‘ï¼‰
-            printf("çŠ¶æ€: Cç‚¹æ—‹è½¬\r\n");
+            // ÔÚCµãĞı×ªÖÁÄ¿±ê½Ç¶È£¨ÆğÊ¼½Ç¶ÈµÄ·´Ïò£©
+            printf("×´Ì¬: CµãĞı×ª\r\n");
             if(turnToAbsoluteAngle(targetAngle)) {
-                // turnToAbsoluteAngleè¿”å›1è¡¨ç¤ºå®Œæˆè½¬å‘
-                printf("Cç‚¹è½¬å‘å®Œæˆï¼Œç›®æ ‡è§’åº¦: %.2fï¼Œå½“å‰è§’åº¦: %.2f\r\n", 
+                // turnToAbsoluteAngle·µ»Ø1±íÊ¾Íê³É×ªÏò
+                printf("Cµã×ªÏòÍê³É£¬Ä¿±ê½Ç¶È: %.2f£¬µ±Ç°½Ç¶È: %.2f\r\n", 
                        targetAngle, getHeadingAngle());
                 led3_off();
-                led1_on(); // åˆ‡æ¢LEDæŒ‡ç¤ºå½“å‰çŠ¶æ€
+                led1_on(); // ÇĞ»»LEDÖ¸Ê¾µ±Ç°×´Ì¬
                 currentState = MOVE_C_TO_D;
             }
             return 0;
             
         case MOVE_C_TO_D:
-            // Cç‚¹åˆ°Dç‚¹çš„ç›´çº¿è¡Œé©¶
-            printf("çŠ¶æ€: C->D ç›´çº¿è¡Œé©¶\r\n");
+            // Cµãµ½DµãµÄÖ±ÏßĞĞÊ»
+            printf("×´Ì¬: C->D Ö±ÏßĞĞÊ»\r\n");
             if(moveForward_Handler()) {
-                // moveForward_Handlerè¿”å›1è¡¨ç¤ºæ£€æµ‹åˆ°é»‘çº¿ï¼Œå³åˆ°è¾¾Dç‚¹
-                printf("åˆ°è¾¾Dç‚¹\r\n");
+                // moveForward_Handler·µ»Ø1±íÊ¾¼ì²âµ½ºÚÏß£¬¼´µ½´ïDµã
+                printf("µ½´ïDµã\r\n");
                 led1_off();
-                led2_on(); // åˆ‡æ¢LEDæŒ‡ç¤ºå½“å‰çŠ¶æ€
+                led2_on(); // ÇĞ»»LEDÖ¸Ê¾µ±Ç°×´Ì¬
                 currentState = TRACK_D_TO_A;
             }
             return 0;
             
         case TRACK_D_TO_A:
-            // Dç‚¹åˆ°Aç‚¹æ²¿é»‘çº¿å¾ªè¿¹
-            printf("çŠ¶æ€: D->A æ²¿é»‘çº¿å¾ªè¿¹\r\n");
+            // Dµãµ½AµãÑØºÚÏßÑ­¼£
+            printf("×´Ì¬: D->A ÑØºÚÏßÑ­¼£\r\n");
             if(lineTracking_Handler()) {
-                // lineTracking_Handlerè¿”å›1è¡¨ç¤ºå®Œæˆå¾ªè¿¹
-                printf("åˆ°è¾¾Aç‚¹, ä»»åŠ¡å®Œæˆ\r\n");
+                // lineTracking_Handler·µ»Ø1±íÊ¾Íê³ÉÑ­¼£
+                printf("µ½´ïAµã, ÈÎÎñÍê³É\r\n");
                 led2_off();
-                all_leds_on(); // æ‰€æœ‰LEDäº®èµ·è¡¨ç¤ºä»»åŠ¡å®Œæˆ
-                Set_Pwm(0, 0); // åœæ­¢ç”µæœº
+                all_leds_on(); // ËùÓĞLEDÁÁÆğ±íÊ¾ÈÎÎñÍê³É
+                Set_Pwm(0, 0); // Í£Ö¹µç»ú
                 currentState = COMPLETED;
             }
             return 0;
             
         case COMPLETED:
-            // ä»»åŠ¡å®ŒæˆçŠ¶æ€
-            // é‡ç½®çŠ¶æ€ï¼Œä¸ºä¸‹æ¬¡ä»»åŠ¡åšå‡†å¤‡
+            // ÈÎÎñÍê³É×´Ì¬
+            // ÖØÖÃ×´Ì¬£¬ÎªÏÂ´ÎÈÎÎñ×ö×¼±¸
             currentState = INIT;
             all_leds_off();
-            return 1; // è¿”å›1è¡¨ç¤ºä»»åŠ¡å®Œæˆ
+            return 1; // ·µ»Ø1±íÊ¾ÈÎÎñÍê³É
             
         default:
-            // å¼‚å¸¸æƒ…å†µï¼Œé‡ç½®çŠ¶æ€
+            // Òì³£Çé¿ö£¬ÖØÖÃ×´Ì¬
             currentState = INIT;
             return 0;
     }
