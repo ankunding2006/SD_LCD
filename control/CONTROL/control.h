@@ -98,6 +98,7 @@ u8 localSteeringControl_Handler(float angle);
 void SteeringTest_CyclicRotation(void);
 void Test_Handler(void);
 void normal_Handler(void);
+int moveForward_Handler(void);
 
 // 转向控制参数调节函数
 void Set_Steering_Kp(u16 kp);
@@ -109,5 +110,8 @@ float Get_Steering_Kp(void);
 float Get_Steering_Ki(void);
 float Get_Steering_Kd(void);
 float Get_Steering_Error_Threshold(void);
+u8 turnToAbsoluteAngle(float targetAbsoluteAngle);
+u8 Task2_Handler(void);
+void turnToAbsoluteAngle_TEST_Handler(void);
 
 #endif

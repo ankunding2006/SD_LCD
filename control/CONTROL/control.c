@@ -13,9 +13,16 @@
 器和电机驱动模块的代码
 ***********************************************/
 #include "control.h"
+#include "Test.h"
+#include "Task.h"
+#include "setParma.h"
+#include <stdio.h>
+#include <math.h>
 
 // 在文件开头添加全局变量定义
 float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
+volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
+volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm=0;
 
 /**************************************************************************
 函数功能：Control function
@@ -28,19 +35,16 @@ Output  : none
 入口参数：无
 返回  值：无
 **************************************************************************/
-
-
-volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
-volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm=0;
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM6)
 	{
 		#if TEST_MODE==1 // 测试模式
 			Test_Handler();
-        #else
+        #elif Normal_Mode==1 // 正常模式
             normal_Handler(); // 正常模式
+        #elif TASK2==1 // 测试模式2
+            Task2_Handler(); // 测试模式2
 		#endif
 	}
 }
@@ -332,9 +336,17 @@ u8 localSteeringControl_Handler(float angle)
         output = STEERING_MIN_OUTPUT;
     }
     
-    // 设置电机速度
-    Motor_Left = -(PWM_Base + output);
-    Motor_Right = PWM_Base + output;
+    if (output >= 0) {
+        // 逆时针转向 (output 为正或零)
+        // 左轮反转，右轮正转
+        Motor_Left = -(PWM_Base + output);
+        Motor_Right = PWM_Base + output;
+    } else {
+        // 顺时针转向 (output 为负)
+        // 左轮正转，右轮反转，注意 output 本身为负数
+        Motor_Left = PWM_Base - output;  // -output 为正值，增加左轮正转速度
+        Motor_Right = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
+    }
     
     // 误差在阈值范围内且变化率小，计数稳定时间
     if(fabs(error) < (float)Steering_Error_Threshold/100.0f && fabs(derivative) < 0.5f) {
@@ -396,171 +408,137 @@ int moveForward_Handler(void)
 	return 0; // 返回0，表示没有完成走直线,正在走直线中
 }
 
+/**
+ * @brief 控制小车转向到指定的绝对角度
+ * @note 这个函数控制小车转向到一个指定的绝对航向角度，不是相对转动角度
+ * 当车头指向正西方向时候返回值为0度,正北方向为-90度,正南方向为90度
+ * @param targetAbsoluteAngle 目标绝对角度，范围[-180, 180]度
+ * @return u8 1:转向完成 0:小车正在转向中
+ */
+u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
+{
+    static float lastError = 0;        // 上一次误差
+    static float integral = 0;         // 积分项
+    static u8 isInitialized = 0;       // 初始化标志
+    
+    float currentAngle = getHeadingAngle();   // 获取当前角度
+    float error, derivative, output;
+    
+    // 确保目标角度在[-180, 180]范围内
+    while(targetAbsoluteAngle > 180.0f) {
+        targetAbsoluteAngle -= 360.0f;
+    }
+    while(targetAbsoluteAngle < -180.0f) {
+        targetAbsoluteAngle += 360.0f;
+    }
+    
+    // 初始化，重置控制变量
+    if(isInitialized == 0) {
+        printf("开始旋转到绝对角度: 当前角度=%.2f, 目标角度=%.2f\r\n", 
+               currentAngle, targetAbsoluteAngle);
+        
+        lastError = 0;
+        integral = 0;
+        Steering_Stable_Count = 0;
+        Steering_Completed = 0;
+        isInitialized = 1;
+        
+        return 0;  // 刚初始化，返回未完成
+    }
+    
+    // 计算当前误差
+    error = targetAbsoluteAngle - currentAngle;
+    
+    // 关键处理: 处理误差过大的情况（过±180度），确保选择最短路径
+    if(error > 180.0f) {
+        error -= 360.0f;
+    } else if(error < -180.0f) {
+        error += 360.0f;
+    }
+
+    // 计算积分项
+    integral += error;
+    
+    // 积分限幅
+    if(integral > STEERING_I_LIMIT) {
+        integral = STEERING_I_LIMIT;
+    } else if(integral < -STEERING_I_LIMIT) {
+        integral = -STEERING_I_LIMIT;
+    }
+    
+    // 如果误差很小，逐渐减小积分项，防止过冲
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f) {
+        integral *= 0.9f;
+    }
+    
+    // 计算微分项
+    derivative = error - lastError;
+    lastError = error;
+    
+    // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
+    output = ((float)Steering_Kp/100.0f) * error + 
+             ((float)Steering_Ki/100.0f) * integral + 
+             ((float)Steering_Kd/100.0f) * derivative;
+    
+    // 输出限幅
+    if(output > STEERING_MAX_OUTPUT) {
+        output = STEERING_MAX_OUTPUT;
+    } else if(output < STEERING_MIN_OUTPUT) {
+        output = STEERING_MIN_OUTPUT;
+    }
+    
+    if (output >= 0) {
+        // 逆时针转向 (output 为正或零)
+        // 左轮反转，右轮正转
+        Motor_Left = -(PWM_Base + output);
+        Motor_Right = PWM_Base + output;
+    } else {
+        // 顺时针转向 (output 为负)
+        // 左轮正转，右轮反转，注意 output 本身为负数
+        Motor_Left = PWM_Base - output;  // -output 为正值，增加左轮正转速度
+        Motor_Right = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
+    }
+    
+    // 误差在阈值范围内且变化率小，计数稳定时间
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f && fabs(derivative) < 0.5f) {
+        Steering_Stable_Count++;
+        
+        // 调试输出
+        if(Steering_Stable_Count % 20 == 0) {  // 减少打印频率
+            printf("误差: %.2f, 当前角度: %.2f, 目标角度: %.2f\r\n", 
+                   error, currentAngle, targetAbsoluteAngle);
+        }
+        
+        // 如果稳定计数达到设定时间，认为转向完成
+        if(Steering_Stable_Count >= STEERING_STABLE_TIME) {
+            // 重置状态，为下一次转向做准备
+            isInitialized = 0;
+            Set_Pwm(0, 0);  // 停止电机
+            Steering_Completed = 1;
+            printf("转向到绝对角度完成！最终角度: %.2f\r\n", currentAngle);
+            return 1;  // 转向完成
+        }
+    } else {
+        // 不稳定，重置稳定计数
+        Steering_Stable_Count = 0;
+    }
+    
+    // 执行电机控制
+    if(Flag_Stop == 1) {
+        Set_Pwm(0, 0);  // 停止标志为1时停止电机
+    } else {
+        Set_Pwm(Motor_Left, Motor_Right);  // 设置电机PWM
+    }
+    
+    return 0;  // 转向未完成
+}
 
 /**
- * @brief 转向测试函数 - 单方向循环旋转测试
- * @note 控制小车逆时针转60度，等待3秒，再次逆时针转60度，等待3秒，如此循环
+ * @brief normal_Handler函数
+ * @note 普通模式下的处理函数
  * @return None
  */
-void SteeringTest_CyclicRotation(void)
+void normal_Handler(void)
 {
-    static uint8_t test_state = 0;  // 测试状态：0-初始化 1-逆时针旋转 2-等待3秒
-    static uint32_t wait_time = 0;  // 等待时间计数器
-    
-    // 根据当前状态执行不同操作
-    switch(test_state)
-    {
-        case 0:  // 初始化状态
-            printf("开始转向测试：逆时针60度 -> 等待3秒 -> 循环\r\n");
-            test_state = 1;  // 进入逆时针旋转状态
-            led1_on();       // 点亮LED1作为逆时针旋转指示
-            led2_off();
-            led3_off();
-            break;
-            
-        case 1:  // 逆时针旋转60度
-            if(localSteeringControl_Handler(60.0f))  // 如果转向完成
-            {
-                printf("逆时针旋转60度完成，等待3秒...\r\n");
-                test_state = 2;   // 进入等待状态
-                wait_time = 0;    // 清零等待时间计数器
-                led1_off();       // 关闭LED1
-                led3_on();        // 点亮LED3作为等待指示
-            }
-            break;
-            
-        case 2:  // 等待3秒
-            wait_time++;
-            if(wait_time >= 600)  // 5ms中断，600次大约3秒
-            {
-                test_state = 1;   // 返回逆时针旋转状态，形成循环
-                printf("等待结束，再次开始逆时针旋转60度...\r\n");
-                led3_off();       // 关闭LED3
-                led1_on();        // 点亮LED1作为逆时针旋转指示
-            }
-            break;
-            
-        default:
-            test_state = 0;  // 异常情况，重置状态
-            break;
-    }
-}
-
-
-void Test_Handler(void)
-{
-    #if TEST_STEERING_ROTATION==1 // 测试转向旋转 
-        SteeringTest_CyclicRotation(); // 调用转向测试函数
-    #elif TEST_TRACKING==1 // 测试循迹
-        lineTracking_Handler(); // 调用循迹函数
-    #elif TEST_MOVE_FORWARD==1 // 测试前进
-        moveForward_Handler(); // 调用前进函数
-    #endif // TEST_MOVE_FORWARD
-}
-
-/**
- * @brief 设置转向控制比例系数
- * @param kp 新的比例系数(放大100倍的整数)
- * @return 无
- */
-void Set_Steering_Kp(u16 kp)
-{
-    Steering_Kp = kp;
-    printf("设置转向控制比例系数: Kp = %.3f\r\n", (float)kp/100.0f);
-}
-
-/**
- * @brief 设置转向控制积分系数
- * @param ki 新的积分系数(放大100倍的整数)
- * @return 无
- */
-void Set_Steering_Ki(u16 ki)
-{
-    Steering_Ki = ki;
-    printf("设置转向控制积分系数: Ki = %.3f\r\n", (float)ki/100.0f);
-}
-
-/**
- * @brief 设置转向控制微分系数
- * @param kd 新的微分系数(放大100倍的整数)
- * @return 无
- */
-void Set_Steering_Kd(u16 kd)
-{
-    Steering_Kd = kd;
-    printf("设置转向控制微分系数: Kd = %.3f\r\n", (float)kd/100.0f);
-}
-
-/**
- * @brief 设置转向控制误差阈值
- * @param threshold 新的误差阈值(度)(放大100倍的整数)
- * @return 无
- */
-void Set_Steering_Error_Threshold(u16 threshold)
-{
-    Steering_Error_Threshold = threshold;
-    printf("设置转向控制误差阈值: %.3f度\r\n", (float)threshold/100.0f);
-}
-
-/**
- * @brief 一次性设置所有转向控制参数
- * @param kp 比例系数(放大100倍的整数)
- * @param ki 积分系数(放大100倍的整数)
- * @param kd 微分系数(放大100倍的整数)
- * @param threshold 误差阈值(度)(放大100倍的整数)
- * @return 无
- */
-void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
-{
-    Steering_Kp = kp;
-    Steering_Ki = ki;
-    Steering_Kd = kd;
-    Steering_Error_Threshold = threshold;
-    printf("设置所有转向控制参数:\r\n");
-    printf("Kp = %.3f, Ki = %.3f, Kd = %.3f\r\n", (float)kp/100.0f, (float)ki/100.0f, (float)kd/100.0f);
-    printf("误差阈值 = %.3f度\r\n", (float)threshold/100.0f);
-}
-
-/**
- * @brief 获取转向控制比例系数
- * @return 当前比例系数
- */
-float Get_Steering_Kp(void)
-{
-    float kp = (float)Steering_Kp/100.0f;
-    printf("当前转向控制比例系数: Kp = %.3f\r\n", kp);
-    return kp;
-}
-
-/**
- * @brief 获取转向控制积分系数
- * @return 当前积分系数
- */
-float Get_Steering_Ki(void)
-{
-    float ki = (float)Steering_Ki/100.0f;
-    printf("当前转向控制积分系数: Ki = %.3f\r\n", ki);
-    return ki;
-}
-
-/**
- * @brief 获取转向控制微分系数
- * @return 当前微分系数
- */
-float Get_Steering_Kd(void)
-{
-    float kd = (float)Steering_Kd/100.0f;
-    printf("当前转向控制微分系数: Kd = %.3f\r\n", kd);
-    return kd;
-}
-
-/**
- * @brief 获取转向控制误差阈值
- * @return 当前误差阈值(度)
- */
-float Get_Steering_Error_Threshold(void)
-{
-    float threshold = (float)Steering_Error_Threshold/100.0f;
-    printf("当前转向控制误差阈值: %.3f度\r\n", threshold);
-    return threshold;
+    // 普通模式的处理代码
 }
