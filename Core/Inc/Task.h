@@ -8,8 +8,10 @@ extern "C" {
 #include "main.h"
 
 // 任务函数声明
+u8 Task1_Handler(void);
 u8 Task2_Handler(void);
-// 可以添加其他任务函数声明，如Task1_Handler, Task3_Handler等
+u8 Task3_Handler(void);
+u8 Task4_Handler(void);
 
 #ifdef __cplusplus
 }

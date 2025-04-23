@@ -4,6 +4,164 @@
 #include <stdio.h>
 
 /**
+ * @brief 任务1处理函数
+ * @note 小车从A点出发，沿直线行驶至B点后停车，全程用时不超过15秒
+ * 触发条件：到达B点时需有声（如蜂鸣器）光（如LED）提示
+ * @return u8 1:完成任务 0:小车正在执行任务中
+ */
+u8 Task1_Handler(void)
+{
+    // 定义状态机状态
+    typedef enum {
+        INIT_WAIT,         // 等待陀螺仪稳定
+        INIT,              // 初始化状态
+        MOVE_A_TO_B,       // A到B直线行驶
+        COMPLETED          // 任务完成
+    } TaskState;
+    
+    // 使用静态变量保存状态
+    static TaskState currentState = INIT_WAIT;
+    static uint32_t init_start_time = 0;   // 初始化开始时间
+    static float prev_angle = 0.0f;        // 上一次读取的角度
+    static uint8_t retry_count = 0;        // 重试次数计数
+    static uint16_t debug_print_counter = 0; // 调试信息发送计数器
+    static uint32_t task_start_time = 0;    // 任务开始时间
+    
+    // 调试信息发送频率控制
+    bool can_print_debug = false;
+    if (++debug_print_counter >= DEBUG_PRINT_COUNT) {
+        debug_print_counter = 0;
+        can_print_debug = true;
+    }
+    
+    // 状态机实现
+    switch(currentState)
+    {
+        case INIT_WAIT:
+            // 等待陀螺仪稳定
+            if(init_start_time == 0) {
+                // 记录初始化开始时间
+                init_start_time = HAL_GetTick();
+                prev_angle = getHeadingAngle();
+                printf("等待陀螺仪稳定...\r\n");
+                return 0;
+            }
+            
+            // 检查是否已经等待足够时间
+            if(HAL_GetTick() - init_start_time >= GYRO_CHECK_INTERVAL) {
+                // 读取当前角度
+                float current_angle = getHeadingAngle();
+                
+                // 检查数据是否有效
+                if(current_angle == prev_angle) {
+                    // 读取的值完全一样，可能是传感器未正确更新
+                    printf("陀螺仪数据未更新，重试中 (%d/%d)...\r\n", 
+                           retry_count + 1, GYRO_INIT_RETRIES);
+                    
+                    retry_count++;
+                    if(retry_count >= GYRO_INIT_RETRIES) {
+                        // 达到最大重试次数，尝试重新初始化传感器
+                        printf("陀螺仪初始化失败，请检查连接或重启设备\r\n");
+                        
+                        // 重置重试计数和初始化时间，重新开始初始化
+                        retry_count = 0;
+                        init_start_time = 0;
+                    } else {
+                        // 重置初始化时间，继续等待
+                        init_start_time = HAL_GetTick();
+                    }
+                    return 0;
+                }
+                
+                // 检查数据变化是否在合理范围内
+                float angle_diff = fabs(current_angle - prev_angle);
+                if(angle_diff > GYRO_CHECK_THRESHOLD) {
+                    printf("陀螺仪数据波动较大 (%.2f°)，继续等待稳定...\r\n", angle_diff);
+                    
+                    // 更新上一次角度值并继续等待
+                    prev_angle = current_angle;
+                    init_start_time = HAL_GetTick();
+                    return 0;
+                }
+                
+                // 陀螺仪数据稳定，进入初始化状态
+                printf("陀螺仪数据稳定，开始任务初始化\r\n");
+                currentState = INIT;
+                init_start_time = 0;
+                retry_count = 0;
+            }
+            return 0;
+            
+        case INIT:
+            // 初始化：设置初始速度和状态
+            printf("任务1开始: 从A点沿直线行驶至B点并停车\r\n");
+            printf("初始角度 = %.2f\r\n", getHeadingAngle());
+            
+            Set_Target_Velocity(16); // 设置适当的速度
+            led1_on(); // 点亮LED1表示任务开始
+            
+            // 重置调试打印计数器
+            debug_print_counter = 0;
+            
+            // 记录任务开始时间
+            task_start_time = HAL_GetTick();
+            
+            // 切换到下一状态
+            currentState = MOVE_A_TO_B;
+            return 0;
+            
+        case MOVE_A_TO_B:
+            // A点到B点的直线行驶
+            if(can_print_debug) {
+                printf("A→B直线行驶中: 当前角度 = %.2f, 已用时间: %dms\r\n", 
+                       getHeadingAngle(), (int)(HAL_GetTick() - task_start_time));
+            }
+            
+            // 检查任务是否超时
+            if(HAL_GetTick() - task_start_time > 15000) { // 15秒超时
+                printf("任务1超时！已停止\r\n");
+                Set_Pwm(0, 0); // 停止电机
+                all_leds_on(); // 所有LED亮起表示出错
+                HAL_Delay(500);
+                all_leds_off();
+                HAL_Delay(500);
+                currentState = COMPLETED;
+                return 1;
+            }
+            
+            if(moveForward_Handler()) {
+                // moveForward_Handler返回1表示检测到黑线，即到达B点
+                printf("到达B点，任务完成！用时: %dms\r\n", (int)(HAL_GetTick() - task_start_time));
+                
+                // 声光提示已到达B点
+                led1_off();
+                // 闪烁所有LED作为到达提示
+                for(int i = 0; i < 3; i++) {
+                    all_leds_on();
+                    HAL_Delay(200);
+                    all_leds_off();
+                    HAL_Delay(200);
+                }
+                
+                currentState = COMPLETED;
+            }
+            return 0;
+            
+        case COMPLETED:
+            // 任务完成状态
+            // 重置状态，为下次任务做准备
+            currentState = INIT_WAIT;
+            all_leds_off();
+            return 1; // 返回1表示任务完成
+            
+        default:
+            // 异常情况，重置状态
+            currentState = INIT_WAIT;
+            return 0;
+    }
+}
+
+/**
  * @brief 测试任务2的处理函数
  * @note 小车从A点出发，按以下路径行驶：
  * 1. 直线行驶至B点

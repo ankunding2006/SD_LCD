@@ -78,7 +78,8 @@
     "gray_detection.h": "c",
     "cstdint": "c",
     "wit_c_sdk.h": "c",
-    "test.h": "c"
+    "test.h": "c",
+    "task.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true,
   "files.encoding": "gb2312"

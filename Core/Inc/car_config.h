@@ -62,7 +62,7 @@
 
 //*********************调试信息发送频率参数******************
 #define DEBUG_PRINT_INTERVAL      700    // 调试信息发送间隔(ms)
-#define DEBUG_PRINT_COUNT         DEBUG_PRINT_INTERVAL/5    // 调试信息发送计数(基于5ms的中断周期)
+#define DEBUG_PRINT_COUNT         (DEBUG_PRINT_INTERVAL/5)    // 调试信息发送计数(基于5ms的中断周期)
 
 /*****************************无关变量配置***********************************/
 #define WAY_ANGLE_DEFAULT           1    // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
