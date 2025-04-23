@@ -107,3 +107,110 @@ float Get_Steering_Error_Threshold(void)
     printf("当前转向控制误差阈值: %.3f度\r\n", threshold);
     return threshold;
 }
+
+/**
+ * @brief 设置直线行走角度修正比例系数
+ * @param kp 新的比例系数(放大100倍的整数)
+ * @return 无
+ */
+void Set_Forward_Kp(u16 kp)
+{
+    Forward_Kp = kp;
+    printf("设置直线行走角度修正比例系数: Kp = %.3f\r\n", (float)kp/100.0f);
+}
+
+/**
+ * @brief 设置直线行走角度修正积分系数
+ * @param ki 新的积分系数(放大100倍的整数)
+ * @return 无
+ */
+void Set_Forward_Ki(u16 ki)
+{
+    Forward_Ki = ki;
+    printf("设置直线行走角度修正积分系数: Ki = %.3f\r\n", (float)ki/100.0f);
+}
+
+/**
+ * @brief 设置直线行走角度修正微分系数
+ * @param kd 新的微分系数(放大100倍的整数)
+ * @return 无
+ */
+void Set_Forward_Kd(u16 kd)
+{
+    Forward_Kd = kd;
+    printf("设置直线行走角度修正微分系数: Kd = %.3f\r\n", (float)kd/100.0f);
+}
+
+/**
+ * @brief 设置直线行走角度修正误差阈值
+ * @param threshold 新的误差阈值(度)(放大100倍的整数)
+ * @return 无
+ */
+void Set_Forward_Error_Threshold(u16 threshold)
+{
+    Forward_Error_Threshold = threshold;
+    printf("设置直线行走角度修正误差阈值: %.3f度\r\n", (float)threshold/100.0f);
+}
+
+/**
+ * @brief 一次性设置所有直线行走角度修正参数
+ * @param kp 比例系数(放大100倍的整数)
+ * @param ki 积分系数(放大100倍的整数)
+ * @param kd 微分系数(放大100倍的整数)
+ * @param threshold 误差阈值(度)(放大100倍的整数)
+ * @return 无
+ */
+void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
+{
+    Forward_Kp = kp;
+    Forward_Ki = ki;
+    Forward_Kd = kd;
+    Forward_Error_Threshold = threshold;
+    printf("设置所有直线行走角度修正参数:\r\n");
+    printf("Kp = %.3f, Ki = %.3f, Kd = %.3f\r\n", (float)kp/100.0f, (float)ki/100.0f, (float)kd/100.0f);
+    printf("误差阈值 = %.3f度\r\n", (float)threshold/100.0f);
+}
+
+/**
+ * @brief 获取直线行走角度修正比例系数
+ * @return 当前比例系数
+ */
+float Get_Forward_Kp(void)
+{
+    float kp = (float)Forward_Kp/100.0f;
+    printf("当前直线行走角度修正比例系数: Kp = %.3f\r\n", kp);
+    return kp;
+}
+
+/**
+ * @brief 获取直线行走角度修正积分系数
+ * @return 当前积分系数
+ */
+float Get_Forward_Ki(void)
+{
+    float ki = (float)Forward_Ki/100.0f;
+    printf("当前直线行走角度修正积分系数: Ki = %.3f\r\n", ki);
+    return ki;
+}
+
+/**
+ * @brief 获取直线行走角度修正微分系数
+ * @return 当前微分系数
+ */
+float Get_Forward_Kd(void)
+{
+    float kd = (float)Forward_Kd/100.0f;
+    printf("当前直线行走角度修正微分系数: Kd = %.3f\r\n", kd);
+    return kd;
+}
+
+/**
+ * @brief 获取直线行走角度修正误差阈值
+ * @return 当前误差阈值(度)
+ */
+float Get_Forward_Error_Threshold(void)
+{
+    float threshold = (float)Forward_Error_Threshold/100.0f;
+    printf("当前直线行走角度修正误差阈值: %.3f度\r\n", threshold);
+    return threshold;
+}

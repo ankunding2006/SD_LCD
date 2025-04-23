@@ -75,6 +75,10 @@ extern u16 Steering_Speed;
 extern u8 Steering_Completed;
 extern u16 Steering_Stable_Count;
 
+// 直线行驶角度修正PID参数（放大100倍）
+extern u16 Forward_Kp, Forward_Ki, Forward_Kd;
+extern u16 Forward_Error_Threshold;
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

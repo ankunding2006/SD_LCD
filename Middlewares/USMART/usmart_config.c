@@ -10,7 +10,7 @@
 #include "encoder.h" // 编码器函数头文件
 #include "gray_detection.h" // 添加灰度传感器头文件
 #include "tim.h"
-
+#include "setParma.h" // 添加参数设置函数头文件
 
 /* 函数名列表初始化(用户自己添加)
  * 用户直接在这里输入要执行的函数名及其查找串
@@ -38,6 +38,17 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Steering_Ki, "float Get_Steering_Ki(void)"},
     {(void *)Get_Steering_Kd, "float Get_Steering_Kd(void)"},
     {(void *)Get_Steering_Error_Threshold, "float Get_Steering_Error_Threshold(void)"},
+    
+    // 新增直线行驶角度修正参数调节函数 - 使用整数参数(放大100倍)
+    {(void *)Set_Forward_Kp, "void Set_Forward_Kp(u16 kp)"},
+    {(void *)Set_Forward_Ki, "void Set_Forward_Ki(u16 ki)"},
+    {(void *)Set_Forward_Kd, "void Set_Forward_Kd(u16 kd)"},
+    {(void *)Set_Forward_Error_Threshold, "void Set_Forward_Error_Threshold(u16 threshold)"},
+    {(void *)Set_All_Forward_Params, "void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)"},
+    {(void *)Get_Forward_Kp, "float Get_Forward_Kp(void)"},
+    {(void *)Get_Forward_Ki, "float Get_Forward_Ki(void)"},
+    {(void *)Get_Forward_Kd, "float Get_Forward_Kd(void)"},
+    {(void *)Get_Forward_Error_Threshold, "float Get_Forward_Error_Threshold(void)"},
 };
 
 /******************************************************************************************/

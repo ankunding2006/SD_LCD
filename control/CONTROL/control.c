@@ -379,33 +379,116 @@ u8 localSteeringControl_Handler(float angle)
 /**
  * @brief This function is used to control the vehicle to move in a straight line
  * @note This function adjusts the vehicle's speed and direction to maintain a straight path
- * @param speed 目标速度
+ * using gyroscope angle feedback for direction correction
+ * @param void
  * @return u8 1:完成直线移动(即有传感器检测到了黑线) 0:小车正在直行中(没有传感器检测黑线)
  */ 
 int moveForward_Handler(void)
 {
-	Encoder_Left = Read_Encoder(3);							// 读取左轮编码器的值，前进为正，后退为负
-	Encoder_Right = Read_Encoder(5);						// 修改为TIM5，前进为正，后退为负
-															// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
-	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）                                          				
-	int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM,速度控制
-	Velocity(Encoder_Left, Encoder_Right);
-
-	grey_sensor_Read(); // 读取灰度传感器数据 
-	Turn_Pwm = Calculate_Turn_Pwm(); // 此处并非计算转向PWM值,而是查看当前小车是否有传感器检测到黑线,如果有传感器检测到黑线,则返回1,否则返回0
+	static float referenceAngle = 0.0f;    // 直线行走的参考角度
+	static float integral = 0.0f;          // 积分项
+	static float lastError = 0.0f;         // 上一次误差
+	static u8 isInitialized = 0;           // 初始化标志
+	
+	float currentAngle, error, derivative, angleCorrection;
+	
+	// 读取编码器值
+	Encoder_Left = Read_Encoder(3);		// 读取左轮编码器的值，前进为正，后退为负
+	Encoder_Right = Read_Encoder(5);	// 修改为TIM5，前进为正，后退为负
+											// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
+	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）
+	
+	// 获取速度控制的PWM值
+	int actual_velocity = Velocity(Encoder_Left, Encoder_Right);
+	
+	// 读取灰度传感器数据
+	grey_sensor_Read();
+	// 检查是否有传感器检测到黑线
+	Turn_Pwm = Calculate_Turn_Pwm();
 	if (Turn_Pwm != INT16_MIN)
 	{
-		Set_Pwm(0, 0); // 如果没有传感器检测到黑线，停止电机
+		Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
+		isInitialized = 0; // 重置初始化标志，为下次直线行驶做准备
+		integral = 0.0f;   // 重置积分项
+        static uint8_t debug_counter = 0;
+        if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
+            debug_counter = 0;
+            printf("检测到黑线，直线行驶结束\r\n");
+        }
 		return 1; // 返回1，表示完成直线移动
 	}
-	// 使用计算出的实际速度，不修改Target_Velocity
-	Motor_Left = actual_velocity;
-	Motor_Right = actual_velocity;
+	
+	// 如果是第一次调用，初始化参考角度
+	if (isInitialized == 0)
+	{
+		referenceAngle = getHeadingAngle(); // 获取当前航向角作为参考
+		printf("开始直线行驶，参考角度: %.2f\r\n", referenceAngle);
+		isInitialized = 1;
+		integral = 0.0f;
+		lastError = 0.0f;
+	}
+	
+	// 获取当前角度并计算误差
+	currentAngle = getHeadingAngle();
+	error = currentAngle - referenceAngle;
+	
+	// 处理误差过大的情况（过±180度），确保选择最短路径
+	if (error > 180.0f) {
+		error -= 360.0f;
+	} else if (error < -180.0f) {
+		error += 360.0f;
+	}
+	
+	// 计算积分项
+	integral += error;
+	
+	// 积分限幅
+	if (integral > FORWARD_I_LIMIT) {
+		integral = FORWARD_I_LIMIT;
+	} else if (integral < -FORWARD_I_LIMIT) {
+		integral = -FORWARD_I_LIMIT;
+	}
+	
+	// 如果误差很小，逐渐减小积分项，防止过冲
+	if (fabs(error) < (float)Forward_Error_Threshold/100.0f) {
+		integral *= 0.95f;
+	}
+	
+	// 计算微分项
+	derivative = error - lastError;
+	lastError = error;
+	
+	// 计算PID输出 - 使用放大100倍后的参数值，并转换回float
+	angleCorrection = ((float)Forward_Kp/100.0f) * error + 
+					  ((float)Forward_Ki/100.0f) * integral + 
+					  ((float)Forward_Kd/100.0f) * derivative;
+	
+	// 输出限幅，参考localSteeringControl_Handler函数的实现
+	if (angleCorrection > STEERING_MAX_OUTPUT) {
+		angleCorrection = STEERING_MAX_OUTPUT;
+	} else if (angleCorrection < STEERING_MIN_OUTPUT) {
+		angleCorrection = STEERING_MIN_OUTPUT;
+	}
+	
+	// 基于角度纠正计算左右轮差速
+	Motor_Left = actual_velocity + angleCorrection;
+	Motor_Right = actual_velocity - angleCorrection;
+	
+	// 打印调试信息（降低频率，避免刷屏）
+	static uint8_t debug_counter = 0;
+	if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
+		debug_counter = 0;
+		printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
+			   currentAngle, referenceAngle, error, angleCorrection);
+	}
+	
+	// 执行电机控制
 	if (Flag_Stop == 1) 
-		Set_Pwm(0, 0);
+		Set_Pwm(0, 0); // 停止标志为1时停止电机
 	else
 		Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
-	return 0; // 返回0，表示没有完成走直线,正在走直线中
+	
+	return 0; // 返回0，表示没有完成直线移动，正在直行中
 }
 
 /**
