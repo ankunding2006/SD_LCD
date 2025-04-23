@@ -254,6 +254,47 @@ int lineTracking_Handler(void)
 	return 0; // 返回0，表示没有完成循迹,正在循迹中
 }
 
+
+/**
+ * @brief Open loop steering control function
+ * 
+ * @param angle 小车旋转的时间,逆时针旋转为正,顺时针旋转为负
+ * @return u8 1:完成 0:小车正在转向中
+ */
+u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value)
+{
+    static u8 isInitialized = 0; // 初始化标志
+    static u32 startTime = 0; // 开始时间
+    static u8 isSteeringCompleted = 0; // 转向完成标志
+    
+    if(isInitialized == 0) {
+        startTime = HAL_GetTick(); // 记录开始时间
+        isInitialized = 1; // 设置初始化标志
+        isSteeringCompleted = 0; // 重置转向完成标志
+        return 0; // 返回未完成
+    }
+    
+    if(HAL_GetTick() - startTime >= (u32)SteerTime) {
+        Set_Pwm(0, 0); // 停止电机
+        isSteeringCompleted = 1; // 设置转向完成标志
+        return 1; // 返回完成
+    } else {
+        if(SteerTime > 0) {
+            // 逆时针转向
+            Motor_Left = -PWM_Value; // 左轮反转
+            Motor_Right = PWM_Value; // 右轮正转
+        } else {
+            // 顺时针转向
+            Motor_Left = PWM_Value; // 左轮正转
+            Motor_Right = -PWM_Value; // 右轮反转
+        }
+        Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+        return 0; // 返回未完成
+    }
+}
+
+
+
 /**
  * @brief Local steering control function
  * @note This function is used to control the steering of the vehicle

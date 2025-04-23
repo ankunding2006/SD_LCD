@@ -6,6 +6,9 @@ extern "C" {
 #endif
 
 #include "main.h"
+#include "control.h"
+#include "LED.h"
+#include <stdio.h>
 
 // 任务函数声明
 u8 Task1_Handler(void);
