@@ -16,8 +16,8 @@ int16_t sReg[REGSIZE];
 
 /*****************************************************/
 static volatile uint8_t g_dataUpdateFlags = 0;
-float fAcc[3], fGyro[3], fAngle[3]; // ä¼ æ„Ÿå™¨æ•°æ®
-int16_t iMag[3];                    // ç£åœºä¼ æ„Ÿå™¨æ•°æ®
+float fAcc[3], fGyro[3], fAngle[3]; // ´«¸ĞÆ÷Êı¾İ
+int16_t iMag[3];                    // ´Å³¡´«¸ĞÆ÷Êı¾İ
 static volatile char s_cDataUpdate1 = 0,s_cDataUpdate2 = 0,s_cDataUpdate3 = 0,s_cDataUpdate4 = 0, s_cCmd = 0xff;
 const uint32_t c_uiBaud[10] = {0, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};
 /*****************************************************/
@@ -619,24 +619,24 @@ int32_t WitSetContent(int32_t uiRsw)
 }
 
 
-// æ›¿æ¢UART2å‘é€å‡½æ•°
+// Ìæ»»UART2·¢ËÍº¯Êı
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
 {
-    // ä½¿ç”¨HALåº“APIå‘é€æ•°æ®
+    // Ê¹ÓÃHAL¿âAPI·¢ËÍÊı¾İ
     HAL_UART_Transmit(&huart2, p_data, uiSize, 50);
-    // TODO:åœ¨cubeMXä¸­é…ç½®DMAï¼Œä½¿ç”¨DMAå‘é€æ•°æ®
+    // TODO:ÔÚcubeMXÖĞÅäÖÃDMA£¬Ê¹ÓÃDMA·¢ËÍÊı¾İ
     //  HAL_UART_Transmit_DMA(&huart2, p_data, uiSize);
 }
 
 static void Delayms(uint16_t ucMs)
 {
-    HAL_Delay(ucMs); // ä½¿ç”¨HALåº“å»¶æ—¶å‡½æ•°
+    HAL_Delay(ucMs); // Ê¹ÓÃHAL¿âÑÓÊ±º¯Êı
 }
 
 /**
- * @brief ä¼ æ„Ÿå™¨æ•°æ®æ›´æ–°å›è°ƒå‡½æ•° - ä»…è´Ÿè´£æ•°æ®è½¬æ¢å’Œæ ‡å¿—è®¾ç½®
- * @param uiReg - æ›´æ–°çš„å¯„å­˜å™¨èµ·å§‹åœ°å€
- * @param uiRegNum - æ›´æ–°çš„å¯„å­˜å™¨æ•°é‡
+ * @brief ´«¸ĞÆ÷Êı¾İ¸üĞÂ»Øµ÷º¯Êı - ½ö¸ºÔğÊı¾İ×ª»»ºÍ±êÖ¾ÉèÖÃ
+ * @param uiReg - ¸üĞÂµÄ¼Ä´æÆ÷ÆğÊ¼µØÖ·
+ * @param uiRegNum - ¸üĞÂµÄ¼Ä´æÆ÷ÊıÁ¿
  */
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
 {
@@ -674,7 +674,7 @@ static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
 }
 
 /**
- * @brief JY901ä¼ æ„Ÿå™¨åˆå§‹åŒ–
+ * @brief JY901´«¸ĞÆ÷³õÊ¼»¯
  */
 void JY901_init(void)
 {
@@ -687,14 +687,14 @@ void JY901_init(void)
 	HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
     for(int i = 0; i < 5; i++)
     {
-        JY901_Handler(); // å¤„ç†JY901æ•°æ®
-        printf("Current HeadAngle is %.2f \r\n", getHeadingAngle()); // è¯»å–å½“å‰èˆªå‘è§’
-        HAL_Delay(300); // å»¶æ—¶
+        JY901_Handler(); // ´¦ÀíJY901Êı¾İ
+        printf("Current HeadAngle is %.2f \r\n", getHeadingAngle()); // ¶ÁÈ¡µ±Ç°º½Ïò½Ç
+        HAL_Delay(300); // ÑÓÊ±
     }
 }
 
 /**
- * @brief JY901å¤„ç†å‡½æ•° - ä»…è´Ÿè´£æ•°æ®æ˜¾ç¤º
+ * @brief JY901´¦Àíº¯Êı - ½ö¸ºÔğÊı¾İÏÔÊ¾
  */
 void JY901_Handler(void)
 {

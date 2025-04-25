@@ -7,7 +7,7 @@ extern "C" {
 
 #include "main.h"
 
-// 鍙傛暟璁剧疆鍑芥暟澹版槑
+// 参数设置函数声明
 void Set_Steering_Kp(u16 kp);
 void Set_Steering_Ki(u16 ki);
 void Set_Steering_Kd(u16 kd);
@@ -18,7 +18,7 @@ float Get_Steering_Ki(void);
 float Get_Steering_Kd(void);
 float Get_Steering_Error_Threshold(void);
 
-// 鐩寸嚎琛岃蛋瑙掑害淇鍙傛暟璁剧疆鍑芥暟
+// 直线行走角度修正参数设置函数
 void Set_Forward_Kp(u16 kp);
 void Set_Forward_Ki(u16 ki);
 void Set_Forward_Kd(u16 kd);

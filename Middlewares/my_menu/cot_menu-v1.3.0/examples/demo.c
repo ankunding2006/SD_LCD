@@ -1,5 +1,5 @@
 
-/* èœå•æ˜¾ç¤ºæ•ˆæœå›¾å¯çœ‹: 
+/* ²Ëµ¥ÏÔÊ¾Ğ§¹ûÍ¼¿É¿´: 
 
 https://blog.csdn.net/qq_24130227/article/details/121167276 
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
         {
             printf("%s(0-%s%s; 1-%s): ", get_text(TEXT_SELECT_OPTION), 
                     get_text(TEXT_ENTER), get_text(TEXT_MAIN_MENU), get_text(TEXT_EXIT));
-            scanf(" %d", &cmd); // ç©ºæ ¼ä½œç”¨æ˜¯å¿½ç•¥ä¸Šæ¬¡çš„å›è½¦
+            scanf(" %d", &cmd); // ¿Õ¸ñ×÷ÓÃÊÇºöÂÔÉÏ´ÎµÄ»Ø³µ
 
             if (cmd == 0)
             {

@@ -1,7 +1,7 @@
 /**
   **********************************************************************************************************************
   * @file    cot_menu.h
-  * @brief   该文件提供菜单框架所有函数原型
+  * @brief   ���ļ��ṩ�˵�������к���ԭ��
   * @author  const_zpc    any question please send mail to const_zpc@163.com
   * @date    2024-06-09
   **********************************************************************************************************************
@@ -24,21 +24,21 @@
 #endif 
 
 
-/******************************************* 配置项 ********************************************************************/
+/******************************************* ������ ********************************************************************/
 
-/* 定义 _COT_MENU_USE_MALLOC_ 则采用 malloc/free 的方式实现多级菜单, 否则通过数组的形式 */
+/* ���� _COT_MENU_USE_MALLOC_ ����� malloc/free �ķ�ʽʵ�ֶ༶�˵�, ����ͨ���������ʽ */
 // #define _COT_MENU_USE_MALLOC_
 
-/* 定义 _COT_MENU_USE_SHORTCUT_ 则启用快捷菜单选项进入功能 */
+/* ���� _COT_MENU_USE_SHORTCUT_ �����ÿ�ݲ˵�ѡ����빦�� */
 #define _COT_MENU_USE_SHORTCUT_
 
-/* 多级菜单深度 */
+/* �༶�˵���� */
 #define COT_MENU_MAX_DEPTH              10
 
-/* 菜单支持的最大选项数目 */
+/* �˵�֧�ֵ����ѡ����Ŀ */
 #define COT_MENU_MAX_NUM                20
 
-/******************************************* 配置项 ********************************************************************/
+/******************************************* ������ ********************************************************************/
 
 
 /* Exported types ----------------------------------------------------------------------------------------------------*/
@@ -51,80 +51,80 @@ typedef uint16_t menusize_t;
 
 typedef union
 {
-    void     *pVoid;                   /*!< 通用指针(目的消除编译警告) */
+    void     *pVoid;                   /*!< ͨ��ָ��(Ŀ���������뾯��) */
     
-    size_t    textId;                  /*!< 文本ID */
+    size_t    textId;                  /*!< �ı�ID */
 
-    char     *pTextString;             /*!< 文本字符串 */
+    char     *pTextString;             /*!< �ı��ַ��� */
 } cotMenuDsecStr_u;
 
 /**
-  * @brief      单个选项信息
+  * @brief      ����ѡ����Ϣ
   * 
   */
 typedef struct
 {
-    cotMenuDsecStr_u uMenuDesc;         /*!< 该选项的描述 */
+    cotMenuDsecStr_u uMenuDesc;         /*!< ��ѡ������� */
 
-    void     *pExtendData;              /*!< 该选项注册时的扩展数据 */
+    void     *pExtendData;              /*!< ��ѡ��ע��ʱ����չ���� */
 } cotMenuItemInfo_t;
 
 typedef void (*cotMenuCallFun_f)(const cotMenuItemInfo_t *pItemInfo);
 
 /**
-  * @brief      单个选项带菜单列表等信息
+  * @brief      ����ѡ����˵��б�����Ϣ
   * 
   */
 typedef struct
 {
-    menusize_t itemsNum;                /*!< 当前菜单中选项的总数目 */
+    menusize_t itemsNum;                /*!< ��ǰ�˵���ѡ�������Ŀ */
 
-    menusize_t selectItem;              /*!< 当前菜单中被选中的选项 */
+    menusize_t selectItem;              /*!< ��ǰ�˵��б�ѡ�е�ѡ�� */
 
-    menusize_t showBaseItem;            /*!< 当前菜单首个显示的选项 */
+    menusize_t showBaseItem;            /*!< ��ǰ�˵��׸���ʾ��ѡ�� */
 
-    cotMenuDsecStr_u uMenuDesc;         /*!< 当前菜单的描述 */
+    cotMenuDsecStr_u uMenuDesc;         /*!< ��ǰ�˵������� */
 
-    void     *pExtendData;              /*!< 当前菜单注册时的扩展数据 */
+    void     *pExtendData;              /*!< ��ǰ�˵�ע��ʱ����չ���� */
 
-    cotMenuDsecStr_u uItemsListDesc[COT_MENU_MAX_NUM];/*!< 当前菜单中选项列表的描述 */
+    cotMenuDsecStr_u uItemsListDesc[COT_MENU_MAX_NUM];/*!< ��ǰ�˵���ѡ���б������� */
 
-    void *pItemsListExtendData[COT_MENU_MAX_NUM];   /*!< 当前菜单中选项列表注册时的扩展数据 */
+    void *pItemsListExtendData[COT_MENU_MAX_NUM];   /*!< ��ǰ�˵���ѡ���б�ע��ʱ����չ���� */
 } cotMenuShow_t;
 
 typedef void (*cotShowMenuCallFun_f)(cotMenuShow_t *ptShowInfo);
 
 /**
-  * @brief 菜单信息注册结构体
+  * @brief �˵���Ϣע��ṹ��
   * 
   */
 typedef struct
 {
-    cotMenuDsecStr_u     uMenuDesc;        /*!< 当前菜单的描述 */
+    cotMenuDsecStr_u     uMenuDesc;        /*!< ��ǰ�˵������� */
 
-    cotMenuCallFun_f     pfnEnterCallFun;  /*!< 当前菜单选项进入时(从父菜单进入)需要执行一次的函数, 为NULL不执行 */
+    cotMenuCallFun_f     pfnEnterCallFun;  /*!< ��ǰ�˵�ѡ�����ʱ(�Ӹ��˵�����)��Ҫִ��һ�εĺ���, ΪNULL��ִ�� */
 
-    cotMenuCallFun_f     pfnExitCallFun;   /*!< 当前菜单选项进入后退出时(退出至父菜单)需要执行一次的函数, 为NULL不执行 */
+    cotMenuCallFun_f     pfnExitCallFun;   /*!< ��ǰ�˵�ѡ�������˳�ʱ(�˳������˵�)��Ҫִ��һ�εĺ���, ΪNULL��ִ�� */
     
-    cotMenuCallFun_f     pfnLoadCallFun;   /*!< 当前菜单选项每次加载时(从父菜单进入或子菜单退出)需要执行一次的函数, 为NULL不执行 */
+    cotMenuCallFun_f     pfnLoadCallFun;   /*!< ��ǰ�˵�ѡ��ÿ�μ���ʱ(�Ӹ��˵�������Ӳ˵��˳�)��Ҫִ��һ�εĺ���, ΪNULL��ִ�� */
 
-    cotMenuCallFun_f     pfnRunCallFun;    /*!< 当前菜单选项的周期调度函数 */
+    cotMenuCallFun_f     pfnRunCallFun;    /*!< ��ǰ�˵�ѡ������ڵ��Ⱥ��� */
 
-    void                *pExtendData;      /*!< 当前选项的菜单显示效果函数扩展数据入参, 可自行设置该内容 */
+    void                *pExtendData;      /*!< ��ǰѡ��Ĳ˵���ʾЧ��������չ�������, ���������ø����� */
 } cotMenuList_t, cotMainMenuCfg_t;
 
 /* Exported constants ------------------------------------------------------------------------------------------------*/
 /* Exported macro ----------------------------------------------------------------------------------------------------*/
 
 /**
-  * @brief  单个菜单选项定义
+  * @brief  �����˵�ѡ���
   * 
-  * @param  title    菜单选项描述
-  * @param  enterFun 当前菜单选项进入时(从父菜单进入)需要执行一次的函数, 为NULL不执行
-  * @param  exitFun  当前菜单选项进入后退出时(退出至父菜单)需要执行一次的函数, 为NULL不执行
-  * @param  loadFun  当前菜单选项每次加载时(从父菜单进入或子菜单退出)需要执行一次的函数, 为NULL不执行
-  * @param  runFun   当前菜单选项的周期调度函数
-  * @param  extendData 当前选项的菜单显示效果函数扩展数据入参, 可自行设置该内容
+  * @param  title    �˵�ѡ������
+  * @param  enterFun ��ǰ�˵�ѡ�����ʱ(�Ӹ��˵�����)��Ҫִ��һ�εĺ���, ΪNULL��ִ��
+  * @param  exitFun  ��ǰ�˵�ѡ�������˳�ʱ(�˳������˵�)��Ҫִ��һ�εĺ���, ΪNULL��ִ��
+  * @param  loadFun  ��ǰ�˵�ѡ��ÿ�μ���ʱ(�Ӹ��˵�������Ӳ˵��˳�)��Ҫִ��һ�εĺ���, ΪNULL��ִ��
+  * @param  runFun   ��ǰ�˵�ѡ������ڵ��Ⱥ���
+  * @param  extendData ��ǰѡ��Ĳ˵���ʾЧ��������չ�������, ���������ø�����
   */
 #define COT_MENU_ITEM_BIND(title, enterFun, exitFun, loadFun, runFun, extendData) \
     { \
@@ -136,24 +136,24 @@ typedef struct
         .pExtendData = extendData \
     }
 
-// 计算得到菜单列表元素数目
+// ����õ��˵��б�Ԫ����Ŀ
 #define COT_GET_MENU_NUM(X)    (sizeof(X) / sizeof(cotMenuList_t))
 
 /* Exported functions ------------------------------------------------------------------------------------------------*/
 
-/* 菜单初始化和反初始化 */
+/* �˵���ʼ���ͷ���ʼ�� */
 
 extern int cotMenu_Init(cotMainMenuCfg_t *pMainMenu);
 extern int cotMenu_DeInit(void);
 
 extern int cotMenu_Bind(cotMenuList_t *pMenuList, menusize_t menuNum, cotShowMenuCallFun_f pfnShowMenuFun);
 
-/* 菜单选项显示时需要使用的功能扩展函数 */
+/* �˵�ѡ����ʾʱ��Ҫʹ�õĹ�����չ���� */
 
 extern int cotMenu_LimitShowListNum(cotMenuShow_t *ptMenuShow, menusize_t *pShowNum);
 extern int cotMenu_QueryParentMenu(cotMenuShow_t *ptMenuShow, uint8_t level);
 
-/* 菜单操作 */
+/* �˵����� */
 
 extern int cotMenu_MainEnter(void);
 extern int cotMenu_MainExit(void);
@@ -167,7 +167,7 @@ extern int cotMenu_Select(menusize_t selectItem);
 
 extern int cotMenu_ShortcutEnter(bool isAbsolute, uint8_t deep, ...);
 
-/* 菜单轮询处理任务 */
+/* �˵���ѯ�������� */
 
 extern int cotMenu_Task(void);
 

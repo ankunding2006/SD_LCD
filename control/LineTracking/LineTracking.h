@@ -4,32 +4,32 @@
 #include "main.h"
 #include "usart.h"
 
-// å·¡çº¿æ•°æ®åŒ…å®šä¹‰
+// Ñ²ÏßÊı¾İ°ü¶¨Òå
 #define FRAME_HEADER 0xFD
 #define FRAME_FOOTER 0xFE
-#define LINE_DATA_LENGTH 7  // å®Œæ•´æ•°æ®åŒ…é•¿åº¦
+#define LINE_DATA_LENGTH 7  // ÍêÕûÊı¾İ°ü³¤¶È
 
-// UART2æ¥æ”¶ç¼“å†²åŒº
+// UART2½ÓÊÕ»º³åÇø
 #define UART2_RX_BUFFER_SIZE 1
-extern uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // UART2æ¥æ”¶ç¼“å†²åŒº
+extern uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  // UART2½ÓÊÕ»º³åÇø
 
-// è·¯å¾„é€‰æ‹©æšä¸¾
+// Â·¾¶Ñ¡ÔñÃ¶¾Ù
 typedef enum {
     PATH_LEFT = 0,
     PATH_RIGHT = 1,
     PATH_MIDDLE = 2
 } PathChoice_t;
 
-// å·¡çº¿æ•°æ®ç»“æ„
+// Ñ²ÏßÊı¾İ½á¹¹
 typedef struct {
-    uint16_t lineOffset;   // çº¿åç§»é‡ (0-360)
-    uint16_t angleLeft;    // å·¦ä¾§è§’åº¦ä¿¡æ¯
-    uint8_t crossFlag;     // å²”è·¯æ ‡å¿— (0:æ— å²”è·¯ 1:æœ‰å²”è·¯)
-    uint8_t stopFlag;      // åœæ­¢æ ‡å¿— (0:ä¸åœ 1-3:åœæ­¢ç±»å‹)
-    uint8_t dataReady;     // æ•°æ®å°±ç»ªæ ‡å¿—
+    uint16_t lineOffset;   // ÏßÆ«ÒÆÁ¿ (0-360)
+    uint16_t angleLeft;    // ×ó²à½Ç¶ÈĞÅÏ¢
+    uint8_t crossFlag;     // ²íÂ·±êÖ¾ (0:ÎŞ²íÂ· 1:ÓĞ²íÂ·)
+    uint8_t stopFlag;      // Í£Ö¹±êÖ¾ (0:²»Í£ 1-3:Í£Ö¹ÀàĞÍ)
+    uint8_t dataReady;     // Êı¾İ¾ÍĞ÷±êÖ¾
 } LineTrackData_t;
 
-// å‡½æ•°å£°æ˜
+// º¯ÊıÉùÃ÷
 void LineTracking_Init(void);
 void LineTracking_ProcessData(uint8_t rxData);
 int LineTracking_CalculateTurn(void); 

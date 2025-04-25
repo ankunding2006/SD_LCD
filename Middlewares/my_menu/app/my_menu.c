@@ -1,10 +1,10 @@
-// åœ¨ä¸€ä¸ªæ–°æ–‡ä»¶(my_menu.c)ä¸­å®ç°
+// ÔÚÒ»¸öĞÂÎÄ¼ş(my_menu.c)ÖĞÊµÏÖ
 #include "cot_menu.h"
 #include "my_menu.h"
 #include "lcd.h"
 #include <string.h>
 
-extern lcd lcd_desc; // ä½¿ç”¨main.cä¸­å·²ç»åˆå§‹åŒ–çš„LCDå¯¹è±¡
+extern lcd lcd_desc; // Ê¹ÓÃmain.cÖĞÒÑ¾­³õÊ¼»¯µÄLCD¶ÔÏó
 
 static void ShowMenu(cotMenuShow_t *ptShowInfo)
 {
@@ -12,33 +12,33 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
     static menusize_t lastShowBaseItem = 0xFF;
     static char lastTitle[32] = {0};
     
-    uint8_t showNum = 4; // ä¸€æ¬¡æ˜¾ç¤ºçš„èœå•é¡¹æ•°é‡
+    uint8_t showNum = 4; // Ò»´ÎÏÔÊ¾µÄ²Ëµ¥ÏîÊıÁ¿
     menusize_t tmpselect;
     bool needFullRedraw = false;
     
-    // æ£€æŸ¥æ˜¯å¦éœ€è¦å®Œå…¨é‡ç»˜
+    // ¼ì²éÊÇ·ñĞèÒªÍêÈ«ÖØ»æ
     if (lastShowBaseItem != ptShowInfo->showBaseItem || 
         strcmp(lastTitle, ptShowInfo->uMenuDesc.pTextString) != 0) {
         needFullRedraw = true;
     }
     
-    // é™åˆ¶æ˜¾ç¤ºçš„èœå•é¡¹æ•°é‡
+    // ÏŞÖÆÏÔÊ¾µÄ²Ëµ¥ÏîÊıÁ¿
     cotMenu_LimitShowListNum(ptShowInfo, &showNum);
     
     if (needFullRedraw) {
-        // å®Œå…¨é‡ç»˜ - å…ˆæ¸…é™¤æ˜¾ç¤ºåŒºåŸŸ
+        // ÍêÈ«ÖØ»æ - ÏÈÇå³ıÏÔÊ¾ÇøÓò
         lcd_clear(&lcd_desc, BLACK);
         
-        // æ˜¾ç¤ºèœå•æ ‡é¢˜
+        // ÏÔÊ¾²Ëµ¥±êÌâ
         lcd_set_font(&lcd_desc, FONT_1608, YELLOW, BLACK);
         lcd_print(&lcd_desc, 5, 5, "%s", ptShowInfo->uMenuDesc.pTextString);
         
-        // æ˜¾ç¤ºæ‰€æœ‰èœå•é¡¹
+        // ÏÔÊ¾ËùÓĞ²Ëµ¥Ïî
         for (int i = 0; i < showNum; i++) {
             tmpselect = i + ptShowInfo->showBaseItem;
             
             if (tmpselect == ptShowInfo->selectItem) {
-                // é€‰ä¸­é¡¹ä½¿ç”¨ä¸åŒçš„é¢œè‰²
+                // Ñ¡ÖĞÏîÊ¹ÓÃ²»Í¬µÄÑÕÉ«
                 lcd_fill(&lcd_desc, 0, 30 + i * 30, lcd_desc.hw->width, 30 + (i + 1) * 30 - 2, YELLOW);
                 lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
             } else {
@@ -48,9 +48,9 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
             lcd_print(&lcd_desc, 10, 30 + i * 30, "%s", ptShowInfo->uItemsListDesc[tmpselect].pTextString);
         }
     } else if (lastSelectItem != ptShowInfo->selectItem) {
-        // åªæœ‰é€‰ä¸­é¡¹å‘ç”Ÿå˜åŒ–æ—¶æ‰æ›´æ–°ç›¸å…³é¡¹
+        // Ö»ÓĞÑ¡ÖĞÏî·¢Éú±ä»¯Ê±²Å¸üĞÂÏà¹ØÏî
         
-        // æ‰¾å‡ºä¸Šä¸€ä¸ªé€‰ä¸­é¡¹å’Œå½“å‰é€‰ä¸­é¡¹çš„æ˜¾ç¤ºç´¢å¼•
+        // ÕÒ³öÉÏÒ»¸öÑ¡ÖĞÏîºÍµ±Ç°Ñ¡ÖĞÏîµÄÏÔÊ¾Ë÷Òı
         int lastIndex = -1;
         int currIndex = -1;
         
@@ -64,9 +64,9 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
                 currIndex = i;
         }
         
-        // åªæ›´æ–°å˜åŒ–çš„é¡¹
+        // Ö»¸üĞÂ±ä»¯µÄÏî
         if (lastIndex >= 0) {
-            // æ¢å¤ä¸Šä¸€ä¸ªé€‰ä¸­é¡¹ä¸ºæ™®é€šæ˜¾ç¤º
+            // »Ö¸´ÉÏÒ»¸öÑ¡ÖĞÏîÎªÆÕÍ¨ÏÔÊ¾
             lcd_fill(&lcd_desc, 0, 30 + lastIndex * 30, lcd_desc.hw->width, 30 + (lastIndex + 1) * 30 - 2, BLACK);
             lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
             lcd_print(&lcd_desc, 10, 30 + lastIndex * 30, "%s", 
@@ -74,7 +74,7 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
         }
         
         if (currIndex >= 0) {
-            // å°†å½“å‰é€‰ä¸­é¡¹è®¾ç½®ä¸ºé«˜äº®æ˜¾ç¤º
+            // ½«µ±Ç°Ñ¡ÖĞÏîÉèÖÃÎª¸ßÁÁÏÔÊ¾
             lcd_fill(&lcd_desc, 0, 30 + currIndex * 30, lcd_desc.hw->width, 30 + (currIndex + 1) * 30 - 2, YELLOW);
             lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
             lcd_print(&lcd_desc, 10, 30 + currIndex * 30, "%s", 
@@ -82,24 +82,24 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
         }
     }
     
-    // ä¿å­˜å½“å‰çŠ¶æ€ç”¨äºä¸‹æ¬¡æ¯”è¾ƒ
+    // ±£´æµ±Ç°×´Ì¬ÓÃÓÚÏÂ´Î±È½Ï
     lastSelectItem = ptShowInfo->selectItem;
     lastShowBaseItem = ptShowInfo->showBaseItem;
     strncpy(lastTitle, ptShowInfo->uMenuDesc.pTextString, sizeof(lastTitle)-1);
 }
 
-// åœ¨my_menu.cä¸­ç»§ç»­æ·»åŠ 
+// ÔÚmy_menu.cÖĞ¼ÌĞøÌí¼Ó
 
-// å‰å‘å£°æ˜
+// Ç°ÏòÉùÃ÷
 void MainMenu_Enter(const cotMenuItemInfo_t *pItemInfo);
 void Settings_Enter(const cotMenuItemInfo_t *pItemInfo);
 void Info_Enter(const cotMenuItemInfo_t *pItemInfo);
 void About_Enter(const cotMenuItemInfo_t *pItemInfo);
 
-// ä¸»èœå•é…ç½®
+// Ö÷²Ëµ¥ÅäÖÃ
 static cotMainMenuCfg_t sg_tMainMenu = {"Main Menu", MainMenu_Enter, NULL, NULL, NULL};
 
-// ä¸»èœå•é¡¹
+// Ö÷²Ëµ¥Ïî
 cotMenuList_t sg_MainMenuTable[] =
     {
         COT_MENU_ITEM_BIND("Settings", Settings_Enter, NULL, NULL, NULL, NULL),
@@ -107,7 +107,7 @@ cotMenuList_t sg_MainMenuTable[] =
         COT_MENU_ITEM_BIND("About", About_Enter, NULL, NULL, NULL, NULL),
 };
 
-// è®¾ç½®å­èœå•é¡¹
+// ÉèÖÃ×Ó²Ëµ¥Ïî
 cotMenuList_t sg_SettingsMenuTable[] =
     {
         COT_MENU_ITEM_BIND("Brightness", NULL, NULL, NULL, NULL, NULL),
@@ -115,7 +115,7 @@ cotMenuList_t sg_SettingsMenuTable[] =
         COT_MENU_ITEM_BIND("Language", NULL, NULL, NULL, NULL, NULL),
 };
 
-// èœå•å›è°ƒå‡½æ•°å®ç°
+// ²Ëµ¥»Øµ÷º¯ÊıÊµÏÖ
 void MainMenu_Enter(const cotMenuItemInfo_t *pItemInfo)
 {
     cotMenu_Bind(sg_MainMenuTable, COT_GET_MENU_NUM(sg_MainMenuTable), ShowMenu);
@@ -128,7 +128,7 @@ void Settings_Enter(const cotMenuItemInfo_t *pItemInfo)
 
 void Info_Enter(const cotMenuItemInfo_t *pItemInfo)
 {
-    // æ˜¾ç¤ºä¿¡æ¯é¡µé¢
+    // ÏÔÊ¾ĞÅÏ¢Ò³Ãæ
     lcd_fill(&lcd_desc, 0, 0, lcd_desc.hw->width, lcd_desc.hw->height, BLACK);
     lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
     lcd_print(&lcd_desc, 10, 10, "Info Page");
@@ -138,7 +138,7 @@ void Info_Enter(const cotMenuItemInfo_t *pItemInfo)
 
 void About_Enter(const cotMenuItemInfo_t *pItemInfo)
 {
-    // æ˜¾ç¤ºå…³äºé¡µé¢
+    // ÏÔÊ¾¹ØÓÚÒ³Ãæ
     lcd_fill(&lcd_desc, 0, 0, lcd_desc.hw->width, lcd_desc.hw->height, BLACK);
     lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
     lcd_print(&lcd_desc, 10, 10, "About");
@@ -146,58 +146,58 @@ void About_Enter(const cotMenuItemInfo_t *pItemInfo)
     lcd_print(&lcd_desc, 10, 60, "Date: 2024/09");
 }
 
-// åˆå§‹åŒ–èœå•ç³»ç»Ÿ
+// ³õÊ¼»¯²Ëµ¥ÏµÍ³
 void Menu_Init(void)
 {
     cotMenu_Init(&sg_tMainMenu);
-    cotMenu_MainEnter(); // è¿›å…¥ä¸»èœå•
+    cotMenu_MainEnter(); // ½øÈëÖ÷²Ëµ¥
 }
 
-// ç¤ºä¾‹ï¼šæŒ‰é”®å¤„ç†å‡½æ•°
+// Ê¾Àı£º°´¼ü´¦Àíº¯Êı
 void Key_Handler(uint8_t key)
 {
     switch (key)
     {
     case KEY_UP:
-        cotMenu_SelectPrevious(true); // å‘ä¸Šé€‰æ‹©
+        cotMenu_SelectPrevious(true); // ÏòÉÏÑ¡Ôñ
         break;
 
     case KEY_DOWN:
-        cotMenu_SelectNext(true); // å‘ä¸‹é€‰æ‹©
+        cotMenu_SelectNext(true); // ÏòÏÂÑ¡Ôñ
         break;
 
     case KEY_ENTER:
-        cotMenu_Enter(); // è¿›å…¥é€‰ä¸­çš„èœå•é¡¹
+        cotMenu_Enter(); // ½øÈëÑ¡ÖĞµÄ²Ëµ¥Ïî
         break;
 
     case KEY_BACK:
-        cotMenu_Exit(true); // è¿”å›ä¸Šçº§èœå•
+        cotMenu_Exit(true); // ·µ»ØÉÏ¼¶²Ëµ¥
         break;
     }
 }
 
 uint8_t Get_Key(void)
 {
-    static uint8_t key_up = 1; // æŒ‰é”®æ¾å¼€æ ‡å¿—
+    static uint8_t key_up = 1; // °´¼üËÉ¿ª±êÖ¾
     
-    // æ£€æŸ¥æ˜¯å¦æœ‰æŒ‰é”®è¢«æŒ‰ä¸‹ï¼ˆä½ç”µå¹³æœ‰æ•ˆï¼‰
+    // ¼ì²éÊÇ·ñÓĞ°´¼ü±»°´ÏÂ£¨µÍµçÆ½ÓĞĞ§£©
     if (key_up && 
         (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
          HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
          HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
          HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET))
     {
-        HAL_Delay(10); // å»¶æ—¶æ¶ˆæŠ–
+        HAL_Delay(10); // ÑÓÊ±Ïû¶¶
         
-        // äºŒæ¬¡ç¡®è®¤ï¼Œç¡®ä¿ä¸æ˜¯æŠ–åŠ¨
+        // ¶ş´ÎÈ·ÈÏ£¬È·±£²»ÊÇ¶¶¶¯
         if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
             HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
         {
-            key_up = 0; // æ ‡è®°æŒ‰é”®å·²æŒ‰ä¸‹
+            key_up = 0; // ±ê¼Ç°´¼üÒÑ°´ÏÂ
             
-            // è¿”å›å…·ä½“æŒ‰ä¸‹çš„æŒ‰é”®
+            // ·µ»Ø¾ßÌå°´ÏÂµÄ°´¼ü
             if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET)
                 return KEY_UP;
             else if (HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET)
@@ -213,10 +213,10 @@ uint8_t Get_Key(void)
              HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET && 
              HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_SET)
     {
-        key_up = 1; // æ‰€æœ‰æŒ‰é”®éƒ½æ¾å¼€äº†
+        key_up = 1; // ËùÓĞ°´¼ü¶¼ËÉ¿ªÁË
     }
     
-    return KEY_NONE; // æ²¡æœ‰æŒ‰é”®æŒ‰ä¸‹æˆ–è€…æŒ‰é”®æœªæ¾å¼€
+    return KEY_NONE; // Ã»ÓĞ°´¼ü°´ÏÂ»òÕß°´¼üÎ´ËÉ¿ª
 }
 
 void Lcd_MenuTask(void)
@@ -226,9 +226,9 @@ void Lcd_MenuTask(void)
     key = Get_Key();
     if (key != KEY_NONE)
     {
-        //åè½¬LEDç¯
+        //·´×ªLEDµÆ
         led_toggle();
         Key_Handler(key);
     }
-    cotMenu_Task(); // èœå•ä»»åŠ¡å¤„ç†
+    cotMenu_Task(); // ²Ëµ¥ÈÎÎñ´¦Àí
 }

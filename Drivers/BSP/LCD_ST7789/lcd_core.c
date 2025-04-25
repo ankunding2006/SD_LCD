@@ -65,22 +65,22 @@ uint8_t lcd_cfg_address[][4][4] = {
 };
 
 /******************************************************************************
-      å‡½æ•°è¯´æ˜ï¼šè®¾ç½®èµ·å§‹å’Œç»“æŸåœ°å€
-      å…¥å£æ•°æ®ï¼šx1,x2 è®¾ç½®åˆ—çš„èµ·å§‹å’Œç»“æŸåœ°å€
-                y1,y2 è®¾ç½®è¡Œçš„èµ·å§‹å’Œç»“æŸåœ°å€
-      è¿”å›å€¼ï¼š  æ— 
+      º¯ÊıËµÃ÷£ºÉèÖÃÆğÊ¼ºÍ½áÊøµØÖ·
+      Èë¿ÚÊı¾İ£ºx1,x2 ÉèÖÃÁĞµÄÆğÊ¼ºÍ½áÊøµØÖ·
+                y1,y2 ÉèÖÃĞĞµÄÆğÊ¼ºÍ½áÊøµØÖ·
+      ·µ»ØÖµ£º  ÎŞ
 ******************************************************************************/
 void lcd_set_address(lcd* plcd, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
-    /* åˆ—åœ°å€è®¾ç½® */
+    /* ÁĞµØÖ·ÉèÖÃ */
     lcd_config_reg(plcd->io, 0x2a);
     lcd_write_halfword(plcd->io, x1 + lcd_cfg_address[plcd->hw->type][plcd->hw->rotate][0]);
     lcd_write_halfword(plcd->io, x2 + lcd_cfg_address[plcd->hw->type][plcd->hw->rotate][1]);
-    /* è¡Œåœ°å€è®¾ç½® */
+    /* ĞĞµØÖ·ÉèÖÃ */
     lcd_config_reg(plcd->io, 0x2b);
     lcd_write_halfword(plcd->io, y1 + lcd_cfg_address[plcd->hw->type][plcd->hw->rotate][2]);
     lcd_write_halfword(plcd->io, y2 + lcd_cfg_address[plcd->hw->type][plcd->hw->rotate][3]);
-    /* å‚¨å­˜å™¨å†™ */
+    /* ´¢´æÆ÷Ğ´ */
     lcd_config_reg(plcd->io, 0x2c);
 }
 
@@ -90,7 +90,7 @@ void lcd_config_reg_1_14(lcd* plcd)
     lcd_config_reg(plcd->io, 0x11);
 	lcd_delay(5);
 
-    /* è®¾ç½®æ˜¾ç¤ºæ–¹å‘ */
+    /* ÉèÖÃÏÔÊ¾·½Ïò */
     lcd_config_reg(plcd->io, 0x36, lcd_cfg_order[plcd->hw->type][plcd->hw->rotate]);
 
     /* 16bit/pixel */
@@ -141,7 +141,7 @@ void lcd_config_reg_1_47(lcd* plcd)
     lcd_config_reg(plcd->io, 0x11);
 	lcd_delay(5);
 
-    /* è®¾ç½®æ˜¾ç¤ºæ–¹å‘ */
+    /* ÉèÖÃÏÔÊ¾·½Ïò */
     lcd_config_reg(plcd->io, 0x36, lcd_cfg_order[plcd->hw->type][plcd->hw->rotate]);
 
     /* 16bit/pixel */
@@ -198,7 +198,7 @@ void lcd_config_reg_2_00(lcd* plcd)
     lcd_config_reg(plcd->io, 0x11);
 	lcd_delay(5);
 
-    /* è®¾ç½®æ˜¾ç¤ºæ–¹å‘ */
+    /* ÉèÖÃÏÔÊ¾·½Ïò */
     lcd_config_reg(plcd->io, 0x36, lcd_cfg_order[plcd->hw->type][plcd->hw->rotate]);
 
     /* 16bit/pixel */
@@ -248,7 +248,7 @@ void lcd_init_hw(lcd* plcd)
     lcd_io_rst(plcd->io, 1);
 	lcd_delay(100);
 
-	/* æ‰“å¼€èƒŒå…‰ */
+	/* ´ò¿ª±³¹â */
     lcd_io_bl(plcd->io, 1);
     lcd_delay(100);
 
@@ -343,7 +343,7 @@ void lcd_fill(lcd* plcd, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
     }
 }
 
-/* x1, y1:èµ·ç‚¹åæ ‡ x2, y2:ç»ˆç‚¹åæ ‡*/
+/* x1, y1:Æğµã×ø±ê x2, y2:ÖÕµã×ø±ê*/
 void lcd_draw_line(lcd* plcd, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
     int xerr = 0, yerr = 0;
@@ -405,7 +405,7 @@ void lcd_set_font(lcd* plcd, font_type type, uint16_t front_color, uint16_t back
     plcd->font.back_color  = back_color;
 }
 
-/* åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ */
+/* ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Ò»¸ö×Ö·û */
 void lcd_show_char(lcd* plcd, uint16_t x, uint16_t y, uint16_t chr)
 {
     uint8_t width = 0;
@@ -436,7 +436,7 @@ void lcd_show_char(lcd* plcd, uint16_t x, uint16_t y, uint16_t chr)
     }  	 	  
 }
 
-/* *p:å­—ç¬¦ä¸²èµ·å§‹åœ°å€ */
+/* *p:×Ö·û´®ÆğÊ¼µØÖ· */
 void lcd_show_string(lcd* plcd, uint16_t x, uint16_t y, const uint8_t *p)
 {
     while(*p != '\0') {
@@ -463,12 +463,12 @@ void lcd_print(lcd* plcd, uint16_t x, uint16_t y, const char *fmt, ...)
 }
 
 /******************************************************************************
-      å‡½æ•°è¯´æ˜ï¼šæ˜¾ç¤ºå›¾ç‰‡
-      å…¥å£æ•°æ®ï¼šx,yèµ·ç‚¹åæ ‡
-                length å›¾ç‰‡é•¿åº¦
-                width  å›¾ç‰‡å®½åº¦
-                pic[]  å›¾ç‰‡æ•°ç»„    
-      è¿”å›å€¼ï¼š  æ— 
+      º¯ÊıËµÃ÷£ºÏÔÊ¾Í¼Æ¬
+      Èë¿ÚÊı¾İ£ºx,yÆğµã×ø±ê
+                length Í¼Æ¬³¤¶È
+                width  Í¼Æ¬¿í¶È
+                pic[]  Í¼Æ¬Êı×é    
+      ·µ»ØÖµ£º  ÎŞ
 ******************************************************************************/
 void lcd_show_picture(lcd* plcd, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t* pic)
 {

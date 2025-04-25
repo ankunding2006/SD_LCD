@@ -97,8 +97,9 @@ int lineTracking_Handler(void);
 u8 localSteeringControl_Handler(float angle);
 void SteeringTest_CyclicRotation(void);
 void Test_Handler(void);
-void normal_Handler(void);
+void normal_Handler(void); 
 int moveForward_Handler(void);
+u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value);
 
 // 转向控制参数调节函数
 void Set_Steering_Kp(u16 kp);

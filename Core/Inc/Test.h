@@ -8,7 +8,7 @@ extern "C" {
 #include "main.h"
 #include "LED.h"
 
-// æµ‹è¯•å‡½æ•°å£°æ˜
+// ²âÊÔº¯ÊıÉùÃ÷
 void SteeringTest_CyclicRotation(void);
 void Test_Handler(void);
 void turnToAbsoluteAngle_TEST_Handler(void);

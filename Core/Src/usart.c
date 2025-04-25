@@ -22,7 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 uint8_t uart2_rx_buffer[UART2_RX_BUFFER_SIZE];  
-uint8_t g_usart_rx_buf[USART_REC_LEN];                //UART1æŽ¥æ”¶ç¼“å†²åŒº,æœ€å¤§USART_REC_LENä¸ªå­—èŠ‚
+uint8_t g_usart_rx_buf[USART_REC_LEN];                //UART1½ÓÊÕ»º³åÇø,×î´óUSART_REC_LEN¸ö×Ö½Ú
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;

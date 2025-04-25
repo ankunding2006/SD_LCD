@@ -10,7 +10,7 @@ uint8_t Get_Key(void);
 void Key_Handler(uint8_t key);
 void Lcd_MenuTask(void);
 
-// å®šä¹‰æŒ‰é”®å€¼
+// ¶¨Òå°´¼üÖµ
 #define KEY_NONE    0
 #define KEY_UP      1
 #define KEY_DOWN    2

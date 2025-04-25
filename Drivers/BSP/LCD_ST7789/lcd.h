@@ -65,7 +65,7 @@ void lcd_write_reg_data(lcd_io* lcdio, int len, ...);
 #define NUMARGS(...)  (sizeof((int[]){__VA_ARGS__}) / sizeof(int))
 #define lcd_config_reg(x, ...)   lcd_write_reg_data(x, NUMARGS(__VA_ARGS__), __VA_ARGS__)
 
-//ç”»ç¬”é¢œè‰²
+//»­±ÊÑÕÉ«
 #define WHITE         	 0xFFFF
 #define BLACK         	 0x0000	  
 #define BLUE           	 0x001F  
@@ -77,16 +77,16 @@ void lcd_write_reg_data(lcd_io* lcdio, int len, ...);
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //æ£•è‰²
-#define BRRED 			 0XFC07 //æ£•çº¢è‰²
-#define GRAY  			 0X8430 //ç°è‰²
-#define DARKBLUE      	 0X01CF	//æ·±è“è‰²
-#define LIGHTBLUE      	 0X7D7C	//æµ…è“è‰²  
-#define GRAYBLUE       	 0X5458 //ç°è“è‰²
-#define LIGHTGREEN     	 0X841F //æµ…ç»¿è‰²
-#define LGRAY 			 0XC618 //æµ…ç°è‰²(PANNEL),çª—ä½“èƒŒæ™¯è‰²
-#define LGRAYBLUE        0XA651 //æµ…ç°è“è‰²(ä¸­é—´å±‚é¢œè‰²)
-#define LBBLUE           0X2B12 //æµ…æ£•è“è‰²(é€‰æ‹©æ¡ç›®çš„åè‰²)
+#define BROWN 			 0XBC40 //×ØÉ«
+#define BRRED 			 0XFC07 //×ØºìÉ«
+#define GRAY  			 0X8430 //»ÒÉ«
+#define DARKBLUE      	 0X01CF	//ÉîÀ¶É«
+#define LIGHTBLUE      	 0X7D7C	//Ç³À¶É«  
+#define GRAYBLUE       	 0X5458 //»ÒÀ¶É«
+#define LIGHTGREEN     	 0X841F //Ç³ÂÌÉ«
+#define LGRAY 			 0XC618 //Ç³»ÒÉ«(PANNEL),´°Ìå±³¾°É«
+#define LGRAYBLUE        0XA651 //Ç³»ÒÀ¶É«(ÖĞ¼ä²ãÑÕÉ«)
+#define LBBLUE           0X2B12 //Ç³×ØÀ¶É«(Ñ¡ÔñÌõÄ¿µÄ·´É«)
 
 #endif
 

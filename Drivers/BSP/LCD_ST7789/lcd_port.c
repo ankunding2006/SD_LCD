@@ -58,7 +58,7 @@ void lcd_write_byte(lcd_io* lcdio, uint8_t data)
 void lcd_write_halfword(lcd_io* lcdio, uint16_t data)
 {
     lcd_io_dc(lcdio, 1);
-    /* note: 浣跨敤HAL搴撲竴娆″彂閫佷袱涓瓧鑺傞『搴忎笌灞忓箷瀹氫箟椤哄簭鐩稿弽 */
+    /* note: 使用HAL库一次发送两个字节顺序与屏幕定义顺序相反 */
     data = (data << 8) | (data >> 8);
     lcd_spi_transmit(lcdio->spi, (uint8_t *)&data, 0x02);
 }

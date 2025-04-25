@@ -19,7 +19,7 @@ void Hmi_OnCommonFunction(const cotMenuItemInfo_t *pItemInfo)
 
     printf("%s(0-%s): ", 
             get_text(TEXT_SELECT_OPTION), get_text(TEXT_EXIT));
-    scanf(" %d", &cmd); // 绌烘牸浣滅敤鏄拷鐣ヤ笂娆＄殑鍥炶溅
+    scanf(" %d", &cmd); // 空格作用是忽略上次的回车
 
     if (cmd == 0)
     {

@@ -3,16 +3,16 @@
 
 #include "cot_menu.h"
 
-/* è‡ªå®šä¹‰å›¾æ ‡æ•°æ® */
+/* ×Ô¶¨ÒåÍ¼±êÊı¾İ */
 typedef struct
 {
     const char *pImageFrame;
     const char *pImage;
 } MenuImage_t;
 
-// æ¸…é™¤å±å¹•
+// Çå³ıÆÁÄ»
 #define CLEAR() printf("\033[2J")
-// å®šä½å…‰æ ‡
+// ¶¨Î»¹â±ê
 #define MOVETO(x,y) printf("\033[%d;%dH", (x), (y))
 
 void Hmi_OnCommonFunction(const cotMenuItemInfo_t *pItemInfo);

@@ -2,33 +2,33 @@
 #include "control.h"
 #include <stdio.h>
 
-// å®šä¹‰å…¨å±€å˜é‡
+// ¶¨ÒåÈ«¾Ö±äÁ¿
 LineTrackData_t lineData = {0};
-PathChoice_t currentPathChoice = PATH_MIDDLE; // é»˜è®¤é€‰æ‹©ä¸­é—´è·¯å¾„
+PathChoice_t currentPathChoice = PATH_MIDDLE; // Ä¬ÈÏÑ¡ÔñÖĞ¼äÂ·¾¶
 uint8_t rxBuffer[LINE_DATA_LENGTH] = {0};
 uint8_t rxIndex = 0;
 uint8_t isReceiving = 0;
 
 
 /**
-  * @brief  åˆå§‹åŒ–å·¡çº¿åŠŸèƒ½
-  * @param  æ— 
-  * @retval æ— 
+  * @brief  ³õÊ¼»¯Ñ²Ïß¹¦ÄÜ
+  * @param  ÎŞ
+  * @retval ÎŞ
   */
 void LineTracking_Init(void)
 {
-    // æ³¨ï¼šUART2å·²åœ¨main.cä¸­åˆå§‹åŒ–
+    // ×¢£ºUART2ÒÑÔÚmain.cÖĞ³õÊ¼»¯
     printf("LineTracking module initialized\r\n");
 }
 
 /**
-  * @brief  å¤„ç†æ¥æ”¶åˆ°çš„å·¡çº¿æ•°æ®
-  * @param  rxData: æ¥æ”¶åˆ°çš„å­—èŠ‚æ•°æ®
-  * @retval æ— 
+  * @brief  ´¦Àí½ÓÊÕµ½µÄÑ²ÏßÊı¾İ
+  * @param  rxData: ½ÓÊÕµ½µÄ×Ö½ÚÊı¾İ
+  * @retval ÎŞ
   */
 void LineTracking_ProcessData(uint8_t rxData)
 {
-    // å¸§å¤´æ£€æµ‹
+    // Ö¡Í·¼ì²â
     if(rxData == FRAME_HEADER && !isReceiving)
     {
         rxIndex = 0;
@@ -37,27 +37,27 @@ void LineTracking_ProcessData(uint8_t rxData)
         return;
     }
     
-    // æ¥æ”¶æ•°æ®
+    // ½ÓÊÕÊı¾İ
     if(isReceiving)
     {
         rxBuffer[rxIndex++] = rxData;
         
-        // æ£€æŸ¥æ˜¯å¦æ¥æ”¶å®Œæ•´
+        // ¼ì²éÊÇ·ñ½ÓÊÕÍêÕû
         if(rxIndex >= LINE_DATA_LENGTH)
         {
             isReceiving = 0;
             
-            // éªŒè¯å¸§å°¾
+            // ÑéÖ¤Ö¡Î²
             if(rxBuffer[LINE_DATA_LENGTH-1] == FRAME_FOOTER)
             {
-                // è§£ææ•°æ®åŒ…
-                lineData.lineOffset = (rxBuffer[1] << 8) | rxBuffer[2];  // é«˜å­—èŠ‚åœ¨å‰
+                // ½âÎöÊı¾İ°ü
+                lineData.lineOffset = (rxBuffer[1] << 8) | rxBuffer[2];  // ¸ß×Ö½ÚÔÚÇ°
                 lineData.angleLeft = (rxBuffer[3] << 8) | rxBuffer[4];
                 lineData.crossFlag = rxBuffer[5];
                 lineData.stopFlag = rxBuffer[6];
                 lineData.dataReady = 1;
                 
-                // è°ƒè¯•è¾“å‡º
+                // µ÷ÊÔÊä³ö
                 printf("Line Data: Offset=%d, Angle=%d, Cross=%d, Stop=%d\r\n", 
                        lineData.lineOffset, lineData.angleLeft, 
                        lineData.crossFlag, lineData.stopFlag);
@@ -68,9 +68,9 @@ void LineTracking_ProcessData(uint8_t rxData)
 }
 
 /**
-  * @brief  æ ¹æ®å·¡çº¿æ•°æ®è®¡ç®—è½¬å‘å€¼
-  * @param  æ— 
-  * @retval è½¬å‘PWMå€¼ (-1000 åˆ° 1000)
+  * @brief  ¸ù¾İÑ²ÏßÊı¾İ¼ÆËã×ªÏòÖµ
+  * @param  ÎŞ
+  * @retval ×ªÏòPWMÖµ (-1000 µ½ 1000)
   */
 int LineTracking_CalculateTurn(void)
 {
@@ -79,35 +79,35 @@ int LineTracking_CalculateTurn(void)
     if(!lineData.dataReady)
         return 0;
     
-    // åŸºäºå±å¹•ä¸­å¿ƒ(180)è®¡ç®—åç§»é‡
+    // »ùÓÚÆÁÄ»ÖĞĞÄ(180)¼ÆËãÆ«ÒÆÁ¿
     int centerOffset = (int)lineData.lineOffset - 180;
     
-    // PIDå‚æ•°ï¼ˆå¯æ ¹æ®å®é™…è°ƒæ•´ï¼‰
-    float Kp = 10.0f;  // æ¯”ä¾‹ç³»æ•°
-    float Kd = 5.0f;   // å¾®åˆ†ç³»æ•°
+    // PID²ÎÊı£¨¿É¸ù¾İÊµ¼Êµ÷Õû£©
+    float Kp = 10.0f;  // ±ÈÀıÏµÊı
+    float Kd = 5.0f;   // Î¢·ÖÏµÊı
     
     static int lastOffset = 0;
     int differential = centerOffset - lastOffset;
     lastOffset = centerOffset;
     
-    // è®¡ç®—è½¬å‘å€¼
+    // ¼ÆËã×ªÏòÖµ
     turnValue = (int)(Kp * centerOffset + Kd * differential);
     
-    // é™åˆ¶è½¬å‘å€¼èŒƒå›´
+    // ÏŞÖÆ×ªÏòÖµ·¶Î§
     if(turnValue > 1000) turnValue = 1000;
     if(turnValue < -1000) turnValue = -1000;
     
-    // ç‰¹æ®Šæƒ…å†µå¤„ç†
+    // ÌØÊâÇé¿ö´¦Àí
     if(lineData.crossFlag && currentPathChoice != PATH_MIDDLE)
     {
-        // åœ¨å²”è·¯å£æ—¶æ ¹æ®é€‰æ‹©è·¯å¾„è°ƒæ•´è½¬å‘å€¼
+        // ÔÚ²íÂ·¿ÚÊ±¸ù¾İÑ¡ÔñÂ·¾¶µ÷Õû×ªÏòÖµ
         if(currentPathChoice == PATH_LEFT)
         {
-            turnValue -= 500; // å‘å·¦åç§»æ›´å¤š
+            turnValue -= 500; // Ïò×óÆ«ÒÆ¸ü¶à
         }
         else if(currentPathChoice == PATH_RIGHT)
         {
-            turnValue += 500; // å‘å³åç§»æ›´å¤š
+            turnValue += 500; // ÏòÓÒÆ«ÒÆ¸ü¶à
         }
     }
     
@@ -115,9 +115,9 @@ int LineTracking_CalculateTurn(void)
 }
 
 /**
-  * @brief  è®¾ç½®è·¯å¾„é€‰æ‹©
-  * @param  choice: è·¯å¾„é€‰æ‹©ï¼ˆå·¦/å³/ä¸­ï¼‰
-  * @retval æ— 
+  * @brief  ÉèÖÃÂ·¾¶Ñ¡Ôñ
+  * @param  choice: Â·¾¶Ñ¡Ôñ£¨×ó/ÓÒ/ÖĞ£©
+  * @retval ÎŞ
   */
 void LineTracking_SetPathChoice(PathChoice_t choice)
 {
@@ -126,9 +126,9 @@ void LineTracking_SetPathChoice(PathChoice_t choice)
 }
 
 /**
-  * @brief  è·å–å½“å‰è·¯å¾„é€‰æ‹©
-  * @param  æ— 
-  * @retval å½“å‰è·¯å¾„é€‰æ‹©
+  * @brief  »ñÈ¡µ±Ç°Â·¾¶Ñ¡Ôñ
+  * @param  ÎŞ
+  * @retval µ±Ç°Â·¾¶Ñ¡Ôñ
   */
 PathChoice_t LineTracking_GetPathChoice(void)
 {
@@ -136,9 +136,9 @@ PathChoice_t LineTracking_GetPathChoice(void)
 }
 
 /**
-  * @brief  è·å–å·¡çº¿æ•°æ®ç»“æ„ä½“æŒ‡é’ˆ
-  * @param  æ— 
-  * @retval å·¡çº¿æ•°æ®ç»“æ„ä½“æŒ‡é’ˆ
+  * @brief  »ñÈ¡Ñ²ÏßÊı¾İ½á¹¹ÌåÖ¸Õë
+  * @param  ÎŞ
+  * @retval Ñ²ÏßÊı¾İ½á¹¹ÌåÖ¸Õë
   */
 LineTrackData_t* LineTracking_GetData(void)
 {
@@ -146,16 +146,16 @@ LineTrackData_t* LineTracking_GetData(void)
 }
 
 /**
-  * @brief  å·¡çº¿ä¸»ä»»åŠ¡ï¼Œéœ€è¦åœ¨ä¸»å¾ªç¯ä¸­è°ƒç”¨
-  * @param  æ— 
-  * @retval æ— 
+  * @brief  Ñ²ÏßÖ÷ÈÎÎñ£¬ĞèÒªÔÚÖ÷Ñ­»·ÖĞµ÷ÓÃ
+  * @param  ÎŞ
+  * @retval ÎŞ
   */
 void LineTracking_Task(void)
 {
-    // æ£€æŸ¥åœæ­¢æ ‡å¿—
+    // ¼ì²éÍ£Ö¹±êÖ¾
     if(lineData.dataReady && lineData.stopFlag)
     {
-        // å¦‚æœæ£€æµ‹åˆ°åœæ­¢çº¿ï¼Œæ‰§è¡Œåœè½¦æ“ä½œ
+        // Èç¹û¼ì²âµ½Í£Ö¹Ïß£¬Ö´ĞĞÍ£³µ²Ù×÷
         Flag_Stop = 1;
         printf("Stop line detected, Flag_Stop=%d\r\n", Flag_Stop);
     }

@@ -1,24 +1,24 @@
 /**
   **********************************************************************************************************************
   * @file    cot_menu.c
-  * @brief   è¯¥æ–‡ä»¶æä¾›èœå•æ¡†æ¶åŠŸèƒ½
+  * @brief   ¸ÃÎÄ¼şÌá¹©²Ëµ¥¿ò¼Ü¹¦ÄÜ
   * @author  const_zpc  any question please send mail to const_zpc@163.com
   * @version V1.3.0
   * @date    2024-06-09
   *
-  * @details  åŠŸèƒ½è¯¦ç»†è¯´æ˜ï¼š
-  *           + èœå•åˆå§‹åŒ–å‡½æ•°
-  *           + è¿”å›ä¸»èœå•å‡½æ•°
-  *           + èœå•æ§åˆ¶å‡½æ•°
-  *           + èœå•è½®è¯¢ä»»åŠ¡å‡½æ•°
+  * @details  ¹¦ÄÜÏêÏ¸ËµÃ÷£º
+  *           + ²Ëµ¥³õÊ¼»¯º¯Êı
+  *           + ·µ»ØÖ÷²Ëµ¥º¯Êı
+  *           + ²Ëµ¥¿ØÖÆº¯Êı
+  *           + ²Ëµ¥ÂÖÑ¯ÈÎÎñº¯Êı
   *
   **********************************************************************************************************************
-  * æºç è·¯å¾„ï¼šhttps://gitee.com/cot_package/cot_menu.git å…·ä½“é—®é¢˜åŠå»ºè®®å¯åœ¨è¯¥ç½‘å€å¡«å†™ Issue
+  * Ô´ÂëÂ·¾¶£ºhttps://gitee.com/cot_package/cot_menu.git ¾ßÌåÎÊÌâ¼°½¨Òé¿ÉÔÚ¸ÃÍøÖ·ÌîĞ´ Issue
   *
-  * ä½¿ç”¨æ–¹å¼:
-  *    1ã€ä½¿ç”¨å‰åˆå§‹åŒ–å‡½æ•° cotMenu_Init, è®¾ç½®ä¸»èœå•å†…å®¹
-  *    2ã€å‘¨æœŸè°ƒç”¨å‡½æ•° cotMenu_Task, ç”¨æ¥å¤„ç†èœå•æ˜¾ç¤ºå’Œæ‰§è¡Œç›¸å…³å›è°ƒå‡½æ•°
-  *    3ã€ä½¿ç”¨å…¶ä»–å‡½æ•°å¯¹èœå•ç•Œé¢æ§åˆ¶
+  * Ê¹ÓÃ·½Ê½:
+  *    1¡¢Ê¹ÓÃÇ°³õÊ¼»¯º¯Êı cotMenu_Init, ÉèÖÃÖ÷²Ëµ¥ÄÚÈİ
+  *    2¡¢ÖÜÆÚµ÷ÓÃº¯Êı cotMenu_Task, ÓÃÀ´´¦Àí²Ëµ¥ÏÔÊ¾ºÍÖ´ĞĞÏà¹Ø»Øµ÷º¯Êı
+  *    3¡¢Ê¹ÓÃÆäËûº¯Êı¶Ô²Ëµ¥½çÃæ¿ØÖÆ
   *
   **********************************************************************************************************************
   */
@@ -37,26 +37,26 @@
 /* Private typedef ---------------------------------------------------------------------------------------------------*/
 typedef struct MenuCtrl
 {
-    struct MenuCtrl    *pParentMenuCtrl;    /*!< çˆ¶èœå•æ§åˆ¶å¤„ç† */
-    cotMenuDsecStr_u    uMenuDesc;          /*!< å½“å‰èœå•çš„å­—ç¬¦ä¸²æè¿° */
-    void               *pExtendData;        /*!< å½“å‰é€‰é¡¹æ³¨å†Œæ—¶çš„æ‰©å±•æ•°æ® */
-    cotShowMenuCallFun_f pfnShowMenuFun; /*!< å½“å‰èœå•æ˜¾ç¤ºæ•ˆæœå‡½æ•° */
-    cotMenuList_t      *pMenuList;          /*!< å½“å‰èœå•åˆ—è¡¨ */
-    cotMenuCallFun_f    pfnLoadCallFun;     /*!< å½“å‰èœå•åŠ è½½å‡½æ•° */
-    cotMenuCallFun_f    pfnRunCallFun;      /*!< å½“å‰é€‰é¡¹çš„éèœå•åŠŸèƒ½å‡½æ•° */
-    menusize_t          itemsNum;           /*!< å½“å‰èœå•é€‰é¡¹æ€»æ•°ç›® */
-    menusize_t          showBaseItem;       /*!< å½“å‰èœå•é¦–ä¸ªæ˜¾ç¤ºçš„é€‰é¡¹ */
-    menusize_t          selectItem;         /*!< å½“å‰èœå•é€‰ä¸­çš„é€‰é¡¹ */
-    bool                isSelected;         /*!< èœå•é€‰é¡¹æ˜¯å¦å·²ç»è¢«é€‰æ‹© */
+    struct MenuCtrl    *pParentMenuCtrl;    /*!< ¸¸²Ëµ¥¿ØÖÆ´¦Àí */
+    cotMenuDsecStr_u    uMenuDesc;          /*!< µ±Ç°²Ëµ¥µÄ×Ö·û´®ÃèÊö */
+    void               *pExtendData;        /*!< µ±Ç°Ñ¡Ïî×¢²áÊ±µÄÀ©Õ¹Êı¾İ */
+    cotShowMenuCallFun_f pfnShowMenuFun; /*!< µ±Ç°²Ëµ¥ÏÔÊ¾Ğ§¹ûº¯Êı */
+    cotMenuList_t      *pMenuList;          /*!< µ±Ç°²Ëµ¥ÁĞ±í */
+    cotMenuCallFun_f    pfnLoadCallFun;     /*!< µ±Ç°²Ëµ¥¼ÓÔØº¯Êı */
+    cotMenuCallFun_f    pfnRunCallFun;      /*!< µ±Ç°Ñ¡ÏîµÄ·Ç²Ëµ¥¹¦ÄÜº¯Êı */
+    menusize_t          itemsNum;           /*!< µ±Ç°²Ëµ¥Ñ¡Ïî×ÜÊıÄ¿ */
+    menusize_t          showBaseItem;       /*!< µ±Ç°²Ëµ¥Ê×¸öÏÔÊ¾µÄÑ¡Ïî */
+    menusize_t          selectItem;         /*!< µ±Ç°²Ëµ¥Ñ¡ÖĞµÄÑ¡Ïî */
+    bool                isSelected;         /*!< ²Ëµ¥Ñ¡ÏîÊÇ·ñÒÑ¾­±»Ñ¡Ôñ */
 }MenuCtrl_t;
 
 typedef struct
 {
-    MenuCtrl_t        *pMenuCtrl;           /*!< å½“å‰èœå•æ§åˆ¶å¤„ç† */
-    cotMenuCallFun_f   pfnMainEnterCallFun; /*!< ä¸»èœå•è¿›å…¥æ—¶(è¿›å…¥èœå•)éœ€è¦æ‰§è¡Œä¸€æ¬¡çš„å‡½æ•° */
-    cotMenuCallFun_f   pfnMainExitCallFun;  /*!< ä¸»èœå•è¿›å…¥åé€€å‡ºæ—¶(é€€å‡ºèœå•)éœ€è¦æ‰§è¡Œä¸€æ¬¡çš„å‡½æ•° */
-    cotMenuCallFun_f   pfnLoadCallFun;      /*!< é‡åŠ è½½å‡½æ•° */
-    uint8_t            isEnterMainMenu : 1; /*!< æ˜¯å¦è¿›å…¥äº†ä¸»èœå• */
+    MenuCtrl_t        *pMenuCtrl;           /*!< µ±Ç°²Ëµ¥¿ØÖÆ´¦Àí */
+    cotMenuCallFun_f   pfnMainEnterCallFun; /*!< Ö÷²Ëµ¥½øÈëÊ±(½øÈë²Ëµ¥)ĞèÒªÖ´ĞĞÒ»´ÎµÄº¯Êı */
+    cotMenuCallFun_f   pfnMainExitCallFun;  /*!< Ö÷²Ëµ¥½øÈëºóÍË³öÊ±(ÍË³ö²Ëµ¥)ĞèÒªÖ´ĞĞÒ»´ÎµÄº¯Êı */
+    cotMenuCallFun_f   pfnLoadCallFun;      /*!< ÖØ¼ÓÔØº¯Êı */
+    uint8_t            isEnterMainMenu : 1; /*!< ÊÇ·ñ½øÈëÁËÖ÷²Ëµ¥ */
 }MenuManage_t;
 
 /* Private define ----------------------------------------------------------------------------------------------------*/
@@ -76,7 +76,7 @@ static void DeleteMenu(MenuCtrl_t *pMenu);
 
 /* Private function --------------------------------------------------------------------------------------------------*/
 /**
-  * @brief      æ–°å»ºèœå•å±‚çº§
+  * @brief      ĞÂ½¨²Ëµ¥²ã¼¶
   * 
   * @return     MenuCtrl_t* 
   */
@@ -98,7 +98,7 @@ static MenuCtrl_t *NewMenu(void)
 }
 
 /**
-  * @brief      é”€æ¯èœå•å±‚çº§
+  * @brief      Ïú»Ù²Ëµ¥²ã¼¶
   * 
   * @param      pMenu 
   */
@@ -114,10 +114,10 @@ static void DeleteMenu(MenuCtrl_t *pMenu)
 }
 
 /**
-  * @brief      èœå•åˆå§‹åŒ–
+  * @brief      ²Ëµ¥³õÊ¼»¯
   * 
-  * @param[in]  pMainMenu        ä¸»èœå•æ³¨å†Œä¿¡æ¯
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @param[in]  pMainMenu        Ö÷²Ëµ¥×¢²áĞÅÏ¢
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_Init(cotMainMenuCfg_t *pMainMenu)
 {
@@ -159,10 +159,10 @@ int cotMenu_Init(cotMainMenuCfg_t *pMainMenu)
 }
 
 /**
-  * @brief  èœå•ååˆå§‹åŒ–
+  * @brief  ²Ëµ¥·´³õÊ¼»¯
   * 
-  * @attention  ä¸ç®¡å¤„äºä»»ä½•ç•Œé¢éƒ½ä¼šé€çº§é€€å‡ºåˆ°ä¸»èœå•åï¼ˆä¼šè°ƒç”¨é€€å‡ºå‡½æ•°ï¼‰ï¼Œå†é€€å‡ºä¸»èœå•ï¼Œæœ€åååˆå§‹åŒ–
-  * @return 0,æˆåŠŸ; -1,å¤±è´¥  
+  * @attention  ²»¹Ü´¦ÓÚÈÎºÎ½çÃæ¶¼»áÖğ¼¶ÍË³öµ½Ö÷²Ëµ¥ºó£¨»áµ÷ÓÃÍË³öº¯Êı£©£¬ÔÙÍË³öÖ÷²Ëµ¥£¬×îºó·´³õÊ¼»¯
+  * @return 0,³É¹¦; -1,Ê§°Ü  
   */
 int cotMenu_DeInit(void)
 {
@@ -184,12 +184,12 @@ int cotMenu_DeInit(void)
 }
 
 /**
-  * @brief      å­èœå•ç»‘å®šå½“å‰èœå•é€‰é¡¹
+  * @brief      ×Ó²Ëµ¥°ó¶¨µ±Ç°²Ëµ¥Ñ¡Ïî
   * 
-  * @param      pMenuList       æ–°çš„èœå•åˆ—è¡¨
-  * @param      menuNum         æ–°çš„èœå•åˆ—è¡¨æ•°ç›®
-  * @param      pfnShowMenuFun  æ–°çš„èœå•åˆ—è¡¨æ˜¾ç¤ºæ•ˆæœå›è°ƒå‡½æ•°, ä¸ºNULLåˆ™å»¶ç»­ä¸Šçº§èœå•æ˜¾ç¤ºæ•ˆæœ
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @param      pMenuList       ĞÂµÄ²Ëµ¥ÁĞ±í
+  * @param      menuNum         ĞÂµÄ²Ëµ¥ÁĞ±íÊıÄ¿
+  * @param      pfnShowMenuFun  ĞÂµÄ²Ëµ¥ÁĞ±íÏÔÊ¾Ğ§¹û»Øµ÷º¯Êı, ÎªNULLÔòÑÓĞøÉÏ¼¶²Ëµ¥ÏÔÊ¾Ğ§¹û
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_Bind(cotMenuList_t *pMenuList, menusize_t menuNum, cotShowMenuCallFun_f pfnShowMenuFun)
 {
@@ -215,10 +215,10 @@ int cotMenu_Bind(cotMenuList_t *pMenuList, menusize_t menuNum, cotShowMenuCallFu
 }
 
 /**
-  * @brief      å¤ä½èœå•, å›åˆ°ä¸»èœå•ç•Œé¢
+  * @brief      ¸´Î»²Ëµ¥, »Øµ½Ö÷²Ëµ¥½çÃæ
   * 
-  * @note       è¯¥å¤ä½å›åˆ°ä¸»èœå•ä¸ä¼šæ‰§è¡Œé€€å‡ºæ‰€éœ€è¦æ‰§è¡Œçš„å›è°ƒå‡½æ•°
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @note       ¸Ã¸´Î»»Øµ½Ö÷²Ëµ¥²»»áÖ´ĞĞÍË³öËùĞèÒªÖ´ĞĞµÄ»Øµ÷º¯Êı
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_Reset(void)
 {
@@ -241,9 +241,9 @@ int cotMenu_Reset(void)
 }
 
 /**
-  * @brief      ä¸»èœå•è¿›å…¥
+  * @brief      Ö÷²Ëµ¥½øÈë
   * 
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥  
+  * @return     0,³É¹¦; -1,Ê§°Ü  
   */
 int cotMenu_MainEnter(void)
 {
@@ -268,10 +268,10 @@ int cotMenu_MainEnter(void)
 }
 
 /**
-  * @brief      ä¸»èœå•é€€å‡º
+  * @brief      Ö÷²Ëµ¥ÍË³ö
   * 
-  * @attention  ä¸ç®¡å¤„äºä»»ä½•ç•Œé¢éƒ½ä¼šé€çº§é€€å‡ºåˆ°ä¸»èœå•åï¼ˆä¼šè°ƒç”¨é€€å‡ºå‡½æ•°ï¼‰ï¼Œå†é€€å‡ºä¸»èœå•
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥  
+  * @attention  ²»¹Ü´¦ÓÚÈÎºÎ½çÃæ¶¼»áÖğ¼¶ÍË³öµ½Ö÷²Ëµ¥ºó£¨»áµ÷ÓÃÍË³öº¯Êı£©£¬ÔÙÍË³öÖ÷²Ëµ¥
+  * @return     0,³É¹¦; -1,Ê§°Ü  
   */
 int cotMenu_MainExit(void)
 {
@@ -293,9 +293,9 @@ int cotMenu_MainExit(void)
 }
 
 /**
-  * @brief      è¿›å…¥å½“å‰èœå•é€‰é¡¹
+  * @brief      ½øÈëµ±Ç°²Ëµ¥Ñ¡Ïî
   * 
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥  
+  * @return     0,³É¹¦; -1,Ê§°Ü  
   */
 int cotMenu_Enter(void)
 {
@@ -339,10 +339,10 @@ int cotMenu_Enter(void)
 }
 
 /**
-  * @brief      é€€å‡ºå½“å‰é€‰é¡¹å¹¶è¿”å›ä¸Šä¸€å±‚èœå•
+  * @brief      ÍË³öµ±Ç°Ñ¡Ïî²¢·µ»ØÉÏÒ»²ã²Ëµ¥
   * 
-  * @param[in]  isReset èœå•é€‰é¡¹æ˜¯å¦ä»å¤´é€‰æ‹©
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥, å³ç›®å‰å¤„äºä¸»èœå•, æ— æ³•è¿”å›
+  * @param[in]  isReset ²Ëµ¥Ñ¡ÏîÊÇ·ñ´ÓÍ·Ñ¡Ôñ
+  * @return     0,³É¹¦; -1,Ê§°Ü, ¼´Ä¿Ç°´¦ÓÚÖ÷²Ëµ¥, ÎŞ·¨·µ»Ø
   */
 int cotMenu_Exit(bool isReset)
 {
@@ -382,10 +382,10 @@ int cotMenu_Exit(bool isReset)
 }
 
 /**
-  * @brief      é€‰æ‹©ä¸Šä¸€ä¸ªèœå•é€‰é¡¹
+  * @brief      Ñ¡ÔñÉÏÒ»¸ö²Ëµ¥Ñ¡Ïî
   * 
-  * @param[in]  isAllowRoll ç¬¬ä¸€ä¸ªé€‰é¡¹æ—¶æ˜¯å¦ä»è·³è½¬åˆ°æœ€åä¸€ä¸ªé€‰é¡¹
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥
+  * @param[in]  isAllowRoll µÚÒ»¸öÑ¡ÏîÊ±ÊÇ·ñ´ÓÌø×ªµ½×îºóÒ»¸öÑ¡Ïî
+  * @return     0,³É¹¦; -1,Ê§°Ü
   */
 int cotMenu_SelectPrevious(bool isAllowRoll)
 {
@@ -415,10 +415,10 @@ int cotMenu_SelectPrevious(bool isAllowRoll)
 }
 
 /**
-  * @brief      é€‰æ‹©ä¸‹ä¸€ä¸ªèœå•é€‰é¡¹
+  * @brief      Ñ¡ÔñÏÂÒ»¸ö²Ëµ¥Ñ¡Ïî
   * 
-  * @param[in]  isAllowRoll æœ€åä¸€ä¸ªé€‰é¡¹æ—¶æ˜¯å¦è·³è½¬åˆ°ç¬¬ä¸€ä¸ªé€‰é¡¹
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @param[in]  isAllowRoll ×îºóÒ»¸öÑ¡ÏîÊ±ÊÇ·ñÌø×ªµ½µÚÒ»¸öÑ¡Ïî
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_SelectNext(bool isAllowRoll)
 {
@@ -448,10 +448,10 @@ int cotMenu_SelectNext(bool isAllowRoll)
 }
 
 /**
-  * @brief      é€‰æ‹©æŒ‡å®šçš„èœå•é€‰é¡¹
+  * @brief      Ñ¡ÔñÖ¸¶¨µÄ²Ëµ¥Ñ¡Ïî
   * 
-  * @param      selectItem æŒ‡å®šçš„èœå•é€‰é¡¹
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @param      selectItem Ö¸¶¨µÄ²Ëµ¥Ñ¡Ïî
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_Select(menusize_t selectItem)
 {
@@ -473,12 +473,12 @@ int cotMenu_Select(menusize_t selectItem)
 #ifdef _COT_MENU_USE_SHORTCUT_
 
 /**
- * @brief      ç›¸å¯¹ä¸»èœå•æˆ–å½“å‰èœå•é€šè¿‡ä¸‹çº§å„èœå•ç´¢å¼•å¿«é€Ÿè¿›å…¥æŒ‡å®šé€‰é¡¹
+ * @brief      Ïà¶ÔÖ÷²Ëµ¥»òµ±Ç°²Ëµ¥Í¨¹ıÏÂ¼¶¸÷²Ëµ¥Ë÷Òı¿ìËÙ½øÈëÖ¸¶¨Ñ¡Ïî
  * 
- * @param[in]  isAbsolute æ˜¯å¦é‡‡ç”¨ç»å¯¹èœå•ç´¢å¼•ï¼ˆä»ä¸»èœå•å¼€å§‹ï¼‰
- * @param[in]  deep èœå•æ·±åº¦ï¼Œå¤§äº 0
- * @param[in]  ...  å„çº§èœå•ç´¢å¼•å€¼(ä»0å¼€å§‹), å…¥å‚ä¸ªæ•°ç”± deep çš„å€¼å†³å®š
- * @return     0,æˆåŠŸ; -1,å¤±è´¥
+ * @param[in]  isAbsolute ÊÇ·ñ²ÉÓÃ¾ø¶Ô²Ëµ¥Ë÷Òı£¨´ÓÖ÷²Ëµ¥¿ªÊ¼£©
+ * @param[in]  deep ²Ëµ¥Éî¶È£¬´óÓÚ 0
+ * @param[in]  ...  ¸÷¼¶²Ëµ¥Ë÷ÒıÖµ(´Ó0¿ªÊ¼), Èë²Î¸öÊıÓÉ deep µÄÖµ¾ö¶¨
+ * @return     0,³É¹¦; -1,Ê§°Ü
  */
 int cotMenu_ShortcutEnter(bool isAbsolute, uint8_t deep, ...)
 {
@@ -521,12 +521,12 @@ int cotMenu_ShortcutEnter(bool isAbsolute, uint8_t deep, ...)
 #endif
 
 /**
-  * @brief      é™åˆ¶å½“å‰èœå•ç•Œé¢æœ€å¤šæ˜¾ç¤ºçš„èœå•æ•°ç›®
+  * @brief      ÏŞÖÆµ±Ç°²Ëµ¥½çÃæ×î¶àÏÔÊ¾µÄ²Ëµ¥ÊıÄ¿
   * 
-  * @note       åœ¨èœå•æ˜¾ç¤ºæ•ˆæœå›è°ƒå‡½æ•°ä¸­ä½¿ç”¨, ä½¿ç”¨æˆå‘˜å˜é‡ showBaseItem å¾—åˆ°æ˜¾ç¤ºç•Œé¢çš„ç¬¬ä¸€ä¸ªé€‰é¡¹ç´¢å¼•
-  * @param[in,out]  tMenuShow   å½“å‰èœå•æ˜¾ç¤ºä¿¡æ¯
-  * @param[in,out]  showNum     å½“å‰èœå•ä¸­éœ€è¦æ˜¾ç¤ºçš„é€‰é¡¹æ•°ç›®, æ ¹æ®å½“å‰èœå•é€‰é¡¹çš„æ€»æ•°å¾—åˆ°æœ€ç»ˆçš„æ˜¾ç¤ºçš„é€‰é¡¹æ•°ç›®
-  * @return     0,æˆåŠŸ; -1,å¤±è´¥ 
+  * @note       ÔÚ²Ëµ¥ÏÔÊ¾Ğ§¹û»Øµ÷º¯ÊıÖĞÊ¹ÓÃ, Ê¹ÓÃ³ÉÔ±±äÁ¿ showBaseItem µÃµ½ÏÔÊ¾½çÃæµÄµÚÒ»¸öÑ¡ÏîË÷Òı
+  * @param[in,out]  tMenuShow   µ±Ç°²Ëµ¥ÏÔÊ¾ĞÅÏ¢
+  * @param[in,out]  showNum     µ±Ç°²Ëµ¥ÖĞĞèÒªÏÔÊ¾µÄÑ¡ÏîÊıÄ¿, ¸ù¾İµ±Ç°²Ëµ¥Ñ¡ÏîµÄ×ÜÊıµÃµ½×îÖÕµÄÏÔÊ¾µÄÑ¡ÏîÊıÄ¿
+  * @return     0,³É¹¦; -1,Ê§°Ü 
   */
 int cotMenu_LimitShowListNum(cotMenuShow_t *ptMenuShow, menusize_t *pShowNum)
 {
@@ -550,19 +550,19 @@ int cotMenu_LimitShowListNum(cotMenuShow_t *ptMenuShow, menusize_t *pShowNum)
     }
     else
     {
-        // ä¿æŒ
+        // ±£³Ö
     }
 
     return 0;
 }
 
 /**
- * @brief       è·å–å½“å‰çˆ¶èœå•æ˜¾ç¤ºä¿¡æ¯
- *              å¦‚è·å–å½“å‰èœå•çš„äºŒçº§çˆ¶èœå•ä¿¡æ¯ï¼Œlevel ä¸º2
+ * @brief       »ñÈ¡µ±Ç°¸¸²Ëµ¥ÏÔÊ¾ĞÅÏ¢
+ *              Èç»ñÈ¡µ±Ç°²Ëµ¥µÄ¶ş¼¶¸¸²Ëµ¥ĞÅÏ¢£¬level Îª2
  * 
- * @param[out]  ptMenuShow çˆ¶ n çº§èœå•æ˜¾ç¤ºä¿¡æ¯
- * @param[in]   level      n çº§, å¤§äº 0
- * @return      0,æˆåŠŸ; -1,å¤±è´¥  
+ * @param[out]  ptMenuShow ¸¸ n ¼¶²Ëµ¥ÏÔÊ¾ĞÅÏ¢
+ * @param[in]   level      n ¼¶, ´óÓÚ 0
+ * @return      0,³É¹¦; -1,Ê§°Ü  
  */
 int cotMenu_QueryParentMenu(cotMenuShow_t *ptMenuShow, uint8_t level)
 {
@@ -604,9 +604,9 @@ int cotMenu_QueryParentMenu(cotMenuShow_t *ptMenuShow, uint8_t level)
 }
 
 /**
-  * @brief  èœå•ä»»åŠ¡
+  * @brief  ²Ëµ¥ÈÎÎñ
   * 
-  * @return 0,æˆåŠŸ, å¤„äºèœå•æ¨¡å¼ä¸‹; -1,å¤±è´¥, æœªå¤„äºèœå•æ¨¡å¼ä¸‹ 
+  * @return 0,³É¹¦, ´¦ÓÚ²Ëµ¥Ä£Ê½ÏÂ; -1,Ê§°Ü, Î´´¦ÓÚ²Ëµ¥Ä£Ê½ÏÂ 
   */
 int cotMenu_Task(void)
 {

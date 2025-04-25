@@ -12,35 +12,35 @@ typedef enum
 
 typedef enum
 {
-    TEXT_MENU = 0,              // èœå•
-    TEXT_MAIN_MENU,             // ä¸»èœå•
-    TEXT_SELECT_OPTION,         // é€‰æ‹©æ“ä½œ
-    TEXT_ENTER,                 // è¿›å…¥
-    TEXT_EXIT,                  // é€€å‡º
-    TEXT_RETURN,                // è¿”å›ž
-    TEXT_MUSIC,                 // éŸ³ä¹
-    TEXT_VIDEO,                 // è§†é¢‘
-    TEXT_CAMERA,                // æ‘„åƒæœº
-    TEXT_SETTING,               // è®¾ç½®
-    TEXT_SHORTCUT,              // å¿«æ·
-    TEXT_MORE,                  // æ›´å¤š
-    TEXT_LANGUAGE,              // è¯­è¨€
-    TEXT_NEXT,                  // ä¸‹ä¸€ä¸ª
-    TEXT_PREVIOUS,              // ä¸Šä¸€ä¸ª
-    TEXT_FUNCTION_TEST,         // åŠŸèƒ½æµ‹è¯•
-    TEXT_TEST,                  // æµ‹è¯•
-    TEXT_BLUETOOTH,             // è“ç‰™
-    TEXT_BATTERY,               // ç”µæ± 
-    TEXT_STORE,                 // å‚¨å­˜
-    TEXT_UPGRADE,               // å‡çº§
-    TEXT_ABOUT,                 // å…³äºŽ
-    TEXT_PHOTO,                 // æ‹ç…§
-    TEXT_PHOTOGRAPHY,           // æ‘„å½±
-    TEXT_LOADING,               // åŠ è½½ä¸­
-    TEXT_STOPPING_PLAYBACK,     // æ­£åœ¨åœæ­¢æ’­æ”¾
-    TEXT_EXIT_MAIN_MENU,        // é€€å‡ºä¸»èœå•
-    TEXT_RETURN_MAIN_MENU,      // è¿”å›žä¸»èœå•
-    TEXT_MORE_SETTING,          // æ›´å¤šè®¾ç½®
+    TEXT_MENU = 0,              // ²Ëµ¥
+    TEXT_MAIN_MENU,             // Ö÷²Ëµ¥
+    TEXT_SELECT_OPTION,         // Ñ¡Ôñ²Ù×÷
+    TEXT_ENTER,                 // ½øÈë
+    TEXT_EXIT,                  // ÍË³ö
+    TEXT_RETURN,                // ·µ»Ø
+    TEXT_MUSIC,                 // ÒôÀÖ
+    TEXT_VIDEO,                 // ÊÓÆµ
+    TEXT_CAMERA,                // ÉãÏñ»ú
+    TEXT_SETTING,               // ÉèÖÃ
+    TEXT_SHORTCUT,              // ¿ì½Ý
+    TEXT_MORE,                  // ¸ü¶à
+    TEXT_LANGUAGE,              // ÓïÑÔ
+    TEXT_NEXT,                  // ÏÂÒ»¸ö
+    TEXT_PREVIOUS,              // ÉÏÒ»¸ö
+    TEXT_FUNCTION_TEST,         // ¹¦ÄÜ²âÊÔ
+    TEXT_TEST,                  // ²âÊÔ
+    TEXT_BLUETOOTH,             // À¶ÑÀ
+    TEXT_BATTERY,               // µç³Ø
+    TEXT_STORE,                 // ´¢´æ
+    TEXT_UPGRADE,               // Éý¼¶
+    TEXT_ABOUT,                 // ¹ØÓÚ
+    TEXT_PHOTO,                 // ÅÄÕÕ
+    TEXT_PHOTOGRAPHY,           // ÉãÓ°
+    TEXT_LOADING,               // ¼ÓÔØÖÐ
+    TEXT_STOPPING_PLAYBACK,     // ÕýÔÚÍ£Ö¹²¥·Å
+    TEXT_EXIT_MAIN_MENU,        // ÍË³öÖ÷²Ëµ¥
+    TEXT_RETURN_MAIN_MENU,      // ·µ»ØÖ÷²Ëµ¥
+    TEXT_MORE_SETTING,          // ¸ü¶àÉèÖÃ
 
     TEXT_ALL,
 } TextId_e;
