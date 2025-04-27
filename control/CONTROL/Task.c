@@ -749,7 +749,6 @@ u8 Task3_Handler(void)
  */
 u8 Task4_Handler(void)
 {
-    // 定义状态机状态
     typedef enum {
         INIT_WAIT,         // 等待陀螺仪稳定
         INIT,              // 初始化状态
