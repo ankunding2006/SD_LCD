@@ -62,14 +62,17 @@
 
 //*********************调试信息发送频率参数******************
 #define DEBUG_PRINT_INTERVAL      700    // 调试信息发送间隔(ms)
-#define DEBUG_PRINT_COUNT         (DEBUG_PRINT_INTERVAL / 5) // 调试信息发送计数(基于5ms的中断周期)
+#define DEBUG_PRINT_COUNT         140    // 调试信息发送计数(基于5ms的中断周期)
 
 //*********************任务3相关参数******************
-#define TASK3_ROTATION_ANGLE_1    50     // 任务3中从A到C后需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_2    50     // 任务3中从B到D前需要顺时针旋转的角度(度)
-#define TASK3_STEER_TIME         125     // openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM          30      // openLoopSteering的PWM参数(速度值)
+#define TASK3_ROTATION_ANGLE_1    50     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_3    50     // 任务3中从B到D前需要逆时针旋转的角度(度)
+#define TASK3_STEER_TIME_C        125    // C点openLoopSteering的转向时间参数(中断次数) 
+#define TASK3_STEER_PWM_C         30     // C点openLoopSteering的PWM参数(速度值) 
+#define TASK3_STEER_TIME_D        125    // D点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_PWM_D         30     // D点openLoopSteering的PWM参数(速度值)
 
 /*****************************无关变量配置***********************************/
 #define WAY_ANGLE_DEFAULT           1    // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
 #define MIDDLE_ANGLE_DEFAULT        0    // 初始平衡角度设定
+#define TASK3_ROTATION_ANGLE_2    50     // 任务3中C点旋转需要顺时针旋转的角度(度)
