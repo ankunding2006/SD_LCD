@@ -39,12 +39,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM6)
 	{
-		#if TEST_MODE==1 // 测试模式
+		#if TEST_MODE==1 // 单项测试模式
 			Test_Handler();
         #elif Normal_Mode==1 // 正常模式
             normal_Handler(); // 正常模式
+        #elif TASK1==1 // 测试模式1
+            Task1_Handler(); // 测试模式1
         #elif TASK2==1 // 测试模式2
             Task2_Handler(); // 测试模式2
+        #elif TASK3==1 // 测试模式3
+            Task3_Handler(); // 测试模式3
+        #elif TASK4==1 // 测试模式4
+            Task4_Handler(); // 测试模式4
 		#endif
 	}
 }
@@ -265,18 +271,15 @@ u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value)
 {
     static u8 isInitialized = 0; // 初始化标志
     static u32 startTime = 0; // 开始时间
-    static u8 isSteeringCompleted = 0; // 转向完成标志
     
     if(isInitialized == 0) {
         startTime = HAL_GetTick(); // 记录开始时间
         isInitialized = 1; // 设置初始化标志
-        isSteeringCompleted = 0; // 重置转向完成标志
         return 0; // 返回未完成
     }
     
     if(HAL_GetTick() - startTime >= (u32)SteerTime) {
         Set_Pwm(0, 0); // 停止电机
-        isSteeringCompleted = 1; // 设置转向完成标志
         return 1; // 返回完成
     } else {
         if(SteerTime > 0) {
@@ -288,7 +291,10 @@ u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value)
             Motor_Left = PWM_Value; // 左轮正转
             Motor_Right = -PWM_Value; // 右轮反转
         }
-        Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+        if(Flag_Stop==1) // 如果停止标志为1，停止电机
+            Set_Pwm(0, 0); // 停止电机
+        else
+            Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
         return 0; // 返回未完成
     }
 }

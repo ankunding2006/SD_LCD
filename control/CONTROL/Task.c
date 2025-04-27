@@ -497,7 +497,7 @@ u8 Task3_Handler(void)
             initialAngle = getHeadingAngle();
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
-            Set_Target_Velocity(16); // 设置适当的速度
+            Set_Target_Velocity(TASK3_MOVE_FORWARD_SPEED); // 设置适当的速度
             all_leds_off();
             led1_on(); // A点提示
             printf("从A点出发\r\n");

@@ -1,9 +1,9 @@
 /*************************测试部分配置******************************/
-#define TEST_MODE                      0       // 测试模式 
+#define TEST_MODE                      0       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
-#define TASK2                          1       // 测试模式2
-#define TASK3                          0       // 测试模式3
+#define TASK2                          0       // 测试模式2
+#define TASK3                          1       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         1       // 测试相对转向旋转
@@ -21,7 +21,7 @@
 #define STEERING_ERROR_THRESHOLD_DEFAULT     400    // 转向控制误差阈值(度)
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
-#define FLAG_STOP_DEFAULT           0    // 默认停止
+#define FLAG_STOP_DEFAULT           0    // 是否默认停止
 #define FLAG_SHOW_DEFAULT           0    // 默认显示打开
 #define MODE_DEFAULT                0    // 初始模式选择,默认为普通控制模式 
 /****************************PID系数初值配置*********************************/
@@ -71,8 +71,9 @@
 #define TASK3_STEER_PWM_C         30     // C点openLoopSteering的PWM参数(速度值) 
 #define TASK3_STEER_TIME_D        125    // D点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_D         30     // D点openLoopSteering的PWM参数(速度值)
+#define TASK3_MOVE_FORWARD_SPEED  10   // 直线行驶速度
 
 /*****************************无关变量配置***********************************/
-#define WAY_ANGLE_DEFAULT           1    // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
-#define MIDDLE_ANGLE_DEFAULT        0    // 初始平衡角度设定
-#define TASK3_ROTATION_ANGLE_2    50     // 任务3中C点旋转需要顺时针旋转的角度(度)
+#define WAY_ANGLE_DEFAULT           1      // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
+#define MIDDLE_ANGLE_DEFAULT        0      // 初始平衡角度设定
+#define TASK3_ROTATION_ANGLE_2      50     // 任务3中C点旋转需要顺时针旋转的角度(度)
