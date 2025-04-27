@@ -267,7 +267,7 @@ int lineTracking_Handler(void)
  * @param angle 小车旋转的时间,逆时针旋转为正,顺时针旋转为负
  * @return u8 1:完成 0:小车正在转向中
  */
-u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value)
+u8 openLoopSteering_Handler(int SteerTime,int PWM_Value)
 {
     static u8 isInitialized = 0; // 初始化标志
     static u32 startTime = 0; // 开始时间
@@ -278,8 +278,9 @@ u8 openLoopSteering_Handler(int SteerTime,u8 PWM_Value)
         return 0; // 返回未完成
     }
     
-    if(HAL_GetTick() - startTime >= (u32)SteerTime) {
+    if(HAL_GetTick() - startTime >= abs(SteerTime)) {
         Set_Pwm(0, 0); // 停止电机
+        isInitialized = 0; // 重置初始化标志
         return 1; // 返回完成
     } else {
         if(SteerTime > 0) {
@@ -374,7 +375,7 @@ u8 localSteeringControl_Handler(float angle)
     lastError = error;
     
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-    output = ((float)Steering_Kp/100.0f) * error + ((float)Steering_Ki/100.0f) * integral + ((float)Steering_Kd/100.0f) * derivative;
+    output = ((float)Steering_Kp/100.0f) * error + ((float)Steering_Ki/1000.0f) * integral + ((float)Steering_Kd/100.0f) * derivative;
     
     // 输出限幅
     if(output > STEERING_MAX_OUTPUT) {
@@ -607,7 +608,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
     output = ((float)Steering_Kp/100.0f) * error + 
-             ((float)Steering_Ki/100.0f) * integral + 
+             ((float)Steering_Ki/1000.0f) * integral + 
              ((float)Steering_Kd/100.0f) * derivative;
     
     // 输出限幅
