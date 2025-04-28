@@ -18,7 +18,7 @@
 #define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
 #define PWM_Base                  1000	   // PWM基准值
-#define STEERING_ERROR_THRESHOLD_DEFAULT     400    // 转向控制误差阈值(度)
+#define STEERING_ERROR_THRESHOLD_DEFAULT     230    // 转向控制误差阈值(度)
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
 #define FLAG_STOP_DEFAULT           0    // 是否默认停止
@@ -43,8 +43,8 @@
 #define turn_PWM_Limit            1500   // 循迹转向PWM的限制值，防止过大过小
 
 //*********************转向控制PID参数及相关变量（放大100倍）******************
-#define STEERING_KP_DEFAULT        50    // 转向控制比例系数
-#define STEERING_KI_DEFAULT        2     // 转向控制积分系数
+#define STEERING_KP_DEFAULT        690    // 转向控制比例系数
+#define STEERING_KI_DEFAULT        100     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 #define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
 

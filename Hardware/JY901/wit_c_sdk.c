@@ -16,7 +16,7 @@ int16_t sReg[REGSIZE];
 
 /*****************************************************/
 static volatile uint8_t g_dataUpdateFlags = 0;
-float fAcc[3], fGyro[3], fAngle[3]; // 传感器数据
+volatile float fAcc[3], fGyro[3], fAngle[3]; // 传感器数据
 int16_t iMag[3];                    // 磁场传感器数据
 static volatile char s_cDataUpdate1 = 0,s_cDataUpdate2 = 0,s_cDataUpdate3 = 0,s_cDataUpdate4 = 0, s_cCmd = 0xff;
 const uint32_t c_uiBaud[10] = {0, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};

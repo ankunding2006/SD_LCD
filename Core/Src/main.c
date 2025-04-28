@@ -324,9 +324,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Lcd_MenuTask();
-    JY901_Handler(); // 处理JY901数据
-    ////grey_sensorData_print(); // 打印灰度传感器数据
+    Lcd_MenuTask(); // 菜单任务
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -56,7 +56,7 @@ extern float Acceleration_Z;
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
 extern float Target_Velocity; 
-extern float fAcc[3], fGyro[3], fAngle[3];
+extern volatile float fAcc[3], fGyro[3], fAngle[3];
 extern int16_t iMag[3];
 extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 extern volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
