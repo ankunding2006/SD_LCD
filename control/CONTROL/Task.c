@@ -1034,7 +1034,7 @@ u8 Task4_Handler(void)
                 printf("D点顺时针旋转中：当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(openLoopSteering_Handler(TASK4_STEER_PWM_D, TASK4_STEER_PWM_D)) {
+            if(openLoopSteering_Handler(TASK4_STEER_TIME_D, TASK4_STEER_PWM_D)) {
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
                 currentState = TRACK_D_TO_A;

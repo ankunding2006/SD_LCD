@@ -18,6 +18,7 @@
 #include "setParma.h"
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 // 在文件开头添加全局变量定义
 float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
@@ -608,7 +609,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
     output = ((float)Steering_Kp/100.0f) * error + 
-             ((float)Steering_Ki/1000.0f) * integral + 
+             ((float)Steering_Ki/100.0f) * integral + 
              ((float)Steering_Kd/100.0f) * derivative;
     
     // 输出限幅
