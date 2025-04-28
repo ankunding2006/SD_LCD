@@ -555,31 +555,18 @@ u8 Task3_Handler(void)
                 // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
-                
-                // 计算顺时针旋转TASK3_ROTATION_ANGLE_2度的目标角度
-                targetAngle = targetAngle - TASK3_ROTATION_ANGLE_2; // 顺时针旋转要减去角度值
-                // 规范化角度到±180度范围
-                while(targetAngle > 180.0f) {
-                    targetAngle -= 360.0f;
-                }
-                while(targetAngle < -180.0f) {
-                    targetAngle += 360.0f;
-                }
-                
+                 
                 // 重置延时计数器，进入C点延时状态
                 delay_counter = 0;
                 currentState = C_POINT_DELAY;
             }
             return 0;
             
-        case C_POINT_DELAY:
-            // C点LED提示延时状态（非阻塞）
+        case C_POINT_DELAY: 
             delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
-                led3_off();
-                printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
-                currentState = TURN_AT_C;
-            }
+            led3_off();
+            printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
+            currentState = TURN_AT_C;
             return 0;
             
         case TURN_AT_C:
