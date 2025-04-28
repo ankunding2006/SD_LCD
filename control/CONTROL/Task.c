@@ -497,13 +497,13 @@ u8 Task3_Handler(void)
             initialAngle = getHeadingAngle();
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
-            Set_Target_Velocity(TASK3_MOVE_FORWARD_SPEED); // 设置适当的速度
+            Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
             all_leds_off();
             led1_on(); // A点提示
             printf("从A点出发\r\n");
             
             // 计算顺时针旋转TASK3_ROTATION_ANGLE_1度的目标角度
-            targetAngle = initialAngle - TASK3_ROTATION_ANGLE_1; // 顺时针旋转要减去角度值
+            targetAngle = initialAngle - Task3_Rotation_Angle_1; // 顺时针旋转要减去角度值
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;
@@ -571,7 +571,7 @@ u8 Task3_Handler(void)
             
         case TURN_AT_C:
             // 使用openLoopSteering_Handler在C点进行旋转
-            if(openLoopSteering_Handler(TASK3_STEER_TIME_C, TASK3_STEER_PWM_C)) {
+            if(openLoopSteering_Handler(Task3_Steer_Time_C, Task3_Steer_PWM_C)) {
                 // 转向完成
                 printf("C点转向完成，开始C→B循迹\r\n");
                 currentState = TRACK_C_TO_B;
@@ -591,8 +591,8 @@ u8 Task3_Handler(void)
                 
                 // 计算目标角度：初始角度的反方向再逆时针旋转TASK3_ROTATION_ANGLE_3度
                 // 初始方向的反方向 = 初始角度 + 180度
-                // 再逆时针偏转TASK3_ROTATION_ANGLE_3度 = 再加上TASK3_ROTATION_ANGLE_3度
-                targetAngle = initialAngle + 180.0f + TASK3_ROTATION_ANGLE_3;
+                // 再逆时针偏转Task3_Rotation_Angle_3度 = 再加上Task3_Rotation_Angle_3度
+                targetAngle = initialAngle + 180.0f + Task3_Rotation_Angle_3;
                 
                 // 规范化角度到±180度范围
                 while(targetAngle > 180.0f) {
@@ -667,7 +667,7 @@ u8 Task3_Handler(void)
                 printf("D点顺时针旋转中：当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(openLoopSteering_Handler(TASK3_STEER_TIME_D, TASK3_STEER_PWM_D)) {
+            if(openLoopSteering_Handler(Task3_Steer_Time_D, Task3_Steer_PWM_D)) {
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
                 currentState = TRACK_D_TO_A;
