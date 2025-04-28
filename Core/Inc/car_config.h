@@ -1,24 +1,24 @@
 /*************************测试部分配置******************************/
-#define TEST_MODE                      1       // 单项测试模式 
+#define TEST_MODE                      0       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          0       // 测试模式3
+#define TASK3                          1       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
 #define TEST_TRACKING                  0       // 测试循迹
-#define TEST_TURNTO_ABSLUTE_ANGLE      0       // 测试转向到绝对角度
-#define TEST_MOVE_FORWARD              1       // 测试直线前进  
+#define TEST_TURNTO_ABSLUTE_ANGLE      1       // 测试转向到绝对角度
+#define TEST_MOVE_FORWARD              0       // 测试直线前进  
 /******************************************************************/ 
 
 //************************原地转向控制相关宏定义***********************
-#define STEERING_STABLE_TIME        70     // 转向稳定需要保持的时间计数
+#define STEERING_STABLE_TIME        50     // 转向稳定需要保持的时间计数
 #define STEERING_MAX_OUTPUT        3000    // 转向控制最大PWM输出
 #define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
 #define PWM_Base                  1000	   // PWM基准值
-#define STEERING_ERROR_THRESHOLD_DEFAULT     230    // 转向控制误差阈值(度)
+#define STEERING_ERROR_THRESHOLD_DEFAULT     300    // 转向控制误差阈值(度)
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
 #define FLAG_STOP_DEFAULT           0    // 是否默认停止
@@ -43,8 +43,8 @@
 #define turn_PWM_Limit            1500   // 循迹转向PWM的限制值，防止过大过小
 
 //*********************转向控制PID参数及相关变量（放大100倍）******************
-#define STEERING_KP_DEFAULT        690    // 转向控制比例系数
-#define STEERING_KI_DEFAULT        10     // 转向控制积分系数
+#define STEERING_KP_DEFAULT        220    // 转向控制比例系数
+#define STEERING_KI_DEFAULT        3     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 #define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
 
@@ -67,21 +67,21 @@
 //*********************任务3相关参数*****************************************
 #define TASK3_ROTATION_ANGLE_1    30     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_2    30     // 任务3中C点旋转需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_3    50     // 任务3中从B到D前需要逆时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_3    70     // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C        500    // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C         900    // C点openLoopSteering的PWM参数(速度值)
-#define TASK3_STEER_TIME_D        500    // D点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_TIME_D        -500    // D点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_D         900    // D点openLoopSteering的PWM参数(速度值)
 #define TASK3_MOVE_FORWARD_SPEED  12     // 任务3中直线行驶的速度(速度值) 
 
 //*********************任务4相关参数*****************************************
-#define TASK4_ROTATION_ANGLE_1    50     // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_1    47     // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK4_ROTATION_ANGLE_2    50     // 任务4中C点旋转需要顺时针旋转的角度(度)
-#define TASK4_ROTATION_ANGLE_3    50     // 任务4中从B到D前需要逆时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_3    60     // 任务4中从B到D前需要逆时针旋转的角度(度)
 #define TASK4_STEER_TIME_C        125    // 任务4中C点openLoopSteering的转向时间参数(中断次数)
-#define TASK4_STEER_PWM_C         30     // 任务4中C点openLoopSteering的PWM参数(速度值)
+#define TASK4_STEER_PWM_C         900     // 任务4中C点openLoopSteering的PWM参数(速度值)
 #define TASK4_STEER_TIME_D        125    // 任务4中D点openLoopSteering的转向时间参数(中断次数)
-#define TASK4_STEER_PWM_D         30     // 任务4中D点openLoopSteering的PWM参数(速度值)
+#define TASK4_STEER_PWM_D         900     // 任务4中D点openLoopSteering的PWM参数(速度值)
 #define TASK4_CYCLE_COUNT         4      // 任务4循环执行次数
 #define TASK4_CYCLE_DELAY         200    // 任务4循环之间的延时(中断次数，5ms/次)
 #define TASK4_MOVE_FORWARD_SPEED  10     // 任务4中直线行驶的速度(速度值)
