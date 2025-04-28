@@ -51,9 +51,9 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Forward_Error_Threshold, "float Get_Forward_Error_Threshold(void)"},
     
     // 注册任务3相关参数调节函数
-    {(void *)Set_Task3_Rotation_Angle_1, "void Set_Task3_Rotation_Angle_1(float angle)"},
-    {(void *)Set_Task3_Rotation_Angle_2, "void Set_Task3_Rotation_Angle_2(float angle)"},
-    {(void *)Set_Task3_Rotation_Angle_3, "void Set_Task3_Rotation_Angle_3(float angle)"},
+    {(void *)Set_Task3_Rotation_Angle_1, "void Set_Task3_Rotation_Angle_1(int angle)"},
+    {(void *)Set_Task3_Rotation_Angle_2, "void Set_Task3_Rotation_Angle_2(int angle)"},
+    {(void *)Set_Task3_Rotation_Angle_3, "void Set_Task3_Rotation_Angle_3(int angle)"},
     {(void *)Set_Task3_Steer_Time_C, "void Set_Task3_Steer_Time_C(int time)"},
     {(void *)Set_Task3_Steer_PWM_C, "void Set_Task3_Steer_PWM_C(int pwm)"},
     {(void *)Set_Task3_Steer_Time_D, "void Set_Task3_Steer_Time_D(int time)"},

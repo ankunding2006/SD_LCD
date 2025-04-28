@@ -230,10 +230,10 @@ float Get_Forward_Error_Threshold(void)
  * @param angle 旋转角度(度，顺时针为正)
  * @return 无
  */
-void Set_Task3_Rotation_Angle_1(float angle)
+void Set_Task3_Rotation_Angle_1(int angle)
 {
-    Task3_Rotation_Angle_1 = angle;
-    printf("设置任务3初始旋转角度: %.2f度\r\n", angle);
+    Task3_Rotation_Angle_1 = (float)angle;
+    printf("设置任务3初始旋转角度: %.2f度\r\n", (float)angle);
 }
 
 /**
@@ -241,10 +241,10 @@ void Set_Task3_Rotation_Angle_1(float angle)
  * @param angle 旋转角度(度，顺时针为正)
  * @return 无
  */
-void Set_Task3_Rotation_Angle_2(float angle)
+void Set_Task3_Rotation_Angle_2(int angle)
 {
-    Task3_Rotation_Angle_2 = angle;
-    printf("设置任务3 C点旋转角度: %.2f度\r\n", angle);
+    Task3_Rotation_Angle_2 = (float)angle;
+    printf("设置任务3 C点旋转角度: %.2f度\r\n", (float)angle);
 }
 
 /**
@@ -252,10 +252,10 @@ void Set_Task3_Rotation_Angle_2(float angle)
  * @param angle 旋转角度(度，逆时针为正)
  * @return 无
  */
-void Set_Task3_Rotation_Angle_3(float angle)
+void Set_Task3_Rotation_Angle_3(int angle)
 {
-    Task3_Rotation_Angle_3 = angle;
-    printf("设置任务3 B到D前旋转角度: %.2f度\r\n", angle);
+    Task3_Rotation_Angle_3 = (float)angle;
+    printf("设置任务3 B到D前旋转角度: %.2f度\r\n", (float)angle);
 }
 
 /**
@@ -263,7 +263,7 @@ void Set_Task3_Rotation_Angle_3(float angle)
  * @param time 转向时间(中断次数)
  * @return 无
  */
-void Set_Task3_Steer_Time_C(int time)
+void Set_Task3_Steer_Time_C(int time) 
 {
     Task3_Steer_Time_C = time;
     printf("设置任务3 C点转向时间: %d\r\n", time);
