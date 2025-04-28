@@ -551,13 +551,13 @@ u8 Task3_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达C点
+            if(moveForwardWithAngle_Handler(targetAngle)) {
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
                 
                 // 计算顺时针旋转TASK3_ROTATION_ANGLE_2度的目标角度
-                targetAngle = getHeadingAngle() - TASK3_ROTATION_ANGLE_2; // 顺时针旋转要减去角度值
+                targetAngle = targetAngle - TASK3_ROTATION_ANGLE_2; // 顺时针旋转要减去角度值
                 // 规范化角度到±180度范围
                 while(targetAngle > 180.0f) {
                     targetAngle -= 360.0f;
@@ -652,8 +652,8 @@ u8 Task3_Handler(void)
                 printf("B→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达D点
+            if(moveForwardWithAngle_Handler(targetAngle)) {
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示

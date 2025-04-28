@@ -234,7 +234,7 @@ int lineTracking_Handler(void)
 {
 	Encoder_Left = Read_Encoder(3);							// 读取左轮编码器的值，前进为正，后退为负
 	Encoder_Right = Read_Encoder(5);						// 修改为TIM5，前进为正，后退为负
-															// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
+															// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的脉冲极性相同
 	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）                                          				
 	int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM,速度控制
 	Velocity(Encoder_Left, Encoder_Right);
@@ -425,6 +425,8 @@ u8 localSteeringControl_Handler(float angle)
     return 0;  // 转向未完成
 }
 
+
+
 /**
  * @brief This function is used to control the vehicle to move in a straight line
  * @note This function adjusts the vehicle's speed and direction to maintain a straight path
@@ -434,17 +436,29 @@ u8 localSteeringControl_Handler(float angle)
  */ 
 int moveForward_Handler(void)
 {
-	static float referenceAngle = 0.0f;    // 直线行走的参考角度
-	static float integral = 0.0f;          // 积分项
-	static float lastError = 0.0f;         // 上一次误差
-	static u8 isInitialized = 0;           // 初始化标志
+	// 增加传感器初始化状态枚举
+	typedef enum {
+		INIT_READING,        // 读取初始角度状态
+		INIT_VALIDATING,     // 验证初始角度状态
+		FORWARD_MOVING       // 正常直线行驶状态
+	} MoveForwardState;
+	
+	static MoveForwardState state = INIT_READING;  // 状态机当前状态
+	static float referenceAngle = 0.0f;            // 直线行走的参考角度
+	static float integral = 0.0f;                  // 积分项
+	static float lastError = 0.0f;                 // 上一次误差
+	static float angleReadings[MOVE_FORWARD_INIT_SAMPLES]; // 存储初始读取的角度值
+	static uint8_t sampleCount = 0;                // 已读取的样本数量
+	static uint8_t validationCount = 0;            // 验证计数器
+	static float lastSampleAngle = 0.0f;           // 上一次读取的角度值，用于验证
 	
 	float currentAngle, error, derivative, angleCorrection;
+	float diff = 0.0f;  // 将变量声明移到switch语句前，并初始化
 	
 	// 读取编码器值
 	Encoder_Left = Read_Encoder(3);		// 读取左轮编码器的值，前进为正，后退为负
 	Encoder_Right = Read_Encoder(5);	// 修改为TIM5，前进为正，后退为负
-											// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
+	                                    // 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
 	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）
 	
 	// 获取速度控制的PWM值
@@ -457,78 +471,155 @@ int moveForward_Handler(void)
 	if (Turn_Pwm != INT16_MIN)
 	{
 		Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
-		isInitialized = 0; // 重置初始化标志，为下次直线行驶做准备
-		integral = 0.0f;   // 重置积分项
-        static uint8_t debug_counter = 0;
-        if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
-            debug_counter = 0;
-            printf("检测到黑线，直线行驶结束\r\n");
-        }
+		// 重置所有状态变量，为下次调用准备
+		state = INIT_READING;
+		sampleCount = 0;
+		validationCount = 0;
+		integral = 0.0f;
+        printf("检测到黑线，直线行驶结束\r\n");
 		return 1; // 返回1，表示完成直线移动
 	}
 	
-	// 如果是第一次调用，初始化参考角度
-	if (isInitialized == 0)
-	{
-		referenceAngle = getHeadingAngle(); // 获取当前航向角作为参考
-		printf("开始直线行驶，参考角度: %.2f\r\n", referenceAngle);
-		isInitialized = 1;
-		integral = 0.0f;
-		lastError = 0.0f;
-	}
-	
-	// 获取当前角度并计算误差
-	currentAngle = getHeadingAngle();
-	error = currentAngle - referenceAngle;
-	
-	// 处理误差过大的情况（过±180度），确保选择最短路径
-	if (error > 180.0f) {
-		error -= 360.0f;
-	} else if (error < -180.0f) {
-		error += 360.0f;
-	}
-	
-	// 计算积分项
-	integral += error;
-	
-	// 积分限幅
-	if (integral > FORWARD_I_LIMIT) {
-		integral = FORWARD_I_LIMIT;
-	} else if (integral < -FORWARD_I_LIMIT) {
-		integral = -FORWARD_I_LIMIT;
-	}
-	
-	// 如果误差很小，逐渐减小积分项，防止过冲
-	if (fabs(error) < (float)Forward_Error_Threshold/100.0f) {
-		integral *= 0.95f;
-	}
-	
-	// 计算微分项
-	derivative = error - lastError;
-	lastError = error;
-	
-	// 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-	angleCorrection = ((float)Forward_Kp/100.0f) * error + 
-					  ((float)Forward_Ki/100.0f) * integral + 
-					  ((float)Forward_Kd/100.0f) * derivative;
-	
-	// 输出限幅，参考localSteeringControl_Handler函数的实现
-	if (angleCorrection > STEERING_MAX_OUTPUT) {
-		angleCorrection = STEERING_MAX_OUTPUT;
-	} else if (angleCorrection < STEERING_MIN_OUTPUT) {
-		angleCorrection = STEERING_MIN_OUTPUT;
-	}
-	
-	// 基于角度纠正计算左右轮差速
-	Motor_Left = actual_velocity + angleCorrection;
-	Motor_Right = actual_velocity - angleCorrection;
-	
-	// 打印调试信息（降低频率，避免刷屏）
-	static uint8_t debug_counter = 0;
-	if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
-		debug_counter = 0;
-		printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
-			   currentAngle, referenceAngle, error, angleCorrection);
+	// 状态机处理
+	switch (state) {
+		case INIT_READING:
+			// 初始读取阶段 - 每次调用读取两个样本
+			if (sampleCount < MOVE_FORWARD_INIT_SAMPLES) {
+				// 一次调用最多读取2个样本
+				for (int i = 0; i < 2 && sampleCount < MOVE_FORWARD_INIT_SAMPLES; i++) {
+					// 获取当前角度并存储
+					angleReadings[sampleCount] = getHeadingAngle();
+					if (sampleCount == 0) {
+						printf("开始收集直线行驶初始角度样本...\r\n");
+					}
+					sampleCount++;
+				}
+				
+				// 如果还未收集完所有样本，返回继续
+				if (sampleCount < MOVE_FORWARD_INIT_SAMPLES) {
+					return 0;
+				}
+				
+				// 已收集完所有样本，检查样本稳定性
+				float maxAngle = angleReadings[0];
+				float minAngle = angleReadings[0];
+				float sum = angleReadings[0];
+				
+				// 找出最大值、最小值和计算平均值
+				for (int i = 1; i < MOVE_FORWARD_INIT_SAMPLES; i++) {
+					if (angleReadings[i] > maxAngle) maxAngle = angleReadings[i];
+					if (angleReadings[i] < minAngle) minAngle = angleReadings[i];
+					sum += angleReadings[i];
+				}
+				
+				// 计算最大偏差
+				float maxDeviation = maxAngle - minAngle;
+				// 计算平均值
+				float avgAngle = sum / MOVE_FORWARD_INIT_SAMPLES;
+				
+				printf("角度样本收集完成: 平均值=%.2f, 最大偏差=%.2f\r\n", avgAngle, maxDeviation);
+				
+				// 如果偏差太大，重新开始收集样本
+				if(maxDeviation > (float)MOVE_FORWARD_MAX_DEVIATION) {
+					printf("样本偏差过大(%.2f>%.2f)，重新收集...\r\n", 
+						   maxDeviation, (float)MOVE_FORWARD_MAX_DEVIATION);
+					sampleCount = 0;  // 重置样本计数
+					return 0;  // 返回继续收集
+				}
+				
+				// 样本稳定，进入验证阶段
+				lastSampleAngle = avgAngle;
+				validationCount = 0;
+				state = INIT_VALIDATING;
+				printf("样本稳定，进入验证阶段...\r\n");
+				return 0;
+			}
+			break;
+			
+		case INIT_VALIDATING:
+			// 验证阶段 - 连续验证几次角度是否稳定
+			currentAngle = getHeadingAngle();
+			diff = fabs(currentAngle - lastSampleAngle);  // 使用前面声明的变量
+			
+			// 如果角度变化过大，重新开始初始化
+			if (diff > (float)MOVE_FORWARD_MAX_DEVIATION) {
+				printf("验证中发现角度不稳定: %.2f vs %.2f, 差值=%.2f\r\n", 
+					   currentAngle, lastSampleAngle, diff);
+				state = INIT_READING;
+				sampleCount = 0;
+				return 0;
+			}
+			
+			// 记录当前角度供下次验证
+			lastSampleAngle = currentAngle;
+			validationCount++;
+			
+			// 完成足够次数的验证，启动直线移动
+			if (validationCount >= 3) {  // 至少验证3次
+				referenceAngle = currentAngle;
+				integral = 0.0f;
+				lastError = 0.0f;
+				state = FORWARD_MOVING;
+				printf("验证完成，开始直线行驶，参考角度: %.2f\r\n", referenceAngle);
+			}
+			return 0;
+			
+		case FORWARD_MOVING:
+			// 正常的直线行走阶段
+			// 获取当前角度并计算误差
+			currentAngle = getHeadingAngle();
+			error = currentAngle - referenceAngle;
+			
+			// 处理误差过大的情况（过±180度），确保选择最短路径
+			if (error > 180.0f) {
+				error -= 360.0f;
+			} else if (error < -180.0f) {
+				error += 360.0f;
+			}
+			
+			// 计算积分项
+			integral += error;
+			
+			// 积分限幅
+			if (integral > FORWARD_I_LIMIT) {
+				integral = FORWARD_I_LIMIT;
+			} else if (integral < -FORWARD_I_LIMIT) {
+				integral = -FORWARD_I_LIMIT;
+			}
+			
+			// 如果误差很小，逐渐减小积分项，防止过冲
+			if (fabs(error) < (float)Forward_Error_Threshold/100.0f) {
+				integral *= 0.95f;
+			}
+			
+			// 计算微分项
+			derivative = error - lastError;
+			lastError = error;
+			
+			// 计算PID输出 - 使用放大100倍后的参数值，并转换回float
+			angleCorrection = ((float)Forward_Kp/100.0f) * error + 
+							  ((float)Forward_Ki/100.0f) * integral + 
+							  ((float)Forward_Kd/100.0f) * derivative;
+			
+			// 输出限幅，参考localSteeringControl_Handler函数的实现
+			if (angleCorrection > STEERING_MAX_OUTPUT) {
+				angleCorrection = STEERING_MAX_OUTPUT;
+			} else if (angleCorrection < STEERING_MIN_OUTPUT) {
+				angleCorrection = STEERING_MIN_OUTPUT;
+			}
+			
+			// 基于角度纠正计算左右轮差速
+			Motor_Left = actual_velocity + angleCorrection;
+			Motor_Right = actual_velocity - angleCorrection;
+			
+			// 打印调试信息（降低频率，避免刷屏）
+			static uint8_t debug_counter = 0;
+			if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
+				debug_counter = 0;
+				printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
+					   currentAngle, referenceAngle, error, angleCorrection);
+			}
+			break;
 	}
 	
 	// 执行电机控制
@@ -539,6 +630,139 @@ int moveForward_Handler(void)
 	
 	return 0; // 返回0，表示没有完成直线移动，正在直行中
 }
+
+
+
+/**
+ * @brief 指定角度直线行驶函数
+ * @note 此函数可以接受一个参考角度作为参数，使小车按照指定的角度直线行驶
+ * @param referenceAngle 小车行驶的参考角度(度)
+ * @return int 1:完成直线行驶(检测到黑线) 0:小车正在直行中
+ */
+int moveForwardWithAngle_Handler(float referenceAngle)
+{
+    // 状态机状态枚举
+    typedef enum {
+        INIT,              // 初始化状态
+        FORWARD_MOVING     // 正常直线行驶状态
+    } MoveForwardState;
+    
+    // 静态变量
+    static MoveForwardState state = INIT;
+    static float integral = 0.0f;          // 积分项
+    static float lastError = 0.0f;         // 上一次误差
+    
+    float currentAngle, error, derivative, angleCorrection;
+    
+    // 边界条件处理 - 确保参考角度在±180度范围内
+    while(referenceAngle > 180.0f) {
+        referenceAngle -= 360.0f;
+    }
+    while(referenceAngle < -180.0f) {
+        referenceAngle += 360.0f;
+    }
+    
+    // 读取编码器值
+    Encoder_Left = Read_Encoder(3);        // 读取左轮编码器的值，前进为正，后退为负
+    Encoder_Right = Read_Encoder(5);       // 读取右轮编码器的值，前进为正，后退为负
+    Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）
+    
+    // 获取速度控制的PWM值
+    int actual_velocity = Velocity(Encoder_Left, Encoder_Right);
+    
+    // 读取灰度传感器数据
+    grey_sensor_Read();
+    // 检查是否有传感器检测到黑线
+    Turn_Pwm = Calculate_Turn_Pwm();
+    if (Turn_Pwm != INT16_MIN)
+    {
+        Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
+        // 重置所有状态变量，为下次调用准备
+        state = INIT;
+        integral = 0.0f;
+        lastError = 0.0f;
+        printf("检测到黑线，直线行驶结束\r\n");
+        return 1; // 返回1，表示完成直线移动
+    }
+    
+    // 状态机处理
+    switch (state) {
+        case INIT:
+            // 初始化状态 - 重置积分和误差
+            printf("开始按指定角度 %.2f 度直线行驶\r\n", referenceAngle);
+            integral = 0.0f;
+            lastError = 0.0f;
+            state = FORWARD_MOVING;
+            return 0;
+            
+        case FORWARD_MOVING:
+            // 正常的直线行走阶段
+            // 获取当前角度并计算误差
+            currentAngle = getHeadingAngle();
+            error = currentAngle - referenceAngle;
+            
+            // 处理误差过大的情况（过±180度），确保选择最短路径
+            if (error > 180.0f) {
+                error -= 360.0f;
+            } else if (error < -180.0f) {
+                error += 360.0f;
+            }
+            
+            // 计算积分项
+            integral += error;
+            
+            // 积分限幅
+            if (integral > FORWARD_I_LIMIT) {
+                integral = FORWARD_I_LIMIT;
+            } else if (integral < -FORWARD_I_LIMIT) {
+                integral = -FORWARD_I_LIMIT;
+            }
+            
+            // 如果误差很小，逐渐减小积分项，防止过冲
+            if (fabs(error) < (float)Forward_Error_Threshold/100.0f) {
+                integral *= 0.95f;
+            }
+            
+            // 计算微分项
+            derivative = error - lastError;
+            lastError = error;
+            
+            // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
+            angleCorrection = ((float)Forward_Kp/100.0f) * error + 
+							  ((float)Forward_Ki/100.0f) * integral + 
+							  ((float)Forward_Kd/100.0f) * derivative;
+            
+            // 输出限幅
+            if (angleCorrection > STEERING_MAX_OUTPUT) {
+                angleCorrection = STEERING_MAX_OUTPUT;
+            } else if (angleCorrection < STEERING_MIN_OUTPUT) {
+                angleCorrection = STEERING_MIN_OUTPUT;
+            }
+            
+            // 基于角度纠正计算左右轮差速
+            Motor_Left = actual_velocity + angleCorrection;
+            Motor_Right = actual_velocity - angleCorrection;
+            
+            // 打印调试信息（降低频率，避免刷屏）
+            static uint8_t debug_counter = 0;
+            if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
+                debug_counter = 0;
+                printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
+					   currentAngle, referenceAngle, error, angleCorrection);
+            }
+            break;
+    }
+    
+    // 执行电机控制
+    if (Flag_Stop == 1) 
+        Set_Pwm(0, 0); // 停止标志为1时停止电机
+    else
+        Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+    
+    return 0; // 返回0，表示没有完成直线移动，正在直行中
+}
+
+
 
 /**
  * @brief 控制小车转向到指定的绝对角度

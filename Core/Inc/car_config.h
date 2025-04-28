@@ -86,6 +86,10 @@
 #define TASK4_CYCLE_DELAY         200    // 任务4循环之间的延时(中断次数，5ms/次)
 #define TASK4_MOVE_FORWARD_SPEED  10     // 任务4中直线行驶的速度(速度值)
 
+//*********************moveForward稳定性检测参数********************************
+#define MOVE_FORWARD_INIT_SAMPLES   6    // moveForward函数初始化时读取角度值的次数
+#define MOVE_FORWARD_MAX_DEVIATION  2.0  // moveForward函数初始化时允许的最大角度偏差(度)
+
 /*****************************无关变量配置***********************************/
 #define WAY_ANGLE_DEFAULT           1      // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
 #define MIDDLE_ANGLE_DEFAULT        0      // 初始平衡角度设定
