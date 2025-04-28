@@ -1,6 +1,16 @@
 #include "setParma.h"
 #include <stdio.h>
 
+// 定义Task3相关参数变量，初始值设置为原宏定义值
+float Task3_Rotation_Angle_1 = TASK3_ROTATION_ANGLE_1;    // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+float Task3_Rotation_Angle_2 = TASK3_ROTATION_ANGLE_2;    // 任务3中C点旋转需要顺时针旋转的角度(度)
+float Task3_Rotation_Angle_3 = TASK3_ROTATION_ANGLE_3;    // 任务3中从B到D前需要逆时针旋转的角度(度)
+int Task3_Steer_Time_C = TASK3_STEER_TIME_C;            // C点openLoopSteering的转向时间参数(中断次数)
+int Task3_Steer_PWM_C = TASK3_STEER_PWM_C;             // C点openLoopSteering的PWM参数(速度值)
+int Task3_Steer_Time_D = TASK3_STEER_TIME_D;           // D点openLoopSteering的转向时间参数(中断次数)
+int Task3_Steer_PWM_D = TASK3_STEER_PWM_D;             // D点openLoopSteering的PWM参数(速度值)
+int Task3_Move_Forward_Speed = TASK3_MOVE_FORWARD_SPEED;       // 任务3中直线行驶的速度(速度值)
+
 /**
  * @brief 设置转向控制比例系数
  * @param kp 新的比例系数(放大100倍的整数)
@@ -213,4 +223,172 @@ float Get_Forward_Error_Threshold(void)
     float threshold = (float)Forward_Error_Threshold/100.0f;
     printf("当前直线行走角度修正误差阈值: %.3f度\r\n", threshold);
     return threshold;
+}
+
+/**
+ * @brief 设置任务3中从A点对准C点的旋转角度
+ * @param angle 旋转角度(度，顺时针为正)
+ * @return 无
+ */
+void Set_Task3_Rotation_Angle_1(float angle)
+{
+    Task3_Rotation_Angle_1 = angle;
+    printf("设置任务3初始旋转角度: %.2f度\r\n", angle);
+}
+
+/**
+ * @brief 设置任务3中C点旋转角度
+ * @param angle 旋转角度(度，顺时针为正)
+ * @return 无
+ */
+void Set_Task3_Rotation_Angle_2(float angle)
+{
+    Task3_Rotation_Angle_2 = angle;
+    printf("设置任务3 C点旋转角度: %.2f度\r\n", angle);
+}
+
+/**
+ * @brief 设置任务3中B到D前的旋转角度
+ * @param angle 旋转角度(度，逆时针为正)
+ * @return 无
+ */
+void Set_Task3_Rotation_Angle_3(float angle)
+{
+    Task3_Rotation_Angle_3 = angle;
+    printf("设置任务3 B到D前旋转角度: %.2f度\r\n", angle);
+}
+
+/**
+ * @brief 设置任务3中C点开环转向时间
+ * @param time 转向时间(中断次数)
+ * @return 无
+ */
+void Set_Task3_Steer_Time_C(int time)
+{
+    Task3_Steer_Time_C = time;
+    printf("设置任务3 C点转向时间: %d\r\n", time);
+}
+
+/**
+ * @brief 设置任务3中C点开环转向PWM值
+ * @param pwm PWM值(速度值)
+ * @return 无
+ */
+void Set_Task3_Steer_PWM_C(int pwm)
+{
+    Task3_Steer_PWM_C = pwm;
+    printf("设置任务3 C点转向PWM: %d\r\n", pwm);
+}
+
+/**
+ * @brief 设置任务3中D点开环转向时间
+ * @param time 转向时间(中断次数，负值表示顺时针旋转)
+ * @return 无
+ */
+void Set_Task3_Steer_Time_D(int time)
+{
+    Task3_Steer_Time_D = time;
+    printf("设置任务3 D点转向时间: %d\r\n", time);
+}
+
+/**
+ * @brief 设置任务3中D点开环转向PWM值
+ * @param pwm PWM值(速度值)
+ * @return 无
+ */
+void Set_Task3_Steer_PWM_D(int pwm)
+{
+    Task3_Steer_PWM_D = pwm;
+    printf("设置任务3 D点转向PWM: %d\r\n", pwm);
+}
+
+/**
+ * @brief 设置任务3中直线行驶速度
+ * @param speed 速度值
+ * @return 无
+ */
+void Set_Task3_Move_Forward_Speed(int speed)
+{
+    Task3_Move_Forward_Speed = speed;
+    printf("设置任务3直线行驶速度: %d\r\n", speed);
+}
+
+/**
+ * @brief 获取任务3中从A点对准C点的旋转角度
+ * @return 当前角度值(度)
+ */
+float Get_Task3_Rotation_Angle_1(void)
+{
+    printf("当前任务3初始旋转角度: %.2f度\r\n", Task3_Rotation_Angle_1);
+    return Task3_Rotation_Angle_1;
+}
+
+/**
+ * @brief 获取任务3中C点旋转角度
+ * @return 当前角度值(度)
+ */
+float Get_Task3_Rotation_Angle_2(void)
+{
+    printf("当前任务3 C点旋转角度: %.2f度\r\n", Task3_Rotation_Angle_2);
+    return Task3_Rotation_Angle_2;
+}
+
+/**
+ * @brief 获取任务3中B到D前的旋转角度
+ * @return 当前角度值(度)
+ */
+float Get_Task3_Rotation_Angle_3(void)
+{
+    printf("当前任务3 B到D前旋转角度: %.2f度\r\n", Task3_Rotation_Angle_3);
+    return Task3_Rotation_Angle_3;
+}
+
+/**
+ * @brief 获取任务3中C点开环转向时间
+ * @return 当前转向时间(中断次数)
+ */
+int Get_Task3_Steer_Time_C(void)
+{
+    printf("当前任务3 C点转向时间: %d\r\n", Task3_Steer_Time_C);
+    return Task3_Steer_Time_C;
+}
+
+/**
+ * @brief 获取任务3中C点开环转向PWM值
+ * @return 当前PWM值(速度值)
+ */
+int Get_Task3_Steer_PWM_C(void)
+{
+    printf("当前任务3 C点转向PWM: %d\r\n", Task3_Steer_PWM_C);
+    return Task3_Steer_PWM_C;
+}
+
+/**
+ * @brief 获取任务3中D点开环转向时间
+ * @return 当前转向时间(中断次数)
+ */
+int Get_Task3_Steer_Time_D(void)
+{
+    printf("当前任务3 D点转向时间: %d\r\n", Task3_Steer_Time_D);
+    return Task3_Steer_Time_D;
+}
+
+/**
+ * @brief 获取任务3中D点开环转向PWM值
+ * @return 当前PWM值(速度值)
+ */
+int Get_Task3_Steer_PWM_D(void)
+{
+    printf("当前任务3 D点转向PWM: %d\r\n", Task3_Steer_PWM_D);
+    return Task3_Steer_PWM_D;
+}
+
+/**
+ * @brief 获取任务3中直线行驶速度
+ * @return 当前速度值
+ */
+int Get_Task3_Move_Forward_Speed(void)
+{
+    printf("当前任务3直线行驶速度: %d\r\n", Task3_Move_Forward_Speed);
+    return Task3_Move_Forward_Speed;
 }

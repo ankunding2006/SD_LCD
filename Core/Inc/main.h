@@ -61,6 +61,14 @@ extern int16_t iMag[3];
 extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 extern volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
 extern volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm;
+extern float Task3_Rotation_Angle_1;     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+extern float Task3_Rotation_Angle_2;     // 任务3中C点旋转需要顺时针旋转的角度(度)
+extern float Task3_Rotation_Angle_3;     // 任务3中从B到D前需要逆时针旋转的角度(度)
+extern int Task3_Steer_Time_C;           // C点openLoopSteering的转向时间参数(中断次数)
+extern int Task3_Steer_PWM_C;            // C点openLoopSteering的PWM参数(速度值)
+extern int Task3_Steer_Time_D;           // D点openLoopSteering的转向时间参数(中断次数)
+extern int Task3_Steer_PWM_D;            // D点openLoopSteering的PWM参数(速度值)
+extern int Task3_Move_Forward_Speed;     // 任务3中直线行驶的速度(速度值)
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

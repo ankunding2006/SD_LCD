@@ -49,6 +49,24 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Forward_Ki, "float Get_Forward_Ki(void)"},
     {(void *)Get_Forward_Kd, "float Get_Forward_Kd(void)"},
     {(void *)Get_Forward_Error_Threshold, "float Get_Forward_Error_Threshold(void)"},
+    
+    // 注册任务3相关参数调节函数
+    {(void *)Set_Task3_Rotation_Angle_1, "void Set_Task3_Rotation_Angle_1(float angle)"},
+    {(void *)Set_Task3_Rotation_Angle_2, "void Set_Task3_Rotation_Angle_2(float angle)"},
+    {(void *)Set_Task3_Rotation_Angle_3, "void Set_Task3_Rotation_Angle_3(float angle)"},
+    {(void *)Set_Task3_Steer_Time_C, "void Set_Task3_Steer_Time_C(int time)"},
+    {(void *)Set_Task3_Steer_PWM_C, "void Set_Task3_Steer_PWM_C(int pwm)"},
+    {(void *)Set_Task3_Steer_Time_D, "void Set_Task3_Steer_Time_D(int time)"},
+    {(void *)Set_Task3_Steer_PWM_D, "void Set_Task3_Steer_PWM_D(int pwm)"},
+    {(void *)Set_Task3_Move_Forward_Speed, "void Set_Task3_Move_Forward_Speed(int speed)"},
+    {(void *)Get_Task3_Rotation_Angle_1, "float Get_Task3_Rotation_Angle_1(void)"},
+    {(void *)Get_Task3_Rotation_Angle_2, "float Get_Task3_Rotation_Angle_2(void)"},
+    {(void *)Get_Task3_Rotation_Angle_3, "float Get_Task3_Rotation_Angle_3(void)"},
+    {(void *)Get_Task3_Steer_Time_C, "int Get_Task3_Steer_Time_C(void)"},
+    {(void *)Get_Task3_Steer_PWM_C, "int Get_Task3_Steer_PWM_C(void)"},
+    {(void *)Get_Task3_Steer_Time_D, "int Get_Task3_Steer_Time_D(void)"},
+    {(void *)Get_Task3_Steer_PWM_D, "int Get_Task3_Steer_PWM_D(void)"},
+    {(void *)Get_Task3_Move_Forward_Speed, "int Get_Task3_Move_Forward_Speed(void)"},
 };
 
 /******************************************************************************************/
