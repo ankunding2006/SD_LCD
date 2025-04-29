@@ -451,7 +451,8 @@ int moveForward_Handler(void)
 	static uint8_t sampleCount = 0;                // 已读取的样本数量
 	static uint8_t validationCount = 0;            // 验证计数器
 	static float lastSampleAngle = 0.0f;           // 上一次读取的角度值，用于验证
-	
+	static uint8_t debug_counter = 0;
+
 	float currentAngle, error, derivative, angleCorrection;
 	float diff = 0.0f;  // 将变量声明移到switch语句前，并初始化
 
@@ -467,7 +468,11 @@ int moveForward_Handler(void)
 		sampleCount = 0;
 		validationCount = 0;
 		integral = 0.0f;
-        printf("检测到黑线，直线行驶结束\r\n");
+        if(debug_counter>DEBUG_PRINT_COUNT)
+        {
+            debug_counter = 0;
+            printf("传感器检测到黑线，停止电机\r\n");
+        }
 		return 1; // 返回1，表示完成直线移动
 	}
 	
@@ -604,15 +609,22 @@ int moveForward_Handler(void)
 			Motor_Right = forwardBase_PWM - angleCorrection;
 			
 			// 打印调试信息（降低频率，避免刷屏）
-			static uint8_t debug_counter = 0;
-			if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
-				debug_counter = 0;
+			if (debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
 				printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
 			}
 			break;
 	}
-	
+
+    if (debug_counter < DEBUG_PRINT_COUNT) 
+    {
+        debug_counter++;
+    } 
+    else 
+    {
+        debug_counter = 0; // 重置计数器
+    }
+
 	// 执行电机控制
 	if (Flag_Stop == 1) 
 		Set_Pwm(0, 0); // 停止标志为1时停止电机
@@ -642,7 +654,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     static MoveForwardState state = INIT;
     static float integral = 0.0f;          // 积分项
     static float lastError = 0.0f;         // 上一次误差
-    
+    static uint8_t debug_counter = 0;      // 调试计数器
     float currentAngle, error, derivative, angleCorrection;
     
     // 边界条件处理 - 确保参考角度在±180度范围内
@@ -664,7 +676,9 @@ int moveForwardWithAngle_Handler(float referenceAngle)
         state = INIT;
         integral = 0.0f;
         lastError = 0.0f;
-        printf("检测到黑线，直线行驶结束\r\n");
+        if(debug_counter > DEBUG_PRINT_COUNT) {
+            printf("传感器检测到黑线，停止电机\r\n");
+        }
         return 1; // 返回1，表示完成直线移动
     }
     
@@ -728,12 +742,20 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             
             // 打印调试信息（降低频率，避免刷屏）
             static uint8_t debug_counter = 0;
-            if (++debug_counter >= 50) { // 每50次中断打印一次，约250ms
-                debug_counter = 0;
+            if (++debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
             }
             break;
+    }
+
+    if(debug_counter < DEBUG_PRINT_COUNT) 
+    {
+        debug_counter++;
+    } 
+    else 
+    {
+        debug_counter = 0; // 重置计数器
     }
     
     // 执行电机控制
