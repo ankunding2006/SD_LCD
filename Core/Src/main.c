@@ -174,7 +174,8 @@ volatile u8 delay_flag, delay_50;                                               
 float Balance_Kp = BALANCE_KP_DEFAULT, Balance_Kd = BALANCE_KD_DEFAULT, Velocity_Kp = VELOCITY_KP_DEFAULT, Velocity_Ki = VELOCITY_KI_DEFAULT, Turn_Kp = TURN_KP_DEFAULT, Turn_Kd = TURN_KD_DEFAULT; // PID参数（放大100倍）
 u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状态
 float Sensor_Kp = SENSOR_KP_DEFAULT, Sensor_KI = SENSOR_KI_DEFAULT, Sensor_Kd = SENSOR_KD_DEFAULT;                  // 传感器的PID参数（放大100倍）
-float Target_Velocity = TARGET_VELOCITY_DEFAULT;                                                                    // 目标速度
+float Target_Velocity = TARGET_VELOCITY_DEFAULT;        
+u8 resetTask_flag=0;                 // 是否要重启任务标志位                                                           
 
 // 转向控制PID参数及相关变量（放大100倍）
 u16 Steering_Kp = STEERING_KP_DEFAULT;                                                                             // 转向控制比例系数（放大100倍）
@@ -312,7 +313,7 @@ int main(void)
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
 
   led_off();
-  app_main();
+  //!app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK); 
   Menu_Init(); // 初始化菜单系统
   JY901_init(); // 初始化JY901传感器 
@@ -326,7 +327,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //Lcd_MenuTask(); // 菜单任务
+    Lcd_MenuTask(); // 菜单任务
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

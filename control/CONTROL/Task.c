@@ -402,7 +402,7 @@ u8 Task3_Handler(void)
         INIT_WAIT,         // 等待陀螺仪稳定
         INIT,              // 初始化状态
         INIT_DELAY,        // A点初始延时状态(LED提示)
-        TURN_A_TO_C,       // A点顺时针旋转50度对准C点
+        TURN_A_TO_C,       // A点顺时针旋转一定角度对准C点
         MOVE_A_TO_C,       // A到C直线行驶
         C_POINT_DELAY,     // C点延时状态(LED提示)
         TURN_AT_C,         // 在C点旋转
@@ -426,6 +426,7 @@ u8 Task3_Handler(void)
     static uint8_t retry_count = 0;      // 重试次数计数
     static uint16_t debug_print_counter = 0; // 调试信息发送计数器
     static uint16_t delay_counter = 0;   // 非阻塞延时计数器
+    static u16 resetMode_start_time=0;
     
     // 调试信息发送频率控制
     bool can_print_debug = false;
@@ -433,7 +434,27 @@ u8 Task3_Handler(void)
         debug_print_counter = 0;
         can_print_debug = true;
     }
-    
+    if(resetTask_flag==1)
+    {
+        // 3s后重置任务状态和变量
+        Set_Pwm(0,0);
+        if(resetMode_start_time == 0)
+        {resetMode_start_time=HAL_GetTick();}
+        if(HAL_GetTick()-resetMode_start_time>RESET_WAIT_TIME)
+        {
+            currentState = INIT;
+            init_start_time = 0;
+            prev_angle = 0.0f;
+            retry_count = 0;
+            delay_counter = 0;
+            resetTask_flag=0;
+            resetMode_start_time=0;
+        }
+        else
+        {
+            return 0;
+        }
+    }
     // 状态机实现
     switch(currentState)
     {
@@ -563,7 +584,6 @@ u8 Task3_Handler(void)
             return 0;
             
         case C_POINT_DELAY: 
-            delay_counter++;
             led3_off();
             printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
             currentState = TURN_AT_C;
@@ -652,13 +672,9 @@ u8 Task3_Handler(void)
             return 0;
             
         case D_POINT_DELAY:
-            // D点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led2_off();
                 printf("在D点进行顺时针旋转\r\n");
                 currentState = TURN_AT_D; // 进入D点旋转状态
-            }
             return 0;
             
         case TURN_AT_D:

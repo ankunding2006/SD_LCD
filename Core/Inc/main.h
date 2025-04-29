@@ -61,6 +61,7 @@ extern int16_t iMag[3];
 extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 extern volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
 extern volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm;
+extern u8 resetTask_flag;                // 是否要重启任务标志位   
 extern float Task3_Rotation_Angle_1;     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
 extern float Task3_Rotation_Angle_2;     // 任务3中C点旋转需要顺时针旋转的角度(度)
 extern float Task3_Rotation_Angle_3;     // 任务3中从B到D前需要逆时针旋转的角度(度)

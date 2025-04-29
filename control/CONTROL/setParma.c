@@ -441,3 +441,15 @@ int Get_Task3_Move_Forward_Speed(void)
     printf("当前任务3直线行驶速度: %d\r\n", Task3_Move_Forward_Speed);
     return Task3_Move_Forward_Speed;
 }
+
+
+/**
+ * @brief 重置任务
+ * @return none
+ * 
+ */
+void resetTask(void)
+{
+    resetTask_flag=1;
+    printf("即将在%dms后重置任务",RESET_WAIT_TIME);
+}

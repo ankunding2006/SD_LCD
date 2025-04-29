@@ -28,7 +28,7 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Set_Target_Velocity, "void Set_Target_Velocity(int Target_Velocity)"}, 
     {(void *)getHeadingAngle, "float getHeadingAngle(void)"},
     
-    // 新增转向控制参数调节函数 - 使用整数参数(放大100倍)
+    // 转向控制参数调节函数 - 使用整数参数(放大100倍)
     {(void *)Set_Steering_Kp, "void Set_Steering_Kp(u16 kp)"},
     {(void *)Set_Steering_Ki, "void Set_Steering_Ki(u16 ki)"},
     {(void *)Set_Steering_Kd, "void Set_Steering_Kd(u16 kd)"},
@@ -71,6 +71,7 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Task3_Steer_Time_D, "int Get_Task3_Steer_Time_D(void)"},
     {(void *)Get_Task3_Steer_PWM_D, "int Get_Task3_Steer_PWM_D(void)"},
     {(void *)Get_Task3_Move_Forward_Speed, "int Get_Task3_Move_Forward_Speed(void)"},
+    {(void *)resetTask, "void resetTask(void)"},
 };
 
 /******************************************************************************************/

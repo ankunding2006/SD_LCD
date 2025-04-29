@@ -50,6 +50,7 @@ int Get_Task3_Steer_PWM_C(void);
 int Get_Task3_Steer_Time_D(void);
 int Get_Task3_Steer_PWM_D(void);
 int Get_Task3_Move_Forward_Speed(void);
+void resetTask(void);
 
 #ifdef __cplusplus
 }
