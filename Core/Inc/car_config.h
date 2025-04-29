@@ -21,7 +21,7 @@
 #define STEERING_ERROR_THRESHOLD_DEFAULT     300    // 转向控制误差阈值(度)
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
-#define FLAG_STOP_DEFAULT           0    // 是否默认停止
+#define FLAG_STOP_DEFAULT           1    // 是否默认停止
 #define FLAG_SHOW_DEFAULT           0    // 默认显示打开
 #define MODE_DEFAULT                0    // 初始模式选择,默认为普通控制模式 
 /****************************PID系数初值配置*********************************/
@@ -68,7 +68,6 @@
 
 //*********************任务3相关参数*****************************************
 #define TASK3_ROTATION_ANGLE_1    26     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_2    37     // 任务3中C点旋转需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_3    68     // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C        400    // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C         600    // C点openLoopSteering的PWM参数(速度值)
@@ -78,7 +77,6 @@
 
 //*********************任务4相关参数*****************************************
 #define TASK4_ROTATION_ANGLE_1    47     // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK4_ROTATION_ANGLE_2    50     // 任务4中C点旋转需要顺时针旋转的角度(度)
 #define TASK4_ROTATION_ANGLE_3    60     // 任务4中从B到D前需要逆时针旋转的角度(度)
 #define TASK4_STEER_TIME_C        125    // 任务4中C点openLoopSteering的转向时间参数(中断次数)
 #define TASK4_STEER_PWM_C         900     // 任务4中C点openLoopSteering的PWM参数(速度值)
@@ -95,3 +93,5 @@
 /*****************************无关变量配置***********************************/
 #define WAY_ANGLE_DEFAULT           1      // 角度获取算法选择 1：四元数  2：卡尔曼  3：互补滤波
 #define MIDDLE_ANGLE_DEFAULT        0      // 初始平衡角度设定
+#define TASK3_ROTATION_ANGLE_2      37     // 任务3中C点旋转需要顺时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_2      50     // 任务4中C点旋转需要顺时针旋转的角度(度)
