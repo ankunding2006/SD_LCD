@@ -47,6 +47,8 @@
 #define STEERING_KI_DEFAULT        3     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 #define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
+//******************************开环转向参数**********************************/
+#define OPENLOOP_STEERING_BASE_PWM 500   // 开环转向基础PWM值
 
 //*********************直线行驶角度修正PID参数（放大100倍）******************
 #define FORWARD_KP_DEFAULT         8000  // 直线行走角度修正比例系数
@@ -54,7 +56,7 @@
 #define FORWARD_KD_DEFAULT         0     // 直线行走角度修正微分系数
 #define FORWARD_ERROR_THRESHOLD    370   // 直线行走角度修正误差阈值(度)，实际为2.0度
 #define FORWARD_I_LIMIT            1000  // 直线行走积分限幅值
-
+#define FORWARDBASE_PWM            1400  // 直线行走基础PWM值
 //*********************陀螺仪数据验证参数******************
 #define GYRO_CHECK_THRESHOLD      20     // 陀螺仪数据连续读取差值阈值(0.20度)
 #define GYRO_CHECK_INTERVAL       300    // 陀螺仪初始化稳定等待时间(ms)

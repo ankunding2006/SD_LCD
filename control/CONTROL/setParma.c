@@ -12,6 +12,29 @@ int Task3_Steer_PWM_D = TASK3_STEER_PWM_D;             // D点openLoopSteering的P
 int Task3_Move_Forward_Speed = TASK3_MOVE_FORWARD_SPEED;       // 任务3中直线行驶的速度(速度值)
 
 /**
+ * @brief 设置开环转向基础PWM值
+ * @param pwm 新的开环转向基础PWM值
+ * @return 无
+ */
+void Set_openLoopSteeringBase_PWM(u16 pwm)
+{
+    openLoopSteeringBase_PWM = pwm;
+    printf("设置开环转向基础PWM值: PWM = %d\r\n", pwm);
+}
+
+/**
+ * @brief 获取开环转向基础PWM值
+ * @return 当前开环转向基础PWM值
+ */
+
+
+u16 Get_openLoopSteeringBase_PWM(void)
+{
+    printf("当前开环转向基础PWM值: PWM = %d\r\n", openLoopSteeringBase_PWM);
+    return openLoopSteeringBase_PWM;
+}
+
+/**
  * @brief 设置转向控制比例系数
  * @param kp 新的比例系数(放大100倍的整数)
  * @return 无
@@ -119,6 +142,19 @@ float Get_Steering_Error_Threshold(void)
 }
 
 /**
+ * @brief 设置直线行走基础PWM值
+ * @param pwm 新的基础PWM值(整数)
+ * @return 无
+ */
+void Set_forwardBase_PWM(u16 pwm)
+{
+    forwardBase_PWM = pwm;
+    printf("设置直线行走基础PWM值: PWM = %u\r\n", pwm);
+}
+
+
+
+/**
  * @brief 设置直线行走角度修正比例系数
  * @param kp 新的比例系数(放大100倍的整数)
  * @return 无
@@ -180,6 +216,19 @@ void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
     printf("Kp = %.3f, Ki = %.3f, Kd = %.3f\r\n", (float)kp/100.0f, (float)ki/100.0f, (float)kd/100.0f);
     printf("误差阈值 = %.3f度\r\n", (float)threshold/100.0f);
 }
+
+
+/**
+ * @brief 获取直线行走基础PWM值
+ * @return 当前基础PWM值
+ */
+u16 Get_forwardBase_PWM(void)
+{
+    printf("当前直线行走基础PWM值: PWM = %u\r\n", forwardBase_PWM);
+    return forwardBase_PWM;
+}
+
+
 
 /**
  * @brief 获取直线行走角度修正比例系数

@@ -286,12 +286,12 @@ u8 openLoopSteering_Handler(int SteerTime,int PWM_Value)
     } else {
         if(SteerTime > 0) {
             // 逆时针转向
-            Motor_Left = -PWM_Value; // 左轮反转
-            Motor_Right = PWM_Value; // 右轮正转
+            Motor_Left = openLoopSteeringBase_PWM - PWM_Value; // 左轮反转
+            Motor_Right = openLoopSteeringBase_PWM + PWM_Value; // 右轮正转
         } else {
             // 顺时针转向
-            Motor_Left = PWM_Value; // 左轮正转
-            Motor_Right = -PWM_Value; // 右轮反转
+            Motor_Left = openLoopSteeringBase_PWM + PWM_Value; // 左轮正转
+            Motor_Right = openLoopSteeringBase_PWM - PWM_Value; // 右轮反转
         }
         if(Flag_Stop==1) // 如果停止标志为1，停止电机
             Set_Pwm(0, 0); // 停止电机
@@ -454,16 +454,7 @@ int moveForward_Handler(void)
 	
 	float currentAngle, error, derivative, angleCorrection;
 	float diff = 0.0f;  // 将变量声明移到switch语句前，并初始化
-	
-	// 读取编码器值
-	Encoder_Left = Read_Encoder(3);		// 读取左轮编码器的值，前进为正，后退为负
-	Encoder_Right = Read_Encoder(5);	// 修改为TIM5，前进为正，后退为负
-	                                    // 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的极性相同
-	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）
-	
-	// 获取速度控制的PWM值
-	int actual_velocity = Velocity(Encoder_Left, Encoder_Right);
-	
+
 	// 读取灰度传感器数据
 	grey_sensor_Read();
 	// 检查是否有传感器检测到黑线
@@ -609,8 +600,8 @@ int moveForward_Handler(void)
 			}
 			
 			// 基于角度纠正计算左右轮差速
-			Motor_Left = actual_velocity + angleCorrection;
-			Motor_Right = actual_velocity - angleCorrection;
+			Motor_Left = forwardBase_PWM + angleCorrection;
+			Motor_Right = forwardBase_PWM - angleCorrection;
 			
 			// 打印调试信息（降低频率，避免刷屏）
 			static uint8_t debug_counter = 0;
@@ -661,15 +652,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     while(referenceAngle < -180.0f) {
         referenceAngle += 360.0f;
     }
-    
-    // 读取编码器值
-    Encoder_Left = Read_Encoder(3);        // 读取左轮编码器的值，前进为正，后退为负
-    Encoder_Right = Read_Encoder(5);       // 读取右轮编码器的值，前进为正，后退为负
-    Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）
-    
-    // 获取速度控制的PWM值
-    int actual_velocity = Velocity(Encoder_Left, Encoder_Right);
-    
+
     // 读取灰度传感器数据
     grey_sensor_Read();
     // 检查是否有传感器检测到黑线
@@ -740,8 +723,8 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             }
             
             // 基于角度纠正计算左右轮差速
-            Motor_Left = actual_velocity + angleCorrection;
-            Motor_Right = actual_velocity - angleCorrection;
+            Motor_Left = forwardBase_PWM + angleCorrection;
+            Motor_Right = forwardBase_PWM - angleCorrection;
             
             // 打印调试信息（降低频率，避免刷屏）
             static uint8_t debug_counter = 0;

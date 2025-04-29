@@ -38,8 +38,10 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Steering_Ki, "float Get_Steering_Ki(void)"},
     {(void *)Get_Steering_Kd, "float Get_Steering_Kd(void)"},
     {(void *)Get_Steering_Error_Threshold, "float Get_Steering_Error_Threshold(void)"},
-    
-    // 新增直线行驶角度修正参数调节函数 - 使用整数参数(放大100倍)
+    {(void *)Set_openLoopSteeringBase_PWM, "void Set_openLoopSteeringBase_PWM(u16 pwm)"},
+    {(void *)Get_openLoopSteeringBase_PWM, "u16 Get_openLoopSteeringBase_PWM(void)"},
+
+    // 直线行驶角度修正参数调节函数 - 使用整数参数(放大100倍)
     {(void *)Set_Forward_Kp, "void Set_Forward_Kp(u16 kp)"},
     {(void *)Set_Forward_Ki, "void Set_Forward_Ki(u16 ki)"},
     {(void *)Set_Forward_Kd, "void Set_Forward_Kd(u16 kd)"},
@@ -49,6 +51,8 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Forward_Ki, "float Get_Forward_Ki(void)"},
     {(void *)Get_Forward_Kd, "float Get_Forward_Kd(void)"},
     {(void *)Get_Forward_Error_Threshold, "float Get_Forward_Error_Threshold(void)"},
+    {(void *)Set_forwardBase_PWM, "void Set_forwardBase_PWM(u16 pwm)"},
+    {(void *)Get_forwardBase_PWM, "u16 Get_forwardBase_PWM(void)"},
     
     // 注册任务3相关参数调节函数
     {(void *)Set_Task3_Rotation_Angle_1, "void Set_Task3_Rotation_Angle_1(int angle)"},
@@ -85,7 +89,7 @@ struct _m_usmart_dev usmart_dev =
     sizeof(usmart_nametab) / sizeof(struct _m_usmart_nametab), /* 函数数量 */
     0,      /* 参数数量 */
     0,      /* 函数ID */
-    1,      /* 参数显示类型,0,10进制;1,16进制 */
+    0,      /* 参数显示类型,0,10进制;1,16进制 */
     0,      /* 参数类型.bitx:,0,数字;1,字符串 */
     0,      /* 每个参数的长度暂存表,需要MAX_PARM个0初始化 */
     0,      /* 函数的参数,需要PARM_LEN个0初始化 */

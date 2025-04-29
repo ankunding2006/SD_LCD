@@ -69,6 +69,8 @@ extern int Task3_Steer_PWM_C;            // C点openLoopSteering的PWM参数(速度值)
 extern int Task3_Steer_Time_D;           // D点openLoopSteering的转向时间参数(中断次数)
 extern int Task3_Steer_PWM_D;            // D点openLoopSteering的PWM参数(速度值)
 extern int Task3_Move_Forward_Speed;     // 任务3中直线行驶的速度(速度值)
+extern u16 forwardBase_PWM;              // 直线行走基础PWM值
+extern u16 openLoopSteeringBase_PWM;     // 转向基础PWM值
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
