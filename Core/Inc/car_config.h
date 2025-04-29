@@ -8,7 +8,7 @@
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
 #define TEST_TRACKING                  0       // 测试循迹
-#define TEST_TURNTO_ABSLUTE_ANGLE      0       // 测试转向到绝对角度
+#define TEST_TURNTO_ABSLUTE_ANGLE      1       // 测试转向到绝对角度
 #define TEST_MOVE_FORWARD              0       // 测试直线前进  
 /******************************************************************/ 
 
@@ -44,11 +44,11 @@
 
 //*********************转向控制PID参数及相关变量（放大100倍）******************
 #define STEERING_KP_DEFAULT        220    // 转向控制比例系数
-#define STEERING_KI_DEFAULT        3     // 转向控制积分系数
+#define STEERING_KI_DEFAULT        1     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 #define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
 //******************************开环转向参数**********************************/
-#define OPENLOOP_STEERING_BASE_PWM 500   // 开环转向基础PWM值
+#define OPENLOOP_STEERING_BASE_PWM 1500   // 开环转向基础PWM值
 
 //*********************直线行驶角度修正PID参数（放大100倍）******************
 #define FORWARD_KP_DEFAULT         8000  // 直线行走角度修正比例系数
@@ -56,7 +56,7 @@
 #define FORWARD_KD_DEFAULT         0     // 直线行走角度修正微分系数
 #define FORWARD_ERROR_THRESHOLD    370   // 直线行走角度修正误差阈值(度)，实际为2.0度
 #define FORWARD_I_LIMIT            1000  // 直线行走积分限幅值
-#define FORWARDBASE_PWM            1400  // 直线行走基础PWM值
+#define FORWARDBASE_PWM            2300  // 直线行走基础PWM值
 //*********************陀螺仪数据验证参数******************
 #define GYRO_CHECK_THRESHOLD      20     // 陀螺仪数据连续读取差值阈值(0.20度)
 #define GYRO_CHECK_INTERVAL       300    // 陀螺仪初始化稳定等待时间(ms)
@@ -67,13 +67,13 @@
 #define DEBUG_PRINT_COUNT         140    // 调试信息发送计数(基于5ms的中断周期)
 
 //*********************任务3相关参数*****************************************
-#define TASK3_ROTATION_ANGLE_1    23     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1    24     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_2    37     // 任务3中C点旋转需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_3    68     // 任务3中从B到D前需要逆时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_3    83     // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C        400    // C点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_C         1200    // C点openLoopSteering的PWM参数(速度值)
+#define TASK3_STEER_PWM_C         600    // C点openLoopSteering的PWM参数(速度值)
 #define TASK3_STEER_TIME_D        -500    // D点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_D         1200    // D点openLoopSteering的PWM参数(速度值)
+#define TASK3_STEER_PWM_D         600    // D点openLoopSteering的PWM参数(速度值)
 #define TASK3_MOVE_FORWARD_SPEED  12     // 任务3中直线行驶的速度(速度值)
 
 //*********************任务4相关参数*****************************************

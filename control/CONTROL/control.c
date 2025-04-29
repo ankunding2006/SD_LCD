@@ -839,7 +839,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     }
     
     // 误差在阈值范围内且变化率小，计数稳定时间
-    if(fabs(error) < (float)Steering_Error_Threshold/100.0f && fabs(derivative) < 0.5f) {
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f && fabs(derivative) < 1.2f ) {
         Steering_Stable_Count++;
         
         // 调试输出
