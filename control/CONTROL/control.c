@@ -690,6 +690,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             integral = 0.0f;
             lastError = 0.0f;
             state = FORWARD_MOVING;
+            Set_Pwm(FORWARDBASE_PWM, FORWARDBASE_PWM);
             return 0;
             
         case FORWARD_MOVING:
