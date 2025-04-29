@@ -1,15 +1,15 @@
 /*************************测试部分配置******************************/
-#define TEST_MODE                      0       // 单项测试模式 
+#define TEST_MODE                      1       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          1       // 测试模式3
+#define TASK3                          0       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
 #define TEST_TRACKING                  0       // 测试循迹
 #define TEST_TURNTO_ABSLUTE_ANGLE      0       // 测试转向到绝对角度
-#define TEST_MOVE_FORWARD              0       // 测试直线前进  
+#define TEST_MOVE_FORWARD              1       // 测试直线前进  
 /******************************************************************/ 
 
 //************************原地转向控制相关宏定义***********************
@@ -43,7 +43,7 @@
 #define turn_PWM_Limit            1500   // 循迹转向PWM的限制值，防止过大过小
 
 //*********************转向控制PID参数及相关变量（放大100倍）******************
-#define STEERING_KP_DEFAULT        220    // 转向控制比例系数
+#define STEERING_KP_DEFAULT        220   // 转向控制比例系数
 #define STEERING_KI_DEFAULT        3     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 #define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
@@ -51,20 +51,21 @@
 #define OPENLOOP_STEERING_BASE_PWM 500   // 开环转向基础PWM值
 
 //*********************直线行驶角度修正PID参数（放大100倍）******************
-#define FORWARD_KP_DEFAULT         8000  // 直线行走角度修正比例系数
-#define FORWARD_KI_DEFAULT         3     // 直线行走角度修正积分系数
+#define FORWARD_KP_DEFAULT         10000  // 直线行走角度修正比例系数
+#define FORWARD_KI_DEFAULT         2     // 直线行走角度修正积分系数
 #define FORWARD_KD_DEFAULT         0     // 直线行走角度修正微分系数
-#define FORWARD_ERROR_THRESHOLD    370   // 直线行走角度修正误差阈值(度)，实际为2.0度
+#define FORWARD_ERROR_THRESHOLD    400   // 直线行走角度修正误差阈值(度)，实际为2.0度
 #define FORWARD_I_LIMIT            1000  // 直线行走积分限幅值
-#define FORWARDBASE_PWM            1400  // 直线行走基础PWM值
+#define FORWARDBASE_PWM            1500  // 直线行走基础PWM值
+
 //*********************陀螺仪数据验证参数******************
 #define GYRO_CHECK_THRESHOLD      20     // 陀螺仪数据连续读取差值阈值(0.20度)
 #define GYRO_CHECK_INTERVAL       300    // 陀螺仪初始化稳定等待时间(ms)
 #define GYRO_INIT_RETRIES         5      // 陀螺仪初始化重试次数
 
 //*********************调试信息发送频率参数******************
-#define DEBUG_PRINT_INTERVAL      700    // 调试信息发送间隔(ms)
-#define DEBUG_PRINT_COUNT         140    // 调试信息发送计数(基于5ms的中断周期)
+#define DEBUG_PRINT_INTERVAL      700                       // 调试信息发送间隔(ms)
+#define DEBUG_PRINT_COUNT         (DEBUG_PRINT_INTERVAL/5)    // 调试信息发送计数(基于5ms的中断周期)
 
 //*********************任务3相关参数*****************************************
 #define TASK3_ROTATION_ANGLE_1    23     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
