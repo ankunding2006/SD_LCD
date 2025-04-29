@@ -26,6 +26,7 @@ extern "C" {
 #include "tim.h"
 #include "wit_c_sdk.h" 
 #include "usart.h"
+#include "car_config.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -55,12 +56,38 @@ extern float Acceleration_Z;
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
 extern float Target_Velocity; 
-extern float fAcc[3], fGyro[3], fAngle[3];
+extern volatile float fAcc[3], fGyro[3], fAngle[3];
 extern int16_t iMag[3];
+extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
+extern volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
+extern volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm;
+extern float Task3_Rotation_Angle_1;     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+extern float Task3_Rotation_Angle_2;     // 任务3中C点旋转需要顺时针旋转的角度(度)
+extern float Task3_Rotation_Angle_3;     // 任务3中从B到D前需要逆时针旋转的角度(度)
+extern int Task3_Steer_Time_C;           // C点openLoopSteering的转向时间参数(中断次数)
+extern int Task3_Steer_PWM_C;            // C点openLoopSteering的PWM参数(速度值)
+extern int Task3_Steer_Time_D;           // D点openLoopSteering的转向时间参数(中断次数)
+extern int Task3_Steer_PWM_D;            // D点openLoopSteering的PWM参数(速度值)
+extern int Task3_Move_Forward_Speed;     // 任务3中直线行驶的速度(速度值)
+extern u16 forwardBase_PWM;              // 直线行走基础PWM值
+extern u16 openLoopSteeringBase_PWM;     // 转向基础PWM值
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+
+// 测试函数声明
+void SteeringTest_CyclicRotation(void);
+// 修改PID参数声明，将float改为u16（放大100倍后使用整数）
+extern u16 Steering_Kp, Steering_Ki, Steering_Kd;
+extern u16 Steering_Error_Threshold;
+extern u16 Steering_Speed;
+extern u8 Steering_Completed;
+extern u16 Steering_Stable_Count;
+
+// 直线行驶角度修正PID参数（放大100倍）
+extern u16 Forward_Kp, Forward_Ki, Forward_Kd;
+extern u16 Forward_Error_Threshold;
 
 /* USER CODE END EC */
 

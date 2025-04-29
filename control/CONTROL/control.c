@@ -54,6 +54,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             Task4_Handler(); // 测试模式4
 		#endif
 	}
+    if (htim->Instance == TIM7)
+    {
+        JY901_Handler(); // 处理JY901数据 
+    }
 }
 
 

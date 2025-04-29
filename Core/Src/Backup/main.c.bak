@@ -1,20 +1,133 @@
 /* USER CODE BEGIN Header */
-/**
- ******************************************************************************
- * @file           : main.c
- * @brief          : Main program body
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2025 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+/*
+本项目为 STM32F407 系列 MCU 设计的自动行驶小车，旨在实现路径跟踪和精准停车功能。
+
+题目功能需求概述：
+
+设计一个基于 STM32F407 系列 MCU 控制的自动行驶小车，在指定场地完成以下路径任务：
+
+
+场地及黑线分布详细描述
+
+---
+
+ 1. 场地基础信息  
+- 尺寸：长方形，长220cm × 宽120cm，白色哑光喷绘布，水平铺设于地面。  
+- 黑线特征：  
+  - 仅有 两个对称的黑色半圆弧线，线宽约 1.8cm，半径 40cm。  
+  - 半圆弧的 四个端点（顶点） 定义为 A、B、C、D，分别位于场地四角或关键位置。  
+
+---
+
+ 2. 黑线布局与顶点位置  
+- 半圆弧1（右侧半圆）：  
+  - 连接 B点（右上顶点） 和 C点（右下顶点），形成右侧半圆弧黑线。  
+- 半圆弧2（左侧半圆）：  
+  - 连接 D点（左下顶点） 和 A点（左上顶点），形成左侧半圆弧黑线。  
+- 顶点位置示意：  
+  - A：左上角顶点（坐标示例：长边左端，宽边顶端）。  
+  - B：右上角顶点（长边右端，宽边顶端）。  
+  - C：右下角顶点（长边右端，宽边底端）。  
+  - D：左下角顶点（长边左端，宽边底端）。  
+
+---
+
+ 3. 黑线引导区域与无引导区域  
+- 有黑线引导的区域：  
+  - 右侧半圆弧（B→C）：从右上角 B 沿右侧半圆弧黑线行驶至右下角 C。  
+  - 左侧半圆弧（D→A）：从左下角 D 沿左侧半圆弧黑线行驶至左上角 A。  
+- 无黑线引导的区域：  
+  - 直线段 A→B：左上角 A 到右上角 B 的顶部横向直线，无黑线。  
+  - 直线段 C→D：右下角 C 到左下角 D 的底部横向直线，无黑线。  
+  - 其他直线路径：如任务中涉及的 B→C、D→A 等非弧线段，均无黑线。  
+
+---
+
+ 4. 路径任务与黑线关系  
+- 任务1（A→B）：  
+  - 直线行驶从 A 到 B，无黑线，需依赖编码器/陀螺仪自主导航。  
+- 任务2（A→B→C→D→A）：  
+  - B→C：沿右侧半圆弧黑线循迹。  
+  - D→A：沿左侧半圆弧黑线循迹。  
+  - 其他路径（A→B、C→D）无引导。  
+- 任务3（A→C→B→D→A）：  
+  - C→B：沿右侧半圆弧黑线逆方向循迹。  
+  - D→A：沿左侧半圆弧黑线循迹。  
+  - 其他路径（A→C、B→D）无引导。  
+
+
+
+ 示意图简化理解  
+A (左上)———————————→ B (右上)  
+             
+左侧半圆弧（D→A）  右侧半圆弧（B→C）  
+             
+D (左下) ←——————————— C (右下)  
+- 箭头方向：表示半圆弧黑线走向（实际为半圆路径）。  
+- 横向直线段（A→B、C→D）无黑线，需自主导航。
+
+---
+
+ 任务 1（20 分）  
+- 功能：  
+  小车从 A 点出发，沿直线行驶至 B 点 后停车，全程用时不超过 15 秒。  
+  - 触发条件：到达 B 点时需有声（如蜂鸣器）光（如 LED）提示。  
+
+---
+
+ 任务 2（20 分）  
+- 功能：  
+  小车从 A 点 出发，按以下路径行驶：  
+  1. 直线行驶至 B 点。  
+  2. 沿 半圆弧黑线 从 B 行驶至 C 点。  
+  3. 直线行驶至 D 点。  
+  4. 沿另一 半圆弧黑线 从 D 返回 A 点 停车。  
+  - 触发条件：每经过 A/B/C/D 点时需有声光提示。  
+  - 总时间：不超过 30 秒。
+
+---
+
+ 任务 3（30 分）  
+- 功能：  
+  小车从 A 点 出发，按以下路径行驶：  
+  1. 直线行驶至 C 点。  
+  2. 沿 半圆弧黑线 从 C 行驶至 B 点。  
+  3. 直线行驶至 D 点。  
+  4. 沿另一 半圆弧黑线 从 D 返回 A 点 停车。  
+  - 触发条件：每经过 A/B/C/D 点时需有声光提示。  
+  - 总时间：不超过 40 秒。
+
+---
+
+ 任务 4（30 分）  
+- 功能：  
+  按 任务 3 的路径 连续自动行驶 4 圈，总用时越短越好。
+
+---
+
+ 核心挑战  
+1. 导航方式：  
+   - 直线段：无黑线引导，需通过 编码器 + 陀螺仪 实现航位推算，保持直线行驶。  
+   - 圆弧段：沿黑线循迹，依赖 红外传感器阵列 实时调整转向。  
+
+2. 精准停靠与触发：  
+   - 需在 A/B/C/D 顶点 精确停车或触发提示，要求投影覆盖顶点位置。  
+   - 可结合 编码器距离计算 或 黑线端点检测 触发声光信号。  
+
+3. 时间与稳定性：  
+   - 在高速行驶中维持控制精度，避免脱线或超时。  
+   - 需优化 PID 控制算法 和路径切换逻辑。
+
+---
+
+ 技术实现要点  
+- 传感器：灰度传感器（循迹）、编码器（测距）、陀螺仪（防偏航）。  
+- 控制算法：  
+  - 直线段：PID 控制电机速度 + 陀螺仪纠偏。  
+  - 圆弧段：PID 调节差速转向，保持沿黑线行驶。  
+- 路径规划：根据任务动态切换导航模式（直线/循迹）。  
+- 触发逻辑：通过编码器累计距离或黑线端点检测触发声光提示。  
+*/
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -40,28 +153,59 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-u8 Way_Angle = 1;                                                                                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤??
-u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变??
-u8 Flag_Stop = 1, Flag_Show = 0;                                                                                    // 电机停止标志位和显示标志??  默认停止 显示打开
+u8 Way_Angle = WAY_ANGLE_DEFAULT;                                                                                    // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤波
+u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2;                                                 // 蓝牙遥控相关的变量
+u8 Flag_Stop = FLAG_STOP_DEFAULT, Flag_Show = FLAG_SHOW_DEFAULT;                                                    // 电机停止标志位和显示标志位  默认停止 显示打开
 int Motor_Left, Motor_Right;                                                                                        // 电机PWM变量 应是Motor?? 向Moto致敬
 int Temperature;                                                                                                    // 温度变量
-int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变??
-float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡??螺仪 转向??螺仪
-u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志??
-u8 Mode = 0;                                                                                                        // 模式选择，默认是普???的控制模式
-u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中???和阈???
+int Voltage, Middle_angle;                                                                                          // 电池电压采样相关的变量
+float Angle_Balance, Gyro_Balance, Gyro_Turn;                                                                       // 平衡倾角 平衡陀螺仪 转向陀螺仪
+u8 LD_Successful_Receive_flag;                                                                                      // 雷达成功接收数据标志位
+u8 Mode = MODE_DEFAULT;                                                                                             // 模式选择，默认是普通的控制模式
+u8 CCD_Zhongzhi, CCD_Yuzhi;                                                                                         // CCD中值和阈值
 u16 ADV[128] = {0};                                                                                                 // 存放CCD的数据的数组
 u16 determine;                                                                                                      // 雷达跟随模式的一个标志位
-float Move_X, Move_Z;                                                                                               // 遥控控制的???度
-u32 Distance;                                                                                                       // 超声波测??
+float Move_X, Move_Z;                                                                                               // 遥控控制的速度
+u32 Distance;                                                                                                       // 超声波测距
 u8 PID_Send;                                                                                                        // 调参相关变量
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随???超声波壁障标志??
-float Acceleration_Z;                                                                                               // Z轴加速度??
-volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变??
-float Balance_Kp = 25500, Balance_Kd = 135, Velocity_Kp = 16000, Velocity_Ki = 120, Turn_Kp = 17000, Turn_Kd = 100; // PID参数（放??100倍）
-u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状??
-float Sensor_Kp = 640, Sensor_KI = 2.1, Sensor_Kd = 115;                                                           // 传感器的PID参数（放??100倍）
-float Target_Velocity = 30;                                                                                     // 目标速度
+u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随、超声波壁障标志位
+float Acceleration_Z;                                                                                               // Z轴加速度值
+volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变量
+float Balance_Kp = BALANCE_KP_DEFAULT, Balance_Kd = BALANCE_KD_DEFAULT, Velocity_Kp = VELOCITY_KP_DEFAULT, Velocity_Ki = VELOCITY_KI_DEFAULT, Turn_Kp = TURN_KP_DEFAULT, Turn_Kd = TURN_KD_DEFAULT; // PID参数（放大100倍）
+u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状态
+float Sensor_Kp = SENSOR_KP_DEFAULT, Sensor_KI = SENSOR_KI_DEFAULT, Sensor_Kd = SENSOR_KD_DEFAULT;                  // 传感器的PID参数（放大100倍）
+float Target_Velocity = TARGET_VELOCITY_DEFAULT;                                                                    // 目标速度
+
+// 转向控制PID参数及相关变量（放大100倍）
+u16 Steering_Kp = STEERING_KP_DEFAULT;                                                                             // 转向控制比例系数（放大100倍）
+u16 Steering_Ki = STEERING_KI_DEFAULT;                                                                             // 转向控制积分系数（放大100倍）
+u16 Steering_Kd = STEERING_KD_DEFAULT;                                                                             // 转向控制微分系数（放大100倍）
+u16 Steering_Error_Threshold = STEERING_ERROR_THRESHOLD_DEFAULT;                                                   // 转向控制误差阈值(度)（放大100倍）
+u16 Steering_Speed = STEERING_SPEED_DEFAULT;                                                                       // 转向控制基础速度（放大100倍）
+u8 Steering_Completed = 0;                                                                                         // 转向完成标志
+u16 Steering_Stable_Count = 0;  
+u16 openLoopSteeringBase_PWM = OPENLOOP_STEERING_BASE_PWM;                                                                                 // 转向稳定计数
+
+// 添加直线行驶角度修正PID参数（放大100倍）
+u16 Forward_Kp = 500;                                                                                             // 直线行走角度修正比例系数
+u16 Forward_Ki = 10;                                                                                              // 直线行走角度修正积分系数
+u16 Forward_Kd = 300;                                                                                             // 直线行走角度修正微分系数
+u16 Forward_Error_Threshold = 200;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
+u16 forwardBase_PWM = FORWARDBASE_PWM;                                                                                     // 直线行走基础PWM值
+/**************enum define****************/
+enum currentPosition
+{
+  /*Line*/
+  AB,
+  BC,
+  CD,
+  DA,
+  /* spesific point*/
+  A,
+  B,
+  C,
+  D 
+};
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -181,9 +325,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Lcd_MenuTask();
-    JY901_Handler(); // 处理JY901数据
-    ////grey_sensorData_print(); // 打印灰度传感器数据
+    Lcd_MenuTask(); // 菜单任务
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

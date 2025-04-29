@@ -1,6 +1,6 @@
 #include "LED.h"
 
-// LED1 鎺у埗鍑芥暟
+// LED1 控制函数
 void led1_toggle(void)
 {
   HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
@@ -16,7 +16,7 @@ void led1_off(void)
   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 }
 
-// LED2 鎺у埗鍑芥暟
+// LED2 控制函数
 void led2_toggle(void)
 {
   HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
@@ -32,7 +32,7 @@ void led2_off(void)
   HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
 }
 
-// LED3 鎺у埗鍑芥暟
+// LED3 控制函数
 void led3_toggle(void)
 {
   HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
@@ -48,7 +48,7 @@ void led3_off(void)
   HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
 }
 
-// 鍏ㄩ儴LED鎺у埗鍑芥暟
+// 全部LED控制函数
 void all_leds_on(void)
 {
   led1_on();
@@ -70,7 +70,7 @@ void all_leds_toggle(void)
   led3_toggle();
 }
 
-// 涓轰簡鍏煎鍘熸潵鐨勫嚱鏁帮紝淇濈暀杩欎簺鍑芥暟浣嗕慨鏀逛负浣跨敤LED1
+// 为了兼容原来的函数，保留这些函数但修改为使用LED1
 void led_toggle(void)
 {
   led1_toggle();

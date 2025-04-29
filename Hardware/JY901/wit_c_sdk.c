@@ -685,6 +685,7 @@ void JY901_init(void)
     WitRegisterCallBack(SensorDataUpdata);
     WitDelayMsRegister(Delayms);
 	HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+    HAL_TIM_Base_Start_IT(&htim7);
     for(int i = 0; i < 5; i++)
     {
         JY901_Handler(); // 处理JY901数据
