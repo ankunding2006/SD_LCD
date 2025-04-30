@@ -453,7 +453,11 @@ int moveForward_Handler(void)
     static uint8_t debug_counter = 0;      // 调试计数器
     static float referenceAngle=0;
     float currentAngle, error, derivative, angleCorrection;
-
+    bool can_print_debug = false;
+    if (++debug_counter >= DEBUG_PRINT_COUNT) {
+        debug_counter = 0;
+        can_print_debug = true;
+    }
     // 读取灰度传感器数据
     grey_sensor_Read();
     // 检查是否有传感器检测到黑线
@@ -465,7 +469,7 @@ int moveForward_Handler(void)
         state = INIT;
         integral = 0.0f;
         lastError = 0.0f;
-        if(debug_counter > DEBUG_PRINT_COUNT) {
+        if(can_print_debug==true) {
             printf("传感器检测到黑线，停止电机\r\n");
         }
         return 1; // 返回1，表示完成直线移动
@@ -539,7 +543,6 @@ int moveForward_Handler(void)
             Motor_Right = forwardBase_PWM - angleCorrection;
             
             // 打印调试信息（降低频率，避免刷屏）
-            static uint8_t debug_counter = 0;
             if (debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
@@ -547,14 +550,7 @@ int moveForward_Handler(void)
             break;
     }
 
-    if(debug_counter <= DEBUG_PRINT_COUNT) 
-    {
-        debug_counter++;
-    } 
-    else 
-    {
-        debug_counter = 0; // 重置计数器
-    }
+
     
     // 执行电机控制
     if (Flag_Stop == 1) 
@@ -587,7 +583,13 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     static float lastError = 0.0f;         // 上一次误差
     static uint8_t debug_counter = 0;      // 调试计数器
     float currentAngle, error, derivative, angleCorrection;
-    
+
+    bool can_print_debug = false;
+    if (++debug_counter >= DEBUG_PRINT_COUNT) {
+        debug_counter = 0;
+        can_print_debug = true;
+    }
+
     // 边界条件处理 - 确保参考角度在±180度范围内
     while(referenceAngle > 180.0f) {
         referenceAngle -= 360.0f;
@@ -607,7 +609,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
         state = INIT;
         integral = 0.0f;
         lastError = 0.0f;
-        if(debug_counter > DEBUG_PRINT_COUNT) {
+        if(can_print_debug==true) {
             printf("传感器检测到黑线，停止电机\r\n");
         }
         return 1; // 返回1，表示完成直线移动
@@ -673,22 +675,14 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             Motor_Right = forwardBase_PWM - angleCorrection;
             
             // 打印调试信息（降低频率，避免刷屏）
-            static uint8_t debug_counter = 0;
-            if ( debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
+            if ( debug_counter >= DEBUG_PRINT_COUNT ) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
                 }
             break;
     }
 
-    if(debug_counter <= DEBUG_PRINT_COUNT) 
-    {
-        debug_counter++;
-    } 
-    else 
-    {
-        debug_counter = 0; // 重置计数器
-    }
+
     
     // 执行电机控制
     if (Flag_Stop == 1) 
@@ -717,6 +711,11 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
+    bool can_print_debug = false;
+    if (++debug_counter >= DEBUG_PRINT_COUNT) {
+        debug_counter = 0;
+        can_print_debug = true;
+    }
     
     // 确保目标角度在[-180, 180]范围内
     while(targetAbsoluteAngle > 180.0f) {
@@ -817,19 +816,10 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
         Steering_Stable_Count = 0;
     }
 
-    if(debug_counter > DEBUG_PRINT_COUNT) {
+    if(can_print_debug==true) {
         // 打印调试信息
         printf("PID调试: 当前角度=%.2f, 目标角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
                currentAngle, targetAbsoluteAngle, error, output);
-    }
-
-    if(debug_counter <= DEBUG_PRINT_COUNT) 
-    {
-        debug_counter++;
-    } 
-    else 
-    {
-        debug_counter = 0; // 重置计数器
     }
     
     // 执行电机控制
