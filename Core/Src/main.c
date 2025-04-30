@@ -176,7 +176,7 @@ u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight
 float Sensor_Kp = SENSOR_KP_DEFAULT, Sensor_KI = SENSOR_KI_DEFAULT, Sensor_Kd = SENSOR_KD_DEFAULT;                  // 传感器的PID参数（放大100倍）
 float Target_Velocity = TARGET_VELOCITY_DEFAULT;        
 u8 resetTask_flag=0;                 // 是否要重启任务标志位    
-u16 resetMode_start_time=0;          // 任务3重置模式开始时间                                                       
+u32 resetMode_start_time=0;          // 任务3重置模式开始时间                                                       
 
 // 转向控制PID参数及相关变量（放大100倍）
 u16 Steering_Kp = STEERING_KP_DEFAULT;                                                                             // 转向控制比例系数（放大100倍）
