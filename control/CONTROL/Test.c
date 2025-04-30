@@ -100,9 +100,9 @@ void turnToAbsoluteAngle_TEST_Handler(void)
             break;
             
         case 2:  // 逆时针转90度
-            if(turnToAbsoluteAngle(-90.0f)) { // 如果转向完成
-                printf("逆时针转90度完成，等待3秒...\r\n");
-                test_state = 3;   // 返回顺时针转90度状态，形成循环
+            if(turnToAbsoluteAngle(30.0f)) { // 如果转向完成
+                printf("逆时针转30度完成，等待3秒...\r\n");
+                test_state = 3;   // 返回顺时针转一定角度状态，形成循环
                 wait_time = 0;    // 清零等待时间计数器
             }
             break;
@@ -110,8 +110,8 @@ void turnToAbsoluteAngle_TEST_Handler(void)
         case 3:  // 等待3秒
             wait_time++;
             if(wait_time >= 600) { // 5ms中断，600次大约3秒
-                test_state = 0;   // 返回顺时针转90度状态，形成循环
-                printf("等待结束，再次开始顺时针转90度...\r\n");
+                test_state = 0;   // 返回顺时针转一定角度状态，形成循环
+                printf("等待结束，再次开始顺时针转30度...\r\n");
             }
             break;
             

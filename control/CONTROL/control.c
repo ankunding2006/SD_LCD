@@ -708,6 +708,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     static float integral = 0;         // 积分项
     static u8 isInitialized = 0;       // 初始化标志
     static uint8_t debug_counter = 0;      // 调试计数器
+    static float angleDifference = 0;     // 目标角度与起始角度的差
     
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
@@ -730,6 +731,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
         printf("开始旋转到绝对角度: 当前角度=%.2f, 目标角度=%.2f\r\n", 
                currentAngle, targetAbsoluteAngle);
         
+        angleDifference = targetAbsoluteAngle - currentAngle;
         lastError = 0;
         integral = 0;
         Steering_Stable_Count = 0;
@@ -760,7 +762,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     }
     
     // 如果误差很小，逐渐减小积分项，防止过冲
-    if(fabs(error) < (float)Steering_Error_Threshold/100.0f) {
+    if(fabs(error) < (float)Steering_Error_Threshold/100.0f * 0.85f) {
         integral *= 0.9f;
     }
     
@@ -821,7 +823,13 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
         printf("PID调试: 当前角度=%.2f, 目标角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
                currentAngle, targetAbsoluteAngle, error, output);
     }
-    
+    if(angleDifference > 0) {
+        // 逆时针转向
+        Motor_Left = 0; // 左轮停止
+    } else {
+        // 顺时针转向
+        Motor_Right = 0; // 右轮停止
+    }
     // 执行电机控制
     if(Flag_Stop == 1) {
         Set_Pwm(0, 0);  // 停止标志为1时停止电机
