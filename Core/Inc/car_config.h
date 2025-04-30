@@ -1,9 +1,9 @@
 /*************************测试部分配置******************************/
-#define TEST_MODE                      0       // 单项测试模式 
+#define TEST_MODE                      1       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          1       // 测试模式3
+#define TASK3                          0       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
@@ -19,6 +19,10 @@
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
 #define PWM_Base                  1000	   // PWM基准值
 #define STEERING_ERROR_THRESHOLD_DEFAULT     300    // 转向控制误差阈值(度)
+//*********************转向控制PID参数及相关变量（放大100倍）******************
+#define STEERING_KP_DEFAULT        220    // 转向控制比例系数
+#define STEERING_KI_DEFAULT        1     // 转向控制积分系数
+#define STEERING_KD_DEFAULT        0     // 转向控制微分系数
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
 #define FLAG_STOP_DEFAULT           1    // 是否默认停止
@@ -42,11 +46,6 @@
 #define SENSOR_KD_DEFAULT          115   // 传感器微分系数
 #define turn_PWM_Limit            1500   // 循迹转向PWM的限制值，防止过大过小
 
-//*********************转向控制PID参数及相关变量（放大100倍）******************
-#define STEERING_KP_DEFAULT        220    // 转向控制比例系数
-#define STEERING_KI_DEFAULT        1     // 转向控制积分系数
-#define STEERING_KD_DEFAULT        0     // 转向控制微分系数
-#define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度
 //******************************开环转向参数**********************************/
 #define OPENLOOP_STEERING_BASE_PWM 1500   // 开环转向基础PWM值
 
@@ -96,3 +95,4 @@
 #define MIDDLE_ANGLE_DEFAULT        0      // 初始平衡角度设定
 #define TASK3_ROTATION_ANGLE_2      37     // 任务3中C点旋转需要顺时针旋转的角度(度)
 #define TASK4_ROTATION_ANGLE_2      50     // 任务4中C点旋转需要顺时针旋转的角度(度)
+#define STEERING_SPEED_DEFAULT    5000   // 转向控制基础速度

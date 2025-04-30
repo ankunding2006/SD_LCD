@@ -451,5 +451,7 @@ int Get_Task3_Move_Forward_Speed(void)
 void resetTask(void)
 {
     resetTask_flag=1;
+    resetMode_start_time=HAL_GetTick(); // 记录重置开始时间
+    led1_on();  led2_on(); 
     printf("即将在%dms后重置任务",RESET_WAIT_TIME);
 }

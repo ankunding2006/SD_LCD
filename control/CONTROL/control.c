@@ -540,7 +540,7 @@ int moveForward_Handler(void)
             
             // 打印调试信息（降低频率，避免刷屏）
             static uint8_t debug_counter = 0;
-            if (++debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
+            if (debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
             }
@@ -674,10 +674,10 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             
             // 打印调试信息（降低频率，避免刷屏）
             static uint8_t debug_counter = 0;
-            if (++debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
+            if ( debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
-            }
+                }
             break;
     }
 

@@ -426,7 +426,6 @@ u8 Task3_Handler(void)
     static uint8_t retry_count = 0;      // 重试次数计数
     static uint16_t debug_print_counter = 0; // 调试信息发送计数器
     static uint16_t delay_counter = 0;   // 非阻塞延时计数器
-    static u16 resetMode_start_time=0;
     
     // 调试信息发送频率控制
     bool can_print_debug = false;
@@ -436,19 +435,18 @@ u8 Task3_Handler(void)
     }
     if(resetTask_flag==1)
     {
-        // 3s后重置任务状态和变量
+        // 一定时间后重置任务状态和变量
         Set_Pwm(0,0);
-        if(resetMode_start_time == 0)
-        {resetMode_start_time=HAL_GetTick();}
         if(HAL_GetTick()-resetMode_start_time>RESET_WAIT_TIME)
         {
             currentState = INIT;
             init_start_time = 0;
             prev_angle = 0.0f;
-            retry_count = 0;
+            retry_count = 0; 
             delay_counter = 0;
             resetTask_flag=0;
-            resetMode_start_time=0;
+            led1_off(); led2_off(); led3_off(); // 关闭所有LED
+            printf("任务重置完成\r\n");
         }
         else
         {
