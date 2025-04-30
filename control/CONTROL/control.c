@@ -543,7 +543,7 @@ int moveForward_Handler(void)
             Motor_Right = forwardBase_PWM - angleCorrection;
             
             // 打印调试信息（降低频率，避免刷屏）
-            if (debug_counter >= DEBUG_PRINT_COUNT) { // 每隔一定次数打印一次
+            if (can_print_debug==true) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
             }
@@ -675,7 +675,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             Motor_Right = forwardBase_PWM - angleCorrection;
             
             // 打印调试信息（降低频率，避免刷屏）
-            if ( debug_counter >= DEBUG_PRINT_COUNT ) { // 每隔一定次数打印一次
+            if ( can_print_debug==true ) { // 每隔一定次数打印一次
                 printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
 					   currentAngle, referenceAngle, error, angleCorrection);
                 }
@@ -816,7 +816,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
         Steering_Stable_Count = 0;
     }
 
-    if(can_print_debug==true) {
+    if(can_print_debug==true) { 
         // 打印调试信息
         printf("PID调试: 当前角度=%.2f, 目标角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
                currentAngle, targetAbsoluteAngle, error, output);
