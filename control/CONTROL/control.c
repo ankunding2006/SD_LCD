@@ -547,7 +547,7 @@ int moveForward_Handler(void)
             break;
     }
 
-    if(debug_counter < DEBUG_PRINT_COUNT) 
+    if(debug_counter <= DEBUG_PRINT_COUNT) 
     {
         debug_counter++;
     } 
@@ -681,7 +681,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
             break;
     }
 
-    if(debug_counter < DEBUG_PRINT_COUNT) 
+    if(debug_counter <= DEBUG_PRINT_COUNT) 
     {
         debug_counter++;
     } 
@@ -713,6 +713,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     static float lastError = 0;        // 上一次误差
     static float integral = 0;         // 积分项
     static u8 isInitialized = 0;       // 初始化标志
+    static uint8_t debug_counter = 0;      // 调试计数器
     
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
@@ -814,6 +815,21 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     } else {
         // 不稳定，重置稳定计数
         Steering_Stable_Count = 0;
+    }
+
+    if(debug_counter > DEBUG_PRINT_COUNT) {
+        // 打印调试信息
+        printf("PID调试: 当前角度=%.2f, 目标角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
+               currentAngle, targetAbsoluteAngle, error, output);
+    }
+
+    if(debug_counter <= DEBUG_PRINT_COUNT) 
+    {
+        debug_counter++;
+    } 
+    else 
+    {
+        debug_counter = 0; // 重置计数器
     }
     
     // 执行电机控制
