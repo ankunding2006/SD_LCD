@@ -189,10 +189,10 @@ u16 Steering_Stable_Count = 0;
 u16 openLoopSteeringBase_PWM = OPENLOOP_STEERING_BASE_PWM;                                                                                 // 转向稳定计数
 
 // 添加直线行驶角度修正PID参数（放大100倍）
-u16 Forward_Kp = 500;                                                                                             // 直线行走角度修正比例系数
-u16 Forward_Ki = 10;                                                                                              // 直线行走角度修正积分系数
-u16 Forward_Kd = 300;                                                                                             // 直线行走角度修正微分系数
-u16 Forward_Error_Threshold = 200;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
+u16 Forward_Kp = FORWARD_KP_DEFAULT;                                                                                             // 直线行走角度修正比例系数
+u16 Forward_Ki = FORWARD_KI_DEFAULT;                                                                                              // 直线行走角度修正积分系数
+u16 Forward_Kd = FORWARD_KD_DEFAULT;                                                                                             // 直线行走角度修正微分系数
+u16 Forward_Error_Threshold = FORWARD_ERROR_THRESHOLD;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
 u16 forwardBase_PWM = FORWARDBASE_PWM;                                                                                     // 直线行走基础PWM值
 /**************enum define****************/
 enum currentPosition

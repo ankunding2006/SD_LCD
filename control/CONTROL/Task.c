@@ -570,8 +570,8 @@ u8 Task3_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达C点
+            if(moveForwardWithAngle_Handler(targetAngle)) {
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
                  
@@ -657,8 +657,8 @@ u8 Task3_Handler(void)
                 printf("B→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达D点
+            if(moveForwardWithAngle_Handler(targetAngle)) { 
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示
@@ -709,7 +709,7 @@ u8 Task3_Handler(void)
         case A_POINT_DELAY:
             // A点任务完成LED提示延时状态（非阻塞）
             delay_counter++;
-            if(delay_counter >= 200) { // 5ms中断，200次约等于1000ms
+            if(delay_counter >= (TASK_INTERVAL/5)) { // 5ms中断，TASK_INTERVAL次约等于TASK_INTERVALms
                 currentState = COMPLETED;
             }
             return 0;
@@ -875,16 +875,12 @@ u8 Task4_Handler(void)
             return 0;
             
         case INIT_DELAY:
-            // A点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led1_off();
                 // 重置调试打印计数器
                 debug_print_counter = 0;
                 // 切换到下一状态 - 先旋转对准C点
                 currentState = TURN_A_TO_C;
-            }
-            return 0;
+                return 0;
             
         case TURN_A_TO_C:
             // A点旋转对准C点（顺时针旋转TASK4_ROTATION_ANGLE_1度）
@@ -892,7 +888,6 @@ u8 Task4_Handler(void)
                 printf("A点旋转对准C点: 当前角度 = %.2f, 目标角度 = %.2f\r\n", 
                        getHeadingAngle(), targetAngle);
             }
-            
             if(turnToAbsoluteAngle(targetAngle)) {
                 // 旋转完成，进入直线行驶状态
                 printf("A点旋转完成，开始向C点直线行驶\r\n");
@@ -928,14 +923,10 @@ u8 Task4_Handler(void)
             return 0;
             
         case C_POINT_DELAY:
-            // C点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led3_off();
                 printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
                 currentState = TURN_AT_C;
-            }
-            return 0;
+                return 0;
             
         case TURN_AT_C:
             // 使用openLoopSteering_Handler在C点进行旋转
@@ -978,13 +969,10 @@ u8 Task4_Handler(void)
             
         case B_POINT_DELAY:
             // B点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led2_off();
                 printf("在B点旋转至目标角度: %.2f\r\n", targetAngle);
                 currentState = TURN_AT_B;
-            }
-            return 0;
+                return 0;
             
         case TURN_AT_B:
             // 在B点旋转至目标角度（使用绝对角度旋转函数）
@@ -1020,13 +1008,9 @@ u8 Task4_Handler(void)
             return 0;
             
         case D_POINT_DELAY:
-            // D点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led2_off();
                 printf("在D点进行顺时针旋转\r\n");
                 currentState = TURN_AT_D; // 进入D点旋转状态
-            }
             return 0;
             
         case TURN_AT_D:

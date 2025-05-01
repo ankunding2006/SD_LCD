@@ -67,7 +67,9 @@ void Test_Handler(void)
         moveForward_Handler(); // 调用前进函数
     #elif TEST_TURNTO_ABSLUTE_ANGLE==1 // 测试转向到绝对角度
         turnToAbsoluteAngle_TEST_Handler(); // 调用转向到绝对角度函数
-    #endif // TEST_MOVE_FORWARD
+    #elif MOVE_FORWARD_WITH_ANGLE_HANDLE==1 // 测试指定角度前进
+        moveForwardWithAngle_Handler(115.0f); // 调用指定角度前进函数
+    #endif
 }
 
 /**
