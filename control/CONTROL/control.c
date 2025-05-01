@@ -894,8 +894,9 @@ void angleSetWithKey_Handler(void)
                 printf("检测到长按，直接启动小车！\r\n");
                 
                 // 提供视觉反馈
-                all_leds_on(); // 所有LED亮起表示长按启动成功
-                delay_ms(500); // 短暂延时
+                all_leds_off(); // 所有LED亮起表示长按启动成功
+                led3_on();      // LED3亮起表示启动
+                delay_ms(500);  // 短暂延时
                 all_leds_off(); // 关闭所有LED
                 
                 // 启动小车
