@@ -571,7 +571,7 @@ u8 Task3_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForwardWithAngle_Handler(targetAngle)) {
+            if(moveForward_Handler()) {
                 // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
@@ -632,7 +632,7 @@ u8 Task3_Handler(void)
         case B_POINT_DELAY:
             // B点LED提示延时状态（非阻塞）
             delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
+            if(delay_counter >= (TASK3_B_PONIT_DELAY_TIME/5)) { // 5ms中断，100次约等于500ms
                 led2_off();
                 printf("在B点旋转至目标角度: %.2f\r\n", targetAngle);
                 currentState = TURN_AT_B;
@@ -939,7 +939,7 @@ u8 Task4_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForwardWithAngle_Handler(targetAngle)) {
+            if(moveForward_Handler()) {
                 // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
@@ -998,10 +998,13 @@ u8 Task4_Handler(void)
             return 0;
             
         case B_POINT_DELAY:
-            // B点LED提示延时状态（非阻塞）
+        // B点LED提示延时状态（非阻塞）
+            delay_counter++;
+            if(delay_counter >= (TASK4_B_PONIT_DELAY_TIME/5)) { // 5ms中断，100次约等于500ms
                 led2_off();
                 printf("在B点旋转至目标角度: %.2f\r\n", targetAngle);
                 currentState = TURN_AT_B;
+            }
             return 0;
             
         case TURN_AT_B:
