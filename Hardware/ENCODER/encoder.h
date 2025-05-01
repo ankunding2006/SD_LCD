@@ -32,5 +32,7 @@ All rights reserved
 void Encoder_Init_TIM3(void);             // 初始化TIM3为编码器模式并启动
 void Encoder_Init_TIM5(void);             // 初始化TIM5为编码器模式并启动
 int Read_Encoder(uint8_t TIMX);           // 读取指定定时器的编码器计数
+void Clear_Encoder(void);
+
 
 #endif

@@ -53,6 +53,18 @@ int Read_Encoder(uint8_t TIMX)
     return Encoder_TIM;
 }
 
+/**
+ * @brief 清除编码器数值
+ * @param void
+ * @return void
+ */
+void Clear_Encoder(void)
+{
+    // 清除TIM3和TIM5的计数器值
+    TIM3->CNT = 0;  
+    TIM5->CNT = 0;  
+}
+
 /**************************************************************************
 函数功能：TIM3编码器初始化
 入口参数：无

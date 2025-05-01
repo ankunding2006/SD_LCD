@@ -594,6 +594,7 @@ u8 Task3_Handler(void)
                 // 转向完成
                 printf("C点转向完成，开始C→B循迹\r\n");
                 Set_Target_Velocity(Task3_line_tracking_Speed);
+                Clear_Encoder(); // 清除编码器值
                 currentState = TRACK_C_TO_B;
             }
             return 0;
@@ -688,6 +689,7 @@ u8 Task3_Handler(void)
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
                 Set_Target_Velocity(Task3_line_tracking_Speed); // 设置适当的速度
+                Clear_Encoder(); // 清除编码器值
                 currentState = TRACK_D_TO_A;
             }
             return 0;
@@ -960,6 +962,7 @@ u8 Task4_Handler(void)
                 // 转向完成
                 printf("C点转向完成，开始C→B循迹\r\n");
                 Set_Target_Velocity(TASK4_LINE_TRACKING_SPEED);
+                Clear_Encoder(); // 清除编码器值
                 currentState = TRACK_C_TO_B;
             }
             return 0;
@@ -1051,6 +1054,7 @@ u8 Task4_Handler(void)
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
                 Set_Target_Velocity(TASK4_LINE_TRACKING_SPEED); // 设置适当的速度
+                Clear_Encoder(); // 清除编码器值
                 currentState = TRACK_D_TO_A;
             }
             return 0;
