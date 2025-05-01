@@ -6,7 +6,7 @@
 #define TASK3                          1       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 是否使用灰度传感器进行循迹测试
-#define PRINTF_ANGLE                   1       // 是否打印角度
+#define PRINTF_ANGLE                   0       // 是否打印角度
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
 #define TEST_TRACKING                  0       // 测试循迹
 #define TEST_TURNTO_ABSLUTE_ANGLE      1       // 测试转向到绝对角度
@@ -27,7 +27,7 @@
 #define STEERING_KD_DEFAULT        30     // 转向控制微分系数
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
-#define FLAG_STOP_DEFAULT           0    // 是否默认停止
+#define FLAG_STOP_DEFAULT           1    // 是否默认停止
 #define FLAG_SHOW_DEFAULT           0    // 默认显示打开
 #define MODE_DEFAULT                0    // 初始模式选择,默认为普通控制模式 
 #define MANUAL_SET_ANGLE            1    //手动通过点击按钮设置角度值

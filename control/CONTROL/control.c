@@ -880,11 +880,15 @@ void angleSetWithKey_Handler(void)
         {
             case INITIAL:
                 state = SET_INITIAL_ANGLE; // 设置初始角度
+                Flag_Stop = 1; // 设置停止标志
+                HAL_TIM6_toggle_IT(); // 切换定时器6中断
+                Set_Pwm(0, 0); // 停止电机
                 led1_on(); // 打开LED1
                 break;
             case SET_INITIAL_ANGLE:
                 state = SET_TASK_ROTATION_ANGLE_1; // 设置任务旋转角度1
                 initialAngle = getHeadingAngle(); // 获取当前航向角度
+                printf("设置初始角度: %.2f\r\n", initialAngle); // 打印初始角度
                 led2_on(); // 打开LED2
                 break;
             case SET_TASK_ROTATION_ANGLE_1:   //此时小车被手动对准initialAngle向右偏TaskX_Rotation_Angle_1度
@@ -904,6 +908,7 @@ void angleSetWithKey_Handler(void)
                     Task4_Rotation_Angle_1 += 360.0f;
                 }
                 state = SET_TASK_ROTATION_ANGLE_3; // 设置任务旋转角度3
+                printf("设置任务旋转角度1: %.2f\r\n", Task3_Rotation_Angle_1); // 打印任务旋转角度1
                 led3_on(); // 打开LED3
                 break;
             case SET_TASK_ROTATION_ANGLE_3:
@@ -924,6 +929,7 @@ void angleSetWithKey_Handler(void)
                     Task4_Rotation_Angle_3 += 360.0f;
                 }
                 led1_off(); // 关闭LED1
+                printf("设置任务旋转角度3: %.2f\r\n", Task3_Rotation_Angle_3); // 打印任务旋转角度3
                 break; 
             case SET_TASK_ROTATION_ANGLE_4:
                 state = INITIAL; // 返回初始状态
@@ -939,6 +945,13 @@ void angleSetWithKey_Handler(void)
                 led1_off(); // 关闭LED1
                 led2_off(); // 关闭LED2
                 led3_off(); // 关闭LED3
+                printf("设置任务旋转角度4: %.2f\r\n", Task4_Rotation_Angle_4); // 打印任务旋转角度4
+                // 打印所有设置的角度
+                printf("初始角度: %.2f , 任务旋转角度1: %.2f, 任务旋转角度3: %.2f, 任务旋转角度4: %.2f\r\n", 
+                       initialAngle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_3, Task4_Rotation_Angle_4); // 打印所有设置的角度
+                HAL_TIM6_toggle_IT(); // 切换定时器6中断
+                resetTask(); // 重置任务
+                toggle_Flag_Stop(); // 切换停止标志
                 break;
         }
     }
