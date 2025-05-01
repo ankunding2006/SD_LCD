@@ -938,15 +938,27 @@ u8 Task4_Handler(void)
             if(can_print_debug) {
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
-            
-            if(moveForward_Handler()) {
-                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
-                printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
-                led3_on(); // C点提示
-                 
-                // 重置延时计数器，进入C点延时状态
-                delay_counter = 0;
-                currentState = C_POINT_DELAY;
+            if(cycle_count==0) 
+            {
+                if(moveForward_Handler()) {
+                    // moveForward_Handler返回1表示检测到黑线，即到达C点
+                    printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
+                    led3_on(); // C点提示
+                    // 重置延时计数器，进入C点延时状态
+                    delay_counter = 0;
+                    currentState = C_POINT_DELAY;
+                }
+            }
+            else 
+            {
+                if(moveForward_Handler()) {
+                    // moveForward_Handler返回1表示检测到黑线，即到达C点
+                    printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
+                    led3_on(); // C点提示
+                    // 重置延时计数器，进入C点延时状态
+                    delay_counter = 0;
+                    currentState = C_POINT_DELAY;
+                }
             }
             return 0;
             
