@@ -17,8 +17,8 @@
 #define STEERING_STABLE_TIME        70     // 转向稳定需要保持的时间计数
 #define STEERING_MAX_OUTPUT        3000    // 转向控制最大PWM输出
 #define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
-#define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
-#define PWM_Base                  700	   // PWM基准值
+#define STEERING_I_LIMIT          1300     // 转向控制积分限幅值
+#define PWM_Base                  720	   // PWM基准值
 #define STEERING_ERROR_THRESHOLD_DEFAULT     200    // 转向控制误差阈值(度)
 //*********************转向控制PID参数及相关变量（放大100倍）******************
 #define STEERING_KP_DEFAULT        2200    // 转向控制比例系数
