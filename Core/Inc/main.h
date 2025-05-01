@@ -27,6 +27,7 @@ extern "C" {
 #include "wit_c_sdk.h" 
 #include "usart.h"
 #include "car_config.h"
+#include "my_menu.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -75,6 +76,21 @@ extern u8 resetTask_flag;                // 是否要重启任务标志位
 extern u32 resetMode_start_time;         // 任务3重置模式开始时间
 extern int Task3_line_tracking_Speed;    // 任务3中循迹行驶的速度(速度值)
 extern float initialAngle_temp[5];       // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
+extern float Task4_Rotation_Angle_1;    // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
+extern float Task4_Rotation_Angle_3;    // 任务4中从B到D前需要逆时针旋转的角度(度)
+extern float Task4_Rotation_Angle_4;    // 任务4中后3圈从B到D前需要逆时针旋转的角度(度)
+extern int Task4_Steer_Time_C;          // C点openLoopSteering的转向时间参数(中断次数)
+extern int Task4_Steer_PWM_C;           // C点openLoopSteering的PWM参数(速度值)
+extern int Task4_Steer_Time_D;          // D点openLoopSteering的转向时间参数(中断次数)
+extern int Task4_Steer_PWM_D;           // D点openLoopSteering的PWM参数(速度值)
+extern int Task4_Cycle_Count;           // 任务4循环执行次数
+extern int Task4_Interval;              // 任务间隔时间(毫秒)
+extern int Task4_Move_Forward_Speed;    // 任务4中直线行驶的速度(速度值)
+extern int Task4_Line_Tracking_Speed;   // 任务4中循迹行驶的速度(速度值)
+extern int Task4_B_Point_Delay_Time;    // B点延时时间(毫秒)
+extern u8 key_state;                    // 按键状态
+extern u8 key_state_last;               // 上次按键状态
+extern float initialAngle;              // 初始航向角
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -205,6 +221,7 @@ int click(void);
 void JY901_init(void);
 void print_angle_Handle(void);
 void Before_Main(void);
+void angleSetWithKey_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

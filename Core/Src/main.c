@@ -196,6 +196,9 @@ u16 Forward_Error_Threshold = FORWARD_ERROR_THRESHOLD;                          
 u16 forwardBase_PWM = FORWARDBASE_PWM;                                                                                     // 直线行走基础PWM值
 
 float initialAngle_temp[5]={0}; // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
+u8 key_state=0;
+u8 key_state_last=0; 
+float initialAngle = 0.0f;    // 初始航向角
 /**************enum define****************/
 enum currentPosition
 {
@@ -332,6 +335,9 @@ int main(void)
     //!Lcd_MenuTask(); // 菜单任务
     #if PRINTF_ANGLE==1
     print_angle_Handle(); // 打印角度
+    #endif
+    #if MANUAL_SET_ANGLE==1
+    angleSetWithKey_Handler();
     #endif
     /* USER CODE END WHILE */
 

@@ -848,3 +848,94 @@ void normal_Handler(void)
 {
     // 普通模式的处理代码
 }
+
+
+void angleSetWithKey_Handler(void)
+{
+    typedef enum
+    {
+        INITIAL,
+        SET_INITIAL_ANGLE,
+        SET_TASK_ROTATION_ANGLE_1,
+        SET_TASK_ROTATION_ANGLE_3,
+        SET_TASK_ROTATION_ANGLE_4,
+    } AngleSetState;
+    static AngleSetState state = INITIAL; // 初始化状态机
+    key_state = Get_Key(); // 获取按键状态
+    if(key_state == KEY_ENTER) // 按下回车键
+    {
+        float reverseInitialAngle = initialAngle + 180; // 计算反向初始角度
+        // 规范化反向初始角度到[-180, 180]范围内
+        while(reverseInitialAngle > 180.0f) {
+            reverseInitialAngle -= 360.0f;
+        }
+        while(reverseInitialAngle < -180.0f) {
+            reverseInitialAngle += 360.0f;
+        }
+        switch(state)
+        {
+            case INITIAL:
+                state = SET_INITIAL_ANGLE; // 设置初始角度
+                led1_on(); // 打开LED1
+                break;
+            case SET_INITIAL_ANGLE:
+                state = SET_TASK_ROTATION_ANGLE_1; // 设置任务旋转角度1
+                initialAngle = getHeadingAngle(); // 获取当前航向角度
+                led2_on(); // 打开LED2
+                break;
+            case SET_TASK_ROTATION_ANGLE_1:   //此时小车被手动对准initialAngle向右偏TaskX_Rotation_Angle_1度
+                // 计算任务旋转角度1
+                Task4_Rotation_Angle_1 = Task3_Rotation_Angle_1 = initialAngle - getHeadingAngle(); // 计算任务旋转角度1
+                // 规范化任务旋转角度1到[-180, 180]范围内
+                while(Task3_Rotation_Angle_1 > 180.0f) {
+                    Task3_Rotation_Angle_1 -= 360.0f;
+                }
+                while(Task3_Rotation_Angle_1 < -180.0f) {
+                    Task3_Rotation_Angle_1 += 360.0f;
+                }
+                while(Task4_Rotation_Angle_1 > 180.0f) {
+                    Task4_Rotation_Angle_1 -= 360.0f;
+                }
+                while(Task4_Rotation_Angle_1 < -180.0f) {
+                    Task4_Rotation_Angle_1 += 360.0f;
+                }
+                state = SET_TASK_ROTATION_ANGLE_3; // 设置任务旋转角度3
+                led3_on(); // 打开LED3
+                break;
+            case SET_TASK_ROTATION_ANGLE_3:
+                state = SET_TASK_ROTATION_ANGLE_4; // 设置任务旋转角度4
+                // 计算任务旋转角度3
+                Task4_Rotation_Angle_3 = Task3_Rotation_Angle_3 = getHeadingAngle() - reverseInitialAngle; // 计算任务旋转角度3
+                // 规范化任务旋转角度3到[-180, 180]范围内
+                while(Task3_Rotation_Angle_3 > 180.0f) {
+                    Task3_Rotation_Angle_3 -= 360.0f;
+                }
+                while(Task3_Rotation_Angle_3 < -180.0f) {
+                    Task3_Rotation_Angle_3 += 360.0f;
+                } 
+                while(Task4_Rotation_Angle_3 > 180.0f) {
+                    Task4_Rotation_Angle_3 -= 360.0f;
+                }
+                while(Task4_Rotation_Angle_3 < -180.0f) {
+                    Task4_Rotation_Angle_3 += 360.0f;
+                }
+                led1_off(); // 关闭LED1
+                break; 
+            case SET_TASK_ROTATION_ANGLE_4:
+                state = INITIAL; // 返回初始状态
+                // 计算任务旋转角度4
+                Task4_Rotation_Angle_4 =  initialAngle - getHeadingAngle(); // 计算任务旋转角度4
+
+                while(Task4_Rotation_Angle_4 > 180.0f) {
+                    Task4_Rotation_Angle_4 -= 360.0f;
+                }
+                while(Task4_Rotation_Angle_4 < -180.0f) {
+                    Task4_Rotation_Angle_4 += 360.0f;
+                }
+                led1_off(); // 关闭LED1
+                led2_off(); // 关闭LED2
+                led3_off(); // 关闭LED3
+                break;
+        }
+    }
+}

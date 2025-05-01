@@ -72,6 +72,32 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Task3_Steer_PWM_D, "int Get_Task3_Steer_PWM_D(void)"},
     {(void *)Get_Task3_Move_Forward_Speed, "int Get_Task3_Move_Forward_Speed(void)"},
     {(void *)resetTask, "void resetTask(void)"},
+
+    // 注册任务4相关参数调节函数
+    {(void *)Set_Task4_Rotation_Angle_1, "void Set_Task4_Rotation_Angle_1(int angle)"},
+    {(void *)Set_Task4_Rotation_Angle_3, "void Set_Task4_Rotation_Angle_3(int angle)"},
+    {(void *)Set_Task4_Rotation_Angle_4, "void Set_Task4_Rotation_Angle_4(int angle)"},
+    {(void *)Set_Task4_Steer_Time_C, "void Set_Task4_Steer_Time_C(int time)"},
+    {(void *)Set_Task4_Steer_PWM_C, "void Set_Task4_Steer_PWM_C(int pwm)"},
+    {(void *)Set_Task4_Steer_Time_D, "void Set_Task4_Steer_Time_D(int time)"},
+    {(void *)Set_Task4_Steer_PWM_D, "void Set_Task4_Steer_PWM_D(int pwm)"},
+    {(void *)Set_Task4_Cycle_Count, "void Set_Task4_Cycle_Count(int count)"},
+    {(void *)Set_Task4_Interval, "void Set_Task4_Interval(int interval)"},
+    {(void *)Set_Task4_Move_Forward_Speed, "void Set_Task4_Move_Forward_Speed(int speed)"},
+    {(void *)Set_Task4_Line_Tracking_Speed, "void Set_Task4_Line_Tracking_Speed(int speed)"},
+    {(void *)Set_Task4_B_Point_Delay_Time, "void Set_Task4_B_Point_Delay_Time(int time)"},
+    {(void *)Get_Task4_Rotation_Angle_1, "float Get_Task4_Rotation_Angle_1(void)"},
+    {(void *)Get_Task4_Rotation_Angle_3, "float Get_Task4_Rotation_Angle_3(void)"},
+    {(void *)Get_Task4_Rotation_Angle_4, "float Get_Task4_Rotation_Angle_4(void)"},
+    {(void *)Get_Task4_Steer_Time_C, "int Get_Task4_Steer_Time_C(void)"},
+    {(void *)Get_Task4_Steer_PWM_C, "int Get_Task4_Steer_PWM_C(void)"},
+    {(void *)Get_Task4_Steer_Time_D, "int Get_Task4_Steer_Time_D(void)"},
+    {(void *)Get_Task4_Steer_PWM_D, "int Get_Task4_Steer_PWM_D(void)"},
+    {(void *)Get_Task4_Cycle_Count, "int Get_Task4_Cycle_Count(void)"},
+    {(void *)Get_Task4_Interval, "int Get_Task4_Interval(void)"},
+    {(void *)Get_Task4_Move_Forward_Speed, "int Get_Task4_Move_Forward_Speed(void)"},
+    {(void *)Get_Task4_Line_Tracking_Speed, "int Get_Task4_Line_Tracking_Speed(void)"},
+    {(void *)Get_Task4_B_Point_Delay_Time, "int Get_Task4_B_Point_Delay_Time(void)"},
 };
 
 /******************************************************************************************/

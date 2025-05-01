@@ -11,6 +11,22 @@ int Task3_Steer_Time_D = TASK3_STEER_TIME_D;           // DµãopenLoopSteeringµÄ×
 int Task3_Steer_PWM_D = TASK3_STEER_PWM_D;             // DµãopenLoopSteeringµÄPWM²ÎÊı(ËÙ¶ÈÖµ)
 int Task3_Move_Forward_Speed = TASK3_MOVE_FORWARD_SPEED;       // ÈÎÎñ3ÖĞÖ±ÏßĞĞÊ»µÄËÙ¶È(ËÙ¶ÈÖµ)
 int Task3_line_tracking_Speed = TASK3_LINE_TRACKING_SPEED;       // ÈÎÎñ3ÖĞÑ­¼£ĞĞÊ»µÄËÙ¶È(ËÙ¶ÈÖµ)
+
+// ¶¨ÒåTask4Ïà¹Ø²ÎÊı±äÁ¿£¬³õÊ¼ÖµÉèÖÃÎªºê¶¨ÒåÖµ
+float Task4_Rotation_Angle_1 = TASK4_ROTATION_ANGLE_1;    // ÈÎÎñ4ÖĞ³õÊ¼´ÓAµã¶Ô×¼CµãĞèÒªË³Ê±ÕëĞı×ªµÄ½Ç¶È(¶È)
+float Task4_Rotation_Angle_3 = TASK4_ROTATION_ANGLE_3;    // ÈÎÎñ4ÖĞ´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
+float Task4_Rotation_Angle_4 = TASK4_ROTATION_ANGLE_4;    // ÈÎÎñ4ÖĞºó3È¦´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
+int Task4_Steer_Time_C = TASK4_STEER_TIME_C;            // CµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
+int Task4_Steer_PWM_C = TASK4_STEER_PWM_C;             // CµãopenLoopSteeringµÄPWM²ÎÊı(ËÙ¶ÈÖµ)
+int Task4_Steer_Time_D = TASK4_STEER_TIME_D;           // DµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
+int Task4_Steer_PWM_D = TASK4_STEER_PWM_D;             // DµãopenLoopSteeringµÄPWM²ÎÊı(ËÙ¶ÈÖµ)
+int Task4_Cycle_Count = TASK4_CYCLE_COUNT;             // ÈÎÎñ4Ñ­»·Ö´ĞĞ´ÎÊı
+int Task4_Interval = TASK4_INTERVAL;                   // ÈÎÎñ¼ä¸ôÊ±¼ä(ºÁÃë)
+int Task4_Move_Forward_Speed = TASK4_MOVE_FORWARD_SPEED;       // ÈÎÎñ4ÖĞÖ±ÏßĞĞÊ»µÄËÙ¶È(ËÙ¶ÈÖµ)
+int Task4_Line_Tracking_Speed = TASK4_LINE_TRACKING_SPEED;     // ÈÎÎñ4ÖĞÑ­¼£ĞĞÊ»µÄËÙ¶È(ËÙ¶ÈÖµ)
+int Task4_B_Point_Delay_Time = TASK4_B_PONIT_DELAY_TIME;  
+
+
 /**
  * @brief ÉèÖÃ¿ª»·×ªÏò»ù´¡PWMÖµ
  * @param pwm ĞÂµÄ¿ª»·×ªÏò»ù´¡PWMÖµ
@@ -454,4 +470,259 @@ void resetTask(void)
     resetMode_start_time=HAL_GetTick(); // ¼ÇÂ¼ÖØÖÃ¿ªÊ¼Ê±¼ä
     led1_on();  led2_on(); 
     printf("¼´½«ÔÚ%dmsºóÖØÖÃÈÎÎñ",RESET_WAIT_TIME);
+}
+
+
+
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4³õÊ¼Ğı×ª½Ç¶È
+ * @param angle Ğı×ª½Ç¶È(¶È£¬Ë³Ê±ÕëÎªÕı)
+ * @return ÎŞ
+ */
+void Set_Task4_Rotation_Angle_1(int angle)
+{
+    Task4_Rotation_Angle_1 = (float)angle;
+    printf("ÉèÖÃÈÎÎñ4³õÊ¼Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4´ÓBµ½DÇ°µÄĞı×ª½Ç¶È
+ * @param angle Ğı×ª½Ç¶È(¶È£¬ÄæÊ±ÕëÎªÕı)
+ * @return ÎŞ
+ */
+void Set_Task4_Rotation_Angle_3(int angle)
+{
+    Task4_Rotation_Angle_3 = (float)angle;
+    printf("ÉèÖÃÈÎÎñ4 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ºó3È¦´ÓBµ½DÇ°µÄĞı×ª½Ç¶È
+ * @param angle Ğı×ª½Ç¶È(¶È£¬ÄæÊ±ÕëÎªÕı)
+ * @return ÎŞ
+ */
+void Set_Task4_Rotation_Angle_4(int angle)
+{
+    Task4_Rotation_Angle_4 = (float)angle;
+    printf("ÉèÖÃÈÎÎñ4ºó3È¦Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞCµã¿ª»·×ªÏòÊ±¼ä
+ * @param time ×ªÏòÊ±¼ä(ÖĞ¶Ï´ÎÊı)
+ * @return ÎŞ
+ */
+void Set_Task4_Steer_Time_C(int time) 
+{
+    Task4_Steer_Time_C = time;
+    printf("ÉèÖÃÈÎÎñ4 Cµã×ªÏòÊ±¼ä: %d\r\n", time);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞCµã¿ª»·×ªÏòPWMÖµ
+ * @param pwm PWMÖµ(ËÙ¶ÈÖµ)
+ * @return ÎŞ
+ */
+void Set_Task4_Steer_PWM_C(int pwm)
+{
+    Task4_Steer_PWM_C = pwm;
+    printf("ÉèÖÃÈÎÎñ4 Cµã×ªÏòPWM: %d\r\n", pwm);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞDµã¿ª»·×ªÏòÊ±¼ä
+ * @param time ×ªÏòÊ±¼ä(ÖĞ¶Ï´ÎÊı£¬¸ºÖµ±íÊ¾Ë³Ê±ÕëĞı×ª)
+ * @return ÎŞ
+ */
+void Set_Task4_Steer_Time_D(int time)
+{
+    Task4_Steer_Time_D = time;
+    printf("ÉèÖÃÈÎÎñ4 Dµã×ªÏòÊ±¼ä: %d\r\n", time);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞDµã¿ª»·×ªÏòPWMÖµ
+ * @param pwm PWMÖµ(ËÙ¶ÈÖµ)
+ * @return ÎŞ
+ */
+void Set_Task4_Steer_PWM_D(int pwm)
+{
+    Task4_Steer_PWM_D = pwm;
+    printf("ÉèÖÃÈÎÎñ4 Dµã×ªÏòPWM: %d\r\n", pwm);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4Ñ­»·Ö´ĞĞ´ÎÊı
+ * @param count Ñ­»·´ÎÊı
+ * @return ÎŞ
+ */
+void Set_Task4_Cycle_Count(int count)
+{
+    Task4_Cycle_Count = count;
+    printf("ÉèÖÃÈÎÎñ4Ñ­»·Ö´ĞĞ´ÎÊı: %d\r\n", count);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4¼ä¸ôÊ±¼ä
+ * @param interval ¼ä¸ôÊ±¼ä(ºÁÃë)
+ * @return ÎŞ
+ */
+void Set_Task4_Interval(int interval)
+{
+    Task4_Interval = interval;
+    printf("ÉèÖÃÈÎÎñ4¼ä¸ôÊ±¼ä: %dms\r\n", interval);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞÖ±ÏßĞĞÊ»ËÙ¶È
+ * @param speed ËÙ¶ÈÖµ
+ * @return ÎŞ
+ */
+void Set_Task4_Move_Forward_Speed(int speed)
+{
+    Task4_Move_Forward_Speed = speed;
+    printf("ÉèÖÃÈÎÎñ4Ö±ÏßĞĞÊ»ËÙ¶È: %d\r\n", speed);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞÑ­¼£ĞĞÊ»ËÙ¶È
+ * @param speed ËÙ¶ÈÖµ
+ * @return ÎŞ
+ */
+void Set_Task4_Line_Tracking_Speed(int speed)
+{
+    Task4_Line_Tracking_Speed = speed;
+    printf("ÉèÖÃÈÎÎñ4Ñ­¼£ĞĞÊ»ËÙ¶È: %d\r\n", speed);
+}
+
+/**
+ * @brief ÉèÖÃÈÎÎñ4ÖĞBµãÑÓÊ±Ê±¼ä
+ * @param time ÑÓÊ±Ê±¼ä(ºÁÃë)
+ * @return ÎŞ
+ */
+void Set_Task4_B_Point_Delay_Time(int time)
+{
+    Task4_B_Point_Delay_Time = time;
+    printf("ÉèÖÃÈÎÎñ4 BµãÑÓÊ±Ê±¼ä: %dms\r\n", time);
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞ³õÊ¼Ğı×ª½Ç¶È
+ * @return µ±Ç°½Ç¶ÈÖµ(¶È)
+ */
+float Get_Task4_Rotation_Angle_1(void)
+{
+    printf("µ±Ç°ÈÎÎñ4³õÊ¼Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_1);
+    return Task4_Rotation_Angle_1;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞBµ½DÇ°µÄĞı×ª½Ç¶È
+ * @return µ±Ç°½Ç¶ÈÖµ(¶È)
+ */
+float Get_Task4_Rotation_Angle_3(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_3);
+    return Task4_Rotation_Angle_3;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞºó3È¦´ÓBµ½DÇ°µÄĞı×ª½Ç¶È
+ * @return µ±Ç°½Ç¶ÈÖµ(¶È)
+ */
+float Get_Task4_Rotation_Angle_4(void)
+{
+    printf("µ±Ç°ÈÎÎñ4ºó3È¦Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_4);
+    return Task4_Rotation_Angle_4;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞCµã¿ª»·×ªÏòÊ±¼ä
+ * @return µ±Ç°×ªÏòÊ±¼ä(ÖĞ¶Ï´ÎÊı)
+ */
+int Get_Task4_Steer_Time_C(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 Cµã×ªÏòÊ±¼ä: %d\r\n", Task4_Steer_Time_C);
+    return Task4_Steer_Time_C;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞCµã¿ª»·×ªÏòPWMÖµ
+ * @return µ±Ç°PWMÖµ(ËÙ¶ÈÖµ)
+ */
+int Get_Task4_Steer_PWM_C(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 Cµã×ªÏòPWM: %d\r\n", Task4_Steer_PWM_C);
+    return Task4_Steer_PWM_C;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞDµã¿ª»·×ªÏòÊ±¼ä
+ * @return µ±Ç°×ªÏòÊ±¼ä(ÖĞ¶Ï´ÎÊı)
+ */
+int Get_Task4_Steer_Time_D(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 Dµã×ªÏòÊ±¼ä: %d\r\n", Task4_Steer_Time_D);
+    return Task4_Steer_Time_D;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞDµã¿ª»·×ªÏòPWMÖµ
+ * @return µ±Ç°PWMÖµ(ËÙ¶ÈÖµ)
+ */
+int Get_Task4_Steer_PWM_D(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 Dµã×ªÏòPWM: %d\r\n", Task4_Steer_PWM_D);
+    return Task4_Steer_PWM_D;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4Ñ­»·Ö´ĞĞ´ÎÊı
+ * @return µ±Ç°Ñ­»·´ÎÊı
+ */
+int Get_Task4_Cycle_Count(void)
+{
+    printf("µ±Ç°ÈÎÎñ4Ñ­»·Ö´ĞĞ´ÎÊı: %d\r\n", Task4_Cycle_Count);
+    return Task4_Cycle_Count;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4¼ä¸ôÊ±¼ä
+ * @return µ±Ç°¼ä¸ôÊ±¼ä(ºÁÃë)
+ */
+int Get_Task4_Interval(void)
+{
+    printf("µ±Ç°ÈÎÎñ4¼ä¸ôÊ±¼ä: %dms\r\n", Task4_Interval);
+    return Task4_Interval;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞÖ±ÏßĞĞÊ»ËÙ¶È
+ * @return µ±Ç°ËÙ¶ÈÖµ
+ */
+int Get_Task4_Move_Forward_Speed(void)
+{
+    printf("µ±Ç°ÈÎÎñ4Ö±ÏßĞĞÊ»ËÙ¶È: %d\r\n", Task4_Move_Forward_Speed);
+    return Task4_Move_Forward_Speed;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞÑ­¼£ĞĞÊ»ËÙ¶È
+ * @return µ±Ç°ËÙ¶ÈÖµ
+ */
+int Get_Task4_Line_Tracking_Speed(void)
+{
+    printf("µ±Ç°ÈÎÎñ4Ñ­¼£ĞĞÊ»ËÙ¶È: %d\r\n", Task4_Line_Tracking_Speed);
+    return Task4_Line_Tracking_Speed;
+}
+
+/**
+ * @brief »ñÈ¡ÈÎÎñ4ÖĞBµãÑÓÊ±Ê±¼ä
+ * @return µ±Ç°ÑÓÊ±Ê±¼ä(ºÁÃë)
+ */
+int Get_Task4_B_Point_Delay_Time(void)
+{
+    printf("µ±Ç°ÈÎÎñ4 BµãÑÓÊ±Ê±¼ä: %dms\r\n", Task4_B_Point_Delay_Time);
+    return Task4_B_Point_Delay_Time;
 }

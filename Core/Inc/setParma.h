@@ -52,6 +52,31 @@ int Get_Task3_Steer_PWM_D(void);
 int Get_Task3_Move_Forward_Speed(void);
 void resetTask(void);
 
+// Task4相关参数设置函数声明
+void Set_Task4_Rotation_Angle_1(int angle);
+void Set_Task4_Rotation_Angle_3(int angle);
+void Set_Task4_Rotation_Angle_4(int angle);
+void Set_Task4_Steer_Time_C(int time);
+void Set_Task4_Steer_PWM_C(int pwm);
+void Set_Task4_Steer_Time_D(int time);
+void Set_Task4_Steer_PWM_D(int pwm);
+void Set_Task4_Cycle_Count(int count);
+void Set_Task4_Interval(int interval);
+void Set_Task4_Move_Forward_Speed(int speed);
+void Set_Task4_Line_Tracking_Speed(int speed);
+void Set_Task4_B_Point_Delay_Time(int time);
+float Get_Task4_Rotation_Angle_1(void);
+float Get_Task4_Rotation_Angle_3(void);
+float Get_Task4_Rotation_Angle_4(void);
+int Get_Task4_Steer_Time_C(void);
+int Get_Task4_Steer_PWM_C(void);
+int Get_Task4_Steer_Time_D(void);
+int Get_Task4_Steer_PWM_D(void);
+int Get_Task4_Cycle_Count(void);
+int Get_Task4_Interval(void);
+int Get_Task4_Move_Forward_Speed(void);
+int Get_Task4_Line_Tracking_Speed(void);
+int Get_Task4_B_Point_Delay_Time(void);
 #ifdef __cplusplus
 }
 #endif

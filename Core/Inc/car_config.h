@@ -30,6 +30,7 @@
 #define FLAG_STOP_DEFAULT           0    // 是否默认停止
 #define FLAG_SHOW_DEFAULT           0    // 默认显示打开
 #define MODE_DEFAULT                0    // 初始模式选择,默认为普通控制模式 
+#define MANUAL_SET_ANGLE            1    //手动通过点击按钮设置角度值
 /****************************PID系数初值配置*********************************/
 
 // 速度和PID控制参数 (放大100倍)
