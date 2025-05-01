@@ -122,3 +122,24 @@ void turnToAbsoluteAngle_TEST_Handler(void)
             break;
     }
 }
+
+
+/**
+ * @brief 打印角度处理函数 - 打印当前角度
+ * @param None
+ * @return None
+ */
+void print_angle_Handle(void)
+{
+    static uint16_t debug_print_counter = 0; // 调试信息发送计数器
+    bool can_print_debug = false;
+    
+    if (++debug_print_counter >= ANGLE_PRINT_COUNT) {
+        debug_print_counter = 0;
+        can_print_debug = true;
+    }
+    
+    if(can_print_debug) {
+        printf("当前角度: %.2f\r\n", getHeadingAngle()); // 打印当前角度
+    }
+}

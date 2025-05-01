@@ -3,9 +3,10 @@
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          0       // 测试模式3
-#define TASK4                          1       // 测试模式4
-#define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
+#define TASK3                          1       // 测试模式3
+#define TASK4                          0       // 测试模式4
+#define NOLINEDETECT                   0       // 是否使用灰度传感器进行循迹测试
+#define PRINTF_ANGLE                   1       // 是否打印角度
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
 #define TEST_TRACKING                  0       // 测试循迹
 #define TEST_TURNTO_ABSLUTE_ANGLE      1       // 测试转向到绝对角度
@@ -66,9 +67,10 @@
 //*********************调试信息发送频率参数******************
 #define DEBUG_PRINT_INTERVAL      500                       // 调试信息发送间隔(ms)
 #define DEBUG_PRINT_COUNT         (DEBUG_PRINT_INTERVAL/5)    // 调试信息发送计数(基于5ms的中断周期)
+#define ANGLE_PRINT_COUNT         30000
 
 //*********************任务3相关参数*****************************************
-#define TASK3_ROTATION_ANGLE_1     28.0f     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1     27.1f     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_3     74        // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C         400       // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C          600       // C点openLoopSteering的PWM参数(速度值)

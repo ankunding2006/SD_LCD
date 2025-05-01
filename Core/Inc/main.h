@@ -202,6 +202,7 @@ void delay_us(uint32_t nus);
 void usart_init(uint32_t bound);
 int click(void);
 void JY901_init(void);
+void print_angle_Handle(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

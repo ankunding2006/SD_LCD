@@ -329,6 +329,9 @@ int main(void)
   while (1)
   {
     Lcd_MenuTask(); // 菜单任务
+    #if PRINTF_ANGLE==1
+    print_angle_Handle(); // 打印角度
+    #endif
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
