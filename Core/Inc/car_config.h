@@ -1,9 +1,9 @@
 /*************************测试部分配置******************************/
-#define TEST_MODE                      1       // 单项测试模式 
+#define TEST_MODE                      0       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          0       // 测试模式3
+#define TASK3                          1       // 测试模式3
 #define TASK4                          0       // 测试模式4
 #define NOLINEDETECT                   0       // 如果定义了这个宏为1，表示不使用灰度传感器进行循迹测试
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转
@@ -14,15 +14,15 @@
 /******************************************************************/ 
 
 //************************原地转向控制相关宏定义***********************
-#define STEERING_STABLE_TIME        50     // 转向稳定需要保持的时间计数
+#define STEERING_STABLE_TIME        70     // 转向稳定需要保持的时间计数
 #define STEERING_MAX_OUTPUT        3000    // 转向控制最大PWM输出
 #define STEERING_MIN_OUTPUT       -3000    // 转向控制最小PWM输出
 #define STEERING_I_LIMIT          1000     // 转向控制积分限幅值
-#define PWM_Base                  840	   // PWM基准值
+#define PWM_Base                  700	   // PWM基准值
 #define STEERING_ERROR_THRESHOLD_DEFAULT     200    // 转向控制误差阈值(度)
 //*********************转向控制PID参数及相关变量（放大100倍）******************
 #define STEERING_KP_DEFAULT        2200    // 转向控制比例系数
-#define STEERING_KI_DEFAULT        15     // 转向控制积分系数
+#define STEERING_KI_DEFAULT        17     // 转向控制积分系数
 #define STEERING_KD_DEFAULT        20     // 转向控制微分系数
 /*******************************默认状态配置********************************/
 // 运行控制标志位默认值
@@ -59,17 +59,17 @@
 #define FORWARDBASE_PWM            2300  // 直线行走基础PWM值
 
 //*********************陀螺仪数据验证参数******************
-#define GYRO_CHECK_THRESHOLD      1f     // 陀螺仪数据连续读取差值阈值(0.20度)
+#define GYRO_CHECK_THRESHOLD      1.0f   // 陀螺仪数据连续读取差值阈值(1.0度)
 #define GYRO_CHECK_INTERVAL       300    // 陀螺仪初始化稳定等待时间(ms)
 #define GYRO_INIT_RETRIES         5      // 陀螺仪初始化重试次数
 
 //*********************调试信息发送频率参数******************
-#define DEBUG_PRINT_INTERVAL      700                       // 调试信息发送间隔(ms)
+#define DEBUG_PRINT_INTERVAL      500                       // 调试信息发送间隔(ms)
 #define DEBUG_PRINT_COUNT         (DEBUG_PRINT_INTERVAL/5)    // 调试信息发送计数(基于5ms的中断周期)
 
 //*********************任务3相关参数*****************************************
-#define TASK3_ROTATION_ANGLE_1    27.5     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_3    79     // 任务3中从B到D前需要逆时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1    28     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_3    72     // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C        400    // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C         600    // C点openLoopSteering的PWM参数(速度值)
 #define TASK3_STEER_TIME_D        -500   // D点openLoopSteering的转向时间参数(中断次数)

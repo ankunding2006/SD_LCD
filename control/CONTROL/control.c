@@ -241,7 +241,6 @@ int lineTracking_Handler(void)
 															// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的脉冲极性相同
 	Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right); // 编码器读数转速度（mm/s）                                          				
 	int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM,速度控制
-	Velocity(Encoder_Left, Encoder_Right);
 
 	grey_sensor_Read(); // 读取灰度传感器数据
 	#if NOLINEDETECT==1 // 调试模式，不使用灰度传感器
