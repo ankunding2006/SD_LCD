@@ -707,7 +707,6 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     static float integral = 0;         // 积分项
     static u8 isInitialized = 0;       // 初始化标志
     static uint8_t debug_counter = 0;      // 调试计数器
-    static float angleDifference = 0;     // 目标角度与起始角度的差
     
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
@@ -899,14 +898,13 @@ void angleSetWithKey_Handler(void)
                 printf("检测到长按（%lums），启动小车！\r\n", press_duration);
                 
                 // 提供视觉反馈
-                all_leds_off();
-                led3_on();
                 
                 // 启动小车
                 if (Flag_Stop == 1) { // 只有在停止状态下才启动
                     HAL_TIM6_toggle_IT(); // 切换定时器6中断
                     resetTask(); // 重置任务
                     toggle_Flag_Stop(); // 切换停止标志
+                    all_leds_off();
                 }
                 
                 // 标记长按已处理
@@ -962,13 +960,28 @@ void angleSetWithKey_Handler(void)
                         while (Task3_Rotation_Angle_1 < -180.0f) {
                             Task3_Rotation_Angle_1 += 360.0f;
                         }
-                        state = SET_TASK_ROTATION_ANGLE_3; // 设置任务旋转角度3
+                        state = SET_TASK_ROTATION_ANGLE_4; // 设置任务旋转角度4
                         printf("设置任务旋转角度1: %.2f\r\n", Task3_Rotation_Angle_1); // 打印任务旋转角度1
                         led3_on(); // 打开LED3
                         break;
                         
+                    case SET_TASK_ROTATION_ANGLE_4:
+                        state = SET_TASK_ROTATION_ANGLE_3; // 设置任务旋转角度4
+                        Task4_Rotation_Angle_4 = initialAngle - getHeadingAngle(); // 计算任务旋转角度4
+                        while (Task4_Rotation_Angle_4 > 180.0f) {
+                            Task4_Rotation_Angle_4 -= 360.0f;
+                        }
+                        while (Task4_Rotation_Angle_4 < -180.0f) {
+                            Task4_Rotation_Angle_4 += 360.0f;
+                        }
+
+
+                        led1_off(); // 关闭LED1
+                        printf("设置任务旋转角度3: %.2f\r\n", Task3_Rotation_Angle_3); // 打印任务旋转角度3
+                        break;
+                        
                     case SET_TASK_ROTATION_ANGLE_3:
-                        state = SET_TASK_ROTATION_ANGLE_4; // 设置任务旋转角度4
+                        state = INITIAL; // 返回初始状态
                         Task4_Rotation_Angle_3 = Task3_Rotation_Angle_3 = getHeadingAngle() - reverseInitialAngle; // 计算任务旋转角度3
                         // 规范化任务旋转角度3到[-180, 180]范围内
                         while (Task3_Rotation_Angle_3 > 180.0f) {
@@ -977,19 +990,7 @@ void angleSetWithKey_Handler(void)
                         while (Task3_Rotation_Angle_3 < -180.0f) {
                             Task3_Rotation_Angle_3 += 360.0f;
                         }
-                        led1_off(); // 关闭LED1
-                        printf("设置任务旋转角度3: %.2f\r\n", Task3_Rotation_Angle_3); // 打印任务旋转角度3
-                        break;
-                        
-                    case SET_TASK_ROTATION_ANGLE_4:
-                        state = INITIAL; // 返回初始状态
-                        Task4_Rotation_Angle_4 = initialAngle - getHeadingAngle(); // 计算任务旋转角度4
-                        while (Task4_Rotation_Angle_4 > 180.0f) {
-                            Task4_Rotation_Angle_4 -= 360.0f;
-                        }
-                        while (Task4_Rotation_Angle_4 < -180.0f) {
-                            Task4_Rotation_Angle_4 += 360.0f;
-                        }
+
                         led1_off(); // 关闭LED1
                         led2_off(); // 关闭LED2
                         led3_off(); // 关闭LED3

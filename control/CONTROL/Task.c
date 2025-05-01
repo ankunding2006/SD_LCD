@@ -931,6 +931,7 @@ u8 Task4_Handler(void)
             
         case TURN_A_TO_C:
             // A点旋转对准C点
+            angleDifference = -1;
             if(can_print_debug) {
                 printf("A点旋转对准C点: 当前角度 = %.2f, 目标角度 = %.2f\r\n", 
                        getHeadingAngle(), targetAngle);
@@ -1032,6 +1033,7 @@ u8 Task4_Handler(void)
             
         case TURN_AT_B:
             // 在B点旋转至目标角度（使用绝对角度旋转函数）
+            angleDifference = -1;
             if(can_print_debug) {
                 printf("B点旋转：当前角度 = %.2f, 目标角度 = %.2f, 差值 = %.2f\r\n", 
                       getHeadingAngle(), targetAngle, targetAngle - getHeadingAngle());

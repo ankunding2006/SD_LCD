@@ -91,6 +91,7 @@ extern int Task4_B_Point_Delay_Time;    // B点延时时间(毫秒)
 extern u8 key_state;                    // 按键状态
 extern u8 key_state_last;               // 上次按键状态
 extern float initialAngle;              // 初始航向角
+extern float angleDifference;           // 目标角度与起始角度的差值
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
