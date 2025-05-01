@@ -70,6 +70,9 @@
 #define ANGLE_PRINT_COUNT         30000
 
 //*********************任务3相关参数*****************************************
+#define IS_SET_INIT_ANGLE_MANUALY 1         // 是否手动设置目标角度
+#define MANUAL_INIT_ANGLE         137       // 目标角度(度)
+
 #define TASK3_ROTATION_ANGLE_1     27.1f     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_3     74        // 任务3中从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C         400       // C点openLoopSteering的转向时间参数(中断次数)

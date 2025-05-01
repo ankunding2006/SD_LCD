@@ -513,7 +513,11 @@ u8 Task3_Handler(void)
             
         case INIT:
             // 初始化：记录初始航向角，设置初始速度
+            #if IS_SET_INIT_ANGLE_MANUALY==1
+            initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+            #else
             initialAngle = getHeadingAngle();
+            #endif
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
             Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
@@ -879,7 +883,11 @@ u8 Task4_Handler(void)
             // 初始化：记录初始航向角，设置初始速度
             // 只在第一次循环记录初始角度
             if (cycle_count == 0) {
+                #if IS_SET_INIT_ANGLE_MANUALY==1
+                initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+                #else
                 initialAngle = getHeadingAngle();
+                #endif
             }
             
             printf("任务4 第%d圈开始: 初始角度 = %.2f\r\n", cycle_count + 1, initialAngle);
