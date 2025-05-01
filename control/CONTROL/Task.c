@@ -512,15 +512,12 @@ u8 Task3_Handler(void)
             return 0;
             
         case INIT:
+            
             // 初始化：记录初始航向角，设置初始速度
             #if IS_SET_INIT_ANGLE_MANUALY==1
             initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
             #else
-            float sum = 0;
-            for(int i = 0; i < 5; i++) {
-                sum += initialAngle_temp[i]; // 累加初始角度
-            }
-            initialAngle = sum / 5; // 从陀螺仪获取初始角度
+            initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
             #endif
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
@@ -890,11 +887,7 @@ u8 Task4_Handler(void)
                 #if IS_SET_INIT_ANGLE_MANUALY==1
                 initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
                 #else
-                float sum = 0;
-                for(int i = 0; i < 5; i++) {
-                    sum += initialAngle_temp[i]; // 累加初始角度
-                }
-                initialAngle = sum / 5; // 从陀螺仪获取初始角度
+                initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
                 #endif
             }
             
@@ -905,8 +898,12 @@ u8 Task4_Handler(void)
             led1_on(); // A点提示
             printf("从A点出发\r\n");
             
-            // 计算顺时针旋转TASK4_ROTATION_ANGLE_1度的目标角度
-            targetAngle = initialAngle - TASK4_ROTATION_ANGLE_1; // 顺时针旋转要减去角度值
+            // 计算顺时针旋转TASK4_ROTATION_ANGLE_1/TASK3_ROTATION_ANGLE_3度的目标角度
+            if(cycle_count == 0) {
+                targetAngle = initialAngle - TASK4_ROTATION_ANGLE_1; // 顺时针旋转要减去角度值
+            } else {
+                targetAngle = initialAngle - TASK4_ROTATION_ANGLE_4; // 逆时针旋转要加上角度值
+            }
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;

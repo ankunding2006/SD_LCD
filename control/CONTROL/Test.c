@@ -131,7 +131,7 @@ void turnToAbsoluteAngle_TEST_Handler(void)
  */
 void print_angle_Handle(void)
 {
-    static uint16_t debug_print_counter = 0; // 调试信息发送计数器
+    static uint32_t debug_print_counter = 0; // 调试信息发送计数器
     bool can_print_debug = false;
     
     if (++debug_print_counter >= ANGLE_PRINT_COUNT) {
