@@ -713,7 +713,7 @@ u8 Task3_Handler(void)
         case A_POINT_DELAY:
             // A点任务完成LED提示延时状态（非阻塞）
             delay_counter++;
-            if(delay_counter >= (TASK_INTERVAL/5)) { // 5ms中断，TASK_INTERVAL次约等于TASK_INTERVALms
+            if(delay_counter >= (TASK3_INTERVAL/5)) { // 5ms中断，TASK3_INTERVAL次约等于TASK3_INTERVALms
                 currentState = COMPLETED;
             }
             return 0;
@@ -754,11 +754,12 @@ u8 Task3_Handler(void)
  */
 u8 Task4_Handler(void)
 {
+    // 定义状态机状态
     typedef enum {
         INIT_WAIT,         // 等待陀螺仪稳定
         INIT,              // 初始化状态
         INIT_DELAY,        // A点初始延时状态(LED提示)
-        TURN_A_TO_C,       // A点顺时针旋转对准C点
+        TURN_A_TO_C,       // A点顺时针旋转一定角度对准C点
         MOVE_A_TO_C,       // A到C直线行驶
         C_POINT_DELAY,     // C点延时状态(LED提示)
         TURN_AT_C,         // 在C点旋转
@@ -767,10 +768,10 @@ u8 Task4_Handler(void)
         TURN_AT_B,         // 在B点旋转到D点方向
         MOVE_B_TO_D,       // B到D直线行驶
         D_POINT_DELAY,     // D点延时状态(LED提示)
-        TURN_AT_D,         // 在D点旋转
+        TURN_AT_D,         // 在D点旋转(新增状态)
         TRACK_D_TO_A,      // D到A沿黑线循迹
         A_POINT_DELAY,     // A点延时状态(LED提示)
-        CYCLE_DELAY,       // 循环之间的延时状态
+        CYCLE_COMPLETE,    // 一次循环完成
         COMPLETED          // 任务完成
     } TaskState;
     
@@ -783,13 +784,35 @@ u8 Task4_Handler(void)
     static uint8_t retry_count = 0;      // 重试次数计数
     static uint16_t debug_print_counter = 0; // 调试信息发送计数器
     static uint16_t delay_counter = 0;   // 非阻塞延时计数器
-    static uint8_t cycle_count = 0;      // 循环计数器，记录已完成的循环次数
+    static uint8_t cycle_count = 0;      // 循环计数器，记录完成的循环次数
     
     // 调试信息发送频率控制
     bool can_print_debug = false;
     if (++debug_print_counter >= DEBUG_PRINT_COUNT) {
         debug_print_counter = 0;
         can_print_debug = true;
+    }
+    
+    if(resetTask_flag==1)
+    {
+        // 一定时间后重置任务状态和变量
+        Set_Pwm(0,0);
+        if(HAL_GetTick()-resetMode_start_time>RESET_WAIT_TIME)
+        {
+            currentState = INIT;
+            init_start_time = 0;
+            prev_angle = 0.0f;
+            retry_count = 0; 
+            delay_counter = 0;
+            cycle_count = 0;  // 重置循环计数
+            resetTask_flag=0;
+            led1_off(); led2_off(); led3_off(); // 关闭所有LED
+            printf("任务重置完成\r\n");
+        }
+        else
+        {
+            return 0;
+        }
     }
     
     // 状态机实现
@@ -847,14 +870,17 @@ u8 Task4_Handler(void)
                 currentState = INIT;
                 init_start_time = 0;
                 retry_count = 0;
-                cycle_count = 0;   // 初始化循环计数器
             }
             return 0;
             
         case INIT:
             // 初始化：记录初始航向角，设置初始速度
-            initialAngle = getHeadingAngle();
-            printf("任务4开始: 初始角度 = %.2f (循环 %d/%d)\r\n", initialAngle, cycle_count+1, TASK4_CYCLE_COUNT);
+            // 只在第一次循环记录初始角度
+            if (cycle_count == 0) {
+                initialAngle = getHeadingAngle();
+            }
+            
+            printf("任务4 第%d圈开始: 初始角度 = %.2f\r\n", cycle_count + 1, initialAngle);
             
             Set_Target_Velocity(TASK4_MOVE_FORWARD_SPEED); // 设置适当的速度
             all_leds_off();
@@ -879,12 +905,16 @@ u8 Task4_Handler(void)
             return 0;
             
         case INIT_DELAY:
+            // A点LED提示延时状态（非阻塞）
+            delay_counter++;
+            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led1_off();
                 // 重置调试打印计数器
                 debug_print_counter = 0;
                 // 切换到下一状态 - 先旋转对准C点
                 currentState = TURN_A_TO_C;
-                return 0;
+            }
+            return 0;
             
         case TURN_A_TO_C:
             // A点旋转对准C点（顺时针旋转TASK4_ROTATION_ANGLE_1度）
@@ -892,9 +922,11 @@ u8 Task4_Handler(void)
                 printf("A点旋转对准C点: 当前角度 = %.2f, 目标角度 = %.2f\r\n", 
                        getHeadingAngle(), targetAngle);
             }
+            
             if(turnToAbsoluteAngle(targetAngle)) {
                 // 旋转完成，进入直线行驶状态
                 printf("A点旋转完成，开始向C点直线行驶\r\n");
+                Set_Target_Velocity(TASK4_MOVE_FORWARD_SPEED); // 设置适当的速度
                 currentState = MOVE_A_TO_C;
             }
             return 0;
@@ -905,38 +937,29 @@ u8 Task4_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达C点
+            if(moveForwardWithAngle_Handler(targetAngle)) {
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
-                
-                // 计算顺时针旋转TASK4_ROTATION_ANGLE_2度的目标角度
-                targetAngle = getHeadingAngle() - TASK4_ROTATION_ANGLE_2; // 顺时针旋转要减去角度值
-                // 规范化角度到±180度范围
-                while(targetAngle > 180.0f) {
-                    targetAngle -= 360.0f;
-                }
-                while(targetAngle < -180.0f) {
-                    targetAngle += 360.0f;
-                }
-                
+                 
                 // 重置延时计数器，进入C点延时状态
                 delay_counter = 0;
                 currentState = C_POINT_DELAY;
             }
             return 0;
             
-        case C_POINT_DELAY:
-                led3_off();
-                printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
-                currentState = TURN_AT_C;
-                return 0;
+        case C_POINT_DELAY: 
+            led3_off();
+            printf("在C点旋转至目标角度: %.2f\r\n", targetAngle);
+            currentState = TURN_AT_C;
+            return 0;
             
         case TURN_AT_C:
             // 使用openLoopSteering_Handler在C点进行旋转
             if(openLoopSteering_Handler(TASK4_STEER_TIME_C, TASK4_STEER_PWM_C)) {
                 // 转向完成
                 printf("C点转向完成，开始C→B循迹\r\n");
+                Set_Target_Velocity(TASK4_LINE_TRACKING_SPEED);
                 currentState = TRACK_C_TO_B;
             }
             return 0;
@@ -954,7 +977,7 @@ u8 Task4_Handler(void)
                 
                 // 计算目标角度：初始角度的反方向再逆时针旋转TASK4_ROTATION_ANGLE_3度
                 // 初始方向的反方向 = 初始角度 + 180度
-                // 再逆时针偏转TASK4_ROTATION_ANGLE_3度 = 再加上TASK4_ROTATION_ANGLE_3度
+                // 再逆时针偏转Task4_Rotation_Angle_3度 = 再加上Task4_Rotation_Angle_3度
                 targetAngle = initialAngle + 180.0f + TASK4_ROTATION_ANGLE_3;
                 
                 // 规范化角度到±180度范围
@@ -976,7 +999,7 @@ u8 Task4_Handler(void)
                 led2_off();
                 printf("在B点旋转至目标角度: %.2f\r\n", targetAngle);
                 currentState = TURN_AT_B;
-                return 0;
+            return 0;
             
         case TURN_AT_B:
             // 在B点旋转至目标角度（使用绝对角度旋转函数）
@@ -989,6 +1012,7 @@ u8 Task4_Handler(void)
                 // turnToAbsoluteAngle返回1表示完成转向
                 printf("B点转向完成，目标角度: %.2f，当前角度: %.2f\r\n", 
                        targetAngle, getHeadingAngle());
+                Set_Target_Velocity(TASK4_MOVE_FORWARD_SPEED); // 设置适当的速度
                 currentState = MOVE_B_TO_D;
             }
             return 0;
@@ -999,8 +1023,8 @@ u8 Task4_Handler(void)
                 printf("B→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达D点
+            if(moveForwardWithAngle_Handler(targetAngle)) { 
+                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示
@@ -1026,6 +1050,7 @@ u8 Task4_Handler(void)
             if(openLoopSteering_Handler(TASK4_STEER_TIME_D, TASK4_STEER_PWM_D)) {
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
+                Set_Target_Velocity(TASK4_LINE_TRACKING_SPEED); // 设置适当的速度
                 currentState = TRACK_D_TO_A;
             }
             return 0;
@@ -1038,50 +1063,38 @@ u8 Task4_Handler(void)
             
             if(lineTracking_Handler()) {
                 // lineTracking_Handler返回1表示完成循迹
-                printf("到达A点, 循环%d完成，当前角度: %.2f\r\n", cycle_count+1, getHeadingAngle());
-                all_leds_on(); // 所有LED亮起表示一次循环完成
+                printf("到达A点, 第%d圈完成，当前角度: %.2f\r\n", cycle_count + 1, getHeadingAngle());
+                all_leds_on(); // 所有LED亮起表示该圈完成
+                Set_Pwm(0, 0); // 停止电机
                 
-                // 增加循环计数
-                cycle_count++;
-                
-                // 检查是否已完成所有循环
-                if(cycle_count >= TASK4_CYCLE_COUNT) {
-                    printf("所有循环已完成，任务结束！\r\n");
-                    Set_Pwm(0, 0); // 停止电机
-                    // 重置延时计数器，进入A点延时状态
-                    delay_counter = 0;
-                    currentState = A_POINT_DELAY;
-                } else {
-                    // 未完成所有循环，准备下一次循环
-                    printf("准备开始第%d/%d次循环...\r\n", cycle_count+1, TASK4_CYCLE_COUNT);
-                    // 重置延时计数器，进入循环延时状态
-                    delay_counter = 0;
-                    currentState = CYCLE_DELAY;
-                }
-            }
-            return 0;
-            
-        case CYCLE_DELAY:
-            // 循环之间的延时状态（非阻塞）
-            delay_counter++;
-            
-            // LED闪烁效果，指示等待中
-            if(delay_counter % 40 == 0) {
-                all_leds_toggle();
-            }
-            
-            if(delay_counter >= TASK4_CYCLE_DELAY) { // 等待一段时间后开始下一次循环
-                all_leds_off();
-                // 重新初始化下一次循环
-                currentState = INIT;
+                // 重置延时计数器，进入A点延时状态
+                delay_counter = 0;
+                currentState = A_POINT_DELAY;
             }
             return 0;
             
         case A_POINT_DELAY:
             // A点任务完成LED提示延时状态（非阻塞）
             delay_counter++;
-            if(delay_counter >= 200) { // 5ms中断，200次约等于1000ms
+            if(delay_counter >= (TASK4_INTERVAL/5)) { // 5ms中断，TASK4_INTERVAL次约等于TASK4_INTERVALms
+                currentState = CYCLE_COMPLETE;
+            }
+            return 0;
+            
+        case CYCLE_COMPLETE:
+            // 一个循环完成，检查是否需要继续下一圈
+            cycle_count++;
+            all_leds_off();
+            
+            if(cycle_count >= TASK4_CYCLE_COUNT) {
+                // 所有圈数完成
+                printf("任务4所有%d圈已完成!\r\n", TASK4_CYCLE_COUNT);
                 currentState = COMPLETED;
+            } else {
+                // 继续下一圈
+                printf("开始第%d/%d圈...\r\n", cycle_count + 1, TASK4_CYCLE_COUNT);
+                delay_counter = 0;
+                currentState = INIT; // 返回到初始化状态开始下一圈
             }
             return 0;
             
@@ -1089,14 +1102,14 @@ u8 Task4_Handler(void)
             // 任务完成状态
             // 重置状态，为下次任务做准备
             currentState = INIT_WAIT;
-            cycle_count = 0;
+            cycle_count = 0; // 重置循环计数
             all_leds_off();
             return 1; // 返回1表示任务完成
             
         default:
             // 异常情况，重置状态
             currentState = INIT_WAIT;
-            cycle_count = 0;
+            cycle_count = 0; // 重置循环计数
             return 0;
     }
 }
