@@ -849,7 +849,11 @@ void normal_Handler(void)
     // 普通模式的处理代码
 }
 
-
+/**
+ * @brief angleSetWithKey_Handler函数
+ * @note 通过按键设置角度的处理函数
+ * @return None
+ */
 void angleSetWithKey_Handler(void)
 {
     typedef enum
