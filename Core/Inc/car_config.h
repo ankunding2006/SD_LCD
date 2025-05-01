@@ -3,8 +3,8 @@
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 测试模式1
 #define TASK2                          0       // 测试模式2
-#define TASK3                          1       // 测试模式3
-#define TASK4                          0       // 测试模式4
+#define TASK3                          0       // 测试模式3
+#define TASK4                          1       // 测试模式4
 #define NOLINEDETECT                   0       // 是否使用灰度传感器进行循迹测试
 #define PRINTF_ANGLE                   0       // 是否打印角度
 #define TEST_STEERING_ROTATION         0       // 测试相对转向旋转

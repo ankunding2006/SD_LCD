@@ -222,6 +222,7 @@ void JY901_init(void);
 void print_angle_Handle(void);
 void Before_Main(void);
 void angleSetWithKey_Handler(void);
+u8 Get_Key_Value(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

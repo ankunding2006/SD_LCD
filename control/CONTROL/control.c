@@ -872,7 +872,7 @@ void angleSetWithKey_Handler(void)
     static uint8_t long_press_handled = 0; // 长按是否已处理标志
     
     // 获取按键状态
-    key_state = Get_Key(); 
+    key_state = Get_Key_Value(); 
     
     // 按键状态处理
     if (key_state == KEY_ENTER) // 检测到按下ENTER键
