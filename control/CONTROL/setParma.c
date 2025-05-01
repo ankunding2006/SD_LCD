@@ -10,7 +10,7 @@ int Task3_Steer_PWM_C = TASK3_STEER_PWM_C;             // C点openLoopSteering的P
 int Task3_Steer_Time_D = TASK3_STEER_TIME_D;           // D点openLoopSteering的转向时间参数(中断次数)
 int Task3_Steer_PWM_D = TASK3_STEER_PWM_D;             // D点openLoopSteering的PWM参数(速度值)
 int Task3_Move_Forward_Speed = TASK3_MOVE_FORWARD_SPEED;       // 任务3中直线行驶的速度(速度值)
-
+int Task3_line_tracking_Speed = TASK3_LINE_TRACKING_SPEED;       // 任务3中循迹行驶的速度(速度值)
 /**
  * @brief 设置开环转向基础PWM值
  * @param pwm 新的开环转向基础PWM值

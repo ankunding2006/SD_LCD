@@ -560,6 +560,7 @@ u8 Task3_Handler(void)
             if(turnToAbsoluteAngle(targetAngle)) {
                 // 旋转完成，进入直线行驶状态
                 printf("A点旋转完成，开始向C点直线行驶\r\n");
+                Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
                 currentState = MOVE_A_TO_C;
             }
             return 0;
@@ -592,6 +593,7 @@ u8 Task3_Handler(void)
             if(openLoopSteering_Handler(Task3_Steer_Time_C, Task3_Steer_PWM_C)) {
                 // 转向完成
                 printf("C点转向完成，开始C→B循迹\r\n");
+                Set_Target_Velocity(Task3_line_tracking_Speed);
                 currentState = TRACK_C_TO_B;
             }
             return 0;
@@ -647,6 +649,7 @@ u8 Task3_Handler(void)
                 // turnToAbsoluteAngle返回1表示完成转向
                 printf("B点转向完成，目标角度: %.2f，当前角度: %.2f\r\n", 
                        targetAngle, getHeadingAngle());
+                Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
                 currentState = MOVE_B_TO_D;
             }
             return 0;
@@ -684,6 +687,7 @@ u8 Task3_Handler(void)
             if(openLoopSteering_Handler(Task3_Steer_Time_D, Task3_Steer_PWM_D)) {
                 // 转向完成
                 printf("D点转向完成，开始D→A循迹\r\n");
+                Set_Target_Velocity(Task3_line_tracking_Speed); // 设置适当的速度
                 currentState = TRACK_D_TO_A;
             }
             return 0;

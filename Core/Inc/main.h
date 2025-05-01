@@ -73,6 +73,7 @@ extern u16 forwardBase_PWM;              // 直线行走基础PWM值
 extern u16 openLoopSteeringBase_PWM;     // 转向基础PWM值
 extern u8 resetTask_flag;                // 是否要重启任务标志位   
 extern u32 resetMode_start_time;         // 任务3重置模式开始时间
+extern int Task3_line_tracking_Speed;    // 任务3中循迹行驶的速度(速度值)
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
