@@ -80,16 +80,16 @@
 #define TASK3_MOVE_FORWARD_SPEED  12     // 任务3中直线行驶的速度(速度值)
 
 //*********************任务4相关参数*****************************************
-#define TASK4_ROTATION_ANGLE_1    27.7f    // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK4_ROTATION_ANGLE_3    72     // 任务4中从B到D前需要逆时针旋转的角度(度)
-#define TASK4_STEER_TIME_C        400    // 任务4中C点openLoopSteering的转向时间参数(中断次数)
-#define TASK4_STEER_PWM_C         600     // 任务4中C点openLoopSteering的PWM参数(速度值)
-#define TASK4_STEER_TIME_D        -500    // 任务4中D点openLoopSteering的转向时间参数(中断次数)
-#define TASK4_STEER_PWM_D         600     // 任务4中D点openLoopSteering的PWM参数(速度值)
+#define TASK4_ROTATION_ANGLE_1    TASK3_ROTATION_ANGLE_1    // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_3    TASK3_ROTATION_ANGLE_3     // 任务4中从B到D前需要逆时针旋转的角度(度)
+#define TASK4_STEER_TIME_C        TASK3_STEER_TIME_C    // 任务4中C点openLoopSteering的转向时间参数(中断次数)
+#define TASK4_STEER_PWM_C         TASK3_STEER_PWM_C     // 任务4中C点openLoopSteering的PWM参数(速度值)
+#define TASK4_STEER_TIME_D        TASK3_STEER_TIME_D    // 任务4中D点openLoopSteering的转向时间参数(中断次数)
+#define TASK4_STEER_PWM_D         TASK3_STEER_PWM_D     // 任务4中D点openLoopSteering的PWM参数(速度值)
 #define TASK4_CYCLE_COUNT         4      // 任务4循环执行次数
-#define TASK4_INTERVAL             3000  // 任务间隔时间
-#define TASK4_MOVE_FORWARD_SPEED  15     // 任务4中直线行驶的速度(速度值)
-#define TASK4_LINE_TRACKING_SPEED 12     // 循迹行驶的速度(速度值)
+#define TASK4_INTERVAL            500  // 任务间隔时间
+#define TASK4_MOVE_FORWARD_SPEED  TASK3_LINE_TRACKING_SPEED     // 任务4中直线行驶的速度(速度值)
+#define TASK4_LINE_TRACKING_SPEED TASK3_MOVE_FORWARD_SPEED     // 循迹行驶的速度(速度值)
 
 //*********************moveForward稳定性检测参数********************************
 #define MOVE_FORWARD_INIT_SAMPLES   6    // moveForward函数初始化时读取角度值的次数
