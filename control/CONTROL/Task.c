@@ -516,7 +516,11 @@ u8 Task3_Handler(void)
             #if IS_SET_INIT_ANGLE_MANUALY==1
             initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
             #else
-            initialAngle = getHeadingAngle();
+            float sum = 0;
+            for(int i = 0; i < 5; i++) {
+                sum += initialAngle_temp[i]; // 累加初始角度
+            }
+            initialAngle = sum / 5; // 从陀螺仪获取初始角度
             #endif
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
@@ -886,7 +890,11 @@ u8 Task4_Handler(void)
                 #if IS_SET_INIT_ANGLE_MANUALY==1
                 initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
                 #else
-                initialAngle = getHeadingAngle();
+                float sum = 0;
+                for(int i = 0; i < 5; i++) {
+                    sum += initialAngle_temp[i]; // 累加初始角度
+                }
+                initialAngle = sum / 5; // 从陀螺仪获取初始角度
                 #endif
             }
             

@@ -74,6 +74,7 @@ extern u16 openLoopSteeringBase_PWM;     // 转向基础PWM值
 extern u8 resetTask_flag;                // 是否要重启任务标志位   
 extern u32 resetMode_start_time;         // 任务3重置模式开始时间
 extern int Task3_line_tracking_Speed;    // 任务3中循迹行驶的速度(速度值)
+extern float initialAngle_temp[5];       // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -203,6 +204,7 @@ void usart_init(uint32_t bound);
 int click(void);
 void JY901_init(void);
 void print_angle_Handle(void);
+void Before_Main(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

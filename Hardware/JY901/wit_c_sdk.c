@@ -686,10 +686,11 @@ void JY901_init(void)
     WitDelayMsRegister(Delayms);
 	HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
     HAL_TIM_Base_Start_IT(&htim7);
+    Before_Main(); // 等待传感器稳定
     for(int i = 0; i < 5; i++)
     {
         JY901_Handler(); // 处理JY901数据
-        printf("Current HeadAngle is %.2f \r\n", getHeadingAngle()); // 读取当前航向角
+        printf("Current HeadAngle is %.2f \r\n", initialAngle_temp[i] =getHeadingAngle()); // 读取当前航向角
         HAL_Delay(300); // 延时
     }
 }

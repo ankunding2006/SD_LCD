@@ -194,6 +194,8 @@ u16 Forward_Ki = FORWARD_KI_DEFAULT;                                            
 u16 Forward_Kd = FORWARD_KD_DEFAULT;                                                                                             // 直线行走角度修正微分系数
 u16 Forward_Error_Threshold = FORWARD_ERROR_THRESHOLD;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
 u16 forwardBase_PWM = FORWARDBASE_PWM;                                                                                     // 直线行走基础PWM值
+
+float initialAngle_temp[5]={0}; // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
 /**************enum define****************/
 enum currentPosition
 {
@@ -316,9 +318,8 @@ int main(void)
   led_off();
   //!app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK); 
-  Menu_Init(); // 初始化菜单系统
+  //!Menu_Init(); // 初始化菜单系统
   JY901_init(); // 初始化JY901传感器 
-  Before_Main();
   
   HAL_TIM_Base_Start_IT(&htim6);   
 
@@ -328,7 +329,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Lcd_MenuTask(); // 菜单任务
+    //!Lcd_MenuTask(); // 菜单任务
     #if PRINTF_ANGLE==1
     print_angle_Handle(); // 打印角度
     #endif
