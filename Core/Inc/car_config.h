@@ -76,11 +76,11 @@
 #define MANUAL_INIT_ANGLE         137       // 目标角度(度)
 
 #define TASK3_ROTATION_ANGLE_1     28.8f     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_3     73        // 任务3中从B到D前需要逆时针旋转的角度(度)
-#define TASK3_STEER_TIME_C         500       // C点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_C          650       // C点openLoopSteering的PWM参数(速度值)
-#define TASK3_STEER_TIME_D         -670      // D点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_D          350       // D点openLoopSteering的PWM参数(速度值)
+#define TASK3_ROTATION_ANGLE_3     29        // 任务3中从B到D前需要逆时针旋转的角度(度)
+#define TASK3_STEER_TIME_C         650       // C点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_PWM_C          550       // C点openLoopSteering的PWM参数(速度值)
+#define TASK3_STEER_TIME_D         -820      // D点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_PWM_D          600       // D点openLoopSteering的PWM参数(速度值)
 #define RESET_WAIT_TIME            5000      // 重置等待时间
 #define TASK3_INTERVAL             3000      // 任务间隔时间
 #define TASK3_LINE_TRACKING_SPEED  15        // 循迹行驶的速度(速度值)
