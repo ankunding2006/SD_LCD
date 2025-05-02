@@ -909,6 +909,7 @@ void angleSetWithKey_Handler(void)
                     state = INITIAL; // 重置状态机
                     toggle_Flag_Stop(); // 切换停止标志
                     all_leds_off();
+                    manual_mode = 1; // 手动设置了角度
                 }
                 // 标记长按已处理
                 long_press_handled = 1;
@@ -997,8 +998,9 @@ void angleSetWithKey_Handler(void)
                         led1_off(); // 关闭LED1
                         led2_off(); // 关闭LED2
                         led3_off(); // 关闭LED3
-                        printf("设置任务旋转角度4: %.2f\r\n", Task4_Rotation_Angle_3); // 打印任务旋转角度4
-                        printf("初始角度: %.2f , 任务旋转角度1: %.2f, 任务旋转角度3: %.2f, 任务旋转角度4: %.2f\r\n", 
+                        manual_mode = 1; // 手动设置了角度
+                        printf("设置任务旋转角度3: %.2f\r\n", Task4_Rotation_Angle_3); // 打印任务旋转角度3
+                        printf("初始角度: %.2f , 任务旋转角度1: %.2f, 任务旋转角度2: %.2f, 任务旋转角度3: %.2f\r\n", 
                                initialAngle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_2, Task4_Rotation_Angle_3);
                         HAL_TIM6_toggle_IT(); // 切换定时器6中断
                         resetTask(); // 重置任务

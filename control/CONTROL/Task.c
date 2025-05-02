@@ -516,8 +516,11 @@ u8 Task3_Handler(void)
             #if IS_SET_INIT_ANGLE_MANUALY==1
             initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
             #else
-            initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+            if(manual_mode == 0) {
+                initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+            }
             #endif
+            manual_mode = 0; // 重置手动模式标志
             printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
             
             Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
@@ -885,8 +888,11 @@ u8 Task4_Handler(void)
                 #if IS_SET_INIT_ANGLE_MANUALY==1
                 initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
                 #else
-                initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+                if(manual_mode == 0) {
+                    initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+                }
                 #endif
+                manual_mode = 0; // 重置手动模式标志
             }
             
             printf("任务4 第%d圈开始: 初始角度 = %.2f\r\n", cycle_count + 1, initialAngle);

@@ -25,7 +25,7 @@
  */
 #define NOLINEDETECT                   0       // 调试模式下是否禁用灰度传感器进行循迹(1=禁用)
 #define PRINTF_ANGLE                   0       // 是否打印角度数据(1=打印)
-#define MANUAL_SET_ANGLE               1       // 是否手动通过按钮设置角度值(1=手动)
+#define SET_ANGLE_WITH_KEY             1       // 是否手动通过按钮设置角度值(1=手动)
 #define IS_SET_INIT_ANGLE_MANUALY      0       // 是否手动设置目标角度(1=手动)
 #define MANUAL_INIT_ANGLE              137     // 手动设置的目标角度(度)
 

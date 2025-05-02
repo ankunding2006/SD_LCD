@@ -167,8 +167,7 @@ u16 ADV[128] = {0};                                                             
 u16 determine;                                                                                                      // À×´ï¸úËæÄ£Ê½µÄÒ»¸ö±êÖ¾Î»
 float Move_X, Move_Z;                                                                                               // Ò£¿Ø¿ØÖÆµÄËÙ¶È
 u32 Distance;                                                                                                       // ³¬Éù²¨²â¾à
-u8 PID_Send;                                                                                                        // µ÷²ÎÏà¹Ø±äÁ¿
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // ³¬Éù²¨¸úËæ¡¢³¬Éù²¨±ÚÕÏ±êÖ¾Î»
+u8 PID_Send;                                                                                                        // µ÷²ÎÏà¹Ø±äÁ¿                                                                           // ³¬Éù²¨¸úËæ¡¢³¬Éù²¨±ÚÕÏ±êÖ¾Î»
 float Acceleration_Z;                                                                                               // ZÖá¼ÓËÙ¶ÈÖµ
 volatile u8 delay_flag, delay_50;                                                                                   // Ìá¹©ÑÓÊ±µÄ±äÁ¿
 float Balance_Kp = BALANCE_KP_DEFAULT, Balance_Kd = BALANCE_KD_DEFAULT, Velocity_Kp = VELOCITY_KP_DEFAULT, Velocity_Ki = VELOCITY_KI_DEFAULT, Turn_Kp = TURN_KP_DEFAULT, Turn_Kd = TURN_KD_DEFAULT; // PID²ÎÊý£¨·Å´ó100±¶£©
@@ -199,6 +198,7 @@ float initialAngle_temp[5]={0}; // ¼ÇÂ¼³õÊ¼½Ç¶ÈµÄÊý×é,ÔÚ²»Í¬µÄÊ±¿Ì¼ÇÂ¼³õÊ¼½Ç¶È,È
 u8 key_state=0;
 u8 key_state_last=0; 
 float initialAngle = 0.0f;    // ³õÊ¼º½Ïò½Ç
+u8 manual_mode = 0;           // ÊÖ¶¯ÉèÖÃ½Ç¶È±êÖ¾Î»
 /**************enum define****************/
 enum currentPosition
 {
@@ -336,7 +336,7 @@ int main(void)
     #if PRINTF_ANGLE==1
     print_angle_Handle(); // ´òÓ¡½Ç¶È
     #endif
-    #if MANUAL_SET_ANGLE==1
+    #if SET_ANGLE_WITH_KEY==1
     angleSetWithKey_Handler();
     #endif
     /* USER CODE END WHILE */

@@ -50,9 +50,7 @@ extern u16 determine;
 extern float Move_X, Move_Z;
 extern u8 LD_Successful_Receive_flag;                                            
 extern float Angle_Balance, Gyro_Balance, Gyro_Turn;                            
-extern u32 Distance;                                                             
-extern u8 PID_Send;                                                              
-extern u8 Flag_follow, Flag_avoid;                                               
+extern u32 Distance;                                                                                                                                                                
 extern float Acceleration_Z;                                                     
 extern volatile u8 delay_flag, delay_50;                                         
 extern float Balance_Kp, Balance_Kd, Velocity_Kp, Velocity_Ki, Turn_Kp, Turn_Kd; 
@@ -90,6 +88,7 @@ extern int Task4_B_Point_Delay_Time;    // B点延时时间(毫秒)
 extern u8 key_state;                    // 按键状态
 extern u8 key_state_last;               // 上次按键状态
 extern float initialAngle;              // 初始航向角
+extern u8 manual_mode;                  // 手动设置角度标志位
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
