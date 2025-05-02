@@ -93,8 +93,8 @@
 #define FORWARD_KD_DEFAULT             0       // 直线行走角度修正微分系数
 #define FORWARD_ERROR_THRESHOLD        200     // 直线行走角度修正误差阈值(度)
 #define FORWARD_I_LIMIT                1000    // 直线行走积分限幅值
-#define FORWARD_GraySENSOR_INDEX_1     4,12
-#define FORWARD_GraySENSOR_INDEX_2     1,10
+#define FORWARD_GraySENSOR_INDEX_1     6,12
+#define FORWARD_GraySENSOR_INDEX_2     1,8
 
 /**
  * @brief 灰度传感器循迹PID参数
@@ -127,10 +127,10 @@
  */
 #define TASK3_ROTATION_ANGLE_1         27.7f   // 初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_2         32      // 从B到D前需要逆时针旋转的角度(度)
-#define TASK3_STEER_TIME_C             670     // C点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_C              750     // C点openLoopSteering的PWM参数(速度值)
-#define TASK3_STEER_TIME_D             -670    // D点openLoopSteering的转向时间参数(中断次数)
-#define TASK3_STEER_PWM_D              750     // D点openLoopSteering的PWM参数(速度值)
+#define TASK3_STEER_TIME_C             700     // C点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_PWM_C              800     // C点openLoopSteering的PWM参数(速度值)
+#define TASK3_STEER_TIME_D             -700    // D点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_PWM_D              800     // D点openLoopSteering的PWM参数(速度值)
 #define TASK3_MOVE_FORWARD_SPEED       15      // 直线行驶的速度(速度值)
 #define TASK3_LINE_TRACKING_SPEED      15      // 循迹行驶的速度(速度值)
 #define TASK3_B_PONIT_DELAY_TIME       60      // B点延时时间(毫秒)
