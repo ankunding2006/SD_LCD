@@ -248,6 +248,8 @@ u8 Get_Key_Value(void);
 #define AUTO_GPIO_Port GPIOB
 #define MENU_Pin GPIO_PIN_13
 #define MENU_GPIO_Port GPIOB
+#define start_task_Pin GPIO_PIN_14
+#define start_task_GPIO_Port GPIOB
 #define UP_Pin GPIO_PIN_15
 #define UP_GPIO_Port GPIOB
 #define ENTER_Pin GPIO_PIN_9

@@ -877,7 +877,71 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
  */
 void normal_Handler(void)
 {
-    // 普通模式的处理代码
+    static u8 currentTask = 0;         // 当前任务标志
+    static u8 buttonProcessed = 0;     // 按钮是否已处理标志
+    
+    // 获取当前按键状态
+    u8 keyValue = Get_Key_Value();
+    
+    // 只有在按钮未被处理时才执行任务
+    if (keyValue != KEY_NONE && !buttonProcessed) {
+        buttonProcessed = 1;  // 标记按钮已处理
+        
+        // 根据按键选择任务
+        switch (keyValue) {
+        case KEY_ENTER:
+            currentTask = 1;
+            printf("当前任务: %d\r\n", currentTask);
+            break;
+        
+        case KEY_UP:
+            currentTask = 2;
+            printf("当前任务: %d\r\n", currentTask);
+            break;
+
+        case KEY_DOWN:
+            currentTask = 3;
+            printf("当前任务: %d\r\n", currentTask);
+            break;
+
+        case KEY_BACK:
+            currentTask = 4;
+            printf("当前任务: %d\r\n", currentTask);
+            break;
+        }
+    }
+    // 如果按键释放，重置处理标志
+    else if (keyValue == KEY_NONE) {
+        buttonProcessed = 0;
+    }
+
+    // 执行相应的任务
+    switch (currentTask) {
+        case 1:
+            if(Task1_Handler() == 1) {
+                currentTask = 0; // 重置当前任务
+                printf("任务1完成\r\n");
+            }
+            break;
+        case 2:
+            if(Task2_Handler() == 1) {
+                currentTask = 0;
+                printf("任务2完成\r\n");
+            }
+            break;
+        case 3:
+            if(Task3_Handler() == 1) {
+                currentTask = 0;
+                printf("任务3完成\r\n");
+            }
+            break;
+        case 4:
+            if(Task4_Handler() == 1) {
+                currentTask = 0;
+                printf("任务4完成\r\n");
+            }
+            break;
+    }
 }
 
 
@@ -903,10 +967,10 @@ void angleSetWithKey_Handler(void)
     static uint8_t long_press_handled = 0; // 长按是否已处理标志
     
     // 获取按键状态
-    key_state = Get_Key_Value(); 
+    key_state = Get_start_task_Pin_value(); 
     
     // 按键状态处理
-    if (key_state == KEY_ENTER) // 检测到按下ENTER键
+    if (key_state == 1) // 检测到按下按键
     {
         if (is_key_pressed == 0) // 第一次检测到按下
         {

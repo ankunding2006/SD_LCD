@@ -167,14 +167,15 @@ u16 ADV[128] = {0};                                                             
 u16 determine;                                                                                                      // 雷达跟随模式的一个标志位
 float Move_X, Move_Z;                                                                                               // 遥控控制的速度
 u32 Distance;                                                                                                       // 超声波测距
-u8 PID_Send;                                                                                                        // 调参相关变量
-u8 Flag_follow = 0, Flag_avoid = 0;                                                                                 // 超声波跟随、超声波壁障标志位
+u8 PID_Send;                                                                                                        // 调参相关变量                                                                           // 超声波跟随、超声波壁障标志位
 float Acceleration_Z;                                                                                               // Z轴加速度值
 volatile u8 delay_flag, delay_50;                                                                                   // 提供延时的变量
 float Balance_Kp = BALANCE_KP_DEFAULT, Balance_Kd = BALANCE_KD_DEFAULT, Velocity_Kp = VELOCITY_KP_DEFAULT, Velocity_Ki = VELOCITY_KI_DEFAULT, Turn_Kp = TURN_KP_DEFAULT, Turn_Kd = TURN_KD_DEFAULT; // PID参数（放大100倍）
 u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0, Sensor_MiddleRight = 0, Sensor_Right = 0;             // 传感器状态
 float Sensor_Kp = SENSOR_KP_DEFAULT, Sensor_KI = SENSOR_KI_DEFAULT, Sensor_Kd = SENSOR_KD_DEFAULT;                  // 传感器的PID参数（放大100倍）
-float Target_Velocity = TARGET_VELOCITY_DEFAULT;                                                                    // 目标速度
+float Target_Velocity = TARGET_VELOCITY_DEFAULT;        
+u8 resetTask_flag=0;                 // 是否要重启任务标志位    
+u32 resetMode_start_time=0;          // 任务3重置模式开始时间                                                       
 
 // 转向控制PID参数及相关变量（放大100倍）
 u16 Steering_Kp = STEERING_KP_DEFAULT;                                                                             // 转向控制比例系数（放大100倍）
@@ -187,11 +188,17 @@ u16 Steering_Stable_Count = 0;
 u16 openLoopSteeringBase_PWM = OPENLOOP_STEERING_BASE_PWM;                                                                                 // 转向稳定计数
 
 // 添加直线行驶角度修正PID参数（放大100倍）
-u16 Forward_Kp = 500;                                                                                             // 直线行走角度修正比例系数
-u16 Forward_Ki = 10;                                                                                              // 直线行走角度修正积分系数
-u16 Forward_Kd = 300;                                                                                             // 直线行走角度修正微分系数
-u16 Forward_Error_Threshold = 200;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
+u16 Forward_Kp = FORWARD_KP_DEFAULT;                                                                                             // 直线行走角度修正比例系数
+u16 Forward_Ki = FORWARD_KI_DEFAULT;                                                                                              // 直线行走角度修正积分系数
+u16 Forward_Kd = FORWARD_KD_DEFAULT;                                                                                             // 直线行走角度修正微分系数
+u16 Forward_Error_Threshold = FORWARD_ERROR_THRESHOLD;                                                                                // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
 u16 forwardBase_PWM = FORWARDBASE_PWM;                                                                                     // 直线行走基础PWM值
+
+float initialAngle_temp[5]={0}; // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
+u8 key_state=0;
+u8 key_state_last=0; 
+float initialAngle = 0.0f;    // 初始航向角
+u8 manual_mode = 0;           // 手动设置角度标志位
 /**************enum define****************/
 enum currentPosition
 {
@@ -288,6 +295,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   MX_TIM9_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   delay_init(168);     /* 延时初始*/
   usart_init(115200);  /* 串口初始化为115200 */
@@ -311,11 +319,10 @@ int main(void)
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
 
   led_off();
-  app_main();
+  //!app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK); 
-  Menu_Init(); // 初始化菜单系统
+  //!Menu_Init(); // 初始化菜单系统
   JY901_init(); // 初始化JY901传感器 
-  Before_Main();
   
   HAL_TIM_Base_Start_IT(&htim6);   
 
@@ -325,7 +332,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Lcd_MenuTask(); // 菜单任务
+    //!Lcd_MenuTask(); // 菜单任务
+    #if PRINTF_ANGLE==1
+    print_angle_Handle(); // 打印角度
+    #endif
+    #if SET_ANGLE_WITH_KEY==1
+    angleSetWithKey_Handler();
+    #endif
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -95,8 +95,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : AUTO_Pin MENU_Pin UP_Pin */
-  GPIO_InitStruct.Pin = AUTO_Pin|MENU_Pin|UP_Pin;
+  /*Configure GPIO pins : AUTO_Pin MENU_Pin start_task_Pin UP_Pin */
+  GPIO_InitStruct.Pin = AUTO_Pin|MENU_Pin|start_task_Pin|UP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

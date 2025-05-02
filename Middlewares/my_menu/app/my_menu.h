@@ -9,6 +9,7 @@ void Menu_Init(void);
 uint8_t Get_Key(void);
 void Key_Handler(uint8_t key);
 void Lcd_MenuTask(void);
+uint8_t Get_start_task_Pin_value(void);
 
 // 定义按键值
 #define KEY_NONE    0

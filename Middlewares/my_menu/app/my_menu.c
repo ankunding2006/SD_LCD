@@ -262,3 +262,18 @@ u8 Get_Key_Value(void)
     }
     return KEY_NONE; // 没有按键按下或者按键未松开 
 }
+
+u8 Get_start_task_Pin_value(void)
+{
+    if (HAL_GPIO_ReadPin(start_task_GPIO_Port, start_task_Pin) == GPIO_PIN_RESET)
+    {
+        HAL_Delay(10); // 延时消抖
+        
+        // 二次确认，确保不是抖动
+        if (HAL_GPIO_ReadPin(start_task_GPIO_Port, start_task_Pin) == GPIO_PIN_RESET)
+        {
+            return 1;
+        }
+    }
+    return 0; // 没有按键按下或者按键未松开 
+}
