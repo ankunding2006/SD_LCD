@@ -970,36 +970,36 @@ void angleSetWithKey_Handler(void)
                         
                     case SET_TASK_ROTATION_ANGLE_4:
                         state = SET_TASK_ROTATION_ANGLE_3; // 设置任务旋转角度4
-                        Task4_Rotation_Angle_4 = initialAngle - getHeadingAngle(); // 计算任务旋转角度4
-                        while (Task4_Rotation_Angle_4 > 180.0f) {
-                            Task4_Rotation_Angle_4 -= 360.0f;
+                        Task4_Rotation_Angle_3 = initialAngle - getHeadingAngle(); // 计算任务旋转角度4
+                        while (Task4_Rotation_Angle_3 > 180.0f) {
+                            Task4_Rotation_Angle_3 -= 360.0f;
                         }
-                        while (Task4_Rotation_Angle_4 < -180.0f) {
-                            Task4_Rotation_Angle_4 += 360.0f;
+                        while (Task4_Rotation_Angle_3 < -180.0f) {
+                            Task4_Rotation_Angle_3 += 360.0f;
                         }
 
 
                         led1_off(); // 关闭LED1
-                        printf("设置任务旋转角度3: %.2f\r\n", Task3_Rotation_Angle_3); // 打印任务旋转角度3
+                        printf("设置任务旋转角度2: %.2f\r\n", Task3_Rotation_Angle_2); // 打印任务旋转角度3
                         break;
                         
                     case SET_TASK_ROTATION_ANGLE_3:
                         state = INITIAL; // 返回初始状态
-                        Task4_Rotation_Angle_3 = Task3_Rotation_Angle_3 = getHeadingAngle() - reverseInitialAngle; // 计算任务旋转角度3
+                        Task4_Rotation_Angle_2 = Task3_Rotation_Angle_2 = getHeadingAngle() - reverseInitialAngle; // 计算任务旋转角度3
                         // 规范化任务旋转角度3到[-180, 180]范围内
-                        while (Task3_Rotation_Angle_3 > 180.0f) {
-                            Task3_Rotation_Angle_3 -= 360.0f;
+                        while (Task3_Rotation_Angle_2 > 180.0f) {
+                            Task3_Rotation_Angle_2 -= 360.0f;
                         }
-                        while (Task3_Rotation_Angle_3 < -180.0f) {
-                            Task3_Rotation_Angle_3 += 360.0f;
+                        while (Task3_Rotation_Angle_2 < -180.0f) {
+                            Task3_Rotation_Angle_2 += 360.0f;
                         }
 
                         led1_off(); // 关闭LED1
                         led2_off(); // 关闭LED2
                         led3_off(); // 关闭LED3
-                        printf("设置任务旋转角度4: %.2f\r\n", Task4_Rotation_Angle_4); // 打印任务旋转角度4
+                        printf("设置任务旋转角度4: %.2f\r\n", Task4_Rotation_Angle_3); // 打印任务旋转角度4
                         printf("初始角度: %.2f , 任务旋转角度1: %.2f, 任务旋转角度3: %.2f, 任务旋转角度4: %.2f\r\n", 
-                               initialAngle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_3, Task4_Rotation_Angle_4);
+                               initialAngle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_2, Task4_Rotation_Angle_3);
                         HAL_TIM6_toggle_IT(); // 切换定时器6中断
                         resetTask(); // 重置任务
                         toggle_Flag_Stop(); // 切换停止标志

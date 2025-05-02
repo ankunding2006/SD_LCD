@@ -3,8 +3,7 @@
 
 // ¶¨ÒåTask3Ïà¹Ø²ÎÊı±äÁ¿£¬³õÊ¼ÖµÉèÖÃÎªÔ­ºê¶¨ÒåÖµ
 float Task3_Rotation_Angle_1 = TASK3_ROTATION_ANGLE_1;    // ÈÎÎñ3ÖĞ³õÊ¼´ÓAµã¶Ô×¼CµãĞèÒªË³Ê±ÕëĞı×ªµÄ½Ç¶È(¶È)
-float Task3_Rotation_Angle_2 = TASK3_ROTATION_ANGLE_2;    // ÈÎÎñ3ÖĞCµãĞı×ªĞèÒªË³Ê±ÕëĞı×ªµÄ½Ç¶È(¶È)
-float Task3_Rotation_Angle_3 = TASK3_ROTATION_ANGLE_3;    // ÈÎÎñ3ÖĞ´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
+float Task3_Rotation_Angle_2 = TASK3_ROTATION_ANGLE_2;    // ÈÎÎñ3ÖĞ´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
 int Task3_Steer_Time_C = TASK3_STEER_TIME_C;            // CµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
 int Task3_Steer_PWM_C = TASK3_STEER_PWM_C;             // CµãopenLoopSteeringµÄPWM²ÎÊı(ËÙ¶ÈÖµ)
 int Task3_Steer_Time_D = TASK3_STEER_TIME_D;           // DµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
@@ -14,8 +13,8 @@ int Task3_line_tracking_Speed = TASK3_LINE_TRACKING_SPEED;       // ÈÎÎñ3ÖĞÑ­¼£Ğ
 
 // ¶¨ÒåTask4Ïà¹Ø²ÎÊı±äÁ¿£¬³õÊ¼ÖµÉèÖÃÎªºê¶¨ÒåÖµ
 float Task4_Rotation_Angle_1 = TASK4_ROTATION_ANGLE_1;    // ÈÎÎñ4ÖĞ³õÊ¼´ÓAµã¶Ô×¼CµãĞèÒªË³Ê±ÕëĞı×ªµÄ½Ç¶È(¶È)
-float Task4_Rotation_Angle_3 = TASK4_ROTATION_ANGLE_3;    // ÈÎÎñ4ÖĞ´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
-float Task4_Rotation_Angle_4 = TASK4_ROTATION_ANGLE_4;    // ÈÎÎñ4ÖĞºó3È¦´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
+float Task4_Rotation_Angle_2 = TASK4_ROTATION_ANGLE_2;    // ÈÎÎñ4ÖĞ´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
+float Task4_Rotation_Angle_3 = TASK4_ROTATION_ANGLE_3;    // ÈÎÎñ4ÖĞºó3È¦´ÓBµ½DÇ°ĞèÒªÄæÊ±ÕëĞı×ªµÄ½Ç¶È(¶È)
 int Task4_Steer_Time_C = TASK4_STEER_TIME_C;            // CµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
 int Task4_Steer_PWM_C = TASK4_STEER_PWM_C;             // CµãopenLoopSteeringµÄPWM²ÎÊı(ËÙ¶ÈÖµ)
 int Task4_Steer_Time_D = TASK4_STEER_TIME_D;           // DµãopenLoopSteeringµÄ×ªÏòÊ±¼ä²ÎÊı(ÖĞ¶Ï´ÎÊı)
@@ -301,25 +300,15 @@ void Set_Task3_Rotation_Angle_1(int angle)
     printf("ÉèÖÃÈÎÎñ3³õÊ¼Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
 }
 
-/**
- * @brief ÉèÖÃÈÎÎñ3ÖĞCµãĞı×ª½Ç¶È
- * @param angle Ğı×ª½Ç¶È(¶È£¬Ë³Ê±ÕëÎªÕı)
- * @return ÎŞ
- */
-void Set_Task3_Rotation_Angle_2(int angle)
-{
-    Task3_Rotation_Angle_2 = (float)angle;
-    printf("ÉèÖÃÈÎÎñ3 CµãĞı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
-}
 
 /**
  * @brief ÉèÖÃÈÎÎñ3ÖĞBµ½DÇ°µÄĞı×ª½Ç¶È
  * @param angle Ğı×ª½Ç¶È(¶È£¬ÄæÊ±ÕëÎªÕı)
  * @return ÎŞ
  */
-void Set_Task3_Rotation_Angle_3(int angle)
+void Set_Task3_Rotation_Angle_2(int angle)
 {
-    Task3_Rotation_Angle_3 = (float)angle;
+    Task3_Rotation_Angle_2 = (float)angle;
     printf("ÉèÖÃÈÎÎñ3 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
 }
 
@@ -388,24 +377,16 @@ float Get_Task3_Rotation_Angle_1(void)
     return Task3_Rotation_Angle_1;
 }
 
-/**
- * @brief »ñÈ¡ÈÎÎñ3ÖĞCµãĞı×ª½Ç¶È
- * @return µ±Ç°½Ç¶ÈÖµ(¶È)
- */
-float Get_Task3_Rotation_Angle_2(void)
-{
-    printf("µ±Ç°ÈÎÎñ3 CµãĞı×ª½Ç¶È: %.2f¶È\r\n", Task3_Rotation_Angle_2);
-    return Task3_Rotation_Angle_2;
-}
+
 
 /**
  * @brief »ñÈ¡ÈÎÎñ3ÖĞBµ½DÇ°µÄĞı×ª½Ç¶È
  * @return µ±Ç°½Ç¶ÈÖµ(¶È)
  */
-float Get_Task3_Rotation_Angle_3(void)
+float Get_Task3_Rotation_Angle_2(void)
 {
-    printf("µ±Ç°ÈÎÎñ3 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task3_Rotation_Angle_3);
-    return Task3_Rotation_Angle_3;
+    printf("µ±Ç°ÈÎÎñ3 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task3_Rotation_Angle_2);
+    return Task3_Rotation_Angle_2;
 }
 
 /**
@@ -491,9 +472,9 @@ void Set_Task4_Rotation_Angle_1(int angle)
  * @param angle Ğı×ª½Ç¶È(¶È£¬ÄæÊ±ÕëÎªÕı)
  * @return ÎŞ
  */
-void Set_Task4_Rotation_Angle_3(int angle)
+void Set_Task4_Rotation_Angle_2(int angle)
 {
-    Task4_Rotation_Angle_3 = (float)angle;
+    Task4_Rotation_Angle_2 = (float)angle;
     printf("ÉèÖÃÈÎÎñ4 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
 }
 
@@ -502,9 +483,9 @@ void Set_Task4_Rotation_Angle_3(int angle)
  * @param angle Ğı×ª½Ç¶È(¶È£¬ÄæÊ±ÕëÎªÕı)
  * @return ÎŞ
  */
-void Set_Task4_Rotation_Angle_4(int angle)
+void Set_Task4_Rotation_Angle_3(int angle)
 {
-    Task4_Rotation_Angle_4 = (float)angle;
+    Task4_Rotation_Angle_3 = (float)angle;
     printf("ÉèÖÃÈÎÎñ4ºó3È¦Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", (float)angle);
 }
 
@@ -621,20 +602,20 @@ float Get_Task4_Rotation_Angle_1(void)
  * @brief »ñÈ¡ÈÎÎñ4ÖĞBµ½DÇ°µÄĞı×ª½Ç¶È
  * @return µ±Ç°½Ç¶ÈÖµ(¶È)
  */
-float Get_Task4_Rotation_Angle_3(void)
+float Get_Task4_Rotation_Angle_2(void)
 {
-    printf("µ±Ç°ÈÎÎñ4 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_3);
-    return Task4_Rotation_Angle_3;
+    printf("µ±Ç°ÈÎÎñ4 Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_2);
+    return Task4_Rotation_Angle_2;
 }
 
 /**
  * @brief »ñÈ¡ÈÎÎñ4ÖĞºó3È¦´ÓBµ½DÇ°µÄĞı×ª½Ç¶È
  * @return µ±Ç°½Ç¶ÈÖµ(¶È)
  */
-float Get_Task4_Rotation_Angle_4(void)
+float Get_Task4_Rotation_Angle_3(void)
 {
-    printf("µ±Ç°ÈÎÎñ4ºó3È¦Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_4);
-    return Task4_Rotation_Angle_4;
+    printf("µ±Ç°ÈÎÎñ4ºó3È¦Bµ½DÇ°Ğı×ª½Ç¶È: %.2f¶È\r\n", Task4_Rotation_Angle_3);
+    return Task4_Rotation_Angle_3;
 }
 
 /**

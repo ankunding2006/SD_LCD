@@ -614,10 +614,10 @@ u8 Task3_Handler(void)
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_on(); // B点提示
                 
-                // 计算目标角度：初始角度的反方向再逆时针旋转TASK3_ROTATION_ANGLE_3度
+                // 计算目标角度：初始角度的反方向再逆时针旋转TASK3_ROTATION_ANGLE_2度
                 // 初始方向的反方向 = 初始角度 + 180度
-                // 再逆时针偏转Task3_Rotation_Angle_3度 = 再加上Task3_Rotation_Angle_3度
-                targetAngle = initialAngle + 180.0f + Task3_Rotation_Angle_3;
+                // 再逆时针偏转Task3_Rotation_Angle_2度 = 再加上Task3_Rotation_Angle_2度
+                targetAngle = initialAngle + 180.0f + Task3_Rotation_Angle_2;
                 
                 // 规范化角度到±180度范围
                 while(targetAngle > 180.0f) {
@@ -900,7 +900,7 @@ u8 Task4_Handler(void)
             if(cycle_count == 0) {
                 targetAngle = initialAngle - Task4_Rotation_Angle_1; // 使用全局变量
             } else {
-                targetAngle = initialAngle - Task4_Rotation_Angle_4; // 使用全局变量
+                targetAngle = initialAngle - Task4_Rotation_Angle_3; // 使用全局变量
             }
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
@@ -1001,10 +1001,10 @@ u8 Task4_Handler(void)
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_on(); // B点提示
                 
-                // 计算目标角度：初始角度的反方向再逆时针旋转Task4_Rotation_Angle_3度
+                // 计算目标角度：初始角度的反方向再逆时针旋转Task4_Rotation_Angle_2度
                 // 初始方向的反方向 = 初始角度 + 180度
-                // 再逆时针偏转Task4_Rotation_Angle_3度 = 再加上Task4_Rotation_Angle_3度
-                targetAngle = initialAngle + 180.0f + Task4_Rotation_Angle_3; // 使用全局变量
+                // 再逆时针偏转Task4_Rotation_Angle_2度 = 再加上Task4_Rotation_Angle_2度
+                targetAngle = initialAngle + 180.0f + Task4_Rotation_Angle_2; // 使用全局变量
                 
                 // 规范化角度到±180度范围
                 while(targetAngle > 180.0f) {

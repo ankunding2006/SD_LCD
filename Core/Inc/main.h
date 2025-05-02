@@ -63,8 +63,7 @@ extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 extern volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
 extern volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm;
 extern float Task3_Rotation_Angle_1;     // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
-extern float Task3_Rotation_Angle_2;     // 任务3中C点旋转需要顺时针旋转的角度(度)
-extern float Task3_Rotation_Angle_3;     // 任务3中从B到D前需要逆时针旋转的角度(度)
+extern float Task3_Rotation_Angle_2;     // 任务3中从B到D前需要逆时针旋转的角度(度)
 extern int Task3_Steer_Time_C;           // C点openLoopSteering的转向时间参数(中断次数)
 extern int Task3_Steer_PWM_C;            // C点openLoopSteering的PWM参数(速度值)
 extern int Task3_Steer_Time_D;           // D点openLoopSteering的转向时间参数(中断次数)
@@ -77,8 +76,8 @@ extern u32 resetMode_start_time;         // 任务3重置模式开始时间
 extern int Task3_line_tracking_Speed;    // 任务3中循迹行驶的速度(速度值)
 extern float initialAngle_temp[5];       // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
 extern float Task4_Rotation_Angle_1;    // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
-extern float Task4_Rotation_Angle_3;    // 任务4中从B到D前需要逆时针旋转的角度(度)
-extern float Task4_Rotation_Angle_4;    // 任务4中后3圈从B到D前需要逆时针旋转的角度(度)
+extern float Task4_Rotation_Angle_2;    // 任务4中从B到D前需要逆时针旋转的角度(度)
+extern float Task4_Rotation_Angle_3;    // 任务4中后3圈从B到D前需要逆时针旋转的角度(度)
 extern int Task4_Steer_Time_C;          // C点openLoopSteering的转向时间参数(中断次数)
 extern int Task4_Steer_PWM_C;           // C点openLoopSteering的PWM参数(速度值)
 extern int Task4_Steer_Time_D;          // D点openLoopSteering的转向时间参数(中断次数)

@@ -36,7 +36,6 @@ float Get_Forward_Error_Threshold(void);
 // Task3相关参数设置函数声明
 void Set_Task3_Rotation_Angle_1(int angle);
 void Set_Task3_Rotation_Angle_2(int angle);
-void Set_Task3_Rotation_Angle_3(int angle);
 void Set_Task3_Steer_Time_C(int time);
 void Set_Task3_Steer_PWM_C(int pwm);
 void Set_Task3_Steer_Time_D(int time);
@@ -44,7 +43,6 @@ void Set_Task3_Steer_PWM_D(int pwm);
 void Set_Task3_Move_Forward_Speed(int speed);
 float Get_Task3_Rotation_Angle_1(void);
 float Get_Task3_Rotation_Angle_2(void);
-float Get_Task3_Rotation_Angle_3(void);
 int Get_Task3_Steer_Time_C(void);
 int Get_Task3_Steer_PWM_C(void);
 int Get_Task3_Steer_Time_D(void);
@@ -54,8 +52,8 @@ void resetTask(void);
 
 // Task4相关参数设置函数声明
 void Set_Task4_Rotation_Angle_1(int angle);
+void Set_Task4_Rotation_Angle_2(int angle);
 void Set_Task4_Rotation_Angle_3(int angle);
-void Set_Task4_Rotation_Angle_4(int angle);
 void Set_Task4_Steer_Time_C(int time);
 void Set_Task4_Steer_PWM_C(int pwm);
 void Set_Task4_Steer_Time_D(int time);
@@ -66,8 +64,8 @@ void Set_Task4_Move_Forward_Speed(int speed);
 void Set_Task4_Line_Tracking_Speed(int speed);
 void Set_Task4_B_Point_Delay_Time(int time);
 float Get_Task4_Rotation_Angle_1(void);
+float Get_Task4_Rotation_Angle_2(void);
 float Get_Task4_Rotation_Angle_3(void);
-float Get_Task4_Rotation_Angle_4(void);
 int Get_Task4_Steer_Time_C(void);
 int Get_Task4_Steer_PWM_C(void);
 int Get_Task4_Steer_Time_D(void);
