@@ -26,8 +26,8 @@
 #define NOLINEDETECT                   0       // 调试模式下是否禁用灰度传感器进行循迹(1=禁用)
 #define PRINTF_ANGLE                   0       // 是否打印角度数据(1=打印)
 #define SET_ANGLE_WITH_KEY             1       // 是否手动通过按钮设置角度值(1=手动)
-#define IS_SET_INIT_ANGLE_MANUALY      0       // 是否手动设置目标角度(1=手动)
-#define MANUAL_INIT_ANGLE              137     // 手动设置的目标角度(度)
+#define IS_SET_INIT_ANGLE_MANUALY      1       // 是否手动设置目标角度(1=手动)
+#define MANUAL_INIT_ANGLE              146     // 手动设置的目标角度(度)
 
 /*=========================== 功能测试选择 ===========================*/
 /**
@@ -125,8 +125,8 @@
 /**
  * @brief 任务3(A->C->B->D->A)的参数配置
  */
-#define TASK3_ROTATION_ANGLE_1         27.7f   // 初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_2         32      // 从B到D前需要逆时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1         27.0f     // 初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_2         48      // 从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C             700     // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C              800     // C点openLoopSteering的PWM参数(速度值)
 #define TASK3_STEER_TIME_D             -700    // D点openLoopSteering的转向时间参数(中断次数)
@@ -143,7 +143,7 @@
  */
 #define TASK4_ROTATION_ANGLE_1         TASK3_ROTATION_ANGLE_1  // 初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK4_ROTATION_ANGLE_2         TASK3_ROTATION_ANGLE_2  // 从B到D前需要逆时针旋转的角度(度)
-#define TASK4_ROTATION_ANGLE_3         24.2f                   // 后3圈从B到D前需要逆时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_3         25.0f                   // 后3圈从B到D前需要逆时针旋转的角度(度)
 #define TASK4_STEER_TIME_C             TASK3_STEER_TIME_C      // C点openLoopSteering的转向时间参数
 #define TASK4_STEER_PWM_C              TASK3_STEER_PWM_C       // C点openLoopSteering的PWM参数
 #define TASK4_STEER_TIME_D             TASK3_STEER_TIME_D      // D点openLoopSteering的转向时间参数
