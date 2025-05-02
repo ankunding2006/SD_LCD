@@ -320,7 +320,6 @@ u8 localSteeringControl_Handler(float angle)
     static float integral = 0;         // 积分项
     static float startAngle = 0;       // 开始角度
     static u8 isInitialized = 0;       // 初始化标志
-    
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
     
@@ -707,7 +706,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     static float integral = 0;         // 积分项
     static u8 isInitialized = 0;       // 初始化标志
     static uint8_t debug_counter = 0;      // 调试计数器
-    
+    static float angleDifference = 0;     // 目标角度与起始角度的差值
     float currentAngle = getHeadingAngle();   // 获取当前角度
     float error, derivative, output;
     bool can_print_debug = false;
@@ -730,6 +729,12 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
                currentAngle, targetAbsoluteAngle);
         
         angleDifference = targetAbsoluteAngle - currentAngle;
+        // 处理角度差值，确保在[-180, 180]范围内
+        if(angleDifference > 180.0f) {
+            angleDifference -= 360.0f;
+        } else if(angleDifference < -180.0f) {
+            angleDifference += 360.0f;
+        }
         lastError = 0;
         integral = 0;
         Steering_Stable_Count = 0;
@@ -896,17 +901,15 @@ void angleSetWithKey_Handler(void)
             {
                 // 满足长按条件，直接启动小车
                 printf("检测到长按（%lums），启动小车！\r\n", press_duration);
-                
-                // 提供视觉反馈
-                
+                state = INITIAL; // 重置状态机
                 // 启动小车
                 if (Flag_Stop == 1) { // 只有在停止状态下才启动
                     HAL_TIM6_toggle_IT(); // 切换定时器6中断
                     resetTask(); // 重置任务
+                    state = INITIAL; // 重置状态机
                     toggle_Flag_Stop(); // 切换停止标志
                     all_leds_off();
                 }
-                
                 // 标记长按已处理
                 long_press_handled = 1;
             }

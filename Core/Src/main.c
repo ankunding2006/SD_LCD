@@ -199,7 +199,6 @@ float initialAngle_temp[5]={0}; // ¼ÇÂ¼³õÊ¼½Ç¶ÈµÄÊı×é,ÔÚ²»Í¬µÄÊ±¿Ì¼ÇÂ¼³õÊ¼½Ç¶È,È
 u8 key_state=0;
 u8 key_state_last=0; 
 float initialAngle = 0.0f;    // ³õÊ¼º½Ïò½Ç
-float angleDifference = 0;     // Ä¿±ê½Ç¶ÈÓëÆğÊ¼½Ç¶ÈµÄ²îÖµ
 /**************enum define****************/
 enum currentPosition
 {
