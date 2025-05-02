@@ -359,3 +359,29 @@ void grey_sensorData_print(void)
 		   gray_state.gray.bit1,
 		   gray_state.state, gray_status[0], gray_status[1]);
 }
+
+
+/**
+ * @brief 检测指定区域的灰度传感器是否有检测到黑线
+ * @param start_graySensor 起始灰度传感器索引(从1开始)
+ * @param end_graySensor 结束灰度传感器索引
+ * @return int 返回检测到黑线的传感器值，或INT16_MIN表示没有检测到黑线
+ */
+int IsCertainGraySenorsAcrived(uint8_t start_graySensor, uint8_t end_graySensor)
+{
+    // 确保传感器索引在有效范围内
+    if (start_graySensor < 1) start_graySensor = 1;
+    if (end_graySensor > 12) end_graySensor = 12;
+    
+    // 检查传感器的对应位
+    for (uint8_t i = start_graySensor; i <= end_graySensor; i++) {
+        // 由于gray_state.gray.bit1对应state的最低位，所以需要计算对应的位
+        // 传感器1对应二进制位0，传感器2对应二进制位1，以此类推
+        if (gray_state.state & (1 << (i-1))) {
+            printf("传感器%d检测到黑线\n", i);
+            return i;
+        }
+    }
+    
+    return INT16_MIN; // 未检测到黑线
+}

@@ -39,6 +39,7 @@ void grey_sensor_Init(void);
 void grey_sensorData_print(void);
 uint16_t pca9555_read_bit12(uint8_t slave_num);
 uint8_t i2c_CheckDevice(uint8_t _Address);
+extern int IsCertainGraySenorsAcrived(uint8_t start_graySensor, uint8_t end_graySensor);
 
 extern float gray_status[2],gray_status_backup[2][20];
 extern uint32_t gray_status_worse;

@@ -1011,3 +1011,135 @@ void angleSetWithKey_Handler(void)
         }
     }
 }
+
+/**
+ * @brief 指定角度直线行驶函数,直线行驶直到灰度传感器的某半部分检测到黑线
+ * @note 此函数可以接受一个参考角度作为参数，使小车按照指定的角度直线行驶
+ * @param referenceAngle 小车行驶的参考角度(度)
+ * @param start_graySensor 起始灰度传感器编号(从1开始)
+ * @param end_graySensor 结束灰度传感器编号
+ * @return int 1:完成直线行驶(检测到黑线) 0:小车正在直行中
+ */
+int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngle,u8 start_graySensor,u8 end_graySensor)
+{
+    // 状态机状态枚举
+    typedef enum {
+        INIT,              // 初始化状态
+        FORWARD_MOVING     // 正常直线行驶状态
+    } MoveForwardState;
+    
+    // 静态变量
+    static MoveForwardState state = INIT;
+    static float integral = 0.0f;          // 积分项
+    static float lastError = 0.0f;         // 上一次误差
+    static uint8_t debug_counter = 0;      // 调试计数器
+    float currentAngle, error, derivative, angleCorrection;
+
+    bool can_print_debug = false;
+    if (++debug_counter >= DEBUG_PRINT_COUNT) {
+        debug_counter = 0;
+        can_print_debug = true;
+    }
+
+    // 边界条件处理 - 确保参考角度在±180度范围内
+    while(referenceAngle > 180.0f) {
+        referenceAngle -= 360.0f;
+    }
+    while(referenceAngle < -180.0f) {
+        referenceAngle += 360.0f;
+    }
+
+    // 读取灰度传感器数据
+    grey_sensor_Read();
+    // 检查是否有传感器检测到黑线
+    Turn_Pwm = IsCertainGraySenorsAcrived(start_graySensor-1,end_graySensor-1);
+    if (Turn_Pwm != INT16_MIN)
+    {
+        Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
+        // 重置所有状态变量，为下次调用准备
+        state = INIT;
+        integral = 0.0f;
+        lastError = 0.0f;
+        if(can_print_debug==true) {
+            printf("传感器检测到黑线，停止电机\r\n");
+        }
+        return 1; // 返回1，表示完成直线移动
+    }
+    
+    // 状态机处理
+    switch (state) {
+        case INIT:
+            // 初始化状态 - 重置积分和误差
+            printf("开始按指定角度 %.2f 度直线行驶\r\n", referenceAngle);
+            integral = 0.0f;
+            lastError = 0.0f;
+            state = FORWARD_MOVING;
+            Set_Pwm(FORWARDBASE_PWM, FORWARDBASE_PWM);
+            return 0;
+            
+        case FORWARD_MOVING:
+            // 正常的直线行走阶段
+            // 获取当前角度并计算误差
+            currentAngle = getHeadingAngle();
+            error = currentAngle - referenceAngle;
+            
+            // 处理误差过大的情况（过±180度），确保选择最短路径
+            if (error > 180.0f) {
+                error -= 360.0f;
+            } else if (error < -180.0f) {
+                error += 360.0f;
+            }
+            
+            // 计算积分项
+            integral += error;
+            
+            // 积分限幅
+            if (integral > FORWARD_I_LIMIT) {
+                integral = FORWARD_I_LIMIT;
+            } else if (integral < -FORWARD_I_LIMIT) {
+                integral = -FORWARD_I_LIMIT;
+            }
+            
+            // 如果误差很小，逐渐减小积分项，防止过冲
+            if (fabs(error) < (float)Forward_Error_Threshold/100.0f) {
+                integral *= 0.95f;
+            }
+            
+            // 计算微分项
+            derivative = error - lastError;
+            lastError = error;
+            
+            // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
+            angleCorrection = ((float)Forward_Kp/100.0f) * error + 
+							  ((float)Forward_Ki/100.0f) * integral + 
+							  ((float)Forward_Kd/100.0f) * derivative;
+            
+            // 输出限幅
+            if (angleCorrection > STEERING_MAX_OUTPUT) {
+                angleCorrection = STEERING_MAX_OUTPUT;
+            } else if (angleCorrection < STEERING_MIN_OUTPUT) {
+                angleCorrection = STEERING_MIN_OUTPUT;
+            }
+            
+            // 基于角度纠正计算左右轮差速
+            Motor_Left = forwardBase_PWM + angleCorrection;
+            Motor_Right = forwardBase_PWM - angleCorrection;
+            
+            // 打印调试信息（降低频率，避免刷屏）
+            if ( can_print_debug==true ) { // 每隔一定次数打印一次
+                printf("直线修正: 当前角度=%.2f, 参考角度=%.2f, 误差=%.2f, 修正值=%.2f\r\n", 
+					   currentAngle, referenceAngle, error, angleCorrection);
+                }
+            break;
+    }
+
+
+    
+    // 执行电机控制
+    if (Flag_Stop == 1) 
+        Set_Pwm(0, 0); // 停止标志为1时停止电机
+    else
+        Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+    
+    return 0; // 返回0，表示没有完成直线移动，正在直行中
+}

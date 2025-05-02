@@ -55,7 +55,7 @@
  * @brief 速度控制相关参数
  */
 #define TARGET_VELOCITY_DEFAULT        15      // 默认目标速度
-#define FORWARDBASE_PWM                2300    // 直线行走基础PWM值
+#define FORWARDBASE_PWM                2900    // 直线行驶基础PWM值
 #define OPENLOOP_STEERING_BASE_PWM     1500    // 开环转向基础PWM值
 
 /*=========================== PID控制参数 ===========================*/
@@ -123,9 +123,9 @@
  */
 #define TASK3_ROTATION_ANGLE_1         27.7f   // 初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_2         72      // 从B到D前需要逆时针旋转的角度(度)
-#define TASK3_STEER_TIME_C             650     // C点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_TIME_C             0       // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C              550     // C点openLoopSteering的PWM参数(速度值)
-#define TASK3_STEER_TIME_D             -690    // D点openLoopSteering的转向时间参数(中断次数)
+#define TASK3_STEER_TIME_D             -0      // D点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_D              500     // D点openLoopSteering的PWM参数(速度值)
 #define TASK3_MOVE_FORWARD_SPEED       18      // 直线行驶的速度(速度值)
 #define TASK3_LINE_TRACKING_SPEED      19      // 循迹行驶的速度(速度值)
@@ -146,9 +146,9 @@
 #define TASK4_STEER_PWM_D              TASK3_STEER_PWM_D       // D点openLoopSteering的PWM参数
 #define TASK4_CYCLE_COUNT              4                       // 循环执行次数
 #define TASK4_INTERVAL                 60                      // 任务间隔时间(毫秒)
-#define TASK4_MOVE_FORWARD_SPEED       TASK3_LINE_TRACKING_SPEED   // 直线行驶的速度
-#define TASK4_LINE_TRACKING_SPEED      TASK3_MOVE_FORWARD_SPEED    // 循迹行驶的速度
-#define TASK4_B_PONIT_DELAY_TIME       TASK3_B_PONIT_DELAY_TIME    // B点延时时间(毫秒)
+#define TASK4_LINE_TRACKING_SPEED      TASK3_LINE_TRACKING_SPEED    // 循迹行驶的速度
+#define TASK4_MOVE_FORWARD_SPEED       TASK3_MOVE_FORWARD_SPEED     // 任务4中直线行驶的速度(速度值)
+#define TASK4_B_PONIT_DELAY_TIME       TASK3_B_PONIT_DELAY_TIME     // B点延时时间(毫秒)
 
 /*=========================== 稳定性检测参数 ===========================*/
 /**

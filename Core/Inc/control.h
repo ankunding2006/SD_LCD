@@ -115,5 +115,6 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle);
 u8 Task2_Handler(void);
 void turnToAbsoluteAngle_TEST_Handler(void);
 int moveForwardWithAngle_Handler(float referenceAngle); // 添加带参考角度的直线行驶函数声明
+int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngle,u8 start_graySensor,u8 end_graySensor); // 添加带参考角度的直线行驶函数声明
 
 #endif

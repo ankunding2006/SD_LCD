@@ -578,8 +578,7 @@ u8 Task3_Handler(void)
                 printf("A→C直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达C点
+            if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle,7,12)) {
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
                  
@@ -668,7 +667,7 @@ u8 Task3_Handler(void)
                 printf("B→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForwardWithAngle_Handler(targetAngle)) { 
+            if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle, 1, 6)) { 
                 // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
@@ -957,8 +956,8 @@ u8 Task4_Handler(void)
             }
             if(cycle_count==0) 
             {
-                if(moveForward_Handler()) {
-                    // moveForward_Handler返回1表示检测到黑线，即到达C点
+                if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle,7,12)) {
+                    // 返回1表示检测到黑线，即到达C点
                     printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                     led3_on(); // C点提示
                     // 重置延时计数器，进入C点延时状态
@@ -968,8 +967,8 @@ u8 Task4_Handler(void)
             }
             else 
             {
-                if(moveForward_Handler()) {
-                    // moveForward_Handler返回1表示检测到黑线，即到达C点
+                if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle,7,12)) {
+                    // 返回1表示检测到黑线，即到达C点
                     printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                     led3_on(); // C点提示
                     // 重置延时计数器，进入C点延时状态
@@ -1058,8 +1057,8 @@ u8 Task4_Handler(void)
                 printf("B→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForwardWithAngle_Handler(targetAngle)) { 
-                // moveForwardWithAngle_Handler返回1表示检测到黑线，即到达D点
+            if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle,1,6)) { 
+                // 返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示
