@@ -707,3 +707,93 @@ int Get_Task4_B_Point_Delay_Time(void)
     printf("当前任务4 B点延时时间: %dms\r\n", Task4_B_Point_Delay_Time);
     return Task4_B_Point_Delay_Time;
 }
+
+/**
+ * @brief 设置任务3或任务4的所有转向角度参数
+ * @param task 任务编号(3或4)
+ * @param angle1 任务初始旋转角度(度)
+ * @param angle2 任务B到D前旋转角度(度)
+ * @param angle3 任务后3圈B到D前旋转角度(度)(如果任务3则传入0)
+ * @return 无返回值
+ */
+void Set_Task_SteeringAngle_Params(int task, int angle1, int angle2, int angle3)
+{
+    if (task == 3) {
+        Set_Task3_Rotation_Angle_1(angle1);
+        Set_Task3_Rotation_Angle_2(angle2);
+        printf("设置任务3参数: 旋转角度1 = %.2f, 旋转角度2 = %.2f\r\n",
+               Task3_Rotation_Angle_1, Task3_Rotation_Angle_2);
+    } else if (task == 4) {
+        Set_Task4_Rotation_Angle_1(angle1);
+        Set_Task4_Rotation_Angle_2(angle2);
+        Set_Task4_Rotation_Angle_3(angle3);
+        printf("设置任务4参数: 旋转角度1 = %.2f, 旋转角度2 = %.2f, 旋转角度3 = %.2f\r\n",
+               Task4_Rotation_Angle_1, Task4_Rotation_Angle_2, Task4_Rotation_Angle_3);
+    } else {
+        printf("无效的任务编号: %d\r\n", task);
+    }
+}
+
+/**
+ * @brief 获取任务3或任务4的所有转向角度参数
+ * @param task 任务编号(3或4)
+ * @return 无返回值
+ */
+void Get_Task_SteeringAngle_Params(int task)
+{
+    if (task == 3) {
+        printf("任务3参数: 旋转角度1 = %.2f, 旋转角度2 = %.2f\r\n",
+               Task3_Rotation_Angle_1, Task3_Rotation_Angle_2);
+    } else if (task == 4) {
+        printf("任务4参数: 旋转角度1 = %.2f, 旋转角度2 = %.2f, 旋转角度3 = %.2f\r\n",
+               Task4_Rotation_Angle_1, Task4_Rotation_Angle_2, Task4_Rotation_Angle_3);
+    } else {
+        printf("无效的任务编号: %d\r\n", task);
+    }
+}
+/**
+ * @brief 设置任务3或任务4的所有开环转向参数
+ * @param task 任务编号(3或4)
+ * @param steer_time_c C点转向时间(中断次数)
+ * @param steer_pwm_c C点转向PWM值(速度值)
+ * @param steer_time_d D点转向时间(中断次数，负值表示顺时针旋转)
+ * @param steer_pwm_d D点转向PWM值(速度值)
+ * @return 无返回值
+ */
+void Set_Task_OpenLoopSteering_Params(int task, int steer_time_c, int steer_pwm_c, int steer_time_d, int steer_pwm_d)
+{
+    if (task == 3) {
+        Set_Task3_Steer_Time_C(steer_time_c);
+        Set_Task3_Steer_PWM_C(steer_pwm_c);
+        Set_Task3_Steer_Time_D(steer_time_d);
+        Set_Task3_Steer_PWM_D(steer_pwm_d);
+        printf("设置任务3参数: C点转向时间 = %d, C点转向PWM = %d, D点转向时间 = %d, D点转向PWM = %d\r\n",
+               Task3_Steer_Time_C, Task3_Steer_PWM_C, Task3_Steer_Time_D, Task3_Steer_PWM_D);
+    } else if (task == 4) {
+        Set_Task4_Steer_Time_C(steer_time_c);
+        Set_Task4_Steer_PWM_C(steer_pwm_c);
+        Set_Task4_Steer_Time_D(steer_time_d);
+        Set_Task4_Steer_PWM_D(steer_pwm_d);
+        printf("设置任务4参数: C点转向时间 = %d, C点转向PWM = %d, D点转向时间 = %d, D点转向PWM = %d\r\n",
+               Task4_Steer_Time_C, Task4_Steer_PWM_C, Task4_Steer_Time_D, Task4_Steer_PWM_D);
+    } else {
+        printf("无效的任务编号: %d\r\n", task);
+    }
+}
+/**
+ * @brief 获取任务3或任务4的所有开环转向参数
+ * @param task 任务编号(3或4)
+ * @return 无返回值
+ */
+void Get_Task_OpenLoopSteering_Params(int task)
+{
+    if (task == 3) {
+        printf("任务3参数: C点转向时间 = %d, C点转向PWM = %d, D点转向时间 = %d, D点转向PWM = %d\r\n",
+               Task3_Steer_Time_C, Task3_Steer_PWM_C, Task3_Steer_Time_D, Task3_Steer_PWM_D);
+    } else if (task == 4) {
+        printf("任务4参数: C点转向时间 = %d, C点转向PWM = %d, D点转向时间 = %d, D点转向PWM = %d\r\n",
+               Task4_Steer_Time_C, Task4_Steer_PWM_C, Task4_Steer_Time_D, Task4_Steer_PWM_D);
+    } else {
+        printf("无效的任务编号: %d\r\n", task);
+    }
+}

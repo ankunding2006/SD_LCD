@@ -69,6 +69,8 @@ void Test_Handler(void)
         turnToAbsoluteAngle_TEST_Handler(); // 调用转向到绝对角度函数
     #elif MOVE_FORWARD_WITH_ANGLE_HANDLE==1 // 测试指定角度前进
         moveForwardWithAngle_Handler(115.0f); // 调用指定角度前进函数
+    #elif TEST_MOVE_FORWARD_WITH_ANGLE_UNTILE_SOME_GRAY_SENCOR_ACTIVED==1 // 测试指定角度前进，直到某个灰度传感器激活
+        moveForwardWithAngle_UntileSomeGraySencorActived_Handler(140.0f, 7, 12); // 调用指定角度前进函数
     #endif
 }
 

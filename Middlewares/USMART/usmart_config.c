@@ -96,6 +96,11 @@ struct _m_usmart_nametab usmart_nametab[] =
     {(void *)Get_Task4_Move_Forward_Speed, "int Get_Task4_Move_Forward_Speed(void)"},
     {(void *)Get_Task4_Line_Tracking_Speed, "int Get_Task4_Line_Tracking_Speed(void)"},
     {(void *)Get_Task4_B_Point_Delay_Time, "int Get_Task4_B_Point_Delay_Time(void)"},
+
+    {(void *)Set_Task_SteeringAngle_Params, "void Set_Task_SteeringAngle_Params(int task, int angle1, int angle2, int angle3)"},
+    {(void *)Set_Task_OpenLoopSteering_Params, "void Set_Task_OpenLoopSteering_Params(int task, int steer_time_c, int steer_pwm_c, int steer_time_d, int steer_pwm_d)"},
+    {(void *)Get_Task_OpenLoopSteering_Params, "void Get_Task_OpenLoopSteering_Params(int task)"},
+    {(void *)Get_Task_SteeringAngle_Params, "void Get_Task_SteeringAngle_Params(int task)"},
 };
 
 /******************************************************************************************/
