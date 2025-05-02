@@ -51,6 +51,7 @@
 #define MODE_DEFAULT                   0       // 初始模式选择(0=普通控制模式)
 #define LONG_PRESS_THRESHOLD           1300    // 长按阈值(毫秒)
 #define WAY_ANGLE_DEFAULT              1       // 角度获取算法(1=四元数, 2=卡尔曼, 3=互补滤波)
+#define LINE_TRACKING_DEAD_TIME        1000    // 循迹死区时间(毫秒)
 
 /*=========================== 速度控制参数 ===========================*/
 /**

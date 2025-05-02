@@ -236,6 +236,15 @@ float getHeadingAngle(void)
  */
 int lineTracking_Handler(void)
 {
+    static u8 init=0; // 初始化标志
+    static u32 startTime = 0; // 开始时间
+    static u16 prev_turn_pwm = 0; // 上一次的转向PWM值
+    if(init==0) // 如果没有初始化
+    {
+        init=1; // 设置初始化标志
+        startTime = HAL_GetTick(); // 记录开始时间
+        return 0; // 返回0，表示没有完成循迹,正在循迹中
+    }
 	Encoder_Left = Read_Encoder(3);							// 读取左轮编码器的值，前进为正，后退为负
 	Encoder_Right = Read_Encoder(5);						// 修改为TIM5，前进为正，后退为负
 															// 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的脉冲极性相同
@@ -247,10 +256,26 @@ int lineTracking_Handler(void)
 	Turn_Pwm = 0; // 调试模式，不使用灰度传感器
 	#else
 	Turn_Pwm = Calculate_Turn_Pwm(); // 计算转向PWM值,如果所有传感器都返回白色，返回1
+
 	if (Turn_Pwm==INT16_MIN)
 	{
-		Set_Pwm(0, 0); // 如果没有传感器检测到黑线，停止电机
-		return 1; // 返回1，表示完成循迹
+        if(HAL_GetTick() - startTime <= LINE_TRACKING_DEAD_TIME) 
+        {
+            Motor_Left = actual_velocity - prev_turn_pwm;
+            Motor_Right = actual_velocity + prev_turn_pwm;
+            if (Flag_Stop == 1) 
+                Set_Pwm(0, 0);
+            else
+                Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+            return 0; // 返回0，表示没有完成循迹,正在循迹中
+        }
+        else
+        {
+            Set_Pwm(0, 0); // 如果没有传感器检测到黑线，停止电机
+            init = 0; // 重置初始化标志
+            startTime = 0; // 重置开始时间
+            return 1; // 返回1，表示完成循迹
+        }
 	}
 	#endif
 
@@ -261,6 +286,8 @@ int lineTracking_Handler(void)
 		Set_Pwm(0, 0);
 	else
 		Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+        prev_turn_pwm = Turn_Pwm; // 更新上一次的转向PWM值
+        
 	return 0; // 返回0，表示没有完成循迹,正在循迹中
 }
 
