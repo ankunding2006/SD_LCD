@@ -15,9 +15,9 @@
 #define TEST_MODE                      0       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 任务1：A点直线前进到B点
-#define TASK2                          0       // 任务2：A->B->C->D->A
+#define TASK2                          1       // 任务2：A->B->C->D->A
 #define TASK3                          0       // 任务3：A->C->B->D->A
-#define TASK4                          1       // 任务4：A->C->B->D->A 重复四圈
+#define TASK4                          0       // 任务4：A->C->B->D->A 重复四圈
 
 /*=========================== 调试功能配置 ===========================*/
 /**
@@ -46,7 +46,7 @@
 /**
  * @brief 系统默认状态配置
  */
-#define FLAG_STOP_DEFAULT              1       // 默认停止状态(1=停止)
+#define FLAG_STOP_DEFAULT              0       // 默认停止状态(1=停止)
 #define FLAG_SHOW_DEFAULT              0       // 默认显示状态(1=显示)
 #define MODE_DEFAULT                   0       // 初始模式选择(0=普通控制模式)
 #define LONG_PRESS_THRESHOLD           1300    // 长按阈值(毫秒)
@@ -126,7 +126,7 @@
 /**
  * @brief 任务3(A->C->B->D->A)的参数配置
  */
-#define TASK3_ROTATION_ANGLE_1         32.0f   // 初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1         32.6f   // 初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK3_ROTATION_ANGLE_2         58.8f   // 从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C             500     // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C              700     // C点openLoopSteering的PWM参数(速度值)
@@ -150,7 +150,7 @@
 #define TASK4_STEER_TIME_D             TASK3_STEER_TIME_D      // D点openLoopSteering的转向时间参数
 #define TASK4_STEER_PWM_D              TASK3_STEER_PWM_D       // D点openLoopSteering的PWM参数
 #define TASK4_CYCLE_COUNT              4                       // 循环执行次数
-#define TASK4_INTERVAL                 60                      // 任务间隔时间(毫秒)
+#define TASK4_INTERVAL                 50                      // 任务间隔时间(毫秒)
 #define TASK4_LINE_TRACKING_SPEED      TASK3_LINE_TRACKING_SPEED    // 循迹行驶的速度
 #define TASK4_MOVE_FORWARD_SPEED       TASK3_MOVE_FORWARD_SPEED     // 任务4中直线行驶的速度(速度值)
 #define TASK4_B_PONIT_DELAY_TIME       TASK3_B_PONIT_DELAY_TIME     // B点延时时间(毫秒)

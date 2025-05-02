@@ -197,6 +197,26 @@ u8 Task2_Handler(void)
         debug_print_counter = 0;
         can_print_debug = true;
     }
+
+    if(resetTask_flag==1)
+    {
+        // 一定时间后重置任务状态和变量
+        Set_Pwm(0,0);
+        if(HAL_GetTick()-resetMode_start_time>RESET_WAIT_TIME)
+        {
+            currentState = INIT;
+            init_start_time = 0;
+            prev_angle = 0.0f;
+            retry_count = 0; 
+            resetTask_flag=0;
+            led1_off(); led2_off(); led3_off(); // 关闭所有LED
+            printf("任务重置完成\r\n");
+        }
+        else
+        {
+            return 0;
+        }
+    }
     
     // 状态机实现
     switch(currentState)
@@ -265,7 +285,7 @@ u8 Task2_Handler(void)
             printf("测试任务2开始: 初始角度 = %.2f\r\n", startAngle);
             
             // 计算目标反向角度（起始角度+180度，确保在±180度范围内）
-            targetAngle = startAngle + 180.0f;
+            targetAngle = startAngle + 180.0f +8.0f;
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;
@@ -275,7 +295,7 @@ u8 Task2_Handler(void)
             }
             
             printf("目标反向角度: %.2f\r\n", targetAngle);
-            Set_Target_Velocity(10); // 设置适当的速度
+            Set_Target_Velocity(14); // 设置适当的速度
             led1_on(); // 点亮LED1表示任务开始
             
             // 重置调试打印计数器
@@ -291,10 +311,11 @@ u8 Task2_Handler(void)
                 printf("A→B直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达B点
+            if(moveForwardWithAngle_Handler(startAngle+2.0f)) {
+                // 返回1表示检测到黑线，即到达B点
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led1_off();
+                Clear_Encoder(); // 清除编码器计数器
                 led2_on(); // 切换LED指示当前状态
                 currentState = TRACK_B_TO_C;
             }
@@ -338,9 +359,10 @@ u8 Task2_Handler(void)
                 printf("C→D直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForward_Handler()) {
-                // moveForward_Handler返回1表示检测到黑线，即到达D点
+            if(moveForwardWithAngle_Handler(targetAngle)) {
+                // 返回1表示检测到黑线，即到达D点
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
+                Clear_Encoder(); // 清除编码器计数器
                 led1_off();
                 led2_on(); // 切换LED指示当前状态
                 currentState = TRACK_D_TO_A;
@@ -924,14 +946,11 @@ u8 Task4_Handler(void)
             
         case INIT_DELAY:
             // A点LED提示延时状态（非阻塞）
-            delay_counter++;
-            if(delay_counter >= 100) { // 5ms中断，100次约等于500ms
                 led1_off();
                 // 重置调试打印计数器
                 debug_print_counter = 0;
                 // 切换到下一状态 - 先旋转对准C点
                 currentState = TURN_A_TO_C;
-            }
             return 0;
             
         case TURN_A_TO_C:
