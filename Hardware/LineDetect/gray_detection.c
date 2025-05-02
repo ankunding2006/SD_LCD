@@ -22,7 +22,6 @@ int Calculate_Turn_Pwm(void)
     // 计算权重和
     int weighted_sum = 0;
     int active_sensors = 0;
-    
     // 为每个传感器分配权重，从右到左，权重从负到正
     // bit1(最右侧)权重最小(负值)，bit12(最左侧)权重最大(正值)
     if(gray_state.gray.bit1)  { weighted_sum += -16; active_sensors++; }
@@ -53,7 +52,7 @@ int Calculate_Turn_Pwm(void)
     // 对PWM值进行限幅，防止过大过小
     if(turn_pwm > turn_PWM_Limit) turn_pwm = turn_PWM_Limit;
     if(turn_pwm < -turn_PWM_Limit) turn_pwm = -turn_PWM_Limit;
-    
+	
     return turn_pwm; // 返回转向PWM值，左转为负，右转为正
 }
 
