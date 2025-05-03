@@ -342,7 +342,7 @@ u8 Task2_Handler(void)
                       getHeadingAngle(), targetAngle, targetAngle - getHeadingAngle());
             }
                    
-            if(openLoopSteeringWithBase_PWM_Handler(-900, 300, 0)) {
+            if(openLoopSteeringWithBase_PWM_Handler(-150, 1100, 0)) {
                 // openLoopSteeringWithBase_PWM_Handler返回1表示完成转向
                 printf("C点转向完成，目标角度: %.2f，当前角度: %.2f\r\n", 
                        targetAngle, getHeadingAngle());
