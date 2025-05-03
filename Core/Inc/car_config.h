@@ -13,11 +13,11 @@
  * @note 只能有一个模式为1，其他必须为0
  */
 #define TEST_MODE                      0       // 单项测试模式 
-#define Normal_Mode                    0       // 正常模式
+#define Normal_Mode                    1       // 正常模式
 #define TASK1                          0       // 任务1：A点直线前进到B点
 #define TASK2                          0       // 任务2：A->B->C->D->A
 #define TASK3                          0       // 任务3：A->C->B->D->A
-#define TASK4                          1       // 任务4：A->C->B->D->A 重复四圈
+#define TASK4                          0       // 任务4：A->C->B->D->A 重复四圈
 
 /*=========================== 调试功能配置 ===========================*/
 /**
