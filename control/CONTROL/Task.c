@@ -97,6 +97,7 @@ u8 Task1_Handler(void)
             
             Set_Target_Velocity(16); // 设置适当的速度
             led1_on(); // 点亮LED1表示任务开始
+            beep_on(); // 蜂鸣器提示任务开始
             
             // 重置调试打印计数器
             debug_print_counter = 0;
@@ -120,9 +121,6 @@ u8 Task1_Handler(void)
                 printf("任务1超时！已停止\r\n");
                 Set_Pwm(0, 0); // 停止电机
                 all_leds_on(); // 所有LED亮起表示出错
-                HAL_Delay(500);
-                all_leds_off();
-                HAL_Delay(500);
                 currentState = COMPLETED;
                 return 1;
             }
@@ -130,17 +128,9 @@ u8 Task1_Handler(void)
             if(moveForward_Handler()) {
                 // moveForward_Handler返回1表示检测到黑线，即到达B点
                 printf("到达B点，任务完成！用时: %dms\r\n", (int)(HAL_GetTick() - task_start_time));
-                
                 // 声光提示已到达B点
-                led1_off();
-                // 闪烁所有LED作为到达提示
-                for(int i = 0; i < 3; i++) {
                     all_leds_on();
-                    HAL_Delay(200);
-                    all_leds_off();
-                    HAL_Delay(200);
-                }
-                
+                    beep_on(); // 蜂鸣器提示
                 currentState = COMPLETED;
             }
             return 0;
@@ -297,6 +287,7 @@ u8 Task2_Handler(void)
             printf("目标反向角度: %.2f\r\n", targetAngle);
             Set_Target_Velocity(14); // 设置适当的速度
             led1_on(); // 点亮LED1表示任务开始
+            beep_on(); // 蜂鸣器提示任务开始
             
             // 重置调试打印计数器
             debug_print_counter = 0;
@@ -317,6 +308,7 @@ u8 Task2_Handler(void)
                 led1_off();
                 Clear_Encoder(); // 清除编码器计数器
                 led2_on(); // 切换LED指示当前状态
+                beep_on(); // 蜂鸣器提示到达B点
                 currentState = TRACK_B_TO_C;
             }
             return 0;
@@ -332,6 +324,7 @@ u8 Task2_Handler(void)
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_off();
                 led3_on(); // 切换LED指示当前状态
+                beep_on(); // 蜂鸣器提示到达C点
                 currentState = TURN_AT_C;
             }
             return 0;
@@ -365,6 +358,7 @@ u8 Task2_Handler(void)
                 Clear_Encoder(); // 清除编码器计数器
                 led1_off();
                 led2_on(); // 切换LED指示当前状态
+                beep_on(); // 蜂鸣器提示到达D点
                 currentState = TRACK_D_TO_A;
             }
             return 0;
@@ -380,6 +374,7 @@ u8 Task2_Handler(void)
                 printf("到达A点, 任务完成，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_off();
                 all_leds_on(); // 所有LED亮起表示任务完成
+                beep_on();     // 蜂鸣器提示任务完成
                 Set_Pwm(0, 0); // 停止电机
                 currentState = COMPLETED;
             }
@@ -548,6 +543,7 @@ u8 Task3_Handler(void)
             Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
             all_leds_off();
             led1_on(); // A点提示
+            beep_on(); // 蜂鸣器提示任务开始
             printf("从A点出发\r\n");
             
             // 计算顺时针旋转TASK3_ROTATION_ANGLE_1度的目标角度
@@ -603,7 +599,7 @@ u8 Task3_Handler(void)
             if(moveForwardWithAngle_UntileSomeGraySencorActived_Handler(targetAngle,FORWARD_GraySENSOR_INDEX_1)) {
                 printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                 led3_on(); // C点提示
-                 
+                beep_on(); // 蜂鸣器提示到达C点
                 // 重置延时计数器，进入C点延时状态
                 delay_counter = 0;
                 currentState = C_POINT_DELAY;
@@ -637,7 +633,8 @@ u8 Task3_Handler(void)
                 // lineTracking_Handler返回1表示完成循迹（所有传感器都检测到白色）
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_on(); // B点提示
-                
+                beep_on(); // 蜂鸣器提示到达B点
+
                 // 计算目标角度：初始角度的反方向再逆时针旋转TASK3_ROTATION_ANGLE_2度
                 // 初始方向的反方向 = 初始角度 + 180度
                 // 再逆时针偏转Task3_Rotation_Angle_2度 = 再加上Task3_Rotation_Angle_2度
@@ -694,7 +691,7 @@ u8 Task3_Handler(void)
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示
-                
+                beep_on(); // 蜂鸣器提示到达D点
                 // 重置延时计数器，进入D点延时状态
                 delay_counter = 0;
                 currentState = D_POINT_DELAY;
@@ -732,6 +729,7 @@ u8 Task3_Handler(void)
                 // lineTracking_Handler返回1表示完成循迹
                 printf("到达A点, 任务完成，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_on(); // 所有LED亮起表示任务完成
+                beep_on();     // 蜂鸣器提示任务完成
                 Set_Pwm(0, 0); // 停止电机
                 
                 // 重置延时计数器，进入A点延时状态
@@ -921,6 +919,7 @@ u8 Task4_Handler(void)
             Set_Target_Velocity(Task4_Move_Forward_Speed); // 使用全局变量
             all_leds_off();
             led1_on(); // A点提示
+            beep_on(); // 蜂鸣器提示任务开始
             printf("从A点出发\r\n");
             
             // 计算顺时针旋转的目标角度
@@ -979,6 +978,7 @@ u8 Task4_Handler(void)
                     // 返回1表示检测到黑线，即到达C点
                     printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                     led3_on(); // C点提示
+                    beep_on(); // 蜂鸣器提示到达C点
                     // 重置延时计数器，进入C点延时状态
                     delay_counter = 0;
                     currentState = C_POINT_DELAY;
@@ -990,6 +990,7 @@ u8 Task4_Handler(void)
                     // 返回1表示检测到黑线，即到达C点
                     printf("到达C点，当前角度: %.2f\r\n", getHeadingAngle());
                     led3_on(); // C点提示
+                    beep_on(); // 蜂鸣器提示到达C点
                     // 重置延时计数器，进入C点延时状态
                     delay_counter = 0;
                     currentState = C_POINT_DELAY;
@@ -1024,7 +1025,8 @@ u8 Task4_Handler(void)
                 // lineTracking_Handler返回1表示完成循迹（所有传感器都检测到白色）
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led2_on(); // B点提示
-                
+                beep_on(); // 蜂鸣器提示到达B点
+
                 // 计算目标角度：初始角度的反方向再逆时针旋转Task4_Rotation_Angle_2度
                 // 初始方向的反方向 = 初始角度 + 180度
                 // 再逆时针偏转Task4_Rotation_Angle_2度 = 再加上Task4_Rotation_Angle_2度
@@ -1081,7 +1083,7 @@ u8 Task4_Handler(void)
                 printf("到达D点，当前角度: %.2f\r\n", getHeadingAngle());
                 all_leds_off();
                 led2_on(); // D点提示
-                
+                beep_on(); // 蜂鸣器提示到达D点
                 // 重置延时计数器，进入D点延时状态
                 delay_counter = 0;
                 currentState = D_POINT_DELAY;
@@ -1119,6 +1121,7 @@ u8 Task4_Handler(void)
                 // lineTracking_Handler返回1表示完成循迹
                 printf("到达A点, 第%d圈完成，当前角度: %.2f\r\n", cycle_count + 1, getHeadingAngle());
                 all_leds_on(); // 所有LED亮起表示该圈完成
+                beep_on(); // 蜂鸣器提示任务完成
                 Set_Pwm(0, 0); // 停止电机
                 
                 // 重置延时计数器，进入A点延时状态

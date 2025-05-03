@@ -199,6 +199,8 @@ u8 key_state=0;
 u8 key_state_last=0; 
 float initialAngle = 0.0f;    // 初始航向角
 u8 manual_mode = 0;           // 手动设置角度标志位
+u8 BEPP_ON_flag = 0;          // 蜂鸣器标志位
+u8 BEEP_start_time=0;      // 蜂鸣器开启时间
 /**************enum define****************/
 enum currentPosition
 {
@@ -339,6 +341,7 @@ int main(void)
     #if SET_ANGLE_WITH_KEY==1
     angleSetWithKey_Handler();
     #endif
+    Is_beep_should_off(); // 蜂鸣器定时关闭
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
