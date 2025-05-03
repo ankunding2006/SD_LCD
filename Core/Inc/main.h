@@ -90,7 +90,7 @@ extern u8 key_state_last;               // 上次按键状态
 extern float initialAngle;              // 初始航向角
 extern u8 manual_mode;                  // 手动设置角度标志位
 extern u8 BEPP_ON_flag;                 // 蜂鸣器标志位
-extern u8 BEEP_start_time;           // 蜂鸣器开启时间
+extern u32 BEEP_start_time;           // 蜂鸣器开启时间
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
