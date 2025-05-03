@@ -15,9 +15,9 @@
 #define TEST_MODE                      0       // 单项测试模式 
 #define Normal_Mode                    0       // 正常模式
 #define TASK1                          0       // 任务1：A点直线前进到B点
-#define TASK2                          1       // 任务2：A->B->C->D->A
+#define TASK2                          0       // 任务2：A->B->C->D->A
 #define TASK3                          0       // 任务3：A->C->B->D->A
-#define TASK4                          0       // 任务4：A->C->B->D->A 重复四圈
+#define TASK4                          1       // 任务4：A->C->B->D->A 重复四圈
 
 /*=========================== 调试功能配置 ===========================*/
 /**
@@ -60,7 +60,7 @@
  */
 #define TARGET_VELOCITY_DEFAULT        15      // 默认目标速度
 #define FORWARDBASE_PWM                2500    // 直线行驶基础PWM值
-#define OPENLOOP_STEERING_BASE_PWM     900    // 开环转向基础PWM值
+#define OPENLOOP_STEERING_BASE_PWM     840    // 开环转向基础PWM值
 
 /*=========================== PID控制参数 ===========================*/
 /**
@@ -76,16 +76,16 @@
 /**
  * @brief 原地转向控制PID参数(放大100倍)
  */
-#define STEERING_KP_DEFAULT            2000    // 转向控制比例系数
-#define STEERING_KI_DEFAULT            20      // 转向控制积分系数
-#define STEERING_KD_DEFAULT            30      // 转向控制微分系数
-#define STEERING_ERROR_THRESHOLD_DEFAULT 200   // 转向控制误差阈值(度)
+#define STEERING_KP_DEFAULT            2200    // 转向控制比例系数
+#define STEERING_KI_DEFAULT            22      // 转向控制积分系数
+#define STEERING_KD_DEFAULT            45      // 转向控制微分系数
+#define STEERING_ERROR_THRESHOLD_DEFAULT 225   // 转向控制误差阈值(度)
 #define STEERING_STABLE_TIME           70      // 转向稳定需要保持的时间计数
-#define STEERING_MAX_OUTPUT            1800    // 转向控制最大PWM输出
-#define STEERING_MIN_OUTPUT            -1800   // 转向控制最小PWM输出
+#define STEERING_MAX_OUTPUT            1000    // 转向控制最大PWM输出
+#define STEERING_MIN_OUTPUT            -1000   // 转向控制最小PWM输出
 #define STEERING_I_LIMIT               1200    // 转向控制积分限幅值
 #define STEERING_SPEED_DEFAULT         5000    // 转向控制基础速度
-#define PWM_Base                       945    // PWM基准值
+#define PWM_Base                       935    // PWM基准值
 
 /**
  * @brief 直线行驶角度修正PID参数(放大100倍)
@@ -123,12 +123,17 @@
 #define DEBUG_PRINT_COUNT              (DEBUG_PRINT_INTERVAL/5)    // 调试信息发送计数(基于5ms的中断周期)
 #define ANGLE_PRINT_COUNT              1500000                    // 角度打印计数
 
+/*=========================== 任务1参数配置 =========================== */
+
+/*=========================== 任务2参数配置 =========================== */
+#define TASK2_ANGLE_OFFSET             15.0f   // 初始角度偏移
+
 /*=========================== 任务3参数配置 ===========================*/
 /**
  * @brief 任务3(A->C->B->D->A)的参数配置
  */
-#define TASK3_ROTATION_ANGLE_1         32.6f   // 初始从A点对准C点需要顺时针旋转的角度(度)
-#define TASK3_ROTATION_ANGLE_2         58.8f   // 从B到D前需要逆时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_1         35.9f   // 初始从A点对准C点需要顺时针旋转的角度(度)
+#define TASK3_ROTATION_ANGLE_2         63.8f   // 从B到D前需要逆时针旋转的角度(度)
 #define TASK3_STEER_TIME_C             500     // C点openLoopSteering的转向时间参数(中断次数)
 #define TASK3_STEER_PWM_C              700     // C点openLoopSteering的PWM参数(速度值)
 #define TASK3_STEER_TIME_D             -500    // D点openLoopSteering的转向时间参数(中断次数)
@@ -145,7 +150,7 @@
  */
 #define TASK4_ROTATION_ANGLE_1         TASK3_ROTATION_ANGLE_1  // 初始从A点对准C点需要顺时针旋转的角度(度)
 #define TASK4_ROTATION_ANGLE_2         TASK3_ROTATION_ANGLE_2  // 从B到D前需要逆时针旋转的角度(度)
-#define TASK4_ROTATION_ANGLE_3         32.5f                   // 后3圈从B到D前需要逆时针旋转的角度(度)
+#define TASK4_ROTATION_ANGLE_3         33.5f                   // 后3圈从B到D前需要逆时针旋转的角度(度)
 #define TASK4_STEER_TIME_C             TASK3_STEER_TIME_C      // C点openLoopSteering的转向时间参数
 #define TASK4_STEER_PWM_C              TASK3_STEER_PWM_C       // C点openLoopSteering的PWM参数
 #define TASK4_STEER_TIME_D             TASK3_STEER_TIME_D      // D点openLoopSteering的转向时间参数

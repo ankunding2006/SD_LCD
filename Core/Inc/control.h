@@ -38,16 +38,6 @@ extern float Velocity_Left, Velocity_Right; // 左右轮速度
 #define Reduction_Ratio  30.0f			//添加f后缀
 #define Perimeter  210.4867f 			//添加f后缀
 
-//小车各模式定义
-#define Normal_Mode							0
-#define Ultrasonic_Avoid_Mode               1
-#define Ultrasonic_Follow_Mode              2
-#define Lidar_Avoid_Mode					3
-#define Lidar_Follow_Mode					4
-#define Lidar_Straight_Mode                 5
-#define ELE_Line_Patrol_Mode				7
-#define CCD_Line_Patrol_Mode				6
-
 
 
 //避障模式的参数

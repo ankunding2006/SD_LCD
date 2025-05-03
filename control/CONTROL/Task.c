@@ -281,7 +281,7 @@ u8 Task2_Handler(void)
             printf("测试任务2开始: 初始角度 = %.2f\r\n", initialAngle);
             
             // 计算目标反向角度（起始角度+180度，确保在±180度范围内）
-            targetAngle = initialAngle + 180.0f + 8.0f;
+            targetAngle = initialAngle + 180.0f + TASK2_ANGLE_OFFSET; 
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;
