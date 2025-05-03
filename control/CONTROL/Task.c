@@ -174,7 +174,6 @@ u8 Task2_Handler(void)
     
     // 使用静态变量保存状态和起始角度
     static TestState currentState = INIT_WAIT;
-    static float startAngle = 0.0f;
     static float targetAngle = 0.0f;
     static uint32_t init_start_time = 0;   // 初始化开始时间
     static float prev_angle = 0.0f;        // 上一次读取的角度
@@ -271,11 +270,18 @@ u8 Task2_Handler(void)
             
         case INIT:
             // 初始化：记录起始角度，设置初始速度
-            startAngle = getHeadingAngle();
-            printf("测试任务2开始: 初始角度 = %.2f\r\n", startAngle);
+            #if IS_SET_INIT_ANGLE_MANUALY==1
+            initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+            #else
+            if(manual_mode == 0) {
+                initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+            }
+            #endif
+            manual_mode = 0; // 重置手动模式标志
+            printf("测试任务2开始: 初始角度 = %.2f\r\n", initialAngle);
             
             // 计算目标反向角度（起始角度+180度，确保在±180度范围内）
-            targetAngle = startAngle + 180.0f +8.0f;
+            targetAngle = initialAngle + 180.0f + 8.0f;
             // 规范化角度到±180度范围
             while(targetAngle > 180.0f) {
                 targetAngle -= 360.0f;
@@ -302,7 +308,7 @@ u8 Task2_Handler(void)
                 printf("A→B直线行驶中: 当前角度 = %.2f\r\n", getHeadingAngle());
             }
             
-            if(moveForwardWithAngle_Handler(startAngle+2.0f)) {
+            if(moveForward_Handler()) {
                 // 返回1表示检测到黑线，即到达B点
                 printf("到达B点，当前角度: %.2f\r\n", getHeadingAngle());
                 led1_off();
@@ -336,8 +342,8 @@ u8 Task2_Handler(void)
                       getHeadingAngle(), targetAngle, targetAngle - getHeadingAngle());
             }
                    
-            if(turnToAbsoluteAngle(targetAngle)) {
-                // turnToAbsoluteAngle返回1表示完成转向
+            if(openLoopSteeringWithBase_PWM_Handler(-900, 300, 0)) {
+                // openLoopSteeringWithBase_PWM_Handler返回1表示完成转向
                 printf("C点转向完成，目标角度: %.2f，当前角度: %.2f\r\n", 
                        targetAngle, getHeadingAngle());
                 led3_off();

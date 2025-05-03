@@ -333,6 +333,49 @@ u8 openLoopSteering_Handler(int SteerTime,int PWM_Value)
 
 
 
+
+/**
+ * @brief Open loop steering control function
+ * 
+ * @param angle 小车旋转的时间,逆时针旋转为正,顺时针旋转为负
+ * @param PWM_Value 转向PWM值
+ * @param PWM_Base 基础PWM值
+ * @return u8 1:完成 0:小车正在转向中
+ */
+u8 openLoopSteeringWithBase_PWM_Handler(int SteerTime,int PWM_Value, int openLoopSteeringBase_PWM)
+{
+    static u8 isInitialized = 0; // 初始化标志
+    static u32 startTime = 0; // 开始时间
+    
+    if(isInitialized == 0) {
+        startTime = HAL_GetTick(); // 记录开始时间
+        isInitialized = 1; // 设置初始化标志
+        return 0; // 返回未完成
+    }
+    
+    if(HAL_GetTick() - startTime >= abs(SteerTime)) {
+        Set_Pwm(0, 0); // 停止电机
+        isInitialized = 0; // 重置初始化标志
+        return 1; // 返回完成
+    } else {
+        if(SteerTime > 0) {
+            // 逆时针转向
+            Motor_Left = openLoopSteeringBase_PWM - PWM_Value; // 左轮反转
+            Motor_Right = openLoopSteeringBase_PWM + PWM_Value; // 右轮正转
+        } else {
+            // 顺时针转向
+            Motor_Left = openLoopSteeringBase_PWM + PWM_Value; // 左轮正转
+            Motor_Right = openLoopSteeringBase_PWM - PWM_Value; // 右轮反转
+        }
+        if(Flag_Stop==1) // 如果停止标志为1，停止电机
+            Set_Pwm(0, 0); // 停止电机
+        else
+            Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+        return 0; // 返回未完成
+    }
+}
+
+
 /**
  * @brief Local steering control function
  * @note This function is used to control the steering of the vehicle
