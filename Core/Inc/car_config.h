@@ -76,14 +76,14 @@
 /**
  * @brief 原地转向控制PID参数(放大100倍)
  */
-#define STEERING_KP_DEFAULT            2100    // 转向控制比例系数
-#define STEERING_KI_DEFAULT            21      // 转向控制积分系数
-#define STEERING_KD_DEFAULT            30      // 转向控制微分系数
+#define STEERING_KP_DEFAULT            3000    // 转向控制比例系数
+#define STEERING_KI_DEFAULT            30      // 转向控制积分系数
+#define STEERING_KD_DEFAULT            80      // 转向控制微分系数
 #define STEERING_ERROR_THRESHOLD_DEFAULT 225   // 转向控制误差阈值(度)
 #define STEERING_STABLE_TIME           70      // 转向稳定需要保持的时间计数
 #define STEERING_MAX_OUTPUT            800    // 转向控制最大PWM输出
 #define STEERING_MIN_OUTPUT            -800   // 转向控制最小PWM输出
-#define STEERING_I_LIMIT               1400    // 转向控制积分限幅值
+#define STEERING_I_LIMIT               2000    // 转向控制积分限幅值
 #define STEERING_SPEED_DEFAULT         5000    // 转向控制基础速度
 #define PWM_Base                       875    // PWM基准值
 
