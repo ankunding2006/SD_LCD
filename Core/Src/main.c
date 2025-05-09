@@ -315,10 +315,6 @@ int main(void)
   //********初始化12路灰度传感器**********//
   grey_sensor_Init(); // 初始化灰度传感器
 
-  // 初始化编码器
-  Encoder_Init_TIM3(); // 打开左轮编码器
-  Encoder_Init_TIM5(); // 打开右轮编码器
-
   // 设置默认控制参数
   Middle_angle = 0;     // 初始平衡角度设定
   Target_Velocity = 16; // 目标速度

@@ -14,5 +14,8 @@ void led3_off(void);
 void all_leds_on(void);
 void all_leds_off(void);
 void all_leds_toggle(void);
+void beep_on(void);
+void beep_off(void);
+void Is_beep_should_off(void);
 
 #endif

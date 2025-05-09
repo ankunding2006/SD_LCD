@@ -89,6 +89,8 @@ extern u8 key_state;                    // 按键状态
 extern u8 key_state_last;               // 上次按键状态
 extern float initialAngle;              // 初始航向角
 extern u8 manual_mode;                  // 手动设置角度标志位
+extern u8 BEPP_ON_flag;                 // 蜂鸣器标志位
+extern u32 BEEP_start_time;           // 蜂鸣器开启时间
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -236,6 +238,8 @@ u8 Get_Key_Value(void);
 #define LCD_DC_GPIO_Port GPIOA
 #define LCD_SDA_Pin GPIO_PIN_7
 #define LCD_SDA_GPIO_Port GPIOA
+#define BEEP_Pin GPIO_PIN_5
+#define BEEP_GPIO_Port GPIOC
 #define BIN2_Pin GPIO_PIN_13
 #define BIN2_GPIO_Port GPIOE
 #define BIN1_Pin GPIO_PIN_14
@@ -248,6 +252,8 @@ u8 Get_Key_Value(void);
 #define AUTO_GPIO_Port GPIOB
 #define MENU_Pin GPIO_PIN_13
 #define MENU_GPIO_Port GPIOB
+#define start_task_Pin GPIO_PIN_14
+#define start_task_GPIO_Port GPIOB
 #define UP_Pin GPIO_PIN_15
 #define UP_GPIO_Port GPIOB
 #define ENTER_Pin GPIO_PIN_9
