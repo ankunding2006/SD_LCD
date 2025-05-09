@@ -238,6 +238,8 @@ u8 Get_Key_Value(void);
 #define LCD_DC_GPIO_Port GPIOA
 #define LCD_SDA_Pin GPIO_PIN_7
 #define LCD_SDA_GPIO_Port GPIOA
+#define BEEP_Pin GPIO_PIN_5
+#define BEEP_GPIO_Port GPIOC
 #define BIN2_Pin GPIO_PIN_13
 #define BIN2_GPIO_Port GPIOE
 #define BIN1_Pin GPIO_PIN_14

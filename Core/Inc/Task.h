@@ -15,6 +15,7 @@ u8 Task1_Handler(void);
 u8 Task2_Handler(void);
 u8 Task3_Handler(void);
 u8 Task4_Handler(void);
+void normal_Handler(void);
 
 #ifdef __cplusplus
 }
