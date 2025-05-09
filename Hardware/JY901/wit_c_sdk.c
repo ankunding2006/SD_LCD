@@ -1,6 +1,6 @@
 #include "wit_c_sdk.h"
 #include "main.h"
-#include "control.h" 
+#include "control.h"
 
 static SerialWrite p_WitSerialWriteFunc = NULL;
 static WitI2cWrite p_WitI2cWriteFunc = NULL;
@@ -17,8 +17,8 @@ int16_t sReg[REGSIZE];
 /*****************************************************/
 static volatile uint8_t g_dataUpdateFlags = 0;
 volatile float fAcc[3], fGyro[3], fAngle[3]; // 传感器数据
-int16_t iMag[3];                    // 磁场传感器数据
-static volatile char s_cDataUpdate1 = 0,s_cDataUpdate2 = 0,s_cDataUpdate3 = 0,s_cDataUpdate4 = 0, s_cCmd = 0xff;
+int16_t iMag[3];                             // 磁场传感器数据
+static volatile char s_cDataUpdate1 = 0, s_cDataUpdate2 = 0, s_cDataUpdate3 = 0, s_cDataUpdate4 = 0, s_cCmd = 0xff;
 const uint32_t c_uiBaud[10] = {0, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};
 /*****************************************************/
 
@@ -618,7 +618,6 @@ int32_t WitSetContent(int32_t uiRsw)
     return WIT_HAL_OK;
 }
 
-
 // 替换UART2发送函数
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
 {
@@ -640,36 +639,36 @@ static void Delayms(uint16_t ucMs)
  */
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
 {
-	int i;
-    for(i = 0; i < uiRegNum; i++)
+    int i;
+    for (i = 0; i < uiRegNum; i++)
     {
-        switch(uiReg)
+        switch (uiReg)
         {
-//            case AX:
-//            case AY:
-            case AZ:
-				s_cDataUpdate1 |= ACC_UPDATE;
+            //            case AX:
+            //            case AY:
+        case AZ:
+            s_cDataUpdate1 |= ACC_UPDATE;
             break;
-//            case GX:
-//            case GY:
-            case GZ:
-				s_cDataUpdate2 |= GYRO_UPDATE;
+            //            case GX:
+            //            case GY:
+        case GZ:
+            s_cDataUpdate2 |= GYRO_UPDATE;
             break;
-//            case HX:
-//            case HY:
-            case HZ:
-				s_cDataUpdate4 |= MAG_UPDATE;
+            //            case HX:
+            //            case HY:
+        case HZ:
+            s_cDataUpdate4 |= MAG_UPDATE;
             break;
-//            case Roll:
-//            case Pitch:
-            case Yaw:
-				s_cDataUpdate3 |= ANGLE_UPDATE;
+            //            case Roll:
+            //            case Pitch:
+        case Yaw:
+            s_cDataUpdate3 |= ANGLE_UPDATE;
             break;
-//            default:
-//				s_cDataUpdate1 |= READ_UPDATE;
-//			break;
+            //            default:
+            //				s_cDataUpdate1 |= READ_UPDATE;
+            //			break;
         }
-		uiReg++;
+        uiReg++;
     }
 }
 
@@ -684,14 +683,14 @@ void JY901_init(void)
     WitSerialWriteRegister(SensorUartSend);
     WitRegisterCallBack(SensorDataUpdata);
     WitDelayMsRegister(Delayms);
-	HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
+    HAL_UART_Receive_IT(&huart2, uart2_rx_buffer, UART2_RX_BUFFER_SIZE);
     HAL_TIM_Base_Start_IT(&htim7);
     Before_Main(); // 等待传感器稳定
-    for(int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        JY901_Handler(); // 处理JY901数据
-        printf("Current HeadAngle is %.2f \r\n", initialAngle_temp[i] =getHeadingAngle()); // 读取当前航向角
-        HAL_Delay(300); // 延时
+        JY901_Handler();                                                                                        // 处理JY901数据
+        printf("Current HeadAngle is %.2f \r\n", car_state.attitude.initial_angle_temp[i] = getHeadingAngle()); // 读取当前航向角
+        HAL_Delay(300);                                                                                         // 延时
     }
 }
 
@@ -700,40 +699,39 @@ void JY901_init(void)
  */
 void JY901_Handler(void)
 {
-    CopeWitData(ucRegIndex,usRegDataBuff,uiRegDataLen);
-    if(s_cDataUpdate1 || s_cDataUpdate2 ||s_cDataUpdate3 ||s_cDataUpdate4 )
+    CopeWitData(ucRegIndex, usRegDataBuff, uiRegDataLen);
+    if (s_cDataUpdate1 || s_cDataUpdate2 || s_cDataUpdate3 || s_cDataUpdate4)
     {
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
-            fAcc[i] = sReg[AX+i] / 32768.0f * 16.0f;
-            fGyro[i] = sReg[GX+i] / 32768.0f * 2000.0f;
-            fAngle[i] = sReg[Roll+i] / 32768.0f * 180.0f;
+            fAcc[i] = sReg[AX + i] / 32768.0f * 16.0f;
+            fGyro[i] = sReg[GX + i] / 32768.0f * 2000.0f;
+            fAngle[i] = sReg[Roll + i] / 32768.0f * 180.0f;
         }
-        #ifdef printfData
+#ifdef printfData
         JY901_PrintData(void);
-        #endif 
+#endif
     }
 }
 
-
 void JY901_PrintData(void)
 {
-    if(s_cDataUpdate1 | ACC_UPDATE)
+    if (s_cDataUpdate1 | ACC_UPDATE)
     {
         printf("acc:%.3f %.3f %.3f\r\n", fAcc[0], fAcc[1], fAcc[2]);
         s_cDataUpdate1 &= ~ACC_UPDATE;
     }
-    if(s_cDataUpdate2 | GYRO_UPDATE)
+    if (s_cDataUpdate2 | GYRO_UPDATE)
     {
         printf("gyro:%.3f %.3f %.3f\r\n", fGyro[0], fGyro[1], fGyro[2]);
         s_cDataUpdate2 &= ~GYRO_UPDATE;
     }
-    if(s_cDataUpdate3 | ANGLE_UPDATE)
+    if (s_cDataUpdate3 | ANGLE_UPDATE)
     {
         printf("angle:%.3f %.3f %.3f\r\n", fAngle[0], fAngle[1], fAngle[2]);
         s_cDataUpdate3 &= ~ANGLE_UPDATE;
     }
-    if(s_cDataUpdate4 | MAG_UPDATE)
+    if (s_cDataUpdate4 | MAG_UPDATE)
     {
         printf("mag:%d %d %d\r\n", sReg[HX], sReg[HY], sReg[HZ]);
         s_cDataUpdate4 &= ~MAG_UPDATE;

@@ -89,22 +89,21 @@ void led_off(void)
 void beep_on(void)
 {
   HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_SET);
-  BEEP_start_time = HAL_GetTick(); // 记录蜂鸣器开启时间
-  BEPP_ON_flag = 1;          // 蜂鸣器标志位
+  car_state.running.beep_start_time = HAL_GetTick(); // 记录蜂鸣器开启时间
+  car_state.running.beep_on_flag = 1;                // 蜂鸣器标志位
 }
-
 
 void beep_off(void)
 {
   HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_RESET);
-  BEPP_ON_flag = 0;          // 蜂鸣器标志位
+  car_state.running.beep_on_flag = 0; // 蜂鸣器标志位
 }
-
 
 void Is_beep_should_off(void)
 {
-  if (BEPP_ON_flag == 1 && (HAL_GetTick() - BEEP_start_time) >= BEEP_ON_TIME){
+  if (car_state.running.beep_on_flag == 1 && (HAL_GetTick() - car_state.running.beep_start_time) >= BEEP_ON_TIME)
+  {
     beep_off();
-    BEEP_start_time = 0; // 重置蜂鸣器开启时间
+    car_state.running.beep_start_time = 0; // 重置蜂鸣器开启时间
   }
 }

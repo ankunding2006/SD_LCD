@@ -153,62 +153,6 @@ D (左下) ←——————————— C (右下)
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-u8 Way_Angle = WAY_ANGLE_DEFAULT;                                   // 获取角度的算法，1：四元数  2：卡尔曼  3：互补滤波
-u8 Flag_front, Flag_back, Flag_Left, Flag_Right, Flag_velocity = 2; // 蓝牙遥控相关的变量
-u8 Flag_Stop = FLAG_STOP_DEFAULT, Flag_Show = FLAG_SHOW_DEFAULT;    // 电机停止标志位和显示标志位  默认停止 显示打开
-int Motor_Left, Motor_Right;                                        // 电机PWM变量 应是Motor?? 向Moto致敬
-int Temperature;                                                    // 温度变量
-int Voltage, Middle_angle;                                          // 电池电压采样相关的变量
-float Angle_Balance, Gyro_Balance, Gyro_Turn;                       // 平衡倾角 平衡陀螺仪 转向陀螺仪
-u8 LD_Successful_Receive_flag;                                      // 雷达成功接收数据标志位
-u8 Mode = MODE_DEFAULT;                                             // 模式选择，默认是普通的控制模式
-u8 CCD_Zhongzhi, CCD_Yuzhi;                                         // CCD中值和阈值
-u16 ADV[128] = {0};                                                 // 存放CCD的数据的数组
-u16 determine;                                                      // 雷达跟随模式的一个标志位
-float Move_X, Move_Z;                                               // 遥控控制的速度
-u32 Distance;                                                       // 超声波测距
-u8 PID_Send;                                                        // 调参相关变量
-float Acceleration_Z;                                               // Z轴加速度值
-volatile u8 delay_flag, delay_50;                                   // 提供延时的变量
-float Balance_Kp = BALANCE_KP_DEFAULT,
-      Balance_Kd = BALANCE_KD_DEFAULT,
-      Velocity_Kp = VELOCITY_KP_DEFAULT,
-      Velocity_Ki = VELOCITY_KI_DEFAULT,
-      Turn_Kp = TURN_KP_DEFAULT,
-      Turn_Kd = TURN_KD_DEFAULT; // PID参数（放大100倍）
-u8 Sensor_Left = 0, Sensor_MiddleLeft = 0, Sensor_Middle = 0,
-   Sensor_MiddleRight = 0, Sensor_Right = 0; // 传感器状态
-float Sensor_Kp = SENSOR_KP_DEFAULT,
-      Sensor_KI = SENSOR_KI_DEFAULT,
-      Sensor_Kd = SENSOR_KD_DEFAULT; // 传感器的PID参数（放大100倍）
-float Target_Velocity = TARGET_VELOCITY_DEFAULT;
-u8 resetTask_flag = 0;        // 是否要重启任务标志位
-u32 resetMode_start_time = 0; // 任务3重置模式开始时间
-
-// 转向控制PID参数及相关变量（放大100倍）
-u16 Steering_Kp = STEERING_KP_DEFAULT;                           // 转向控制比例系数（放大100倍）
-u16 Steering_Ki = STEERING_KI_DEFAULT;                           // 转向控制积分系数（放大100倍）
-u16 Steering_Kd = STEERING_KD_DEFAULT;                           // 转向控制微分系数（放大100倍）
-u16 Steering_Error_Threshold = STEERING_ERROR_THRESHOLD_DEFAULT; // 转向控制误差阈值(度)（放大100倍）
-u16 Steering_Speed = STEERING_SPEED_DEFAULT;                     // 转向控制基础速度（放大100倍）
-u8 Steering_Completed = 0;                                       // 转向完成标志
-u16 Steering_Stable_Count = 0;
-u16 openLoopSteeringBase_PWM = OPENLOOP_STEERING_BASE_PWM; // 转向稳定计数
-
-// 添加直线行驶角度修正PID参数（放大100倍）
-u16 Forward_Kp = FORWARD_KP_DEFAULT;                   // 直线行走角度修正比例系数
-u16 Forward_Ki = FORWARD_KI_DEFAULT;                   // 直线行走角度修正积分系数
-u16 Forward_Kd = FORWARD_KD_DEFAULT;                   // 直线行走角度修正微分系数
-u16 Forward_Error_Threshold = FORWARD_ERROR_THRESHOLD; // 直线行走角度修正误差阈值(度)，放大100倍，实际即2.0度
-u16 forwardBase_PWM = FORWARDBASE_PWM;                 // 直线行走基础PWM值
-
-float initialAngle_temp[5] = {0}; // 记录初始角度的数组,在不同的时刻记录初始角度,取平均值作为最终初始角度
-u8 key_state = 0;
-u8 key_state_last = 0;
-float initialAngle = 0.0f; // 初始航向角
-u8 manual_mode = 0;        // 手动设置角度标志位
-u8 BEPP_ON_flag = 0;       // 蜂鸣器标志位
-u32 BEEP_start_time = 0;   // 蜂鸣器开启时间
 /**************enum define****************/
 enum currentPosition
 {
@@ -267,9 +211,9 @@ void Before_Main(void);
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -311,13 +255,8 @@ int main(void)
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
-
-  //********初始化12路灰度传感器**********//
+  CarState_Init(); // 初始化汽车状态结构体
   grey_sensor_Init(); // 初始化灰度传感器
-
-  // 设置默认控制参数
-  Middle_angle = 0;     // 初始平衡角度设定
-  Target_Velocity = 16; // 目标速度
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
@@ -354,22 +293,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -384,9 +323,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -420,9 +358,9 @@ void Before_Main(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -434,14 +372,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

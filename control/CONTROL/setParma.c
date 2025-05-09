@@ -31,7 +31,7 @@ int Task4_B_Point_Delay_Time = TASK4_B_PONIT_DELAY_TIME;
  */
 void toggle_Flag_Stop(void)
 {
-    Flag_Stop = !Flag_Stop;
+    car_state.running.flag_stop = !car_state.running.flag_stop;
 }
 
 /**
@@ -57,7 +57,7 @@ void HAL_TIM6_toggle_IT(void)
  */
 void Set_openLoopSteeringBase_PWM(u16 pwm)
 {
-    openLoopSteeringBase_PWM = pwm;
+    car_state.running.openloop_steering_base_pwm = pwm;
     printf("设置开环转向基础PWM值: PWM = %d\r\n", pwm);
 }
 
@@ -68,8 +68,8 @@ void Set_openLoopSteeringBase_PWM(u16 pwm)
 
 u16 Get_openLoopSteeringBase_PWM(void)
 {
-    printf("当前开环转向基础PWM值: PWM = %d\r\n", openLoopSteeringBase_PWM);
-    return openLoopSteeringBase_PWM;
+    printf("当前开环转向基础PWM值: PWM = %d\r\n", car_state.running.openloop_steering_base_pwm);
+    return car_state.running.openloop_steering_base_pwm;
 }
 
 /**
@@ -79,7 +79,7 @@ u16 Get_openLoopSteeringBase_PWM(void)
  */
 void Set_Steering_Kp(u16 kp)
 {
-    Steering_Kp = kp;
+    car_state.pid.steering_kp = kp;
     printf("设置转向控制比例系数: Kp = %.3f\r\n", (float)kp / 100.0f);
 }
 
@@ -90,7 +90,7 @@ void Set_Steering_Kp(u16 kp)
  */
 void Set_Steering_Ki(u16 ki)
 {
-    Steering_Ki = ki;
+    car_state.pid.steering_ki = ki;
     printf("设置转向控制积分系数: Ki = %.3f\r\n", (float)ki / 100.0f);
 }
 
@@ -101,7 +101,7 @@ void Set_Steering_Ki(u16 ki)
  */
 void Set_Steering_Kd(u16 kd)
 {
-    Steering_Kd = kd;
+    car_state.pid.steering_kd = kd;
     printf("设置转向控制微分系数: Kd = %.3f\r\n", (float)kd / 100.0f);
 }
 
@@ -112,7 +112,7 @@ void Set_Steering_Kd(u16 kd)
  */
 void Set_Steering_Error_Threshold(u16 threshold)
 {
-    Steering_Error_Threshold = threshold;
+    car_state.pid.steering_error_threshold = threshold;
     printf("设置转向控制误差阈值: %.3f度\r\n", (float)threshold / 100.0f);
 }
 
@@ -126,10 +126,10 @@ void Set_Steering_Error_Threshold(u16 threshold)
  */
 void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
 {
-    Steering_Kp = kp;
-    Steering_Ki = ki;
-    Steering_Kd = kd;
-    Steering_Error_Threshold = threshold;
+    car_state.pid.steering_kp = kp;
+    car_state.pid.steering_ki = ki;
+    car_state.pid.steering_kd = kd;
+    car_state.pid.steering_error_threshold = threshold;
     printf("设置所有转向控制参数:\r\n");
     printf("Kp = %.3f, Ki = %.3f, Kd = %.3f\r\n", (float)kp / 100.0f, (float)ki / 100.0f, (float)kd / 100.0f);
     printf("误差阈值 = %.3f度\r\n", (float)threshold / 100.0f);
@@ -141,7 +141,7 @@ void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
  */
 float Get_Steering_Kp(void)
 {
-    float kp = (float)Steering_Kp / 100.0f;
+    float kp = (float)car_state.pid.steering_kp / 100.0f;
     printf("当前转向控制比例系数: Kp = %.3f\r\n", kp);
     return kp;
 }
@@ -152,7 +152,7 @@ float Get_Steering_Kp(void)
  */
 float Get_Steering_Ki(void)
 {
-    float ki = (float)Steering_Ki / 100.0f;
+    float ki = (float)car_state.pid.steering_ki / 100.0f;
     printf("当前转向控制积分系数: Ki = %.3f\r\n", ki);
     return ki;
 }
@@ -163,7 +163,7 @@ float Get_Steering_Ki(void)
  */
 float Get_Steering_Kd(void)
 {
-    float kd = (float)Steering_Kd / 100.0f;
+    float kd = (float)car_state.pid.steering_kd / 100.0f;
     printf("当前转向控制微分系数: Kd = %.3f\r\n", kd);
     return kd;
 }
@@ -174,7 +174,7 @@ float Get_Steering_Kd(void)
  */
 float Get_Steering_Error_Threshold(void)
 {
-    float threshold = (float)Steering_Error_Threshold / 100.0f;
+    float threshold = (float)car_state.pid.steering_error_threshold / 100.0f;
     printf("当前转向控制误差阈值: %.3f度\r\n", threshold);
     return threshold;
 }
@@ -186,7 +186,7 @@ float Get_Steering_Error_Threshold(void)
  */
 void Set_forwardBase_PWM(u16 pwm)
 {
-    forwardBase_PWM = pwm;
+    car_state.running.forward_base_pwm = pwm;
     printf("设置直线行走基础PWM值: PWM = %u\r\n", pwm);
 }
 
@@ -197,7 +197,7 @@ void Set_forwardBase_PWM(u16 pwm)
  */
 void Set_Forward_Kp(u16 kp)
 {
-    Forward_Kp = kp;
+    car_state.pid.forward_kp = kp;
     printf("设置直线行走角度修正比例系数: Kp = %.3f\r\n", (float)kp / 100.0f);
 }
 
@@ -208,7 +208,7 @@ void Set_Forward_Kp(u16 kp)
  */
 void Set_Forward_Ki(u16 ki)
 {
-    Forward_Ki = ki;
+    car_state.pid.forward_ki = ki;
     printf("设置直线行走角度修正积分系数: Ki = %.3f\r\n", (float)ki / 100.0f);
 }
 
@@ -219,7 +219,7 @@ void Set_Forward_Ki(u16 ki)
  */
 void Set_Forward_Kd(u16 kd)
 {
-    Forward_Kd = kd;
+    car_state.pid.forward_kd = kd;
     printf("设置直线行走角度修正微分系数: Kd = %.3f\r\n", (float)kd / 100.0f);
 }
 
@@ -230,7 +230,7 @@ void Set_Forward_Kd(u16 kd)
  */
 void Set_Forward_Error_Threshold(u16 threshold)
 {
-    Forward_Error_Threshold = threshold;
+    car_state.pid.forward_error_threshold = threshold;
     printf("设置直线行走角度修正误差阈值: %.3f度\r\n", (float)threshold / 100.0f);
 }
 
@@ -244,10 +244,10 @@ void Set_Forward_Error_Threshold(u16 threshold)
  */
 void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
 {
-    Forward_Kp = kp;
-    Forward_Ki = ki;
-    Forward_Kd = kd;
-    Forward_Error_Threshold = threshold;
+    car_state.pid.forward_kp = kp;
+    car_state.pid.forward_ki = ki;
+    car_state.pid.forward_kd = kd;
+    car_state.pid.forward_error_threshold = threshold;
     printf("设置所有直线行走角度修正参数:\r\n");
     printf("Kp = %.3f, Ki = %.3f, Kd = %.3f\r\n", (float)kp / 100.0f, (float)ki / 100.0f, (float)kd / 100.0f);
     printf("误差阈值 = %.3f度\r\n", (float)threshold / 100.0f);
@@ -259,8 +259,8 @@ void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)
  */
 u16 Get_forwardBase_PWM(void)
 {
-    printf("当前直线行走基础PWM值: PWM = %u\r\n", forwardBase_PWM);
-    return forwardBase_PWM;
+    printf("当前直线行走基础PWM值: PWM = %u\r\n", car_state.running.forward_base_pwm);
+    return car_state.running.forward_base_pwm;
 }
 
 /**
@@ -269,7 +269,7 @@ u16 Get_forwardBase_PWM(void)
  */
 float Get_Forward_Kp(void)
 {
-    float kp = (float)Forward_Kp / 100.0f;
+    float kp = (float)car_state.pid.forward_kp / 100.0f;
     printf("当前直线行走角度修正比例系数: Kp = %.3f\r\n", kp);
     return kp;
 }
@@ -280,7 +280,7 @@ float Get_Forward_Kp(void)
  */
 float Get_Forward_Ki(void)
 {
-    float ki = (float)Forward_Ki / 100.0f;
+    float ki = (float)car_state.pid.forward_ki / 100.0f;
     printf("当前直线行走角度修正积分系数: Ki = %.3f\r\n", ki);
     return ki;
 }
@@ -291,7 +291,7 @@ float Get_Forward_Ki(void)
  */
 float Get_Forward_Kd(void)
 {
-    float kd = (float)Forward_Kd / 100.0f;
+    float kd = (float)car_state.pid.forward_kd / 100.0f;
     printf("当前直线行走角度修正微分系数: Kd = %.3f\r\n", kd);
     return kd;
 }
@@ -302,7 +302,7 @@ float Get_Forward_Kd(void)
  */
 float Get_Forward_Error_Threshold(void)
 {
-    float threshold = (float)Forward_Error_Threshold / 100.0f;
+    float threshold = (float)car_state.pid.forward_error_threshold / 100.0f;
     printf("当前直线行走角度修正误差阈值: %.3f度\r\n", threshold);
     return threshold;
 }
@@ -461,8 +461,8 @@ int Get_Task3_Move_Forward_Speed(void)
  */
 void resetTask(void)
 {
-    resetTask_flag = 1;
-    resetMode_start_time = HAL_GetTick(); // 记录重置开始时间
+    car_state.running.reset_task_flag = 1;
+    car_state.running.reset_mode_start_time = HAL_GetTick(); // 记录重置开始时间
     led1_on();
     led2_on();
     printf("即将在%dms后重置任务", RESET_WAIT_TIME);

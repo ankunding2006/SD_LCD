@@ -200,17 +200,17 @@ u8 Task2_Handler(void)
         can_print_debug = true;
     }
 
-    if (resetTask_flag == 1)
+    if (car_state.running.reset_task_flag == 1)
     {
         // 一定时间后重置任务状态和变量
         Set_Pwm(0, 0);
-        if (HAL_GetTick() - resetMode_start_time > RESET_WAIT_TIME)
+        if (HAL_GetTick() - car_state.running.reset_mode_start_time > RESET_WAIT_TIME)
         {
             currentState = INIT;
             init_start_time = 0;
             prev_angle = 0.0f;
             retry_count = 0;
-            resetTask_flag = 0;
+            car_state.running.reset_task_flag = 0;
             led1_off();
             led2_off();
             led3_off(); // 关闭所有LED
@@ -293,18 +293,18 @@ u8 Task2_Handler(void)
     case INIT:
 // 初始化：记录起始角度，设置初始速度
 #if IS_SET_INIT_ANGLE_MANUALY == 1
-        initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+        car_state.attitude.initial_angle = MANUAL_INIT_ANGLE; // 手动设置初始角度
 #else
-        if (manual_mode == 0)
+        if (car_state.running.manual_mode == 0)
         {
-            initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+            car_state.attitude.initial_angle = getHeadingAngle(); // 获取当前角度作为初始角度
         }
 #endif
-        manual_mode = 0; // 重置手动模式标志
-        printf("测试任务2开始: 初始角度 = %.2f\r\n", initialAngle);
+        car_state.running.manual_mode = 0; // 重置手动模式标志
+        printf("测试任务2开始: 初始角度 = %.2f\r\n", car_state.attitude.initial_angle);
 
         // 计算目标反向角度（起始角度+180度，确保在±180度范围内）
-        targetAngle = initialAngle + 180.0f + TASK2_ANGLE_OFFSET;
+        targetAngle = car_state.attitude.initial_angle + 180.0f + TASK2_ANGLE_OFFSET;
         // 规范化角度到±180度范围
         while (targetAngle > 180.0f)
         {
@@ -487,18 +487,18 @@ u8 Task3_Handler(void)
         debug_print_counter = 0;
         can_print_debug = true;
     }
-    if (resetTask_flag == 1)
+    if (car_state.running.reset_task_flag == 1)
     {
         // 一定时间后重置任务状态和变量
         Set_Pwm(0, 0);
-        if (HAL_GetTick() - resetMode_start_time > RESET_WAIT_TIME)
+        if (HAL_GetTick() - car_state.running.reset_mode_start_time > RESET_WAIT_TIME)
         {
             currentState = INIT;
             init_start_time = 0;
             prev_angle = 0.0f;
             retry_count = 0;
             delay_counter = 0;
-            resetTask_flag = 0;
+            car_state.running.reset_task_flag = 0;
             led1_off();
             led2_off();
             led3_off(); // 关闭所有LED
@@ -578,15 +578,15 @@ u8 Task3_Handler(void)
 
 // 初始化：记录初始航向角，设置初始速度
 #if IS_SET_INIT_ANGLE_MANUALY == 1
-        initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+        car_state.attitude.initial_angle = MANUAL_INIT_ANGLE; // 手动设置初始角度
 #else
-        if (manual_mode == 0)
+        if (car_state.running.manual_mode == 0)
         {
-            initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+            car_state.attitude.initial_angle = getHeadingAngle(); // 获取当前角度作为初始角度
         }
 #endif
-        manual_mode = 0; // 重置手动模式标志
-        printf("任务3开始: 初始角度 = %.2f\r\n", initialAngle);
+        car_state.running.manual_mode = 0; // 重置手动模式标志
+        printf("任务3开始: 初始角度 = %.2f\r\n", car_state.attitude.initial_angle);
 
         Set_Target_Velocity(Task3_Move_Forward_Speed); // 设置适当的速度
         all_leds_off();
@@ -595,7 +595,7 @@ u8 Task3_Handler(void)
         printf("从A点出发\r\n");
 
         // 计算顺时针旋转TASK3_ROTATION_ANGLE_1度的目标角度
-        targetAngle = initialAngle - Task3_Rotation_Angle_1; // 顺时针旋转要减去角度值
+        targetAngle = car_state.attitude.initial_angle - Task3_Rotation_Angle_1; // 顺时针旋转要减去角度值
         // 规范化角度到±180度范围
         while (targetAngle > 180.0f)
         {
@@ -696,7 +696,7 @@ u8 Task3_Handler(void)
             // 计算目标角度：初始角度的反方向再逆时针旋转TASK3_ROTATION_ANGLE_2度
             // 初始方向的反方向 = 初始角度 + 180度
             // 再逆时针偏转Task3_Rotation_Angle_2度 = 再加上Task3_Rotation_Angle_2度
-            targetAngle = initialAngle + 180.0f + Task3_Rotation_Angle_2;
+            targetAngle = car_state.attitude.initial_angle + 180.0f + Task3_Rotation_Angle_2;
 
             // 规范化角度到±180度范围
             while (targetAngle > 180.0f)
@@ -885,11 +885,11 @@ u8 Task4_Handler(void)
         can_print_debug = true;
     }
 
-    if (resetTask_flag == 1)
+    if (car_state.running.reset_task_flag == 1)
     {
         // 一定时间后重置任务状态和变量
         Set_Pwm(0, 0);
-        if (HAL_GetTick() - resetMode_start_time > RESET_WAIT_TIME)
+        if (HAL_GetTick() - car_state.running.reset_mode_start_time > RESET_WAIT_TIME)
         {
             currentState = INIT;
             init_start_time = 0;
@@ -897,7 +897,7 @@ u8 Task4_Handler(void)
             retry_count = 0;
             delay_counter = 0;
             cycle_count = 0; // 重置循环计数
-            resetTask_flag = 0;
+            car_state.running.reset_task_flag = 0;
             led1_off();
             led2_off();
             led3_off(); // 关闭所有LED
@@ -980,17 +980,17 @@ u8 Task4_Handler(void)
         if (cycle_count == 0)
         {
 #if IS_SET_INIT_ANGLE_MANUALY == 1
-            initialAngle = MANUAL_INIT_ANGLE; // 手动设置初始角度
+            car_state.attitude.initial_angle = MANUAL_INIT_ANGLE; // 手动设置初始角度
 #else
-            if (manual_mode == 0)
+            if (car_state.running.manual_mode == 0)
             {
-                initialAngle = getHeadingAngle(); // 获取当前角度作为初始角度
+                car_state.attitude.initial_angle = getHeadingAngle(); // 获取当前角度作为初始角度
             }
 #endif
-            manual_mode = 0; // 重置手动模式标志
+            car_state.running.manual_mode = 0; // 重置手动模式标志
         }
 
-        printf("任务4 第%d圈开始: 初始角度 = %.2f\r\n", cycle_count + 1, initialAngle);
+        printf("任务4 第%d圈开始: 初始角度 = %.2f\r\n", cycle_count + 1, car_state.attitude.initial_angle);
 
         Set_Target_Velocity(Task4_Move_Forward_Speed); // 使用全局变量
         all_leds_off();
@@ -1001,11 +1001,11 @@ u8 Task4_Handler(void)
         // 计算顺时针旋转的目标角度
         if (cycle_count == 0)
         {
-            targetAngle = initialAngle - Task4_Rotation_Angle_1; // 使用全局变量
+            targetAngle = car_state.attitude.initial_angle - Task4_Rotation_Angle_1; // 使用全局变量
         }
         else
         {
-            targetAngle = initialAngle - Task4_Rotation_Angle_3; // 使用全局变量
+            targetAngle = car_state.attitude.initial_angle - Task4_Rotation_Angle_3; // 使用全局变量
         }
         // 规范化角度到±180度范围
         while (targetAngle > 180.0f)
@@ -1119,7 +1119,7 @@ u8 Task4_Handler(void)
             // 计算目标角度：初始角度的反方向再逆时针旋转Task4_Rotation_Angle_2度
             // 初始方向的反方向 = 初始角度 + 180度
             // 再逆时针偏转Task4_Rotation_Angle_2度 = 再加上Task4_Rotation_Angle_2度
-            targetAngle = initialAngle + 180.0f + Task4_Rotation_Angle_2; // 使用全局变量
+            targetAngle = car_state.attitude.initial_angle + 180.0f + Task4_Rotation_Angle_2; // 使用全局变量
 
             // 规范化角度到±180度范围
             while (targetAngle > 180.0f)

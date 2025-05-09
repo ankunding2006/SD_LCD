@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "main.h"
 
 /**
  * @brief 这个函数用来控制小车进行循迹
@@ -23,29 +24,29 @@ int lineTracking_Handler(void)
     startTime = HAL_GetTick(); // 记录开始时间
     return 0;                  // 返回0，表示没有完成循迹,正在循迹中
   }
-  Encoder_Left = Read_Encoder(3);                              // 读取左轮编码器的值，前进为正，后退为负
-  Encoder_Right = Read_Encoder(5);                             // 修改为TIM5，前进为正，后退为负
-                                                               // 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的脉冲极性相同
-  Get_Velocity_Form_Encoder(Encoder_Left, Encoder_Right);      // 编码器读数转速度（mm/s）
-  int actual_velocity = Velocity(Encoder_Left, Encoder_Right); // 获取速度控制的PWM,速度控制
+  car_state.motor.encoder_left = Read_Encoder(3);                                              // 读取左轮编码器的值，前进为正，后退为负
+  car_state.motor.encoder_right = Read_Encoder(5);                                             // 修改为TIM5，前进为正，后退为负
+                                                                                               // 左轮A相接TIM2_CH1,右轮A相接TIM4_CH2,故这里两个编码器的脉冲极性相同
+  Get_Velocity_Form_Encoder(car_state.motor.encoder_left, car_state.motor.encoder_right);      // 编码器读数转速度（mm/s）
+  int actual_velocity = Velocity(car_state.motor.encoder_left, car_state.motor.encoder_right); // 获取速度控制的PWM,速度控制
 
-  grey_sensor_Read(); // 读取灰度传感器数据
-#if NOLINEDETECT == 1 // 调试模式，不使用灰度传感器
-  Turn_Pwm = 0;       // 调试模式，不使用灰度传感器
+  grey_sensor_Read();           // 读取灰度传感器数据
+#if NOLINEDETECT == 1           // 调试模式，不使用灰度传感器
+  car_state.motor.turn_pwm = 0; // 调试模式，不使用灰度传感器
 #else
-  Turn_Pwm = Calculate_Turn_Pwm(); // 计算转向PWM值,如果所有传感器都返回白色，返回1
+  car_state.motor.turn_pwm = Calculate_Turn_Pwm(); // 计算转向PWM值,如果所有传感器都返回白色，返回1
 
-  if (Turn_Pwm == INT16_MIN)
+  if (car_state.motor.turn_pwm == INT16_MIN)
   {
     if (HAL_GetTick() - startTime <= LINE_TRACKING_DEAD_TIME)
     {
-      Motor_Left = actual_velocity - prev_turn_pwm;
-      Motor_Right = actual_velocity + prev_turn_pwm;
-      if (Flag_Stop == 1)
+      car_state.motor.left_pwm = actual_velocity - prev_turn_pwm;
+      car_state.motor.right_pwm = actual_velocity + prev_turn_pwm;
+      if (car_state.running.flag_stop == 1)
         Set_Pwm(0, 0);
       else
-        Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
-      return 0;                           // 返回0，表示没有完成循迹,正在循迹中
+        Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
+      return 0;                                                       // 返回0，表示没有完成循迹,正在循迹中
     }
     else
     {
@@ -58,13 +59,13 @@ int lineTracking_Handler(void)
 #endif
 
   // 使用计算出的实际速度，不修改Target_Velocity
-  Motor_Left = actual_velocity - Turn_Pwm;
-  Motor_Right = actual_velocity + Turn_Pwm;
-  if (Flag_Stop == 1)
+  car_state.motor.left_pwm = actual_velocity - car_state.motor.turn_pwm;
+  car_state.motor.right_pwm = actual_velocity + car_state.motor.turn_pwm;
+  if (car_state.running.flag_stop == 1)
     Set_Pwm(0, 0);
   else
-    Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
-  prev_turn_pwm = Turn_Pwm;           // 更新上一次的转向PWM值
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
+  prev_turn_pwm = car_state.motor.turn_pwm;                       // 更新上一次的转向PWM值
 
   return 0; // 返回0，表示没有完成循迹,正在循迹中
 }
@@ -98,20 +99,20 @@ u8 openLoopSteering_Handler(int SteerTime, int PWM_Value)
     if (SteerTime > 0)
     {
       // 逆时针转向
-      Motor_Left = openLoopSteeringBase_PWM - PWM_Value;  // 左轮反转
-      Motor_Right = openLoopSteeringBase_PWM + PWM_Value; // 右轮正转
+      car_state.motor.left_pwm = car_state.running.openloop_steering_base_pwm - PWM_Value;  // 左轮反转
+      car_state.motor.right_pwm = car_state.running.openloop_steering_base_pwm + PWM_Value; // 右轮正转
     }
     else
     {
       // 顺时针转向
-      Motor_Left = openLoopSteeringBase_PWM + PWM_Value;  // 左轮正转
-      Motor_Right = openLoopSteeringBase_PWM - PWM_Value; // 右轮反转
+      car_state.motor.left_pwm = car_state.running.openloop_steering_base_pwm + PWM_Value;  // 左轮正转
+      car_state.motor.right_pwm = car_state.running.openloop_steering_base_pwm - PWM_Value; // 右轮反转
     }
-    if (Flag_Stop == 1) // 如果停止标志为1，停止电机
-      Set_Pwm(0, 0);    // 停止电机
+    if (car_state.running.flag_stop == 1) // 如果停止标志为1，停止电机
+      Set_Pwm(0, 0);                      // 停止电机
     else
-      Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
-    return 0;                           // 返回未完成
+      Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
+    return 0;                                                       // 返回未完成
   }
 }
 
@@ -123,7 +124,7 @@ u8 openLoopSteering_Handler(int SteerTime, int PWM_Value)
  * @param PWM_Base 基础PWM值
  * @return u8 1:完成 0:小车正在转向中
  */
-u8 openLoopSteeringWithBase_PWM_Handler(int SteerTime, int PWM_Value, int openLoopSteeringBase_PWM)
+u8 openLoopSteeringWithBase_PWM_Handler(int SteerTime, int PWM_Value, int openloop_steering_base_pwm)
 {
   static u8 isInitialized = 0; // 初始化标志
   static u32 startTime = 0;    // 开始时间
@@ -146,20 +147,20 @@ u8 openLoopSteeringWithBase_PWM_Handler(int SteerTime, int PWM_Value, int openLo
     if (SteerTime > 0)
     {
       // 逆时针转向
-      Motor_Left = openLoopSteeringBase_PWM - PWM_Value;  // 左轮反转
-      Motor_Right = openLoopSteeringBase_PWM + PWM_Value; // 右轮正转
+      car_state.motor.left_pwm = car_state.running.openloop_steering_base_pwm - PWM_Value;  // 左轮反转
+      car_state.motor.right_pwm = car_state.running.openloop_steering_base_pwm + PWM_Value; // 右轮正转
     }
     else
     {
       // 顺时针转向
-      Motor_Left = openLoopSteeringBase_PWM + PWM_Value;  // 左轮正转
-      Motor_Right = openLoopSteeringBase_PWM - PWM_Value; // 右轮反转
+      car_state.motor.left_pwm = car_state.running.openloop_steering_base_pwm + PWM_Value;  // 左轮正转
+      car_state.motor.right_pwm = car_state.running.openloop_steering_base_pwm - PWM_Value; // 右轮反转
     }
-    if (Flag_Stop == 1) // 如果停止标志为1，停止电机
-      Set_Pwm(0, 0);    // 停止电机
+    if (car_state.running.flag_stop == 1) // 如果停止标志为1，停止电机
+      Set_Pwm(0, 0);                      // 停止电机
     else
-      Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
-    return 0;                           // 返回未完成
+      Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
+    return 0;                                                       // 返回未完成
   }
 }
 
@@ -201,8 +202,8 @@ u8 localSteeringControl_Handler(float angle)
 
     lastError = 0;
     integral = 0;
-    Steering_Stable_Count = 0;
-    Steering_Completed = 0;
+    car_state.running.steering_stable_count = 0;
+    car_state.running.steering_completed = 0;
     isInitialized = 1;
 
     return 0; // 刚初始化，返回未完成
@@ -235,7 +236,7 @@ u8 localSteeringControl_Handler(float angle)
   }
 
   // 如果误差很小，逐渐减小积分项，防止过冲
-  if (fabs(error) < (float)Steering_Error_Threshold / 100.0f)
+  if (fabs(error) < (float)car_state.pid.steering_error_threshold / 100.0f)
   {
     integral *= 0.9f;
   }
@@ -245,7 +246,7 @@ u8 localSteeringControl_Handler(float angle)
   lastError = error;
 
   // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-  output = ((float)Steering_Kp / 100.0f) * error + ((float)Steering_Ki / 1000.0f) * integral + ((float)Steering_Kd / 100.0f) * derivative;
+  output = ((float)car_state.pid.steering_kp / 100.0f) * error + ((float)car_state.pid.steering_ki / 1000.0f) * integral + ((float)car_state.pid.steering_kd / 100.0f) * derivative;
 
   // 输出限幅
   if (output > STEERING_MAX_OUTPUT)
@@ -261,29 +262,29 @@ u8 localSteeringControl_Handler(float angle)
   {
     // 逆时针转向 (output 为正或零)
     // 左轮反转，右轮正转
-    Motor_Left = -(PWM_Base + output);
-    Motor_Right = PWM_Base + output;
+    car_state.motor.left_pwm = -(PWM_Base + output);
+    car_state.motor.right_pwm = PWM_Base + output;
   }
   else
   {
     // 顺时针转向 (output 为负)
     // 左轮正转，右轮反转，注意 output 本身为负数
-    Motor_Left = PWM_Base - output;     // -output 为正值，增加左轮正转速度
-    Motor_Right = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
+    car_state.motor.left_pwm = PWM_Base - output;     // -output 为正值，增加左轮正转速度
+    car_state.motor.right_pwm = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
   }
 
   // 误差在阈值范围内且变化率小，计数稳定时间
-  if (fabs(error) < (float)Steering_Error_Threshold / 100.0f && fabs(derivative) < 0.5f)
+  if (fabs(error) < (float)car_state.pid.steering_error_threshold / 100.0f && fabs(derivative) < 0.5f)
   {
-    Steering_Stable_Count++;
+    car_state.running.steering_stable_count++;
     printf("误差: %.2f, 当前角度: %.2f, 目标角度: %.2f\r\n", error, currentAngle, targetAngle);
     // 如果稳定计数达到设定时间，认为转向完成
-    if (Steering_Stable_Count >= STEERING_STABLE_TIME)
+    if (car_state.running.steering_stable_count >= STEERING_STABLE_TIME)
     {
       // 重置状态，为下一次转向做准备
       isInitialized = 0;
       Set_Pwm(0, 0); // 停止电机
-      Steering_Completed = 1;
+      car_state.running.steering_completed = 1;
       printf("转向完成！最终角度: %.2f\r\n", currentAngle);
       return 1; // 转向完成
     }
@@ -291,17 +292,17 @@ u8 localSteeringControl_Handler(float angle)
   else
   {
     // 不稳定，重置稳定计数
-    Steering_Stable_Count = 0;
+    car_state.running.steering_stable_count = 0;
   }
 
   // 执行电机控制
-  if (Flag_Stop == 1)
+  if (car_state.running.flag_stop == 1)
   {
     Set_Pwm(0, 0); // 停止标志为1时停止电机
   }
   else
   {
-    Set_Pwm(Motor_Left, Motor_Right); // 设置电机PWM
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 设置电机PWM
   }
 
   return 0; // 转向未完成
@@ -339,8 +340,8 @@ int moveForward_Handler(void)
   // 读取灰度传感器数据
   grey_sensor_Read();
   // 检查是否有传感器检测到黑线
-  Turn_Pwm = Calculate_Turn_Pwm();
-  if (Turn_Pwm != INT16_MIN)
+  car_state.motor.turn_pwm = Calculate_Turn_Pwm();
+  if (car_state.motor.turn_pwm != INT16_MIN)
   {
     Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
     // 重置所有状态变量，为下次调用准备
@@ -406,7 +407,7 @@ int moveForward_Handler(void)
     }
 
     // 如果误差很小，逐渐减小积分项，防止过冲
-    if (fabs(error) < (float)Forward_Error_Threshold / 100.0f)
+    if (fabs(error) < (float)car_state.pid.forward_error_threshold / 100.0f)
     {
       integral *= 0.95f;
     }
@@ -416,9 +417,9 @@ int moveForward_Handler(void)
     lastError = error;
 
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-    angleCorrection = ((float)Forward_Kp / 100.0f) * error +
-                      ((float)Forward_Ki / 100.0f) * integral +
-                      ((float)Forward_Kd / 100.0f) * derivative;
+    angleCorrection = ((float)car_state.pid.forward_kp / 100.0f) * error +
+                      ((float)car_state.pid.forward_ki / 100.0f) * integral +
+                      ((float)car_state.pid.forward_kd / 100.0f) * derivative;
 
     // 输出限幅
     if (angleCorrection > STEERING_MAX_OUTPUT)
@@ -431,8 +432,8 @@ int moveForward_Handler(void)
     }
 
     // 基于角度纠正计算左右轮差速
-    Motor_Left = forwardBase_PWM + angleCorrection;
-    Motor_Right = forwardBase_PWM - angleCorrection;
+    car_state.motor.left_pwm = car_state.running.forward_base_pwm + angleCorrection;
+    car_state.motor.right_pwm = car_state.running.forward_base_pwm - angleCorrection;
 
     // 打印调试信息（降低频率，避免刷屏）
     if (can_print_debug == true)
@@ -444,10 +445,10 @@ int moveForward_Handler(void)
   }
 
   // 执行电机控制
-  if (Flag_Stop == 1)
+  if (car_state.running.flag_stop == 1)
     Set_Pwm(0, 0); // 停止标志为1时停止电机
   else
-    Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
 
   return 0; // 返回0，表示没有完成直线移动，正在直行中
 }
@@ -494,8 +495,8 @@ int moveForwardWithAngle_Handler(float referenceAngle)
   // 读取灰度传感器数据
   grey_sensor_Read();
   // 检查是否有传感器检测到黑线
-  Turn_Pwm = Calculate_Turn_Pwm();
-  if (Turn_Pwm != INT16_MIN)
+  car_state.motor.turn_pwm = Calculate_Turn_Pwm();
+  if (car_state.motor.turn_pwm != INT16_MIN)
   {
     Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
     // 重置所有状态变量，为下次调用准备
@@ -551,7 +552,7 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     }
 
     // 如果误差很小，逐渐减小积分项，防止过冲
-    if (fabs(error) < (float)Forward_Error_Threshold / 100.0f)
+    if (fabs(error) < (float)car_state.pid.forward_error_threshold / 100.0f)
     {
       integral *= 0.95f;
     }
@@ -561,9 +562,9 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     lastError = error;
 
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-    angleCorrection = ((float)Forward_Kp / 100.0f) * error +
-                      ((float)Forward_Ki / 100.0f) * integral +
-                      ((float)Forward_Kd / 100.0f) * derivative;
+    angleCorrection = ((float)car_state.pid.forward_kp / 100.0f) * error +
+                      ((float)car_state.pid.forward_ki / 100.0f) * integral +
+                      ((float)car_state.pid.forward_kd / 100.0f) * derivative;
 
     // 输出限幅
     if (angleCorrection > STEERING_MAX_OUTPUT)
@@ -576,8 +577,8 @@ int moveForwardWithAngle_Handler(float referenceAngle)
     }
 
     // 基于角度纠正计算左右轮差速
-    Motor_Left = forwardBase_PWM + angleCorrection;
-    Motor_Right = forwardBase_PWM - angleCorrection;
+    car_state.motor.left_pwm = car_state.running.forward_base_pwm + angleCorrection;
+    car_state.motor.right_pwm = car_state.running.forward_base_pwm - angleCorrection;
 
     // 打印调试信息（降低频率，避免刷屏）
     if (can_print_debug == true)
@@ -589,10 +590,10 @@ int moveForwardWithAngle_Handler(float referenceAngle)
   }
 
   // 执行电机控制
-  if (Flag_Stop == 1)
+  if (car_state.running.flag_stop == 1)
     Set_Pwm(0, 0); // 停止标志为1时停止电机
   else
-    Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
 
   return 0; // 返回0，表示没有完成直线移动，正在直行中
 }
@@ -648,8 +649,8 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
     }
     lastError = 0;
     integral = 0;
-    Steering_Stable_Count = 0;
-    Steering_Completed = 0;
+    car_state.running.steering_stable_count = 0;
+    car_state.running.steering_completed = 0;
     isInitialized = 1;
 
     return 0; // 刚初始化，返回未完成
@@ -682,7 +683,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
   }
 
   // 如果误差很小，逐渐减小积分项，防止过冲
-  if (fabs(error) < (float)Steering_Error_Threshold / 100.0f * 0.85f)
+  if (fabs(error) < (float)car_state.pid.steering_error_threshold / 100.0f * 0.85f)
   {
     integral *= 0.9f;
   }
@@ -692,9 +693,9 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
   lastError = error;
 
   // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-  output = ((float)Steering_Kp / 100.0f) * error +
-           ((float)Steering_Ki / 100.0f) * integral +
-           ((float)Steering_Kd / 100.0f) * derivative;
+  output = ((float)car_state.pid.steering_kp / 100.0f) * error +
+           ((float)car_state.pid.steering_ki / 100.0f) * integral +
+           ((float)car_state.pid.steering_kd / 100.0f) * derivative;
 
   // 输出限幅
   if (output > STEERING_MAX_OUTPUT)
@@ -710,36 +711,36 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
   {
     // 逆时针转向 (output 为正或零)
     // 左轮反转，右轮正转
-    Motor_Left = -(PWM_Base + output);
-    Motor_Right = PWM_Base + output;
+    car_state.motor.left_pwm = -(PWM_Base + output);
+    car_state.motor.right_pwm = PWM_Base + output;
   }
   else
   {
     // 顺时针转向 (output 为负)
     // 左轮正转，右轮反转，注意 output 本身为负数
-    Motor_Left = PWM_Base - output;     // -output 为正值，增加左轮正转速度
-    Motor_Right = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
+    car_state.motor.left_pwm = PWM_Base - output;     // -output 为正值，增加左轮正转速度
+    car_state.motor.right_pwm = -(PWM_Base - output); // -output 为正值，增加右轮反转速度的绝对值
   }
 
   // 误差在阈值范围内且变化率小，计数稳定时间
-  if (fabs(error) < (float)Steering_Error_Threshold / 100.0f && fabs(derivative) < 1.2f)
+  if (fabs(error) < (float)car_state.pid.steering_error_threshold / 100.0f && fabs(derivative) < 1.2f)
   {
-    Steering_Stable_Count++;
+    car_state.running.steering_stable_count++;
 
     // 调试输出
-    if (Steering_Stable_Count % 20 == 0)
+    if (car_state.running.steering_stable_count % 20 == 0)
     { // 减少打印频率
       printf("误差: %.2f, 当前角度: %.2f, 目标角度: %.2f\r\n",
              error, currentAngle, targetAbsoluteAngle);
     }
 
     // 如果稳定计数达到设定时间，认为转向完成
-    if (Steering_Stable_Count >= STEERING_STABLE_TIME)
+    if (car_state.running.steering_stable_count >= STEERING_STABLE_TIME)
     {
       // 重置状态，为下一次转向做准备
       isInitialized = 0;
       Set_Pwm(0, 0); // 停止电机
-      Steering_Completed = 1;
+      car_state.running.steering_completed = 1;
       printf("转向到绝对角度完成！最终角度: %.2f\r\n", currentAngle);
       return 1; // 转向完成
     }
@@ -747,7 +748,7 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
   else
   {
     // 不稳定，重置稳定计数
-    Steering_Stable_Count = 0;
+    car_state.running.steering_stable_count = 0;
   }
 
   if (can_print_debug == true)
@@ -759,21 +760,21 @@ u8 turnToAbsoluteAngle(float targetAbsoluteAngle)
   if (angleDifference > 0)
   {
     // 逆时针转向
-    Motor_Left = 0; // 左轮停止
+    car_state.motor.left_pwm = 0; // 左轮停止
   }
   else
   {
     // 顺时针转向
-    Motor_Right = 0; // 右轮停止
+    car_state.motor.right_pwm = 0; // 右轮停止
   }
   // 执行电机控制
-  if (Flag_Stop == 1)
+  if (car_state.running.flag_stop == 1)
   {
     Set_Pwm(0, 0); // 停止标志为1时停止电机
   }
   else
   {
-    Set_Pwm(Motor_Left, Motor_Right); // 设置电机PWM
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 设置电机PWM
   }
 
   return 0; // 转向未完成
@@ -801,10 +802,10 @@ void angleSetWithKey_Handler(void)
   static uint8_t long_press_handled = 0;    // 长按是否已处理标志
 
   // 获取按键状态
-  key_state = Get_start_task_Pin_value();
+  car_state.misc.key_state = Get_start_task_Pin_value();
 
   // 按键状态处理
-  if (key_state == 1) // 检测到按下按键
+  if (car_state.misc.key_state == 1) // 检测到按下按键
   {
     if (is_key_pressed == 0) // 第一次检测到按下
     {
@@ -829,14 +830,14 @@ void angleSetWithKey_Handler(void)
         printf("检测到长按（%lums），启动小车！\r\n", press_duration);
         state = INITIAL; // 重置状态机
         // 启动小车
-        if (Flag_Stop == 1)
+        if (car_state.running.flag_stop == 1)
         {                       // 只有在停止状态下才启动
           HAL_TIM6_toggle_IT(); // 切换定时器6中断
           resetTask();          // 重置任务
           state = INITIAL;      // 重置状态机
           toggle_Flag_Stop();   // 切换停止标志
           all_leds_off();
-          manual_mode = 1; // 手动设置了角度
+          car_state.running.manual_mode = 1; // 手动设置了角度
         }
         // 标记长按已处理
         long_press_handled = 1;
@@ -855,7 +856,7 @@ void angleSetWithKey_Handler(void)
       // 只有短按才处理状态机逻辑
       if (press_duration < LONG_PRESS_THRESHOLD)
       {
-        float reverseInitialAngle = initialAngle + 180; // 计算反向初始角度
+        float reverseInitialAngle = car_state.attitude.initial_angle + 180; // 计算反向初始角度
         // 规范化反向初始角度到[-180, 180]范围内
         while (reverseInitialAngle > 180.0f)
         {
@@ -870,22 +871,22 @@ void angleSetWithKey_Handler(void)
         switch (state)
         {
         case INITIAL:
-          state = SET_INITIAL_ANGLE; // 设置初始角度
-          Flag_Stop = 1;             // 设置停止标志
-          HAL_TIM6_toggle_IT();      // 切换定时器6中断
-          Set_Pwm(0, 0);             // 停止电机
-          led1_on();                 // 打开LED1
+          state = SET_INITIAL_ANGLE;       // 设置初始角度
+          car_state.running.flag_stop = 1; // 设置停止标志
+          HAL_TIM6_toggle_IT();            // 切换定时器6中断
+          Set_Pwm(0, 0);                   // 停止电机
+          led1_on();                       // 打开LED1
           break;
 
         case SET_INITIAL_ANGLE:
-          state = SET_TASK_ROTATION_ANGLE_1;              // 设置任务旋转角度1
-          initialAngle = getHeadingAngle();               // 获取当前航向角度
-          printf("设置初始角度: %.2f\r\n", initialAngle); // 打印初始角度
-          led2_on();                                      // 打开LED2
+          state = SET_TASK_ROTATION_ANGLE_1;                                  // 设置任务旋转角度1
+          car_state.attitude.initial_angle = getHeadingAngle();               // 获取当前航向角度
+          printf("设置初始角度: %.2f\r\n", car_state.attitude.initial_angle); // 打印初始角度
+          led2_on();                                                          // 打开LED2
           break;
 
         case SET_TASK_ROTATION_ANGLE_1:
-          Task4_Rotation_Angle_1 = Task3_Rotation_Angle_1 = initialAngle - getHeadingAngle(); // 计算任务旋转角度1
+          Task4_Rotation_Angle_1 = Task3_Rotation_Angle_1 = car_state.attitude.initial_angle - getHeadingAngle(); // 计算任务旋转角度1
           // 规范化任务旋转角度1到[-180, 180]范围内
           while (Task3_Rotation_Angle_1 > 180.0f)
           {
@@ -901,8 +902,8 @@ void angleSetWithKey_Handler(void)
           break;
 
         case SET_TASK_ROTATION_ANGLE_4:
-          state = SET_TASK_ROTATION_ANGLE_3;                         // 设置任务旋转角度4
-          Task4_Rotation_Angle_3 = initialAngle - getHeadingAngle(); // 计算任务旋转角度4
+          state = SET_TASK_ROTATION_ANGLE_3;                                             // 设置任务旋转角度4
+          Task4_Rotation_Angle_3 = car_state.attitude.initial_angle - getHeadingAngle(); // 计算任务旋转角度4
           while (Task4_Rotation_Angle_3 > 180.0f)
           {
             Task4_Rotation_Angle_3 -= 360.0f;
@@ -932,10 +933,10 @@ void angleSetWithKey_Handler(void)
           led1_off();                                                    // 关闭LED1
           led2_off();                                                    // 关闭LED2
           led3_off();                                                    // 关闭LED3
-          manual_mode = 1;                                               // 手动设置了角度
+          car_state.running.manual_mode = 1;                             // 手动设置了角度
           printf("设置任务旋转角度3: %.2f\r\n", Task4_Rotation_Angle_3); // 打印任务旋转角度3
           printf("初始角度: %.2f , 任务旋转角度1: %.2f, 任务旋转角度2: %.2f, 任务旋转角度3: %.2f\r\n",
-                 initialAngle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_2, Task4_Rotation_Angle_3);
+                 car_state.attitude.initial_angle, Task3_Rotation_Angle_1, Task3_Rotation_Angle_2, Task4_Rotation_Angle_3);
           HAL_TIM6_toggle_IT(); // 切换定时器6中断
           resetTask();          // 重置任务
           toggle_Flag_Stop();   // 切换停止标志
@@ -990,8 +991,8 @@ int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngl
   // 读取灰度传感器数据
   grey_sensor_Read();
   // 检查是否有传感器检测到黑线
-  Turn_Pwm = IsCertainGraySenorsAcrived(start_graySensor - 1, end_graySensor - 1);
-  if (Turn_Pwm != INT16_MIN)
+  car_state.motor.turn_pwm = IsCertainGraySenorsAcrived(start_graySensor - 1, end_graySensor - 1);
+  if (car_state.motor.turn_pwm != INT16_MIN)
   {
     Set_Pwm(0, 0); // 如果有传感器检测到黑线，停止电机
     // 重置所有状态变量，为下次调用准备
@@ -1047,7 +1048,7 @@ int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngl
     }
 
     // 如果误差很小，逐渐减小积分项，防止过冲
-    if (fabs(error) < (float)Forward_Error_Threshold / 100.0f)
+    if (fabs(error) < (float)car_state.pid.forward_error_threshold / 100.0f)
     {
       integral *= 0.95f;
     }
@@ -1057,9 +1058,9 @@ int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngl
     lastError = error;
 
     // 计算PID输出 - 使用放大100倍后的参数值，并转换回float
-    angleCorrection = ((float)Forward_Kp / 100.0f) * error +
-                      ((float)Forward_Ki / 100.0f) * integral +
-                      ((float)Forward_Kd / 100.0f) * derivative;
+    angleCorrection = ((float)car_state.pid.forward_kp / 100.0f) * error +
+                      ((float)car_state.pid.forward_ki / 100.0f) * integral +
+                      ((float)car_state.pid.forward_kd / 100.0f) * derivative;
 
     // 输出限幅
     if (angleCorrection > STEERING_MAX_OUTPUT)
@@ -1072,8 +1073,8 @@ int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngl
     }
 
     // 基于角度纠正计算左右轮差速
-    Motor_Left = forwardBase_PWM + angleCorrection;
-    Motor_Right = forwardBase_PWM - angleCorrection;
+    car_state.motor.left_pwm = car_state.running.forward_base_pwm + angleCorrection;
+    car_state.motor.right_pwm = car_state.running.forward_base_pwm - angleCorrection;
 
     // 打印调试信息（降低频率，避免刷屏）
     if (can_print_debug == true)
@@ -1085,10 +1086,10 @@ int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngl
   }
 
   // 执行电机控制
-  if (Flag_Stop == 1)
+  if (car_state.running.flag_stop == 1)
     Set_Pwm(0, 0); // 停止标志为1时停止电机
   else
-    Set_Pwm(Motor_Left, Motor_Right); // 赋值给PWM寄存器
+    Set_Pwm(car_state.motor.left_pwm, car_state.motor.right_pwm); // 赋值给PWM寄存器
 
   return 0; // 返回0，表示没有完成直线移动，正在直行中
 }

@@ -18,7 +18,9 @@ extern "C"
 {
 #endif
 
-#include "main.h"
+  typedef unsigned char u8;
+  typedef unsigned short u16;
+  typedef unsigned int u32;
 
   /**
    * @brief 传感器状态结构体
@@ -127,16 +129,16 @@ extern "C"
    */
   typedef struct
   {
-    int temperature;               // 温度变量
-    int voltage;                   // 电池电压
-    int middle_angle;              // 中值角度
-    u8 ccd_zhongzhi;               // CCD中值
-    u8 ccd_yuzhi;                  // CCD阈值
-    u16 adv[128];                  // 存放CCD的数据的数组
-    u16 determine;                 // 雷达跟随模式的一个标志位
-    u8 key_state;                  // 按键状态
-    u8 key_state_last;             // 上次按键状态
-    u8 ld_successful_receive_flag; // 雷达成功接收数据标志位
+    int temperature;                  // 温度变量
+    int voltage;                      // 电池电压
+    int middle_angle;                 // 中值角度
+    u8 ccd_zhongzhi;                  // CCD中值
+    u8 ccd_yuzhi;                     // CCD阈值
+    u16 adv[128];                     // 存放CCD的数据的数组
+    u16 determine;                    // 雷达跟随模式的一个标志位
+    u8 key_state;                     // 按键状态
+    u8 key_state_last; // 上次按键状态
+    u8 ld_successful_receive_flag;    // 雷达成功接收数据标志位
   } MiscData_t;
 
   /**

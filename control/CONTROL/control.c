@@ -21,9 +21,7 @@
 #include <stdlib.h>
 
 // 在文件开头添加全局变量定义
-float Velocity_Left, Velocity_Right;      // 左右轮速度，全局变量
-volatile int Encoder_Left, Encoder_Right; // 左右编码器的脉冲计数
-volatile int Balance_Pwm, Velocity_Pwm, Turn_Pwm = 0;
+float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
 
 /**************************************************************************
 函数功能：Control function
@@ -74,18 +72,18 @@ int Velocity(int encoder_left, int encoder_right)
     volatile static float Encoder_Integral = 0;
 
     //================速度PI控制器=====================//
-    Encoder_Least = Target_Velocity * 2 - (encoder_left + encoder_right); // 获取最新速度偏差=目标速度-测量速度（左右编码器之和）
-    Encoder_bias *= 0.86f;                                                // 添加f后缀，指定为单精度浮点数
-    Encoder_bias += Encoder_Least * 0.14f;                                // 添加f后缀，指定为单精度浮点数
-    Encoder_Integral += Encoder_bias;                                     // 积分出位移 积分时间：10ms
+    Encoder_Least = car_state.running.target_velocity * 2 - (encoder_left + encoder_right); // 获取最新速度偏差=目标速度-测量速度（左右编码器之和）
+    Encoder_bias *= 0.86f;                                                                  // 添加f后缀，指定为单精度浮点数
+    Encoder_bias += Encoder_Least * 0.14f;                                                  // 添加f后缀，指定为单精度浮点数
+    Encoder_Integral += Encoder_bias;                                                       // 积分出位移 积分时间：10ms
     if (Encoder_Integral > 4000)
         Encoder_Integral = 4000; // 积分限幅
     if (Encoder_Integral < -4000)
-        Encoder_Integral = -4000;                                                       // 积分限幅
-    velocity = Encoder_bias * Velocity_Kp / 100 + Encoder_Integral * Velocity_Ki / 100; // 速度控制
-    if (Flag_Stop == 1)
+        Encoder_Integral = -4000;                                                                                   // 积分限幅
+    velocity = Encoder_bias * car_state.pid.velocity_kp / 100 + Encoder_Integral * car_state.pid.velocity_ki / 100; // 速度控制
+    if (car_state.running.flag_stop == 1)
         Encoder_Integral = 0; // 电机关闭后清除积分
-    Velocity_Pwm = velocity;
+    car_state.motor.velocity_pwm = velocity;
     return velocity;
 }
 
@@ -178,7 +176,7 @@ void Get_Velocity_Form_Encoder(int encoder_left, int encoder_right)
 /**
  * @brief 速度控制函数
  * @note 速度控制函数，修改Target_Velocity的值来改变速度
- * @param Target_Velocity 目标速度
+ * @param car_state.running.target_velocity 目标速度
  * @return None
  *
  */
@@ -189,7 +187,7 @@ void Set_Target_Velocity(int Control_Target_Velocity)
         Control_Target_Velocity = 100; // 限制最大速度为100
     if (Control_Target_Velocity < -100)
         Control_Target_Velocity = -100; // 限制最小速度为-100
-    Target_Velocity = Control_Target_Velocity;
+    car_state.running.target_velocity = Control_Target_Velocity;
 }
 
 /**
