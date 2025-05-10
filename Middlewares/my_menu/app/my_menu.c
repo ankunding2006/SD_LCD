@@ -3,6 +3,7 @@
 #include "my_menu.h"
 #include "lcd.h"
 #include <string.h>
+#include "main.h"
 
 extern lcd lcd_desc; // 使用main.c中已经初始化的LCD对象
 
@@ -11,81 +12,92 @@ static void ShowMenu(cotMenuShow_t *ptShowInfo)
     static menusize_t lastSelectItem = 0xFF;
     static menusize_t lastShowBaseItem = 0xFF;
     static char lastTitle[32] = {0};
-    
+
     uint8_t showNum = 4; // 一次显示的菜单项数量
     menusize_t tmpselect;
     bool needFullRedraw = false;
-    
+
     // 检查是否需要完全重绘
-    if (lastShowBaseItem != ptShowInfo->showBaseItem || 
-        strcmp(lastTitle, ptShowInfo->uMenuDesc.pTextString) != 0) {
+    if (lastShowBaseItem != ptShowInfo->showBaseItem ||
+        strcmp(lastTitle, ptShowInfo->uMenuDesc.pTextString) != 0)
+    {
         needFullRedraw = true;
     }
-    
+
     // 限制显示的菜单项数量
     cotMenu_LimitShowListNum(ptShowInfo, &showNum);
-    
-    if (needFullRedraw) {
+
+    if (needFullRedraw)
+    {
         // 完全重绘 - 先清除显示区域
         lcd_clear(&lcd_desc, BLACK);
-        
+
         // 显示菜单标题
         lcd_set_font(&lcd_desc, FONT_1608, YELLOW, BLACK);
         lcd_print(&lcd_desc, 5, 5, "%s", ptShowInfo->uMenuDesc.pTextString);
-        
+
         // 显示所有菜单项
-        for (int i = 0; i < showNum; i++) {
+        for (int i = 0; i < showNum; i++)
+        {
             tmpselect = i + ptShowInfo->showBaseItem;
-            
-            if (tmpselect == ptShowInfo->selectItem) {
+
+            if (tmpselect == ptShowInfo->selectItem)
+            {
                 // 选中项使用不同的颜色
                 lcd_fill(&lcd_desc, 0, 30 + i * 30, lcd_desc.hw->width, 30 + (i + 1) * 30 - 2, YELLOW);
                 lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
-            } else {
+            }
+            else
+            {
                 lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
             }
-            
+
             lcd_print(&lcd_desc, 10, 30 + i * 30, "%s", ptShowInfo->uItemsListDesc[tmpselect].pTextString);
         }
-    } else if (lastSelectItem != ptShowInfo->selectItem) {
+    }
+    else if (lastSelectItem != ptShowInfo->selectItem)
+    {
         // 只有选中项发生变化时才更新相关项
-        
+
         // 找出上一个选中项和当前选中项的显示索引
         int lastIndex = -1;
         int currIndex = -1;
-        
-        for (int i = 0; i < showNum; i++) {
+
+        for (int i = 0; i < showNum; i++)
+        {
             tmpselect = i + ptShowInfo->showBaseItem;
-            
+
             if (tmpselect == lastSelectItem)
                 lastIndex = i;
-                
+
             if (tmpselect == ptShowInfo->selectItem)
                 currIndex = i;
         }
-        
+
         // 只更新变化的项
-        if (lastIndex >= 0) {
+        if (lastIndex >= 0)
+        {
             // 恢复上一个选中项为普通显示
             lcd_fill(&lcd_desc, 0, 30 + lastIndex * 30, lcd_desc.hw->width, 30 + (lastIndex + 1) * 30 - 2, BLACK);
             lcd_set_font(&lcd_desc, FONT_1608, WHITE, BLACK);
-            lcd_print(&lcd_desc, 10, 30 + lastIndex * 30, "%s", 
+            lcd_print(&lcd_desc, 10, 30 + lastIndex * 30, "%s",
                       ptShowInfo->uItemsListDesc[lastIndex + ptShowInfo->showBaseItem].pTextString);
         }
-        
-        if (currIndex >= 0) {
+
+        if (currIndex >= 0)
+        {
             // 将当前选中项设置为高亮显示
             lcd_fill(&lcd_desc, 0, 30 + currIndex * 30, lcd_desc.hw->width, 30 + (currIndex + 1) * 30 - 2, YELLOW);
             lcd_set_font(&lcd_desc, FONT_1608, BLACK, YELLOW);
-            lcd_print(&lcd_desc, 10, 30 + currIndex * 30, "%s", 
+            lcd_print(&lcd_desc, 10, 30 + currIndex * 30, "%s",
                       ptShowInfo->uItemsListDesc[currIndex + ptShowInfo->showBaseItem].pTextString);
         }
     }
-    
+
     // 保存当前状态用于下次比较
     lastSelectItem = ptShowInfo->selectItem;
     lastShowBaseItem = ptShowInfo->showBaseItem;
-    strncpy(lastTitle, ptShowInfo->uMenuDesc.pTextString, sizeof(lastTitle)-1);
+    strncpy(lastTitle, ptShowInfo->uMenuDesc.pTextString, sizeof(lastTitle) - 1);
 }
 
 // 在my_menu.c中继续添加
@@ -179,24 +191,24 @@ void Key_Handler(uint8_t key)
 uint8_t Get_Key(void)
 {
     static uint8_t key_up = 1; // 按键松开标志
-    
+
     // 检查是否有按键被按下（低电平有效）
-    if (key_up && 
-        (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
-         HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
-         HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+    if (key_up &&
+        (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET ||
+         HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET ||
+         HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET ||
          HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET))
     {
         HAL_Delay(10); // 延时消抖
-        
+
         // 二次确认，确保不是抖动
-        if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
-            HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
-            HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+        if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET ||
+            HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET ||
+            HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET ||
             HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
         {
             key_up = 0; // 标记按键已按下
-            
+
             // 返回具体按下的按键
             if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET)
                 return KEY_UP;
@@ -208,14 +220,14 @@ uint8_t Get_Key(void)
                 return KEY_BACK;
         }
     }
-    else if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_SET && 
-             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_SET && 
-             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET && 
+    else if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_SET &&
+             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_SET &&
+             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET &&
              HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_SET)
     {
         key_up = 1; // 所有按键都松开了
     }
-    
+
     return KEY_NONE; // 没有按键按下或者按键未松开
 }
 
@@ -226,13 +238,12 @@ void Lcd_MenuTask(void)
     key = Get_Key();
     if (key != KEY_NONE)
     {
-        //反转LED灯
+        // 反转LED灯
         led_toggle();
         Key_Handler(key);
     }
     cotMenu_Task(); // 菜单任务处理
 }
-
 
 u8 Get_Key_Value(void)
 {
@@ -245,8 +256,8 @@ u8 Get_Key_Value(void)
         return KEY_ENTER;
     else if (HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
         return KEY_BACK;
-    
-    return KEY_NONE; // 没有按键按下或者按键未松开 
+
+    return KEY_NONE; // 没有按键按下或者按键未松开
 }
 
 u8 Get_start_task_Pin_value(void)
@@ -254,12 +265,25 @@ u8 Get_start_task_Pin_value(void)
     if (HAL_GPIO_ReadPin(start_task_GPIO_Port, start_task_Pin) == GPIO_PIN_RESET)
     {
         HAL_Delay(10); // 延时消抖
-        
+
         // 二次确认，确保不是抖动
         if (HAL_GPIO_ReadPin(start_task_GPIO_Port, start_task_Pin) == GPIO_PIN_RESET)
         {
             return 1;
         }
     }
-    return 0; // 没有按键按下或者按键未松开 
+    return 0; // 没有按键按下或者按键未松开
+}
+
+void interface_Handler(void)
+{
+    // 处理界面逻辑
+#if PRINTF_ANGLE == 1
+    print_angle_Handle(); // 打印角度
+#endif
+#if SET_ANGLE_WITH_KEY == 1
+    angleSetWithKey_Handler();
+#endif
+    Is_beep_should_off(); // 蜂鸣器定时关闭
+    Lcd_MenuTask();       // 菜单任务
 }

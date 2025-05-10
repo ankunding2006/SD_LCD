@@ -43,26 +43,26 @@ extern "C"
   extern volatile float fAcc[3], fGyro[3], fAngle[3];
   extern int16_t iMag[3];
   extern float Velocity_Left, Velocity_Right; // 左右轮速度，全局变量
-  extern float Task3_Rotation_Angle_1;  // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
-  extern float Task3_Rotation_Angle_2;  // 任务3中从B到D前需要逆时针旋转的角度(度)
-  extern int Task3_Steer_Time_C;        // C点openLoopSteering的转向时间参数(中断次数)
-  extern int Task3_Steer_PWM_C;         // C点openLoopSteering的PWM参数(速度值)
-  extern int Task3_Steer_Time_D;        // D点openLoopSteering的转向时间参数(中断次数)
-  extern int Task3_Steer_PWM_D;         // D点openLoopSteering的PWM参数(速度值)
-  extern int Task3_Move_Forward_Speed;  // 任务3中直线行驶的速度(速度值)
-  extern int Task3_line_tracking_Speed; // 任务3中循迹行驶的速度(速度值)
-  extern float Task4_Rotation_Angle_1;  // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
-  extern float Task4_Rotation_Angle_2;  // 任务4中从B到D前需要逆时针旋转的角度(度)
-  extern float Task4_Rotation_Angle_3;  // 任务4中后3圈从B到D前需要逆时针旋转的角度(度)
-  extern int Task4_Steer_Time_C;        // C点openLoopSteering的转向时间参数(中断次数)
-  extern int Task4_Steer_PWM_C;         // C点openLoopSteering的PWM参数(速度值)
-  extern int Task4_Steer_Time_D;        // D点openLoopSteering的转向时间参数(中断次数)
-  extern int Task4_Steer_PWM_D;         // D点openLoopSteering的PWM参数(速度值)
-  extern int Task4_Cycle_Count;         // 任务4循环执行次数
-  extern int Task4_Interval;            // 任务间隔时间(毫秒)
-  extern int Task4_Move_Forward_Speed;  // 任务4中直线行驶的速度(速度值)
-  extern int Task4_Line_Tracking_Speed; // 任务4中循迹行驶的速度(速度值)
-  extern int Task4_B_Point_Delay_Time;  // B点延时时间(毫秒)
+  extern float Task3_Rotation_Angle_1;        // 任务3中初始从A点对准C点需要顺时针旋转的角度(度)
+  extern float Task3_Rotation_Angle_2;        // 任务3中从B到D前需要逆时针旋转的角度(度)
+  extern int Task3_Steer_Time_C;              // C点openLoopSteering的转向时间参数(中断次数)
+  extern int Task3_Steer_PWM_C;               // C点openLoopSteering的PWM参数(速度值)
+  extern int Task3_Steer_Time_D;              // D点openLoopSteering的转向时间参数(中断次数)
+  extern int Task3_Steer_PWM_D;               // D点openLoopSteering的PWM参数(速度值)
+  extern int Task3_Move_Forward_Speed;        // 任务3中直线行驶的速度(速度值)
+  extern int Task3_line_tracking_Speed;       // 任务3中循迹行驶的速度(速度值)
+  extern float Task4_Rotation_Angle_1;        // 任务4中初始从A点对准C点需要顺时针旋转的角度(度)
+  extern float Task4_Rotation_Angle_2;        // 任务4中从B到D前需要逆时针旋转的角度(度)
+  extern float Task4_Rotation_Angle_3;        // 任务4中后3圈从B到D前需要逆时针旋转的角度(度)
+  extern int Task4_Steer_Time_C;              // C点openLoopSteering的转向时间参数(中断次数)
+  extern int Task4_Steer_PWM_C;               // C点openLoopSteering的PWM参数(速度值)
+  extern int Task4_Steer_Time_D;              // D点openLoopSteering的转向时间参数(中断次数)
+  extern int Task4_Steer_PWM_D;               // D点openLoopSteering的PWM参数(速度值)
+  extern int Task4_Cycle_Count;               // 任务4循环执行次数
+  extern int Task4_Interval;                  // 任务间隔时间(毫秒)
+  extern int Task4_Move_Forward_Speed;        // 任务4中直线行驶的速度(速度值)
+  extern int Task4_Line_Tracking_Speed;       // 任务4中循迹行驶的速度(速度值)
+  extern int Task4_B_Point_Delay_Time;        // B点延时时间(毫秒)
   /* USER CODE END ET */
 
   /* Exported constants --------------------------------------------------------*/
@@ -187,6 +187,7 @@ extern "C"
   void Before_Main(void);
   void angleSetWithKey_Handler(void);
   u8 Get_Key_Value(void);
+  void interface_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

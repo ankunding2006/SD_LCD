@@ -52,10 +52,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         Task4_Handler(); // 测试模式4
 #endif
     }
+#if GYROSCOPE_ON_DEFAULT == 1
     if (htim->Instance == TIM7)
     {
         JY901_Handler(); // 处理JY901数据
     }
+#endif
 }
 
 /**************************************************************************

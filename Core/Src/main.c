@@ -264,11 +264,12 @@ int main(void)
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
 
   led_off();
-  //! app_main();
+  //!app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  //! Menu_Init(); // 初始化菜单系统
+  Menu_Init(); // 初始化菜单系统
+#if GYROSCOPE_ON_DEFAULT == 1
   JY901_init(); // 初始化JY901传感器
-
+#endif
   HAL_TIM_Base_Start_IT(&htim6);
 
   /* USER CODE END 2 */
@@ -277,14 +278,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-#if PRINTF_ANGLE == 1
-    print_angle_Handle(); // 打印角度
-#endif
-#if SET_ANGLE_WITH_KEY == 1
-    angleSetWithKey_Handler();
-#endif
-    Is_beep_should_off(); // 蜂鸣器定时关闭
-    //! Lcd_MenuTask(); // 菜单任务
+    interface_Handler(); // 菜单界面处理函数
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
