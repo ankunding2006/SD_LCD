@@ -45,12 +45,11 @@ extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim9;
 
 /* USER CODE BEGIN Private defines */
-// 定义PWM通道�?
-#define PWMB   TIM9->CCR1  
-#define PWMA   TIM9->CCR2  
+// ??PWM??
+#define PWMB   TIM9->CCR1
+#define PWMA   TIM9->CCR2
 
-// 删除位带操作宏定义，改用GPIO引脚定义
-// 电机控制引脚
+
 #define BIN2_GPIO_PORT   GPIOE
 #define BIN2_GPIO_PIN    GPIO_PIN_13
 #define BIN1_GPIO_PORT   GPIOE

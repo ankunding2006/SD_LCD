@@ -8,8 +8,7 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -30,10 +29,10 @@ extern "C"
 #include "car_config.h"
 #include "my_menu.h"
 #include "car_state.h"
-  /* USER CODE END Includes */
+/* USER CODE END Includes */
 
-  /* Exported types ------------------------------------------------------------*/
-  /* USER CODE BEGIN ET */
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
   typedef unsigned char u8;
   typedef unsigned short u16;
   typedef unsigned int u32;
@@ -63,10 +62,10 @@ extern "C"
   extern int Task4_Move_Forward_Speed;        // 任务4中直线行驶的速度(速度值)
   extern int Task4_Line_Tracking_Speed;       // 任务4中循迹行驶的速度(速度值)
   extern int Task4_B_Point_Delay_Time;        // B点延时时间(毫秒)
-  /* USER CODE END ET */
+/* USER CODE END ET */
 
-  /* Exported constants --------------------------------------------------------*/
-  /* USER CODE BEGIN EC */
+/* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN EC */
 
   // 测试函数声明
   void SteeringTest_CyclicRotation(void);
@@ -74,10 +73,10 @@ extern "C"
 
   // 直线行驶角度修正PID参数（放大100倍）
 
-  /* USER CODE END EC */
+/* USER CODE END EC */
 
-  /* Exported macro ------------------------------------------------------------*/
-  /* USER CODE BEGIN EM */
+/* Exported macro ------------------------------------------------------------*/
+/* USER CODE BEGIN EM */
 
   typedef int32_t s32;
   typedef int16_t s16;
@@ -153,12 +152,12 @@ extern "C"
 
 #define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) // 输出
 #define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  // 输入
-  /* USER CODE END EM */
+/* USER CODE END EM */
 
-  /* Exported functions prototypes ---------------------------------------------*/
-  void Error_Handler(void);
+/* Exported functions prototypes ---------------------------------------------*/
+void Error_Handler(void);
 
-  /* USER CODE BEGIN EFP */
+/* USER CODE BEGIN EFP */
   void led_toggle(void);
   void led_off(void);
   void led_on(void);
@@ -238,9 +237,9 @@ extern "C"
 #define LCD_CS_Pin GPIO_PIN_5
 #define LCD_CS_GPIO_Port GPIOB
 
-  /* USER CODE BEGIN Private defines */
+/* USER CODE BEGIN Private defines */
 
-  /* USER CODE END Private defines */
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

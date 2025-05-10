@@ -6,14 +6,14 @@
 公司：轮趣科技（东莞）有限公司
 品牌：WHEELTEC
 官网：wheeltec.net
-淘宝店铺：shop114407458.taobao.com 
+淘宝店铺：shop114407458.taobao.com
 速卖通: https://minibalance.aliexpress.com/store/4455017
 版本：V1.0
 修改时间：2023-01-04
 
 Brand: WHEELTEC
 Website: wheeltec.net
-Taobao shop: shop114407458.taobao.com 
+Taobao shop: shop114407458.taobao.com
 Aliexpress: https://minibalance.aliexpress.com/store/4455017
 Version: V1.0
 Update：2023-01-04
@@ -29,27 +29,27 @@ All rights reserved
 int Read_Encoder(uint8_t TIMX)
 {
     int Encoder_TIM = 0;
-    
-    switch(TIMX)
+
+    switch (TIMX)
     {
-        case 3:  
-            // TIM3是16位定时器
-            Encoder_TIM = (short)TIM3->CNT;  
-            TIM3->CNT = 0; 
-            break;
-            
-        case 5:  
-            // TIM5是32位定时器，但我们只取低16位以与TIM3保持一致
-            // 如果需要利用全部32位，可以修改为: Encoder_TIM = (int)TIM5->CNT;
-            Encoder_TIM = (short)TIM5->CNT;  
-            TIM5->CNT = 0;
-            break;
-            
-        default:  
-            Encoder_TIM = 0;
-            break;
+    case 3:
+        // TIM3是16位定时器
+        Encoder_TIM = (short)TIM3->CNT;
+        TIM3->CNT = 0;
+        break;
+
+    case 5:
+        // TIM5是32位定时器，但我们只取低16位以与TIM3保持一致
+        // 如果需要利用全部32位，可以修改为: Encoder_TIM = (int)TIM5->CNT;
+        Encoder_TIM = (short)TIM5->CNT;
+        TIM5->CNT = 0;
+        break;
+
+    default:
+        Encoder_TIM = 0;
+        break;
     }
-    
+
     return Encoder_TIM;
 }
 
@@ -61,8 +61,8 @@ int Read_Encoder(uint8_t TIMX)
 void Clear_Encoder(void)
 {
     // 清除TIM3和TIM5的计数器值
-    TIM3->CNT = 0;  
-    TIM5->CNT = 0;  
+    TIM3->CNT = 0;
+    TIM5->CNT = 0;
 }
 
 /**************************************************************************
