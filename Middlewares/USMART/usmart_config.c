@@ -27,80 +27,7 @@ struct _m_usmart_nametab usmart_nametab[] =
         {(void *)HAL_TIM6_toggle_IT, "void HAL_TIM6_toggle_IT(void)"},
         {(void *)Set_Target_Velocity, "void Set_Target_Velocity(int Target_Velocity)"},
         {(void *)getHeadingAngle, "float getHeadingAngle(void)"},
-
-        // 转向控制参数调节函数 - 使用整数参数(放大100倍)
-        {(void *)Set_Steering_Kp, "void Set_Steering_Kp(u16 kp)"},
-        {(void *)Set_Steering_Ki, "void Set_Steering_Ki(u16 ki)"},
-        {(void *)Set_Steering_Kd, "void Set_Steering_Kd(u16 kd)"},
-        {(void *)Set_Steering_Error_Threshold, "void Set_Steering_Error_Threshold(u16 threshold)"},
-        {(void *)Set_All_Steering_Params, "void Set_All_Steering_Params(u16 kp, u16 ki, u16 kd, u16 threshold)"},
-        {(void *)Get_Steering_Kp, "float Get_Steering_Kp(void)"},
-        {(void *)Get_Steering_Ki, "float Get_Steering_Ki(void)"},
-        {(void *)Get_Steering_Kd, "float Get_Steering_Kd(void)"},
-        {(void *)Get_Steering_Error_Threshold, "float Get_Steering_Error_Threshold(void)"},
-        {(void *)Set_openLoopSteeringBase_PWM, "void Set_openLoopSteeringBase_PWM(u16 pwm)"},
-        {(void *)Get_openLoopSteeringBase_PWM, "u16 Get_openLoopSteeringBase_PWM(void)"},
-
-        // 直线行驶角度修正参数调节函数 - 使用整数参数(放大100倍)
-        {(void *)Set_Forward_Kp, "void Set_Forward_Kp(u16 kp)"},
-        {(void *)Set_Forward_Ki, "void Set_Forward_Ki(u16 ki)"},
-        {(void *)Set_Forward_Kd, "void Set_Forward_Kd(u16 kd)"},
-        {(void *)Set_Forward_Error_Threshold, "void Set_Forward_Error_Threshold(u16 threshold)"},
-        {(void *)Set_All_Forward_Params, "void Set_All_Forward_Params(u16 kp, u16 ki, u16 kd, u16 threshold)"},
-        {(void *)Get_Forward_Kp, "float Get_Forward_Kp(void)"},
-        {(void *)Get_Forward_Ki, "float Get_Forward_Ki(void)"},
-        {(void *)Get_Forward_Kd, "float Get_Forward_Kd(void)"},
-        {(void *)Get_Forward_Error_Threshold, "float Get_Forward_Error_Threshold(void)"},
-        {(void *)Set_forwardBase_PWM, "void Set_forwardBase_PWM(u16 pwm)"},
-        {(void *)Get_forwardBase_PWM, "u16 Get_forwardBase_PWM(void)"},
-
-        // 注册任务3相关参数调节函数
-        {(void *)Set_Task3_Rotation_Angle_1, "void Set_Task3_Rotation_Angle_1(int angle)"},
-        {(void *)Set_Task3_Rotation_Angle_2, "void Set_Task3_Rotation_Angle_2(int angle)"},
-        {(void *)Set_Task3_Steer_Time_C, "void Set_Task3_Steer_Time_C(int time)"},
-        {(void *)Set_Task3_Steer_PWM_C, "void Set_Task3_Steer_PWM_C(int pwm)"},
-        {(void *)Set_Task3_Steer_Time_D, "void Set_Task3_Steer_Time_D(int time)"},
-        {(void *)Set_Task3_Steer_PWM_D, "void Set_Task3_Steer_PWM_D(int pwm)"},
-        {(void *)Set_Task3_Move_Forward_Speed, "void Set_Task3_Move_Forward_Speed(int speed)"},
-        {(void *)Get_Task3_Rotation_Angle_1, "float Get_Task3_Rotation_Angle_1(void)"},
-        {(void *)Get_Task3_Rotation_Angle_2, "float Get_Task3_Rotation_Angle_2(void)"},
-        {(void *)Get_Task3_Steer_Time_C, "int Get_Task3_Steer_Time_C(void)"},
-        {(void *)Get_Task3_Steer_PWM_C, "int Get_Task3_Steer_PWM_C(void)"},
-        {(void *)Get_Task3_Steer_Time_D, "int Get_Task3_Steer_Time_D(void)"},
-        {(void *)Get_Task3_Steer_PWM_D, "int Get_Task3_Steer_PWM_D(void)"},
-        {(void *)Get_Task3_Move_Forward_Speed, "int Get_Task3_Move_Forward_Speed(void)"},
-        {(void *)resetTask, "void resetTask(void)"},
-
-        // 注册任务4相关参数调节函数
-        {(void *)Set_Task4_Rotation_Angle_1, "void Set_Task4_Rotation_Angle_1(int angle)"},
-        {(void *)Set_Task4_Rotation_Angle_2, "void Set_Task4_Rotation_Angle_2(int angle)"},
-        {(void *)Set_Task4_Rotation_Angle_3, "void Set_Task4_Rotation_Angle_3(int angle)"},
-        {(void *)Set_Task4_Steer_Time_C, "void Set_Task4_Steer_Time_C(int time)"},
-        {(void *)Set_Task4_Steer_PWM_C, "void Set_Task4_Steer_PWM_C(int pwm)"},
-        {(void *)Set_Task4_Steer_Time_D, "void Set_Task4_Steer_Time_D(int time)"},
-        {(void *)Set_Task4_Steer_PWM_D, "void Set_Task4_Steer_PWM_D(int pwm)"},
-        {(void *)Set_Task4_Cycle_Count, "void Set_Task4_Cycle_Count(int count)"},
-        {(void *)Set_Task4_Interval, "void Set_Task4_Interval(int interval)"},
-        {(void *)Set_Task4_Move_Forward_Speed, "void Set_Task4_Move_Forward_Speed(int speed)"},
-        {(void *)Set_Task4_Line_Tracking_Speed, "void Set_Task4_Line_Tracking_Speed(int speed)"},
-        {(void *)Set_Task4_B_Point_Delay_Time, "void Set_Task4_B_Point_Delay_Time(int time)"},
-        {(void *)Get_Task4_Rotation_Angle_1, "float Get_Task4_Rotation_Angle_1(void)"},
-        {(void *)Get_Task4_Rotation_Angle_2, "float Get_Task4_Rotation_Angle_2(void)"},
-        {(void *)Get_Task4_Rotation_Angle_3, "float Get_Task4_Rotation_Angle_3(void)"},
-        {(void *)Get_Task4_Steer_Time_C, "int Get_Task4_Steer_Time_C(void)"},
-        {(void *)Get_Task4_Steer_PWM_C, "int Get_Task4_Steer_PWM_C(void)"},
-        {(void *)Get_Task4_Steer_Time_D, "int Get_Task4_Steer_Time_D(void)"},
-        {(void *)Get_Task4_Steer_PWM_D, "int Get_Task4_Steer_PWM_D(void)"},
-        {(void *)Get_Task4_Cycle_Count, "int Get_Task4_Cycle_Count(void)"},
-        {(void *)Get_Task4_Interval, "int Get_Task4_Interval(void)"},
-        {(void *)Get_Task4_Move_Forward_Speed, "int Get_Task4_Move_Forward_Speed(void)"},
-        {(void *)Get_Task4_Line_Tracking_Speed, "int Get_Task4_Line_Tracking_Speed(void)"},
-        {(void *)Get_Task4_B_Point_Delay_Time, "int Get_Task4_B_Point_Delay_Time(void)"},
-
-        {(void *)Set_Task_SteeringAngle_Params, "void Set_Task_SteeringAngle_Params(int task, int angle1, int angle2, int angle3)"},
-        {(void *)Set_Task_OpenLoopSteering_Params, "void Set_Task_OpenLoopSteering_Params(int task, int steer_time_c, int steer_pwm_c, int steer_time_d, int steer_pwm_d)"},
-        {(void *)Get_Task_OpenLoopSteering_Params, "void Get_Task_OpenLoopSteering_Params(int task)"},
-        {(void *)Get_Task_SteeringAngle_Params, "void Get_Task_SteeringAngle_Params(int task)"},
+        {(void *)SetServoAngle, "void SetServoAngle(int16_t angle_deg)"},
 };
 
 /******************************************************************************************/
@@ -117,10 +44,10 @@ struct _m_usmart_dev usmart_dev =
         usmart_exe,
         usmart_scan,
         sizeof(usmart_nametab) / sizeof(struct _m_usmart_nametab), /* 函数数量 */
-        0,                                                         /* 参数数量 */
+        10,                                                         /* 参数数量 */
         0,                                                         /* 函数ID */
         0,                                                         /* 参数显示类型,0,10进制;1,16进制 */
         0,                                                         /* 参数类型.bitx:,0,数字;1,字符串 */
         0,                                                         /* 每个参数的长度暂存表,需要MAX_PARM个0初始化 */
-        0,                                                         /* 函数的参数,需要PARM_LEN个0初始化 */
+        10,                                                         /* 函数的参数,需要PARM_LEN个0初始化 */
 };

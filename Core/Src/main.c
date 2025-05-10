@@ -250,12 +250,13 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM9_Init();
   MX_TIM7_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   delay_init(168);     /* 延时初始*/
   usart_init(115200);  /* 串口初始化为115200 */
   usmart_dev.init(84); /* USMART初始*/
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
-  CarState_Init(); // 初始化汽车状态结构体
+  CarState_Init();    // 初始化汽车状态结构体
   grey_sensor_Init(); // 初始化灰度传感器
 
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
@@ -264,13 +265,14 @@ int main(void)
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
 
   led_off();
-  //!app_main();
+  //! app_main();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Menu_Init(); // 初始化菜单系统
 #if GYROSCOPE_ON_DEFAULT == 1
   JY901_init(); // 初始化JY901传感器
 #endif
   HAL_TIM_Base_Start_IT(&htim6);
+  HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 

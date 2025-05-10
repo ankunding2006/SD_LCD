@@ -40,8 +40,8 @@ extern float Velocity_Left, Velocity_Right; // 左右轮速度
 #define avoid_Distance 350 // 避障距离300mm
 #define avoid_Angle1 50    // 避障的角度，在310~360、0~50°的范围
 #define avoid_Angle2 310
-#define avoid_speed 30   // 避障速度
-#define turn_speed 1000  // 避障转向速度
+#define avoid_speed 30  // 避障速度
+#define turn_speed 1000 // 避障转向速度
 
 // 雷达走直线的参数
 #define Initial_speed 30 // 小车的初始速度大概为200mm每秒
@@ -102,5 +102,5 @@ void turnToAbsoluteAngle_TEST_Handler(void);
 int moveForwardWithAngle_Handler(float referenceAngle);                                                                     // 添加带参考角度的直线行驶函数声明
 int moveForwardWithAngle_UntileSomeGraySencorActived_Handler(float referenceAngle, u8 start_graySensor, u8 end_graySensor); // 添加带参考角度的直线行驶函数声明
 u8 openLoopSteeringWithBase_PWM_Handler(int SteerTime, int PWM_Value, int openLoopSteeringBase_PWM);                        // 添加带基础PWM的转向函数声明
-
+void SetServoAngle(int16_t angle_deg);
 #endif

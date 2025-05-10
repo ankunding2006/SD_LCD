@@ -206,3 +206,35 @@ float getHeadingAngle(void)
 {
     return fAngle[2]; // 返回当前航向角度
 }
+
+/**
+ * @brief  根据输入角度控制舵机转动。
+ *         该函数计算所需的PWM脉冲宽度，并更新TIM10的CCR1寄存器。
+ * @param  angle_deg: 舵机目标角度，范围为 -90 到 +90 度。
+ * @retval None
+ */
+void SetServoAngle(int16_t angle_deg)
+{
+// 定义舵机脉冲宽度的最小值、最大值 (对应于 -90 和 +90 度)
+// 在你的TIM配置下，1ms = 1000 计数，2ms = 2000 计数
+
+// 定义输入角度的最小值和最大值
+#define MIN_ANGLE -65
+#define MAX_ANGLE 65
+
+    // 确保输入的角度在有效范围内，如果超出则进行限制 (clamp)
+    if (angle_deg < MIN_ANGLE)
+    {
+        angle_deg = MIN_ANGLE;
+    }
+    else if (angle_deg > MAX_ANGLE)
+    {
+        angle_deg = MAX_ANGLE;
+    }
+    // uint32_t ccr_value = MIN_PULSE_US + (uint32_t)((angle_deg - MIN_ANGLE) * (MAX_PULSE_US - MIN_PULSE_US) / (MAX_ANGLE - MIN_ANGLE)); // 更通用的线性映射
+    uint32_t ccr_value = (uint32_t)(((int32_t)angle_deg + 90) * 100 / 9) + 500; // 使用简化的 -90到+90 特殊映射
+
+    // 将计算出的脉冲宽度值设置到 TIM10 的通道 1 比较寄存器 (CCR1)
+    // TIM10 只有一个通道，即 TIM_CHANNEL_1
+    __HAL_TIM_SET_COMPARE(&htim10, TIM_CHANNEL_1, ccr_value);
+}

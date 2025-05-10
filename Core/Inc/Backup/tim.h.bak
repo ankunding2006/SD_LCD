@@ -44,6 +44,8 @@ extern TIM_HandleTypeDef htim7;
 
 extern TIM_HandleTypeDef htim9;
 
+extern TIM_HandleTypeDef htim10;
+
 /* USER CODE BEGIN Private defines */
 // ??PWM??
 #define PWMB   TIM9->CCR1
@@ -67,6 +69,7 @@ void MX_TIM5_Init(void);
 void MX_TIM6_Init(void);
 void MX_TIM7_Init(void);
 void MX_TIM9_Init(void);
+void MX_TIM10_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
