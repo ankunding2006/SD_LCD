@@ -195,8 +195,6 @@ void SystemClock_Config(void)
 void Before_Main(void)
 {
   printf("App main started\r\n");
-
-  // åˆå?‹åŒ–æ¼”ï¿½?? - å¾?ç?ç‚¹äº®ï¿???æœ‰LED
   all_leds_off();
   HAL_Delay(500);
   led1_on();

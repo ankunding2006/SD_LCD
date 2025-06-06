@@ -290,82 +290,82 @@ void Menu_Init(void)
 // 示例：按键处理函数
 void Key_Handler(uint8_t key)
 {
-    switch (key)
-    {
-    case KEY_UP:
-        cotMenu_SelectPrevious(true); // 向上选择
-        break;
+    // switch (key)
+    // {
+    // case KEY_UP:
+    //     cotMenu_SelectPrevious(true); // 向上选择
+    //     break;
 
-    case KEY_DOWN:
-        cotMenu_SelectNext(true); // 向下选择
-        break;
+    // case KEY_DOWN:
+    //     cotMenu_SelectNext(true); // 向下选择
+    //     break;
 
-    case KEY_ENTER:
-        cotMenu_Enter(); // 进入选中的菜单项
-        break;
+    // case KEY_ENTER:
+    //     cotMenu_Enter(); // 进入选中的菜单项
+    //     break;
 
-    case KEY_BACK:
-        if(cotMenu_Exit(true) == 0) { // 返回上级菜单
-            // 退出成功时设置重绘标志
-            g_menuNeedFullRedraw = true;
-        }
-        break;
-    }
+    // case KEY_BACK:
+    //     if(cotMenu_Exit(true) == 0) { // 返回上级菜单
+    //         // 退出成功时设置重绘标志
+    //         g_menuNeedFullRedraw = true;
+    //     }
+    //     break;
+    // }
 }
 
-uint8_t Get_Key(void)
-{
-    static uint8_t key_up = 1; // 按键松开标志
+// uint8_t Get_Key(void)
+// {
+//     static uint8_t key_up = 1; // 按键松开标志
     
-    // 检查是否有按键被按下（低电平有效）
-    if (key_up && 
-        (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
-         HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
-         HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
-         HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET))
-    {
-        HAL_Delay(10); // 延时消抖
+//     // 检查是否有按键被按下（低电平有效）
+//     if (key_up && 
+//         (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
+//          HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
+//          HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+//          HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET))
+//     {
+//         HAL_Delay(10); // 延时消抖
         
-        // 二次确认，确保不是抖动
-        if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
-            HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
-            HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
-            HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
-        {
-            key_up = 0; // 标记按键已按下
+//         // 二次确认，确保不是抖动
+//         if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET || 
+//             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET || 
+//             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET || 
+//             HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
+//         {
+//             key_up = 0; // 标记按键已按下
             
-            // 返回具体按下的按键
-            if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET)
-                return KEY_UP;
-            else if (HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET)
-                return KEY_DOWN;
-            else if (HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET)
-                return KEY_ENTER;
-            else if (HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
-                return KEY_BACK;
-        }
-    }
-    else if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_SET && 
-             HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_SET && 
-             HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET && 
-             HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_SET)
-    {
-        key_up = 1; // 所有按键都松开了
-    }
+//             // 返回具体按下的按键
+//             if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_RESET)
+//                 return KEY_UP;
+//             else if (HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_RESET)
+//                 return KEY_DOWN;
+//             else if (HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_RESET)
+//                 return KEY_ENTER;
+//             else if (HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_RESET)
+//                 return KEY_BACK;
+//         }
+//     }
+//     else if (HAL_GPIO_ReadPin(UP_GPIO_Port, UP_Pin) == GPIO_PIN_SET && 
+//              HAL_GPIO_ReadPin(DOWN_GPIO_Port, DOWN_Pin) == GPIO_PIN_SET && 
+//              HAL_GPIO_ReadPin(ENTER_GPIO_Port, ENTER_Pin) == GPIO_PIN_SET && 
+//              HAL_GPIO_ReadPin(MENU_GPIO_Port, MENU_Pin) == GPIO_PIN_SET)
+//     {
+//         key_up = 1; // 所有按键都松开了
+//     }
     
-    return KEY_NONE; // 没有按键按下或者按键未松开
-}
+//     return KEY_NONE; // 没有按键按下或者按键未松开
+// }
 
 void Lcd_MenuTask(void)
 {
     uint8_t key;
 
-    key = Get_Key();
+    //! key = Get_Key();
     if (key != KEY_NONE)
     {
         //反转LED灯
         led_toggle();
-        Key_Handler(key);
+        //! Key_Handler(key);
     }
     cotMenu_Task(); // 菜单任务处理
 }

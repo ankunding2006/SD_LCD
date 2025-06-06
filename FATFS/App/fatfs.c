@@ -18,10 +18,10 @@
 /* USER CODE END Header */
 #include "fatfs.h"
 
-uint8_t retSD;    /* Return value for SD */
-char SDPath[4];   /* SD logical drive path */
-FATFS SDFatFS;    /* File system object for SD logical drive */
-FIL SDFile;       /* File object for SD */
+uint8_t retSD;  /* Return value for SD */
+char SDPath[4]; /* SD logical drive path */
+FATFS SDFatFS;  /* File system object for SD logical drive */
+FIL SDFile;     /* File object for SD */
 
 /* USER CODE BEGIN Variables */
 
@@ -38,10 +38,10 @@ void MX_FATFS_Init(void)
 }
 
 /**
-  * @brief  Gets Time from RTC
-  * @param  None
-  * @retval Time in DWORD
-  */
+ * @brief  Gets Time from RTC
+ * @param  None
+ * @retval Time in DWORD
+ */
 DWORD get_fattime(void)
 {
   /* USER CODE BEGIN get_fattime */
@@ -53,7 +53,7 @@ DWORD get_fattime(void)
 // a simple function to test the SD card
 /* USER CODE BEGIN Application */
 // a simple function to test the SD card
-void app_main(void)
+void SDcard_Test(void)
 {
   printf("Starting SD Card test...\r\n");
   app_fatfs();
@@ -68,7 +68,7 @@ void app_fatfs(void)
   uint32_t byteswritten, bytesread;                         /* File write/read counts */
   uint8_t wtext[] = "X Pulse STM32F407 working with FatFs"; /* File write buffer */
   uint8_t rtext[100];                                       /* File read buffer */
-  //static uint8_t buffer[_MAX_SS];                           /* a work buffer for the f_mkfs() */
+  // static uint8_t buffer[_MAX_SS];                           /* a work buffer for the f_mkfs() */
 
   /*##-2- Register the file system object to the FatFs module ##############*/
   if (f_mount(&SDFatFS, (TCHAR const *)SDPath, 0) != FR_OK)
@@ -80,14 +80,14 @@ void app_fatfs(void)
   else
   {
     /*##-3- Create a FAT file system (format) on the logical drive #########*/
-//    res = f_mkfs((TCHAR const *)SDPath, FM_FAT32, 0, buffer, sizeof(buffer));
-//    if (res != FR_OK)
-//    {
-//      /* FatFs Format Error */
-//      printf("FatFs format error\r\n");
-//      Error_Handler();
-//    }
-//    else
+    //    res = f_mkfs((TCHAR const *)SDPath, FM_FAT32, 0, buffer, sizeof(buffer));
+    //    if (res != FR_OK)
+    //    {
+    //      /* FatFs Format Error */
+    //      printf("FatFs format error\r\n");
+    //      Error_Handler();
+    //    }
+    //    else
     {
       /*##-4- Create and Open a new text file object with write access #####*/
       printf("Creating file...\r\n");
@@ -127,8 +127,8 @@ void app_fatfs(void)
             /*##-8- Read data from the text file ###########################*/
             res = f_read(&MyFile, rtext, sizeof(rtext), (UINT *)&bytesread);
 
-            //lcd显示读取的内�?
-            lcd_set_font(&lcd_desc, FONT_1608,BLUE, BLACK);
+            // lcd显示读取的内�?
+            lcd_set_font(&lcd_desc, FONT_1608, BLUE, BLACK);
             lcd_print(&lcd_desc, 0, 150, "Read from file: %s", rtext);
 
             if ((bytesread == 0) || (res != FR_OK)) /* EOF or Error */
