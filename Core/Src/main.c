@@ -34,6 +34,7 @@
 #include "usart.h"
 #include "usmart.h"
 #include "lfs_port.h"
+#include "Emm_V5.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -138,6 +139,7 @@ int main(void)
   Menu_Init();
   cotMenu_Task();
   Before_Main();
+  Emm_V5_Vel_Control(0x01, 1, 200, 100, 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
