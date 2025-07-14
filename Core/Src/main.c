@@ -18,10 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -110,14 +112,17 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
   MX_SPI2_Init();
+  MX_USART3_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_UART_Receive_IT(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE); /* 开启串口1中断接收 */
   delay_init(168);
-  usart_init(115200);
   usmart_dev.init(84);
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
 

@@ -28,10 +28,10 @@
  * 公司网址:www.alientek.com
  * 购买地址:openedv.taobao.com
  *
- * 修改说明 
- * 
+ * 修改说明
+ *
  * V3.4之前版本详细修改说明见USMART文件夹下的:readme.txt
- * 
+ *
  * V3.4 20200324
  * 1, 新增usmart_port.c和usmart_port.h,用于管理USMART的移植,方便修改
  * 2, 修改变量命名方式为: uint8_t, uint16_t, uint32_t
@@ -47,8 +47,8 @@
  ****************************************************************************************************
  */
 
-#include "./USMART/usmart.h"
-#include "./USMART/usmart_str.h"
+#include "usmart.h"
+#include "usmart_str.h"
 
 /**
  * @brief       对比字符串str1和str2
@@ -60,15 +60,17 @@ uint8_t usmart_strcmp(char *str1, char *str2)
 {
     while (1)
     {
-        if (*str1 != *str2)return 1; /* 不相等 */
+        if (*str1 != *str2)
+            return 1; /* 不相等 */
 
-        if (*str1 == '\0')break;    /* 对比完成了. */
+        if (*str1 == '\0')
+            break; /* 对比完成了. */
 
         str1++;
         str2++;
     }
 
-    return 0;/* 两个字符串相等 */
+    return 0; /* 两个字符串相等 */
 }
 
 /**
@@ -81,9 +83,10 @@ void usmart_strcopy(char *src, char *dst)
 {
     while (1)
     {
-        *dst = *src;            /* 拷贝 */
+        *dst = *src; /* 拷贝 */
 
-        if (*src == '\0')break; /* 拷贝完成了. */
+        if (*src == '\0')
+            break; /* 拷贝完成了. */
 
         src++;
         dst++;
@@ -101,7 +104,8 @@ uint8_t usmart_strlen(char *str)
 
     while (1)
     {
-        if (*str == '\0')break; /* 拷贝完成了. */
+        if (*str == '\0')
+            break; /* 拷贝完成了. */
 
         len++;
         str++;
@@ -120,7 +124,8 @@ uint32_t usmart_pow(uint8_t m, uint8_t n)
 {
     uint32_t result = 1;
 
-    while (n--)result *= m;
+    while (n--)
+        result *= m;
 
     return result;
 }
@@ -143,28 +148,29 @@ uint8_t usmart_str2num(char *str, uint32_t *res)
 {
     uint32_t t;
     int tnum;
-    uint8_t bnum = 0;   /* 数字的位数 */
+    uint8_t bnum = 0; /* 数字的位数 */
     char *p;
-    uint8_t hexdec = 10;/* 默认为十进制数据 */
-    uint8_t flag = 0;   /* 0,没有符号标记;1,表示正数;2,表示负数. */
+    uint8_t hexdec = 10; /* 默认为十进制数据 */
+    uint8_t flag = 0;    /* 0,没有符号标记;1,表示正数;2,表示负数. */
     p = str;
-    *res = 0;   /* 清零. */
+    *res = 0; /* 清零. */
 
     while (1)
     {
         /* 参数合法性检测 */
         if ((*p <= '9' && *p >= '0') || ((*str == '-' || *str == '+') && bnum == 0) || (*p <= 'F' && *p >= 'A') || (*p == 'X' && bnum == 1))
         {
-            if (*p >= 'A')hexdec = 16;  /* 字符串中存在字母,为16进制格式. */
+            if (*p >= 'A')
+                hexdec = 16; /* 字符串中存在字母,为16进制格式. */
 
             if (*str == '-')
             {
-                flag = 2;   /* 偏移掉符号 */
+                flag = 2; /* 偏移掉符号 */
                 str += 1;
             }
             else if (*str == '+')
             {
-                flag = 1;   /* 偏移掉符号 */
+                flag = 1; /* 偏移掉符号 */
                 str += 1;
             }
             else
@@ -174,57 +180,62 @@ uint8_t usmart_str2num(char *str, uint32_t *res)
         }
         else if (*p == '\0')
         {
-            break;      /* 碰到结束符,退出 */
+            break; /* 碰到结束符,退出 */
         }
         else
         {
-            return 1;   /* 不全是十进制或者16进制数据. */
+            return 1; /* 不全是十进制或者16进制数据. */
         }
 
         p++;
     }
 
-    p = str;            /* 重新定位到字符串开始的地址. */
+    p = str; /* 重新定位到字符串开始的地址. */
 
-    if (hexdec == 16)   /* 16进制数据 */
+    if (hexdec == 16) /* 16进制数据 */
     {
-        if (bnum < 3)return 2;  /* 位数小于3，直接退出.因为0X就占了2个,如果0X后面不跟数据,则该数据非法. */
+        if (bnum < 3)
+            return 2; /* 位数小于3，直接退出.因为0X就占了2个,如果0X后面不跟数据,则该数据非法. */
 
-        if (*p == '0' && (*(p + 1) == 'X'))   /* 必须以'0X'开头. */
+        if (*p == '0' && (*(p + 1) == 'X')) /* 必须以'0X'开头. */
         {
-            p += 2;     /* 偏移到数据起始地址. */
-            bnum -= 2;  /* 减去偏移量 */
+            p += 2;    /* 偏移到数据起始地址. */
+            bnum -= 2; /* 减去偏移量 */
         }
         else
         {
-            return 3;   /* 起始头的格式不对 */
+            return 3; /* 起始头的格式不对 */
         }
     }
     else if (bnum == 0)
     {
-        return 4;       /* 位数为0，直接退出. */
+        return 4; /* 位数为0，直接退出. */
     }
 
     while (1)
     {
-        if (bnum)bnum--;
+        if (bnum)
+            bnum--;
 
-        if (*p <= '9' && *p >= '0')t = *p - '0';    /* 得到数字的值 */
-        else t = *p - 'A' + 10; /* 得到A~F对应的值 */
+        if (*p <= '9' && *p >= '0')
+            t = *p - '0'; /* 得到数字的值 */
+        else
+            t = *p - 'A' + 10; /* 得到A~F对应的值 */
 
         *res += t * usmart_pow(hexdec, bnum);
         p++;
 
-        if (*p == '\0')break;   /* 数据都查完了. */
+        if (*p == '\0')
+            break; /* 数据都查完了. */
     }
 
-    if (flag == 2)      /* 是负数? */
+    if (flag == 2) /* 是负数? */
     {
         tnum = -*res;
         *res = tnum;
     }
 
-    return 0;   /* 成功转换 */
+    return 0; /* 成功转换 */
 }
 
 /**
@@ -239,18 +250,19 @@ uint8_t usmart_get_cmdname(char *str, char *cmdname, uint8_t *nlen, uint8_t maxl
 {
     *nlen = 0;
 
-    while (*str != ' ' && *str != '\0')   /* 找到空格或者结束符则认为结束了 */
+    while (*str != ' ' && *str != '\0') /* 找到空格或者结束符则认为结束了 */
     {
         *cmdname = *str;
         str++;
         cmdname++;
-        (*nlen)++;  /* 统计命令长度 */
+        (*nlen)++; /* 统计命令长度 */
 
-        if (*nlen >= maxlen)return 1;   /* 错误的指令 */
+        if (*nlen >= maxlen)
+            return 1; /* 错误的指令 */
     }
 
-    *cmdname = '\0';/* 加入结束符 */
-    return 0;       /* 正常返回 */
+    *cmdname = '\0'; /* 加入结束符 */
+    return 0;        /* 正常返回 */
 }
 
 /**
@@ -262,7 +274,8 @@ uint8_t usmart_search_nextc(char *str)
 {
     str++;
 
-    while (*str == ' ' && str != 0)str++;
+    while (*str == ' ' && str != 0)
+        str++;
 
     return *str;
 }
@@ -278,25 +291,27 @@ uint8_t usmart_search_nextc(char *str)
 uint8_t usmart_get_fname(char *str, char *fname, uint8_t *pnum, uint8_t *rval)
 {
     uint8_t res;
-    uint8_t fover = 0;  /* 括号深度 */
+    uint8_t fover = 0; /* 括号深度 */
     char *strtemp;
     uint8_t offset = 0;
     uint8_t parmnum = 0;
     uint8_t temp = 1;
-    char fpname[6];  /* void+X+'/0' */
+    char fpname[6];     /* void+X+'/0' */
     uint8_t fplcnt = 0; /* 第一个参数的长度计数器 */
     uint8_t pcnt = 0;   /* 参数计数器 */
     uint8_t nchar;
     /* 判断函数是否有返回值 */
     strtemp = str;
 
-    while (*strtemp != '\0')    /* 没有结束 */
+    while (*strtemp != '\0') /* 没有结束 */
     {
-        if (*strtemp != ' ' && (pcnt & 0X7F) < 5)   /* 最多记录5个字符 */
+        if (*strtemp != ' ' && (pcnt & 0X7F) < 5) /* 最多记录5个字符 */
         {
-            if (pcnt == 0)pcnt |= 0X80; /* 置位最高位,标记开始接收返回值类型 */
+            if (pcnt == 0)
+                pcnt |= 0X80; /* 置位最高位,标记开始接收返回值类型 */
 
-            if (((pcnt & 0x7f) == 4) && (*strtemp != '*'))break;    /* 最后一个字符,必须是* */
+            if (((pcnt & 0x7f) == 4) && (*strtemp != '*'))
+                break; /* 最后一个字符,必须是* */
 
             fpname[pcnt & 0x7f] = *strtemp; /* 记录函数的返回值类型 */
             pcnt++;
@@ -309,17 +324,17 @@ uint8_t usmart_get_fname(char *str, char *fname, uint8_t *pnum, uint8_t *rval)
         strtemp++;
     }
 
-    if (pcnt)   /* 接收完了 */
+    if (pcnt) /* 接收完了 */
     {
         fpname[pcnt & 0x7f] = '\0'; /* 加入结束符 */
 
         if (usmart_strcmp(fpname, "void") == 0)
         {
-            *rval = 0;  /* 不需要返回值 */
+            *rval = 0; /* 不需要返回值 */
         }
         else
         {
-            *rval = 1;  /* 需要返回值 */
+            *rval = 1; /* 需要返回值 */
         }
 
         pcnt = 0;
@@ -328,36 +343,38 @@ uint8_t usmart_get_fname(char *str, char *fname, uint8_t *pnum, uint8_t *rval)
     res = 0;
     strtemp = str;
 
-    while (*strtemp != '(' && *strtemp != '\0')   /* 此代码找到函数名的真正起始位置 */
+    while (*strtemp != '(' && *strtemp != '\0') /* 此代码找到函数名的真正起始位置 */
     {
         strtemp++;
         res++;
 
         if (*strtemp == ' ' || *strtemp == '*')
         {
-            nchar = usmart_search_nextc(strtemp);   /* 获取下一个字符 */
+            nchar = usmart_search_nextc(strtemp); /* 获取下一个字符 */
 
-            if (nchar != '(' && nchar != '*')offset = res;  /* 跳过空格和*号 */
+            if (nchar != '(' && nchar != '*')
+                offset = res; /* 跳过空格和*号 */
         }
     }
 
     strtemp = str;
 
-    if (offset)strtemp += offset + 1;   /* 跳到函数名开始的地方 */
+    if (offset)
+        strtemp += offset + 1; /* 跳到函数名开始的地方 */
 
     res = 0;
-    nchar = 0;  /* 是否正在字符串里面的标志,0，不在字符串;1，在字符串; */
+    nchar = 0; /* 是否正在字符串里面的标志,0，不在字符串;1，在字符串; */
 
     while (1)
     {
         if (*strtemp == 0)
         {
-            res = USMART_FUNCERR;   /* 函数错误 */
+            res = USMART_FUNCERR; /* 函数错误 */
             break;
         }
         else if (*strtemp == '(' && nchar == 0)
         {
-            fover++;    /* 括号深度增加一级 */
+            fover++; /* 括号深度增加一级 */
         }
         else if (*strtemp == ')' && nchar == 0)
         {
@@ -367,62 +384,64 @@ uint8_t usmart_get_fname(char *str, char *fname, uint8_t *pnum, uint8_t *rval)
             }
             else
             {
-                res = USMART_FUNCERR;  /* 错误结束,没收到'(' */
+                res = USMART_FUNCERR; /* 错误结束,没收到'(' */
             }
 
-            if (fover == 0)break;       /* 到末尾了,退出 */
+            if (fover == 0)
+                break; /* 到末尾了,退出 */
         }
         else if (*strtemp == '"')
         {
             nchar = !nchar;
         }
 
-        if (fover == 0)   /* 函数名还没接收完 */
+        if (fover == 0) /* 函数名还没接收完 */
         {
-            if (*strtemp != ' ')    /* 空格不属于函数名 */
+            if (*strtemp != ' ') /* 空格不属于函数名 */
             {
-                *fname = *strtemp;  /* 得到函数名 */
+                *fname = *strtemp; /* 得到函数名 */
                 fname++;
             }
         }
-        else     /* 已经接受完了函数名了. */
+        else /* 已经接受完了函数名了. */
         {
             if (*strtemp == ',')
             {
-                temp = 1;           /* 使能增加一个参数 */
+                temp = 1; /* 使能增加一个参数 */
                 pcnt++;
             }
             else if (*strtemp != ' ' && *strtemp != '(')
             {
-                if (pcnt == 0 && fplcnt < 5)    /* 当第一个参数来时,为了避免统计void类型的参数,必须做判断. */
+                if (pcnt == 0 && fplcnt < 5) /* 当第一个参数来时,为了避免统计void类型的参数,必须做判断. */
                 {
-                    fpname[fplcnt] = *strtemp;  /* 记录参数特征. */
+                    fpname[fplcnt] = *strtemp; /* 记录参数特征. */
                     fplcnt++;
                 }
 
-                temp++;     /* 得到有效参数(非空格) */
+                temp++; /* 得到有效参数(非空格) */
             }
 
             if (fover == 1 && temp == 2)
             {
-                temp++;     /* 防止重复增加 */
-                parmnum++;  /* 参数增加一个 */
+                temp++;    /* 防止重复增加 */
+                parmnum++; /* 参数增加一个 */
             }
         }
 
         strtemp++;
     }
 
-    if (parmnum == 1)       /* 只有1个参数. */
+    if (parmnum == 1) /* 只有1个参数. */
     {
-        fpname[fplcnt] = '\0';  /* 加入结束符 */
+        fpname[fplcnt] = '\0'; /* 加入结束符 */
 
-        if (usmart_strcmp(fpname, "void") == 0)parmnum = 0; /* 参数为void,表示没有参数. */
+        if (usmart_strcmp(fpname, "void") == 0)
+            parmnum = 0; /* 参数为void,表示没有参数. */
     }
 
-    *pnum = parmnum;/* 记录参数个数 */
-    *fname = '\0';  /* 加入结束符 */
-    return res;     /* 返回执行结果 */
+    *pnum = parmnum; /* 记录参数个数 */
+    *fname = '\0';   /* 加入结束符 */
+    return res;      /* 返回执行结果 */
 }
 
 /**
@@ -446,20 +465,23 @@ uint8_t usmart_get_aparm(char *str, char *fparm, uint8_t *ptype)
 
     while (1)
     {
-        if (*str == ',' && string == 0)enout = 1;   /* 暂缓立即退出,目的是寻找下一个参数的起始地址 */
+        if (*str == ',' && string == 0)
+            enout = 1; /* 暂缓立即退出,目的是寻找下一个参数的起始地址 */
 
-        if ((*str == ')' || *str == '\0') && string == 0)break; /* 立即退出标识符 */
+        if ((*str == ')' || *str == '\0') && string == 0)
+            break; /* 立即退出标识符 */
 
-        if (type == 0)   /* 默认是数字的 */
+        if (type == 0) /* 默认是数字的 */
         {
             /* 数字串检测 */
             if ((*str >= '0' && *str <= '9') || *str == '-' || *str == '+' || (*str >= 'a' && *str <= 'f') || (*str >= 'A' && *str <= 'F') || *str == 'X' || *str == 'x')
             {
-                if (enout)break;    /* 找到了下一个参数,直接退出. */
+                if (enout)
+                    break; /* 找到了下一个参数,直接退出. */
 
                 if (*str >= 'a')
                 {
-                    *fparm = *str - 0X20;   /* 小写转换为大写 */
+                    *fparm = *str - 0X20; /* 小写转换为大写 */
                 }
                 else
                 {
@@ -468,45 +490,48 @@ uint8_t usmart_get_aparm(char *str, char *fparm, uint8_t *ptype)
 
                 fparm++;
             }
-            else if (*str == '"')     /* 找到字符串的开始标志 */
+            else if (*str == '"') /* 找到字符串的开始标志 */
             {
-                if (enout)break;    /* 找到,后才找到",认为结束了. */
+                if (enout)
+                    break; /* 找到,后才找到",认为结束了. */
 
                 type = 1;
-                string = 1;         /* 登记STRING 正在读了 */
+                string = 1; /* 登记STRING 正在读了 */
             }
-            else if (*str != ' ' && *str != ',')     /* 发现非法字符,参数错误 */
+            else if (*str != ' ' && *str != ',') /* 发现非法字符,参数错误 */
             {
                 type = 0XFF;
                 break;
             }
         }
-        else     /* string类 */
+        else /* string类 */
         {
-            if (*str == '"')string = 0;
+            if (*str == '"')
+                string = 0;
 
-            if (enout)break;    /* 找到了下一个参数,直接退出. */
+            if (enout)
+                break; /* 找到了下一个参数,直接退出. */
 
-            if (string)         /* 字符串正在读 */
+            if (string) /* 字符串正在读 */
             {
-                if (*str == '\\')   /* 遇到转义符(不复制转义符) */
+                if (*str == '\\') /* 遇到转义符(不复制转义符) */
                 {
-                    str++;      /* 偏移到转义符后面的字符,不管什么字符,直接COPY */
+                    str++; /* 偏移到转义符后面的字符,不管什么字符,直接COPY */
                     i++;
                 }
 
-                *fparm = *str;  /* 小写或者数字保持不变 */
+                *fparm = *str; /* 小写或者数字保持不变 */
                 fparm++;
             }
         }
 
-        i++;    /* 偏移量增加 */
+        i++; /* 偏移量增加 */
         str++;
     }
 
-    *fparm = '\0';  /* 加入结束符 */
-    *ptype = type;  /* 返回参数类型 */
-    return i;       /* 返回参数长度 */
+    *fparm = '\0'; /* 加入结束符 */
+    *ptype = type; /* 返回参数类型 */
+    return i;      /* 返回参数长度 */
 }
 
 /**
@@ -543,74 +568,65 @@ uint8_t usmart_get_fparam(char *str, uint8_t *parn)
 
     for (i = 0; i < MAX_PARM; i++)
     {
-        usmart_dev.plentbl[i] = 0;  /* 清空参数长度表 */
+        usmart_dev.plentbl[i] = 0; /* 清空参数长度表 */
     }
 
-    while (*str != '(')   /* 偏移到参数开始的地方 */
+    while (*str != '(') /* 偏移到参数开始的地方 */
     {
         str++;
 
-        if (*str == '\0')return USMART_FUNCERR; /* 遇到结束符了 */
+        if (*str == '\0')
+            return USMART_FUNCERR; /* 遇到结束符了 */
     }
 
-    str++;  /* 偏移到"("之后的第一个字节 */
+    str++; /* 偏移到"("之后的第一个字节 */
 
     while (1)
     {
         i = usmart_get_aparm(str, tstr, &type); /* 得到第一个参数 */
-        str += i;   /* 偏移 */
+        str += i;                               /* 偏移 */
 
         switch (type)
         {
-            case 0: /* 数字 */
-                if (tstr[0] != '\0')    /* 接收到的参数有效 */
-                {
-                    i = usmart_str2num(tstr, &res); /* 记录该参数 */
+        case 0:                  /* 数字 */
+            if (tstr[0] != '\0') /* 接收到的参数有效 */
+            {
+                i = usmart_str2num(tstr, &res); /* 记录该参数 */
 
-                    if (i)return USMART_PARMERR;    /* 参数错误. */
+                if (i)
+                    return USMART_PARMERR; /* 参数错误. */
 
-                    *(uint32_t *)(usmart_dev.parm + usmart_get_parmpos(n)) = res;   /* 记录转换成功的结果. */
-                    usmart_dev.parmtype &= ~(1 << n);   /* 标记数字 */
-                    usmart_dev.plentbl[n] = 4;  /* 该参数的长度为4 */
-                    n++;    /* 参数增加 */
+                *(uint32_t *)(usmart_dev.parm + usmart_get_parmpos(n)) = res; /* 记录转换成功的结果. */
+                usmart_dev.parmtype &= ~(1 << n);                             /* 标记数字 */
+                usmart_dev.plentbl[n] = 4;                                    /* 该参数的长度为4 */
+                n++;                                                          /* 参数增加 */
 
-                    if (n > MAX_PARM)return USMART_PARMOVER;    /* 参数太多 */
-                }
+                if (n > MAX_PARM)
+                    return USMART_PARMOVER; /* 参数太多 */
+            }
 
-                break;
+            break;
 
-            case 1:/* 字符串 */
-                len = usmart_strlen(tstr) + 1;  /* 包含了结束符'\0' */
-                usmart_strcopy(tstr, (char *)&usmart_dev.parm[usmart_get_parmpos(n)]);  /* 拷贝tstr数据到usmart_dev.parm[n] */
-                usmart_dev.parmtype |= 1 << n;  /* 标记字符串 */
-                usmart_dev.plentbl[n] = len;    /* 该参数的长度为len */
-                n++;
+        case 1:                                                                    /* 字符串 */
+            len = usmart_strlen(tstr) + 1;                                         /* 包含了结束符'\0' */
+            usmart_strcopy(tstr, (char *)&usmart_dev.parm[usmart_get_parmpos(n)]); /* 拷贝tstr数据到usmart_dev.parm[n] */
+            usmart_dev.parmtype |= 1 << n;                                         /* 标记字符串 */
+            usmart_dev.plentbl[n] = len;                                           /* 该参数的长度为len */
+            n++;
 
-                if (n > MAX_PARM)return USMART_PARMOVER;    /* 参数太多 */
+            if (n > MAX_PARM)
+                return USMART_PARMOVER; /* 参数太多 */
 
-                break;
+            break;
 
-            case 0XFF:/* 错误 */
-                return USMART_PARMERR;  /* 参数错误 */
+        case 0XFF:                 /* 错误 */
+            return USMART_PARMERR; /* 参数错误 */
         }
 
-        if (*str == ')' || *str == '\0')break;  /* 查到结束标志了. */
+        if (*str == ')' || *str == '\0')
+            break; /* 查到结束标志了. */
     }
 
-    *parn = n;  /* 记录参数的个数 */
-    return USMART_OK;   /* 正确得到了参数 */
+    *parn = n;        /* 记录参数的个数 */
+    return USMART_OK; /* 正确得到了参数 */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -42,10 +42,10 @@
  ****************************************************************************************************
  */
 
-#include "./USMART/usmart.h"
-#include "./USMART/usmart_port.h"
+#include "usmart.h"
+#include "usmart_port.h"
 
-TIM_HandleTypeDef g_timx_usmart_handle;      /* 定时器句柄 */
+TIM_HandleTypeDef g_timx_usmart_handle; /* 定时器句柄 */
 
 /**
  * @brief       获取输入数据流(字符串)
@@ -60,12 +60,12 @@ char *usmart_get_input_string(void)
     uint8_t len;
     char *pbuf = 0;
 
-    if (g_usart_rx_sta & 0x8000)        /* 串口接收完成？ */
+    if (g_usart_rx_sta & 0x8000) /* 串口接收完成？ */
     {
-        len = g_usart_rx_sta & 0x3fff;  /* 得到此次接收到的数据长度 */
-        g_usart_rx_buf[len] = '\0';     /* 在末尾加入结束符. */
-        pbuf = (char*)g_usart_rx_buf;
-        g_usart_rx_sta = 0;             /* 开启下一次接收 */
+        len = g_usart_rx_sta & 0x3fff; /* 得到此次接收到的数据长度 */
+        g_usart_rx_buf[len] = '\0';    /* 在末尾加入结束符. */
+        pbuf = (char *)g_usart_rx_buf;
+        g_usart_rx_sta = 0; /* 开启下一次接收 */
     }
 
     return pbuf;
@@ -104,12 +104,12 @@ void usmart_timx_reset_time(void)
  */
 uint32_t usmart_timx_get_time(void)
 {
-    if (__HAL_TIM_GET_FLAG(&g_timx_usmart_handle, TIM_FLAG_UPDATE) == SET)  /* 在运行期间,产生了定时器溢出 */
+    if (__HAL_TIM_GET_FLAG(&g_timx_usmart_handle, TIM_FLAG_UPDATE) == SET) /* 在运行期间,产生了定时器溢出 */
     {
         usmart_dev.runtime += 0XFFFF;
     }
     usmart_dev.runtime += __HAL_TIM_GET_COUNTER(&g_timx_usmart_handle);
-    return usmart_dev.runtime;                                 /* 返回计数值 */
+    return usmart_dev.runtime; /* 返回计数值 */
 }
 
 /**
@@ -117,20 +117,20 @@ uint32_t usmart_timx_get_time(void)
  * @param       arr:自动重装载值
  *              psc:定时器分频系数
  * @retval      无
- */ 
+ */
 void usmart_timx_init(uint16_t arr, uint16_t psc)
 {
     USMART_TIMX_CLK_ENABLE();
-    
-    g_timx_usmart_handle.Instance = USMART_TIMX;                 /* 通用定时器4 */
-    g_timx_usmart_handle.Init.Prescaler = psc;                   /* 分频系数 */
-    g_timx_usmart_handle.Init.CounterMode = TIM_COUNTERMODE_UP;  /* 向上计数器 */
-    g_timx_usmart_handle.Init.Period = arr;                      /* 自动装载值 */
+
+    g_timx_usmart_handle.Instance = USMART_TIMX;                /* 通用定时器4 */
+    g_timx_usmart_handle.Init.Prescaler = psc;                  /* 分频系数 */
+    g_timx_usmart_handle.Init.CounterMode = TIM_COUNTERMODE_UP; /* 向上计数器 */
+    g_timx_usmart_handle.Init.Period = arr;                     /* 自动装载值 */
     g_timx_usmart_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     HAL_TIM_Base_Init(&g_timx_usmart_handle);
-    HAL_TIM_Base_Start_IT(&g_timx_usmart_handle);                /* 使能定时器和定时器中断 */
-    HAL_NVIC_SetPriority(USMART_TIMX_IRQn,3,3);                  /* 设置中断优先级，抢占优先级3，子优先级3 */
-    HAL_NVIC_EnableIRQ(USMART_TIMX_IRQn);                        /* 开启ITM中断 */ 
+    HAL_TIM_Base_Start_IT(&g_timx_usmart_handle); /* 使能定时器和定时器中断 */
+    HAL_NVIC_SetPriority(USMART_TIMX_IRQn, 3, 3); /* 设置中断优先级，抢占优先级3，子优先级3 */
+    HAL_NVIC_EnableIRQ(USMART_TIMX_IRQn);         /* 开启ITM中断 */
 }
 
 /**
@@ -140,30 +140,15 @@ void usmart_timx_init(uint16_t arr, uint16_t psc)
  */
 void USMART_TIMX_IRQHandler(void)
 {
-    if(__HAL_TIM_GET_IT_SOURCE(&g_timx_usmart_handle,TIM_IT_UPDATE)==SET)/* 溢出中断 */
+    if (__HAL_TIM_GET_IT_SOURCE(&g_timx_usmart_handle, TIM_IT_UPDATE) == SET) /* 溢出中断 */
     {
-        usmart_dev.scan();                                   /* 执行usmart扫描 */
-        __HAL_TIM_SET_COUNTER(&g_timx_usmart_handle, 0);;    /* 清空定时器的CNT */
-        __HAL_TIM_SET_AUTORELOAD(&g_timx_usmart_handle, 100);/* 恢复原来的设置 */
+        usmart_dev.scan(); /* 执行usmart扫描 */
+        __HAL_TIM_SET_COUNTER(&g_timx_usmart_handle, 0);
+        ;                                                     /* 清空定时器的CNT */
+        __HAL_TIM_SET_AUTORELOAD(&g_timx_usmart_handle, 100); /* 恢复原来的设置 */
     }
-    
-    __HAL_TIM_CLEAR_IT(&g_timx_usmart_handle, TIM_IT_UPDATE);/* 清除中断标志位 */
+
+    __HAL_TIM_CLEAR_IT(&g_timx_usmart_handle, TIM_IT_UPDATE); /* 清除中断标志位 */
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
