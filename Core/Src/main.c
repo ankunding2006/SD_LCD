@@ -55,7 +55,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static uint16_t line_buffer[320];
+uint16_t line_buffer[320];
 uint8_t angle = 0;
 
 lcd_io lcd_io_desc = {

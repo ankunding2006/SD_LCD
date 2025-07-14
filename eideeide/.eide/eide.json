@@ -302,6 +302,21 @@
         "folders": []
       },
       {
+        "name": "LineDetect",
+        "files": [
+          {
+            "path": "../Core/Src/LineDetect/gray_detection.c"
+          },
+          {
+            "path": "../Core/Src/LineDetect/nchd12.c"
+          },
+          {
+            "path": "../Core/Src/LineDetect/soft_i2c.c"
+          }
+        ],
+        "folders": []
+      },
+      {
         "name": "::CMSIS",
         "files": [],
         "folders": []
@@ -312,7 +327,7 @@
   "deviceName": null,
   "packDir": null,
   "miscInfo": {
-    "uid": "27a4a24612741ee0f7e5d8782984498b"
+    "uid": "ceeda04df259d075cfc4dc5c15729521"
   },
   "targets": {
     "Downloads": {
@@ -467,6 +482,7 @@
           "../Middlewares/sfud/inc",
           "../Middlewares/littleFS/inc",
           "../Drivers/emm_v5",
+          "../Core/Src/LineDetect",
           ".cmsis/include",
           "../MDK-ARM/RTE/_Downloads"
         ],
