@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Middlewares/my_menu/app;../Middlewares/my_menu/cot_menu-v1.3.0;../Middlewares/sfud/inc;../Middlewares/littleFS/inc;../Drivers/emm_v5</IncludePath>
+              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Middlewares/my_menu/app;../Middlewares/my_menu/cot_menu-v1.3.0;../Middlewares/sfud/inc;../Middlewares/littleFS/inc;../Drivers/emm_v5;..\Core\Src\LineDetect</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1218,6 +1218,26 @@
               <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\emm_v5\Emm_V5.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LineDetect</GroupName>
+          <Files>
+            <File>
+              <FileName>gray_detection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\LineDetect\gray_detection.c</FilePath>
+            </File>
+            <File>
+              <FileName>nchd12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\LineDetect\nchd12.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\LineDetect\soft_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
