@@ -359,57 +359,44 @@ void usmart_exe(void)
     usmart_timx_reset_time(); /* 计时器清零,开始计时 */
 #endif
 
-    switch (usmart_dev.pnum)
-    {
-    case 0: /* 无参数(void类型) */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)();
-        break;
+typedef uint32_t (*func_ptr_t)(uint32_t, ...);   // 可变参数函数指针
 
-    case 1: /* 有1个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0]);
-        break;
-
-    case 2: /* 有2个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1]);
-        break;
-
-    case 3: /* 有3个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2]);
-        break;
-
-    case 4: /* 有4个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3]);
-        break;
-
-    case 5: /* 有5个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4]);
-        break;
-
-    case 6: /* 有6个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4],
-                                                          temp[5]);
-        break;
-
-    case 7: /* 有7个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4],
-                                                          temp[5], temp[6]);
-        break;
-
-    case 8: /* 有8个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4],
-                                                          temp[5], temp[6], temp[7]);
-        break;
-
-    case 9: /* 有9个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4],
-                                                          temp[5], temp[6], temp[7], temp[8]);
-        break;
-
-    case 10: /* 有10个参数 */
-        res = (*(uint32_t (*)())usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4],
-                                                          temp[5], temp[6], temp[7], temp[8], temp[9]);
-        break;
-    }
+switch (usmart_dev.pnum)
+{
+case 0:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(' ');
+    break;
+case 1:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0]);
+    break;
+case 2:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1]);
+    break;
+case 3:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2]);
+    break;
+case 4:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3]);
+    break;
+case 5:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4]);
+    break;
+case 6:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]);
+    break;
+case 7:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6]);
+    break;
+case 8:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]);
+    break;
+case 9:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8]);
+    break;
+case 10:
+    res = ((func_ptr_t)usmart_dev.funs[id].func)(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], temp[9]);
+    break;
+}
 
 #if USMART_ENTIMX_SCAN == 1
     usmart_timx_get_time(); /* 获取函数执行时间 */

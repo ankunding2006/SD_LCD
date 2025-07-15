@@ -165,7 +165,7 @@ extern int cotMenu_SelectPrevious(bool isAllowRoll);
 extern int cotMenu_SelectNext(bool isAllowRoll);
 extern int cotMenu_Select(menusize_t selectItem);
 
-extern int cotMenu_ShortcutEnter(bool isAbsolute, uint8_t deep, ...);
+extern int cotMenu_ShortcutEnter(bool isAbsolute, uint32_t deep, ...);
 
 /* 菜单轮询处理任务 */
 
