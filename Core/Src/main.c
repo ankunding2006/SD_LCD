@@ -31,7 +31,6 @@
 #include "my_menu.h"
 #include "delay.h"
 #include "usmart.h"
-#include "lfs_port.h"
 #include "Emm_V5.h"
 #include "car_config.h"
 #include "test.h"
@@ -135,7 +134,6 @@ int main(void)
 
   led_off();
   //! SDcard_Test();
-  initialize_and_test_LittleFS();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Menu_Init();
   cotMenu_Task();
