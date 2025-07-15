@@ -22,7 +22,6 @@
 #include "delay.h"
 #include "usmart.h"
 #include "Emm_V5.h"
-#include "car_config.h"
 #include "test.h"
 #include "gray_detection.h"
 
@@ -64,9 +63,9 @@ uint8_t line_following_task(void)
     // 3. 根据转向值调整电机速度
     if (turn_value == INT16_MAX)
     {
-        // 检测到3个或更多传感器，任务完成
-        set_motor_speed(0, 0, 252); // 停止
-        return 1;                   // 完成循迹
+        // 检测到6个或更多传感器，判定为经过了直角弯区域，让直角弯计数加一，根据写死的逻辑左右转向，并且记录
+        set_motor_speed(0, 0, 252); // 左转 or 右转
+        return 1;                   // 完成循迹 ？
     }
     else if (turn_value == INT16_MIN)
     {

@@ -14,7 +14,6 @@
 #include "delay.h"
 #include "usmart.h"
 #include "Emm_V5.h"
-#include "car_config.h"
 #include "test.h"
 #include "gray_detection.h"
 
