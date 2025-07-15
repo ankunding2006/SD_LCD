@@ -27,8 +27,8 @@
 /**********************************main_test***********************************/
 void main_test(void)
 {
-  grey_sensor_Read();
-  float turn_pwm = Calculate_Turn_Pwm();
-  printf("turn_pwm: %.1f\n", turn_pwm);
+    grey_sensor_Read();
+    float turn_pwm = Calculate_Turn_Value();
+    printf("turn_pwm: %.1f\n", turn_pwm);
 }
 /********************************main_test_end*********************************/
