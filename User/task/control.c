@@ -29,7 +29,7 @@
 #include "gray_detection.h"
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
-#define CAR_MAX_SPEED  400 // 小车最大速度
+#define CAR_MAX_SPEED 400  // 小车最大速度
 /**
  * @brief 设置两个电机的速度
  * @param left_speed 左电机速度(单位:转/分钟)
@@ -49,8 +49,6 @@ void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
         Emm_V5_Vel_Control(0x02, 0, -right_speed, acc, 0);
 }
 
-
-
 /**
  * @brief 这个函数用来控制小车进行循迹
  * @return 如果完成了循迹(即出现至少3个传感器都返回黑色)就返回1,否则返回0
@@ -64,19 +62,24 @@ uint8_t line_following_task(void)
     int turn_value = Calculate_Turn_Value();
 
     // 3. 根据转向值调整电机速度
-    if (turn_value == INT16_MAX) {
+    if (turn_value == INT16_MAX)
+    {
         // 检测到3个或更多传感器，任务完成
         set_motor_speed(0, 0, 252); // 停止
         return 1;                   // 完成循迹
-    } else if (turn_value == INT16_MIN) {
+    }
+    else if (turn_value == INT16_MIN)
+    {
         // 没有检测到线，可能脱轨了
         // 策略：原地停车
         set_motor_speed(0, 0, 252);
-    } else {
+    }
+    else
+    {
         // 根据转向值调整左右轮速度
         // turn_value > 0 表示线在左边，需要左转，左轮慢，右轮快
         // turn_value < 0 表示线在右边，需要右转，左轮快，右轮慢
-        int16_t left_speed  = CAR_BASE_SPEED - turn_value;
+        int16_t left_speed = CAR_BASE_SPEED - turn_value;
         int16_t right_speed = CAR_BASE_SPEED + turn_value;
 
         // 对速度进行限幅
@@ -108,27 +111,35 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
     static uint32_t turn_end_time = 0;
 
     // A non-zero angle indicates a new turn command.
-    if (angle != 0) {
+    if (angle != 0)
+    {
         int16_t left_speed, right_speed;
 
-        if (angle > 0) { // Counter-clockwise turn (left)
-            left_speed  = Rotate_Speed_Base - Rotate_Speed;
+        if (angle > 0)
+        { // Counter-clockwise turn (left)
+            left_speed = Rotate_Speed_Base - Rotate_Speed;
             right_speed = Rotate_Speed_Base + Rotate_Speed;
-        } else { // Clockwise turn (right)
-            left_speed  = Rotate_Speed_Base + Rotate_Speed;
+        }
+        else
+        { // Clockwise turn (right)
+            left_speed = Rotate_Speed_Base + Rotate_Speed;
             right_speed = Rotate_Speed_Base - Rotate_Speed;
         }
 
         set_motor_speed(left_speed, right_speed, 252); // Use a default acceleration
         turn_end_time = HAL_GetTick() + abs(angle);
         return 0; // Turn initiated
-    } else {
+    }
+    else
+    {
         // angle is 0, check status of the current turn.
-        if (turn_end_time == 0) {
+        if (turn_end_time == 0)
+        {
             return 1; // No turn in progress, so it's "completed"
         }
 
-        if (HAL_GetTick() >= turn_end_time) {
+        if (HAL_GetTick() >= turn_end_time)
+        {
             set_motor_speed(0, 0, 252); // Stop motors
             turn_end_time = 0;          // Reset state
             return 1;                   // Turn completed
