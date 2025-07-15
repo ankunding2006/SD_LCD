@@ -4,6 +4,11 @@
             "path": "."
         }
     ],
-    "settings": {},
+    "settings": {
+        "files.associations": {
+            "usmart_str.h": "c",
+            "usmart.h": "c"
+        }
+    },
     "extensions": {}
 }

@@ -105,7 +105,7 @@ uint8_t g_rx_buffer[RXBUFFERSIZE]; /* HAL库使用的串口接收缓冲 */
  * @param       huart: UART句柄类型指针
  * @retval      无
  */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void USART_UX_Handler(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART_UX) /* 如果是串口1 */
     {

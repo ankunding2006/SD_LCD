@@ -97,4 +97,6 @@ void usmart_scan(void);                       /* 扫描 */
 uint32_t read_addr(uint32_t addr);            /* 读取指定地址的值 */
 void write_addr(uint32_t addr, uint32_t val); /* 在指定地址写入指定的值 */
 
+void USART_UX_Handler(UART_HandleTypeDef *huart);
+
 #endif

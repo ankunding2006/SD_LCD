@@ -1,2 +1,2 @@
 /**********************************config define***********************************/
-#define MAIN_TEST 1
+#define MAIN_TEST 0
