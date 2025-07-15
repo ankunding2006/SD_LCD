@@ -148,3 +148,71 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
         return 0; // Still turning
     }
 }
+
+volatile uint8_t usart2_rx_buffer = 0; // 单字节接收缓冲区
+/**
+ * @brief 串口初始化
+ * @param 无
+ *
+ */
+void visual_reception_init()
+{
+    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
+}
+/**
+ * @brief 对数据进行处理
+ *
+ */
+void visual_process_command(void) // 处理相应消息
+{
+    switch (usart2_rx_buffer)
+    {
+    case 1:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 2:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 3:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 4:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 5:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 6:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 7:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    case 8:
+        printf("num: %d\n", usart2_rx_buffer);
+        usart2_rx_buffer = -1; // 清除接收缓冲区
+
+        break;
+    default:
+        if (usart2_rx_buffer != -1)
+        {
+            printf("bug \n");
+            usart2_rx_buffer = -1; // 清除接收缓冲区
+        }
+        break;
+    }
+}
