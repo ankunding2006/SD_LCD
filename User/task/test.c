@@ -27,8 +27,17 @@
 /**********************************main_test***********************************/
 void main_test(void)
 {
-    grey_sensor_Read();
-    float turn_pwm = Calculate_Turn_Value();
-    printf("turn_pwm: %.1f\n", turn_pwm);
+    Emm_V5_Vel_Control(0x01, 1, 500, 0, 0);
+    delay_ms(1000);
+    Emm_V5_Vel_Control(0x01, 0, 500, 0, 0);
+    delay_ms(1000);
+}
+
+void before_main_test(void)
+{
+    while (1)
+    {
+        /* code */
+    }
 }
 /********************************main_test_end*********************************/

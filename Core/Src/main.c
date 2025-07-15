@@ -124,7 +124,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_IT(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE); /* 开启串口1中断接收 */
+  HAL_UART_Receive_IT(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
   delay_init(168);
   usmart_dev.init(84);
   lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
@@ -140,8 +140,11 @@ int main(void)
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
   Menu_Init();
   cotMenu_Task();
+#if BEFORE_MAIN_TEST == 1
+  before_main_test();
+#endif
   Before_Main();
-  HAL_TIM_Base_Start_IT(&htim12); // 启动TIM12，并使能中断
+  HAL_TIM_Base_Start_IT(&htim12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
