@@ -28,6 +28,8 @@
 #include "test.h"
 #include "gray_detection.h"
 
+uint8_t usart2_rx_buffer = 9; // 单字节接收缓冲区
+
 #define CAR_BASE_SPEED 200 // 小车基础速度
 #define CAR_MAX_SPEED 400  // 小车最大速度
 /**
@@ -149,19 +151,19 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
     }
 }
 
-volatile uint8_t usart2_rx_buffer = 0; // 单字节接收缓冲区
 /**
  * @brief 串口初始化
- * @param 无
+ * @param 无：懒得改，写死了
  *
  */
 void visual_reception_init()
 {
     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
 }
+
 /**
- * @brief 对数据进行处理
- *
+ * @brief 接收视觉传来的数据，接收到正确数据后会执行“一次”处理，然后重新启动中断接收
+ * @param 无：懒得改，写死了
  */
 void visual_process_command(void) // 处理相应消息
 {
@@ -169,50 +171,51 @@ void visual_process_command(void) // 处理相应消息
     {
     case 1:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 2:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 3:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 4:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 5:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 6:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 7:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     case 8:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = -1; // 清除接收缓冲区
+        usart2_rx_buffer = 9; // 清除接收缓冲区
 
         break;
     default:
-        if (usart2_rx_buffer != -1)
+        if (usart2_rx_buffer != 9)
         {
             printf("bug \n");
-            usart2_rx_buffer = -1; // 清除接收缓冲区
+            usart2_rx_buffer = 9; // 清除接收缓冲区
         }
+        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
         break;
     }
 }
