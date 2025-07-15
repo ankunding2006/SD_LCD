@@ -96,6 +96,10 @@ void Error_Handler(void);
 #define LCD_SDA_GPIO_Port GPIOA
 #define SPI2_CS_Pin GPIO_PIN_12
 #define SPI2_CS_GPIO_Port GPIOB
+#define I2C_CLK_Pin GPIO_PIN_6
+#define I2C_CLK_GPIO_Port GPIOD
+#define I2C_Data_Pin GPIO_PIN_7
+#define I2C_Data_GPIO_Port GPIOD
 #define LCD_RST_Pin GPIO_PIN_3
 #define LCD_RST_GPIO_Port GPIOB
 #define LCD_BLK_Pin GPIO_PIN_4
