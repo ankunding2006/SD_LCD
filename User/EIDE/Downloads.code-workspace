@@ -1,10 +1,12 @@
 {
     "folders": [
         {
-            "path": "."
+            "name": "SD_LCD",
+            "path": "../.."
         },
         {
-            "path": "../.."
+            "name": "EIDE",
+            "path": "."
         }
     ],
     "settings": {
