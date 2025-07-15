@@ -1,0 +1,15 @@
+downloads\lfs_port.o: ..\Middlewares\littleFS\lfs_port.c
+downloads\lfs_port.o: ../Middlewares/littleFS/inc/lfs_port.h
+downloads\lfs_port.o: ../Middlewares/littleFS/inc/lfs.h
+downloads\lfs_port.o: ../Middlewares/littleFS/inc/lfs_util.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\assert.h
+downloads\lfs_port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+downloads\lfs_port.o: ../Middlewares/sfud/inc/sfud.h
+downloads\lfs_port.o: ../Middlewares/sfud/inc/sfud_def.h
+downloads\lfs_port.o: ../Middlewares/sfud/inc/sfud_cfg.h
+downloads\lfs_port.o: ../Middlewares/sfud/inc/sfud_flash_def.h

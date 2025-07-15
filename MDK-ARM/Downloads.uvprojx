@@ -10,14 +10,13 @@
       <TargetName>Downloads</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pArmCC>5060960::V5.06 update 7 (build 960)::.\ARMCC</pArmCC>
-      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.3.0.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.3.1.0</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001BFFF) IRAM2(0x2001C000-0x2001FFFF) IROM(0x8000000-0x80FFFFF) CLOCK(25000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -341,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Drivers/BSP/LCD_ST7789;../Middlewares/USMART;../Middlewares/USMART/SYSTEM/usart;../Middlewares/USMART/SYSTEM/sys;../Middlewares/USMART/SYSTEM/delay;../Middlewares/USMART/USMART;../Middlewares/my_menu/app;../Middlewares/my_menu/cot_menu-v1.3.0;../Middlewares/sfud/inc;../Middlewares/littleFS/inc;../Drivers/emm_v5;../Core/Src/LineDetect</IncludePath>
+              <IncludePath>../FATFS/Target;../FATFS/App;../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/sfud/inc;../Middlewares/littleFS/inc;..\User\BSP\LCD_ST7789;..\User\emm_v5;..\User\LineDetect;..\User\my_menu;..\User\my_menu\app;..\User\my_menu\cot_menu-v1.3.0;..\User\task;..\User\USMART;..\User\USMART\SYSTEM\delay;..\User\USMART\SYSTEM\sys;..\User\USMART\SYSTEM\usart</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -383,7 +382,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Application/MDK-ARM</GroupName>
+          <GroupName>MDK-ARM</GroupName>
           <Files>
             <File>
               <FileName>startup_stm32f407xx.s</FileName>
@@ -393,7 +392,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/User/Core</GroupName>
+          <GroupName>Core</GroupName>
           <Files>
             <File>
               <FileName>LED.c</FileName>
@@ -754,7 +753,132 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/User/FATFS/Target</GroupName>
+          <GroupName>User/BSP</GroupName>
+          <Files>
+            <File>
+              <FileName>lcd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\BSP\LCD_ST7789\lcd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\BSP\LCD_ST7789\lcd_font.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\BSP\LCD_ST7789\lcd_port.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/emm_v5</GroupName>
+          <Files>
+            <File>
+              <FileName>Emm_V5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\emm_v5\Emm_V5.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/LineDetect</GroupName>
+          <Files>
+            <File>
+              <FileName>gray_detection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\LineDetect\gray_detection.c</FilePath>
+            </File>
+            <File>
+              <FileName>nchd12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\LineDetect\nchd12.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\LineDetect\soft_i2c.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/my_menu</GroupName>
+          <Files>
+            <File>
+              <FileName>cot_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\my_menu\cot_menu-v1.3.0\cot_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\my_menu\app\my_menu.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/task</GroupName>
+          <Files>
+            <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\task\control.c</FilePath>
+            </File>
+            <File>
+              <FileName>task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\task\task.c</FilePath>
+            </File>
+            <File>
+              <FileName>test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\task\test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/USMART</GroupName>
+          <Files>
+            <File>
+              <FileName>usmart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\usmart.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\usmart_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\usmart_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\usmart_str.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\SYSTEM\sys\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\SYSTEM\delay\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\USMART\SYSTEM\usart\user_usart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FATFS</GroupName>
           <Files>
             <File>
               <FileName>bsp_driver_sd.c</FileName>
@@ -766,15 +890,10 @@
               <FileType>1</FileType>
               <FilePath>../FATFS/Target/sd_diskio.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Application/User/FATFS/App</GroupName>
-          <Files>
             <File>
               <FileName>fatfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../FATFS/App/fatfs.c</FilePath>
+              <FilePath>..\FATFS\App\fatfs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1057,7 +1176,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/FatFs</GroupName>
+          <GroupName>Middlewares/Third_Party</GroupName>
           <Files>
             <File>
               <FileName>diskio.c</FileName>
@@ -1082,102 +1201,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>LCD</GroupName>
-          <Files>
-            <File>
-              <FileName>lcd.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd.h</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd_font.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_font.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd_font.h</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\lcd_port.h</FilePath>
-            </File>
-            <File>
-              <FileName>picture.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\BSP\LCD_ST7789\picture.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>USMART</GroupName>
-          <Files>
-            <File>
-              <FileName>usmart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\usmart.c</FilePath>
-            </File>
-            <File>
-              <FileName>usmart_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\usmart_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usmart_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\usmart_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>usmart_str.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\usmart_str.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\SYSTEM\delay\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\SYSTEM\sys\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\USMART\SYSTEM\usart\usart.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>menu</GroupName>
-          <Files>
-            <File>
-              <FileName>my_menu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\my_menu\app\my_menu.c</FilePath>
-            </File>
-            <File>
-              <FileName>cot_menu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\my_menu\cot_menu-v1.3.0\cot_menu.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>SFUD_LittleFS</GroupName>
+          <GroupName>Middlewares/littleFS</GroupName>
           <Files>
             <File>
               <FileName>lfs.c</FileName>
@@ -1194,11 +1218,11 @@
               <FileType>1</FileType>
               <FilePath>..\Middlewares\littleFS\lfs_util.c</FilePath>
             </File>
-            <File>
-              <FileName>sfud_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Middlewares\sfud\port\sfud_port.c</FilePath>
-            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/sfud</GroupName>
+          <Files>
             <File>
               <FileName>sfud.c</FileName>
               <FileType>1</FileType>
@@ -1209,60 +1233,10 @@
               <FileType>1</FileType>
               <FilePath>..\Middlewares\sfud\src\sfud_sfdp.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>emm_v5</GroupName>
-          <Files>
             <File>
-              <FileName>Emm_V5.c</FileName>
+              <FileName>sfud_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\emm_v5\Emm_V5.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>LineDetect</GroupName>
-          <Files>
-            <File>
-              <FileName>gray_detection.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\LineDetect\gray_detection.c</FilePath>
-            </File>
-            <File>
-              <FileName>nchd12.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\LineDetect\nchd12.c</FilePath>
-            </File>
-            <File>
-              <FileName>soft_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\LineDetect\soft_i2c.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>task</GroupName>
-          <Files>
-            <File>
-              <FileName>control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\task\control.c</FilePath>
-            </File>
-            <File>
-              <FileName>task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\task\task.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
-            <File>
-              <FileName>test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\test\test.c</FilePath>
+              <FilePath>..\Middlewares\sfud\port\sfud_port.c</FilePath>
             </File>
           </Files>
         </Group>

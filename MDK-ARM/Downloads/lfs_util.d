@@ -1,0 +1,9 @@
+downloads\lfs_util.o: ..\Middlewares\littleFS\lfs_util.c
+downloads\lfs_util.o: ../Middlewares/littleFS/inc/lfs_util.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\assert.h
+downloads\lfs_util.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

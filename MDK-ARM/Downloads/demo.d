@@ -1,0 +1,10 @@
+downloads\demo.o: ..\User\my_menu\cot_menu-v1.3.0\examples\demo.c
+downloads\demo.o: ..\User\my_menu\cot_menu-v1.3.0\cot_menu.h
+downloads\demo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\demo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\demo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+downloads\demo.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\mainhmi.h
+downloads\demo.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_common.h
+downloads\demo.o: ..\User\my_menu\cot_menu-v1.3.0\examples\language\language.h
+downloads\demo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+downloads\demo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

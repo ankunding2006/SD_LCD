@@ -22,7 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "usmart.h"
-#include "../../Middlewares/USMART/SYSTEM/usart/usart.h"
+#include "user_usart.h"
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {

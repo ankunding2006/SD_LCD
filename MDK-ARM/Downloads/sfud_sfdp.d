@@ -1,0 +1,9 @@
+downloads\sfud_sfdp.o: ..\Middlewares\sfud\src\sfud_sfdp.c
+downloads\sfud_sfdp.o: ../Middlewares/sfud/inc/sfud.h
+downloads\sfud_sfdp.o: ../Middlewares/sfud/inc/sfud_def.h
+downloads\sfud_sfdp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+downloads\sfud_sfdp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+downloads\sfud_sfdp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\sfud_sfdp.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\sfud_sfdp.o: ../Middlewares/sfud/inc/sfud_cfg.h
+downloads\sfud_sfdp.o: ../Middlewares/sfud/inc/sfud_flash_def.h

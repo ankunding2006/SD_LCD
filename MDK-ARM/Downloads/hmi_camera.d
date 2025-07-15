@@ -1,0 +1,10 @@
+downloads\hmi_camera.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\src\hmi_camera.c
+downloads\hmi_camera.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_camera.h
+downloads\hmi_camera.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_common.h
+downloads\hmi_camera.o: ..\User\my_menu\cot_menu-v1.3.0\cot_menu.h
+downloads\hmi_camera.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\hmi_camera.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\hmi_camera.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+downloads\hmi_camera.o: ..\User\my_menu\cot_menu-v1.3.0\examples\language\language.h
+downloads\hmi_camera.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+downloads\hmi_camera.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

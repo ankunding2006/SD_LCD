@@ -1,0 +1,14 @@
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\src\mainhmi.c
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\mainhmi.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_common.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\cot_menu.h
+downloads\mainhmi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+downloads\mainhmi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+downloads\mainhmi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_camera.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_music.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_set.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\hmi\inc\hmi_video.h
+downloads\mainhmi.o: ..\User\my_menu\cot_menu-v1.3.0\examples\language\language.h
+downloads\mainhmi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+downloads\mainhmi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
