@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+extern volatile uint8_t crossroads;
 uint8_t line_following_task(void);
 uint8_t open_loop_steering_control(int16_t angle, int16_t PWM_Value, int16_t PWM_Base);
 

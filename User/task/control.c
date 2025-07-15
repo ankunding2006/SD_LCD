@@ -25,7 +25,8 @@
 #include "test.h"
 #include "gray_detection.h"
 
-uint8_t usart2_rx_buffer = 9; // 单字节接收缓冲区
+uint8_t usart2_rx_buffer = 9;    // 单字节接收缓冲区
+volatile uint8_t crossroads = 0; // 到十字路口的次数
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
 #define CAR_MAX_SPEED 400  // 小车最大速度
@@ -49,7 +50,7 @@ void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
 }
 
 /**
- * @brief 这个函数用来控制小车进行循迹
+ * @brief 这个函数用来控制小车进行循迹 有直角弯就crossroads++
  * @return 如果完成了循迹(即出现至少3个传感器都返回黑色)就返回1,否则返回0
  */
 uint8_t line_following_task(void)
@@ -63,7 +64,15 @@ uint8_t line_following_task(void)
     // 3. 根据转向值调整电机速度
     if (turn_value == INT16_MAX)
     {
-        // 检测到6个或更多传感器，判定为经过了直角弯区域，让直角弯计数加一，根据写死的逻辑左右转向，并且记录
+        // 检测到6个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一，根据写死的逻辑左右转向，并且记录
+        static uint32_t pre_time = 0;      // (ms)
+        uint64_t now_time = HAL_GetTick(); // 两个时间进行处理
+        if (now_time - pre_time > 500)     // 间隔较长视为进一次直角弯 0-1也是间隔较长 无bug
+        {
+            crossroads++;
+        }
+        pre_time = now_time;
+
         set_motor_speed(0, 0, 252); // 左转 or 右转
         return 1;                   // 完成循迹 ？
     }
