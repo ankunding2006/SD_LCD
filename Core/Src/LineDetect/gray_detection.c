@@ -14,7 +14,6 @@ u16 scaleFactor = 100;																			 // 比例系数，用于调整转向PWM的灵敏度
 备注:	检测到黑线时gray_state.gray.bitX为1，否则为0
 			 gray_state.gray.bit1为车头最右侧的传感器的值
 			 gray_state.gray.bit12为最左侧传感器的值
-作者:	GitHub Copilot
 ****************************************************/
 int Calculate_Turn_Pwm(void)
 {
