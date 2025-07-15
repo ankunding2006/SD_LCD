@@ -13,7 +13,7 @@
 ***	qq交流群：262438510
 **********************************************************/
 
-#define huart1 huart3 // 使用串口3控制电机
+#define Emm_V5_HUART huart3 // 使用串口3控制电机
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 
 typedef enum
