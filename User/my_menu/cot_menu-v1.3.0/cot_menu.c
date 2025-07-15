@@ -480,9 +480,9 @@ int cotMenu_Select(menusize_t selectItem)
  * @param[in]  ...  各级菜单索引值(从0开始), 入参个数由 deep 的值决定
  * @return     0,成功; -1,失败
  */
-int cotMenu_ShortcutEnter(bool isAbsolute, uint8_t deep, ...)
+int cotMenu_ShortcutEnter(bool isAbsolute, uint32_t deep, ...)
 {
-    uint8_t selectDeep = 0;
+    uint32_t selectDeep = 0;
     va_list pItemList;
     menusize_t selectItem;
 
