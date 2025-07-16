@@ -2,7 +2,7 @@
 #include "control.h"
 #include "task.h"
 #include "gray_detection.h"
-
+#include "tim.h"
 /*
   此处说明比赛规则：八个病房，能循迹直角弯到达对应病房执行任务以及返回起点：
 
@@ -44,7 +44,7 @@ void Car_To_Room(uint8_t room_num)
 }
 
 /**
- * @brief 控制小车行驶到第X个十字路口(X=1,2,3)
+ * @brief 控制小车行驶到第X个十字路口(X=1,2,3,4,5) 4为最上面左侧，5为最上面右侧
  * @param 十字路口编号(从1开始计数),中心的道路上上总共有3个路口从下至上分别即为1,2,3
  * @retval 1:完成 0:进行中
  */
@@ -60,68 +60,45 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
     crossings_found = 0;
     is_on_crossing = 0;
     last_target = crossing_num;
-    if (crossing_num == 0)
-    {                             // 调用参数为0可以作为停止/复位的信号
-      set_motor_speed(0, 0, 252); // 停车
-      return 1;                   // 表示“已完成”
-    }
   }
 
-  // 如果没有设置目标，则不执行任何操作。
-  if (crossing_num == 0)
-  {
-    return 1;
-  }
-
-  // 如果任务已经完成，保持小车停止并返回1。
-  if (crossings_found >= crossing_num)
+  // 任务控制逻辑
+  // 如果任务已经完成，保持小车停止并返回1
+  if (crossings_found >= crossing_num && is_on_crossing)
   {
     set_motor_speed(0, 0, 252);
     return 1;
   }
-
-  grey_sensor_Read();
-  int turn_value = Calculate_Turn_Value();
-
-  if (turn_value == INT16_MAX)
-  { // 检测到潜在的十字路口
-    if (!is_on_crossing)
-    {
-      is_on_crossing = 1;
-      crossings_found++;
-
-      if (crossings_found >= crossing_num)
-      {
-        set_motor_speed(0, 0, 252);
-        return 1; // 到达目标十字路口
-      }
-    }
-    // 如果在十字路口但不是目标十字路口，直行通过。
-    set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, 252);
-  }
-  else if (turn_value == INT16_MIN)
-  {                             // 丢失循迹线
-    set_motor_speed(0, 0, 252); // 停车
-    is_on_crossing = 0;         // 不再位于十字路口上
+  // 此段为crossing_nums = 0 的情况，这个是到达药房返回的逻辑
+  else if (!crossing_num)
+  {
+    //返回起点
   }
   else
-  {                     // 正常循迹
-    is_on_crossing = 0; // 回到单线后清除十字路口标志。
+  {
+    line_following_task(); // 循迹 脱线会停车
+  }
 
-    int16_t left_speed = CAR_BASE_SPEED - turn_value;
-    int16_t right_speed = CAR_BASE_SPEED + turn_value;
-
-    // 将电机速度限制在有效范围内
-    if (left_speed > CAR_MAX_SPEED)
-      left_speed = CAR_MAX_SPEED;
-    if (left_speed < 0)
-      left_speed = 0;
-    if (right_speed > CAR_MAX_SPEED)
-      right_speed = CAR_MAX_SPEED;
-    if (right_speed < 0)
-      right_speed = 0;
-
-    set_motor_speed(left_speed, right_speed, 252);
+  // crossings_found 和 is_on_crossing 逻辑
+  // 检测到6个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一
+  static uint32_t pre_time = 0;      // (ms)
+  uint64_t now_time = HAL_GetTick(); // 两个时间进行处理
+  if (Calculate_Turn_Value() == INT16_MAX)
+  {
+    // 间隔较长视为进一次直角弯 0-1也是间隔较长 无bug
+    if (now_time - pre_time > 1000) 
+    {
+      crossings_found++;
+    }
+    is_on_crossing = 1;
+    pre_time = now_time;
+  }
+  else
+  {
+    if (now_time - pre_time > 1000)
+    {
+      is_on_crossing = 0;
+    }
   }
 
   return 0; // 任务进行中

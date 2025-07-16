@@ -1,10 +1,11 @@
 #ifndef __GRAY_DETECTION_H
 #define __GRAY_DETECTION_H
 #include "main.h"
+#include <stdint.h>
 
-typedef uint16_t u16;
-typedef uint8_t u8;
-typedef uint32_t u32;
+#define u16 uint16_t 
+#define u8 uint8_t 
+#define u32 uint32_t 
 
 #define turn_PWM_Limit 1000
 
@@ -28,7 +29,8 @@ typedef struct
     uint8_t bit16 : 1;
 } gray_flags;
 
-typedef union {
+typedef union
+{
     gray_flags gray;
     uint16_t state;
 } _gray_state;

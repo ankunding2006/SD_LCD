@@ -37,8 +37,8 @@ void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
 }
 
 /**
- * @brief 这个函数用来控制小车进行循迹 有直角弯就crossroads++
- * @return 如果完成了循迹(即出现至少3个传感器都返回黑色)就返回1,否则返回0
+ * @brief 这个函数用来控制小车进行循迹
+ * @return 如果完成了循迹,就返回1,否则返回0
  */
 uint8_t line_following_task(void)
 {
@@ -48,26 +48,15 @@ uint8_t line_following_task(void)
     // 2. 计算转向值
     int turn_value = Calculate_Turn_Value();
 
-    // 3. 根据转向值调整电机速度
-    if (turn_value == INT16_MAX)
-    {
-        // 检测到6个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一，根据写死的逻辑左右转向，并且记录
-        static uint32_t pre_time = 0;      // (ms)
-        uint64_t now_time = HAL_GetTick(); // 两个时间进行处理
-        if (now_time - pre_time > 500)     // 间隔较长视为进一次直角弯 0-1也是间隔较长 无bug
-        {
-            crossroads++;
-        }
-        pre_time = now_time;
-
-        set_motor_speed(0, 0, 252); // 左转 or 右转
-        return 1;                   // 完成循迹 ？
-    }
-    else if (turn_value == INT16_MIN)
+    if (turn_value == INT16_MIN)
     {
         // 没有检测到线，可能脱轨了
         // 策略：原地停车
         set_motor_speed(0, 0, 252);
+    }
+    else if(turn_value == INT16_MAX)
+    {
+        set_motor_speed(CAR_BASE_SPEED,CAR_BASE_SPEED,252);
     }
     else
     {
@@ -157,51 +146,29 @@ void visual_reception_init()
 /**
  * @brief 接收视觉传来的数据，接收到正确数据后会执行“一次”处理，然后重新启动中断接收
  * @param 无：懒得改，写死了
+ * @return 1、2、3代表第几个十字路口，0为错误
  */
-void visual_process_command(void) // 处理相应消息
+uint8_t visual_process_command(void) // 处理相应消息
 {
     switch (usart2_rx_buffer)
     {
     case 1:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
     case 2:
         printf("num: %d\n", usart2_rx_buffer);
         usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
+        return 1;
     case 3:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
     case 4:
         printf("num: %d\n", usart2_rx_buffer);
         usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
+        return 2;
     case 5:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
     case 6:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
     case 7:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
     case 8:
         printf("num: %d\n", usart2_rx_buffer);
         usart2_rx_buffer = 9; // 清除接收缓冲区
-
-        break;
+        return 3;
     default:
         if (usart2_rx_buffer != 9)
         {
@@ -209,6 +176,6 @@ void visual_process_command(void) // 处理相应消息
             usart2_rx_buffer = 9; // 清除接收缓冲区
         }
         HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
-        break;
+        return 0;
     }
 }
