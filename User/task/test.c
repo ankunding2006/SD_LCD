@@ -1,18 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
-#include "sdio.h"
-#include "spi.h"
-#include "tim.h"
-#include "usart.h"
-#include "gpio.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include <stdlib.h>
 #include "my_menu.h"
-#include "delay.h"
-#include "usmart.h"
 #include "Emm_V5.h"
 #include "test.h"
 #include "gray_detection.h"

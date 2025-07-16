@@ -1,6 +1,7 @@
 #include "main.h"
 #include "control.h"
 #include "task.h"
+#include "gray_detection.h"
 
 /*
   此处说明比赛规则：八个病房，能循迹直角弯到达对应病房执行任务以及返回起点：

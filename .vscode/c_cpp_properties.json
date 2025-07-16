@@ -84,7 +84,7 @@
       ],
       "cStandard": "${default}",
       "cppStandard": "${default}",
-      "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe"
+      "compilerPath": "D:/msys64/ucrt64/bin/gcc.exe"
     }
   ],
   "version": 4
