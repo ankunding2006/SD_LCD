@@ -13,6 +13,7 @@
 #include "gray_detection.h"
 
 uint8_t usart2_rx_buffer = 9;    // 单字节接收缓冲区
+uint8_t rx_nums = 0;
 volatile uint8_t crossroads = 0; // 到十字路口的次数
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
@@ -26,14 +27,14 @@ volatile uint8_t crossroads = 0; // 到十字路口的次数
  */
 void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
 {
-    if (left_speed > 0)
-        Emm_V5_Vel_Control(0x01, 1, left_speed, acc, 0);
-    else
-        Emm_V5_Vel_Control(0x01, 0, -left_speed, acc, 0);
-    if (right_speed > 0)
-        Emm_V5_Vel_Control(0x02, 1, right_speed, acc, 0);
-    else
-        Emm_V5_Vel_Control(0x02, 0, -right_speed, acc, 0);
+  if (left_speed > 0)
+    Emm_V5_Vel_Control(0x01, 1, left_speed, acc, 0);
+  else
+    Emm_V5_Vel_Control(0x01, 0, -left_speed, acc, 0);
+  if (right_speed > 0)
+    Emm_V5_Vel_Control(0x02, 1, right_speed, acc, 0);
+  else
+    Emm_V5_Vel_Control(0x02, 0, -right_speed, acc, 0);
 }
 
 /**
@@ -42,44 +43,44 @@ void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
  */
 uint8_t line_following_task(void)
 {
-    // 1. 更新传感器数据
-    grey_sensor_Read();
+  // 1. 更新传感器数据
+  grey_sensor_Read();
 
-    // 2. 计算转向值
-    int turn_value = Calculate_Turn_Value();
+  // 2. 计算转向值
+  int turn_value = Calculate_Turn_Value();
 
-    if (turn_value == INT16_MIN)
-    {
-        // 没有检测到线，可能脱轨了
-        // 策略：原地停车
-        set_motor_speed(0, 0, 252);
-    }
-    else if (turn_value == INT16_MAX)
-    {
-        set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, 252);
-    }
-    else
-    {
-        // 根据转向值调整左右轮速度
-        // turn_value > 0 表示线在左边，需要左转，左轮慢，右轮快
-        // turn_value < 0 表示线在右边，需要右转，左轮快，右轮慢
-        int16_t left_speed = CAR_BASE_SPEED - turn_value;
-        int16_t right_speed = CAR_BASE_SPEED + turn_value;
+  if (turn_value == INT16_MIN)
+  {
+    // 没有检测到线，可能脱轨了
+    // 策略：原地停车
+    set_motor_speed(0, 0, 252);
+  }
+  else if (turn_value == INT16_MAX)
+  {
+    set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, 252);
+  }
+  else
+  {
+    // 根据转向值调整左右轮速度
+    // turn_value > 0 表示线在左边，需要左转，左轮慢，右轮快
+    // turn_value < 0 表示线在右边，需要右转，左轮快，右轮慢
+    int16_t left_speed = CAR_BASE_SPEED - turn_value;
+    int16_t right_speed = CAR_BASE_SPEED + turn_value;
 
-        // 对速度进行限幅
-        if (left_speed > CAR_MAX_SPEED)
-            left_speed = CAR_MAX_SPEED;
-        if (left_speed < 0)
-            left_speed = 0;
-        if (right_speed > CAR_MAX_SPEED)
-            right_speed = CAR_MAX_SPEED;
-        if (right_speed < 0)
-            right_speed = 0;
+    // 对速度进行限幅
+    if (left_speed > CAR_MAX_SPEED)
+      left_speed = CAR_MAX_SPEED;
+    if (left_speed < 0)
+      left_speed = 0;
+    if (right_speed > CAR_MAX_SPEED)
+      right_speed = CAR_MAX_SPEED;
+    if (right_speed < 0)
+      right_speed = 0;
 
-        set_motor_speed(left_speed, right_speed, 252); // 使用一个默认加速度
-    }
+    set_motor_speed(left_speed, right_speed, 252); // 使用一个默认加速度
+  }
 
-    return 0; // 循迹未完成
+  return 0; // 循迹未完成
 }
 
 /**
@@ -92,55 +93,55 @@ uint8_t line_following_task(void)
  */
 uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t Rotate_Speed_Base)
 {
-    static uint32_t turn_end_time = 0;
+  static uint32_t turn_end_time = 0;
 
-    // A non-zero angle indicates a new turn command.
-    if (angle != 0)
-    {
-        int16_t left_speed, right_speed;
+  // A non-zero angle indicates a new turn command.
+  if (angle != 0)
+  {
+    int16_t left_speed, right_speed;
 
-        if (angle > 0)
-        { // Counter-clockwise turn (left)
-            left_speed = Rotate_Speed_Base - Rotate_Speed;
-            right_speed = Rotate_Speed_Base + Rotate_Speed;
-        }
-        else
-        { // Clockwise turn (right)
-            left_speed = Rotate_Speed_Base + Rotate_Speed;
-            right_speed = Rotate_Speed_Base - Rotate_Speed;
-        }
-
-        set_motor_speed(left_speed, right_speed, 252); // Use a default acceleration
-        turn_end_time = HAL_GetTick() + abs(angle);
-        return 0; // Turn initiated
+    if (angle > 0)
+    { // Counter-clockwise turn (left)
+      left_speed = Rotate_Speed_Base - Rotate_Speed;
+      right_speed = Rotate_Speed_Base + Rotate_Speed;
     }
     else
-    {
-        // angle is 0, check status of the current turn.
-        if (turn_end_time == 0)
-        {
-            return 1; // No turn in progress, so it's "completed"
-        }
-
-        if (HAL_GetTick() >= turn_end_time)
-        {
-            set_motor_speed(0, 0, 252); // Stop motors
-            turn_end_time = 0;          // Reset state
-            return 1;                   // Turn completed
-        }
-
-        return 0; // Still turning
+    { // Clockwise turn (right)
+      left_speed = Rotate_Speed_Base + Rotate_Speed;
+      right_speed = Rotate_Speed_Base - Rotate_Speed;
     }
+
+    set_motor_speed(left_speed, right_speed, 252); // Use a default acceleration
+    turn_end_time = HAL_GetTick() + abs(angle);
+    return 0; // Turn initiated
+  }
+  else
+  {
+    // angle is 0, check status of the current turn.
+    if (turn_end_time == 0)
+    {
+      return 1; // No turn in progress, so it's "completed"
+    }
+
+    if (HAL_GetTick() >= turn_end_time)
+    {
+      set_motor_speed(0, 0, 252); // Stop motors
+      turn_end_time = 0;          // Reset state
+      return 1;                   // Turn completed
+    }
+
+    return 0; // Still turning
+  }
 }
 
 /**
- * @brief 串口初始化
+ * @brief 视觉接收串口初始化
  * @param 无：懒得改，写死了
  *
  */
 void visual_reception_init()
 {
-    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
+  HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
 }
 
 /**
@@ -150,35 +151,35 @@ void visual_reception_init()
  */
 uint8_t visual_process_command(void) // 处理相应消息
 {
-    switch (usart2_rx_buffer)
+  switch (usart2_rx_buffer)
+  {
+  case 1:
+  case 2:
+    rx_nums = usart2_rx_buffer;
+    printf("num: %d\n", usart2_rx_buffer);
+    usart2_rx_buffer = 9; // 清除接收缓冲区
+    return 1;
+  case 3:
+  case 4:
+    rx_nums = usart2_rx_buffer;
+    printf("num: %d\n", usart2_rx_buffer);
+    usart2_rx_buffer = 9; // 清除接收缓冲区
+    return 2;
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+    rx_nums = usart2_rx_buffer;
+    printf("num: %d\n", usart2_rx_buffer);
+    usart2_rx_buffer = 9; // 清除接收缓冲区
+    return 3;
+  default:
+    if (usart2_rx_buffer != 9)
     {
-    case 1:
-    case 2:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9;                               // 清除接收缓冲区
-        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-        return 1;
-    case 3:
-    case 4:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9;                               // 清除接收缓冲区
-        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-        return 2;
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-        printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9;                               // 清除接收缓冲区
-        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-        return 3;
-    default:
-        if (usart2_rx_buffer != 9)
-        {
-            printf("bug \n");
-            usart2_rx_buffer = 9;                               // 清除接收缓冲区
-            HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-        }
-        return 0;
+      printf("bug \n");
+      usart2_rx_buffer = 9; // 清除接收缓冲区
     }
+    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
+    return 0;
+  }
 }
