@@ -14,6 +14,7 @@
 
 uint8_t usart2_rx_buffer = 9;    // 单字节接收缓冲区
 volatile uint8_t crossroads = 0; // 到十字路口的次数
+volatile uint8_t room_num = 0;   // 病房编号
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
 #define CAR_MAX_SPEED 400  // 小车最大速度
@@ -176,6 +177,7 @@ uint8_t visual_process_command(void) // 处理相应消息
         if (usart2_rx_buffer != 9)
         {
             printf("bug \n");
+            room_num = usart2_rx_buffer;
             usart2_rx_buffer = 9;                               // 清除接收缓冲区
             HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
         }

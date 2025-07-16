@@ -7,6 +7,7 @@
 uint8_t Car_To_Crossing(uint8_t crossing_num);
 void Car_To_Crossing_Reset(void);
 void Car_To_Room(uint8_t room_num);
-void Car_To_Room_1_2(uint8_t room_num);
+int Car_To_Room_1_2(uint8_t room_num);
+int Car_To_Room_3_4(uint8_t room_num);
 
 #endif // TASK_H
