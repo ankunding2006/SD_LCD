@@ -54,9 +54,9 @@ uint8_t line_following_task(void)
         // 策略：原地停车
         set_motor_speed(0, 0, 252);
     }
-    else if(turn_value == INT16_MAX)
+    else if (turn_value == INT16_MAX)
     {
-        set_motor_speed(CAR_BASE_SPEED,CAR_BASE_SPEED,252);
+        set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, 252);
     }
     else
     {
@@ -155,27 +155,30 @@ uint8_t visual_process_command(void) // 处理相应消息
     case 1:
     case 2:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
+        usart2_rx_buffer = 9;                               // 清除接收缓冲区
+        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
         return 1;
     case 3:
     case 4:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
+        usart2_rx_buffer = 9;                               // 清除接收缓冲区
+        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
         return 2;
     case 5:
     case 6:
     case 7:
     case 8:
         printf("num: %d\n", usart2_rx_buffer);
-        usart2_rx_buffer = 9; // 清除接收缓冲区
+        usart2_rx_buffer = 9;                               // 清除接收缓冲区
+        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
         return 3;
     default:
         if (usart2_rx_buffer != 9)
         {
             printf("bug \n");
-            usart2_rx_buffer = 9; // 清除接收缓冲区
+            usart2_rx_buffer = 9;                               // 清除接收缓冲区
+            HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
         }
-        HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
         return 0;
     }
 }

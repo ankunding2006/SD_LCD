@@ -29,22 +29,170 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM12)
   {
     // TODO: 定时器周期溢出回调函数
+    visual_process_command();
   }
 }
 
 /**
- * @brief 通过状态机实现小车行驶到某个"病房"
- * @note:地图介绍
- * @param 病房编号
+ * @brief 通过状态机实现小车行驶到1,2号"病房"
+ * @note:地图介绍：1,2号病房分别在第一个路口的左右两侧,小车需要从药房出发,先循迹直行到达
+ * 第一个路口,然后左转或右转,到达1,2号病房,然后等待取药(具体函数待完成),取药完成后,通过
+ * open_loop_steering_control旋转180度,然后循迹直行到路口,然后右转或左转,再直行到达药房,
+ * 任务结束
+ * @param 病房编号(1,2)
  * @retval 1:完成 0:进行中
  */
-void Car_To_Room(uint8_t room_num)
+void Car_To_Room_1_2(uint8_t room_num)
 {
-  // 状态机
+  // 定义状态机的各个状态
+  typedef enum
+  {
+    CAR_STATE_INIT,               // 初始状态
+    GOING_TO_CROSSING_1,          // 前往第一个路口
+    TURNING_AT_CROSSING_1,        // 在第一个路口转向
+    CHECK_TURN_1_COMPLETE,        // 检查转向是否完成
+    GOING_TO_ROOM,                // 前往病房
+    AT_ROOM,                      // 到达病房，等待卸货
+    TURNING_180_AT_ROOM,          // 在病房门口180度掉头
+    CHECK_TURN_180_COMPLETE,      // 检查180度掉头是否完成
+    RETURNING_TO_CROSSING_1,      // 返回第一个路口
+    TURNING_AT_CROSSING_1_RETURN, // 在路口转向药房方向
+    CHECK_TURN_RETURN_COMPLETE,   // 检查返回转向是否完成
+    RETURNING_TO_PHARMACY,        // 返回药房
+    TASK_COMPLETE                 // 任务完成
+  } CarState_t;
+
+  static CarState_t car_state = CAR_STATE_INIT;
+  static uint8_t target_room = 0;
+
+  // 如果目标病房改变，或不是1/2号房，则重置状态机
+  if (room_num != target_room)
+  {
+    car_state = CAR_STATE_INIT;
+    target_room = room_num;
+    Car_To_Crossing(0); // 通过传递一个不同的目标值来重置Car_To_Crossing函数的状态
+  }
+
+  // 如果不是1号或2号病房，则停车并返回
+  if (room_num != 1 && room_num != 2)
+  {
+    set_motor_speed(0, 0, 252);
+    return;
+  }
+
+  switch (car_state)
+  {
+  case CAR_STATE_INIT:
+    car_state = GOING_TO_CROSSING_1;
+    // 直接进入下一个状态
+  case GOING_TO_CROSSING_1:
+    if (Car_To_Crossing(1)) // 行驶到第一个路口
+    {
+      car_state = TURNING_AT_CROSSING_1;
+    }
+    break;
+
+  case TURNING_AT_CROSSING_1:
+  {
+    // 1号病房左转，2号病房右转。
+    // TODO:转向时间需要调试
+    int16_t turn_duration_ms = (target_room == 1) ? 500 : -500; // 500ms -> 90度
+    open_loop_steering_control(turn_duration_ms, 150, 0);       // 启动转向
+    car_state = CHECK_TURN_1_COMPLETE;
+    break;
+  }
+
+  case CHECK_TURN_1_COMPLETE:
+    car_state = GOING_TO_ROOM; // 转向完成，进入下一个状态
+    break;
+
+  case GOING_TO_ROOM:
+  {
+    static uint32_t travel_start_time = 0;
+    if (travel_start_time == 0)
+    {
+      travel_start_time = HAL_GetTick();
+    }
+    line_following_task(); // 沿线行驶
+    // 根据地图，从路口到病房门口大约40cm。行驶时间需要调试
+    if (HAL_GetTick() - travel_start_time > 1500) // 假设需要1.5秒
+    {
+      set_motor_speed(0, 0, 252); // 到达病房门口，停车
+      travel_start_time = 0;      // 重置计时器
+      car_state = AT_ROOM;
+    }
+    break;
+  }
+
+  case AT_ROOM:
+    // TODO: 点亮红色指示灯
+    // TODO:等待卸货
+    // TODO: 熄灭红色指示灯
+    car_state = TURNING_180_AT_ROOM;
+    break;
+
+  case TURNING_180_AT_ROOM:
+    // 180度掉头，转向时间需要调试
+    // TODO:转向时间需要调试
+    if (open_loop_steering_control(1000, 150, 0)) // 1000ms -> 180度
+    {
+      car_state = CHECK_TURN_180_COMPLETE;
+    }
+    break;
+
+  case CHECK_TURN_180_COMPLETE:
+    car_state = RETURNING_TO_CROSSING_1;
+    break;
+
+  case RETURNING_TO_CROSSING_1:
+    if (Car_To_Crossing(1)) // 返回至路口
+    {
+      car_state = TURNING_AT_CROSSING_1_RETURN;
+    }
+    break;
+
+  case TURNING_AT_CROSSING_1_RETURN:
+  {
+    // 返回时，从1号病房回来需要右转，从2号病房回来需要左转
+    int16_t turn_duration_ms = (target_room == 1) ? -500 : 500;
+    open_loop_steering_control(turn_duration_ms, 150, 0);
+    car_state = CHECK_TURN_RETURN_COMPLETE;
+    break;
+  }
+
+  case CHECK_TURN_RETURN_COMPLETE:
+    car_state = RETURNING_TO_PHARMACY;
+    break;
+
+  case RETURNING_TO_PHARMACY:
+    if (Car_To_Crossing(1)) // 返回药房
+    {
+      car_state = TASK_COMPLETE;
+    }
+    break;
+
+  case TASK_COMPLETE:
+    set_motor_speed(0, 0, 252); // 任务完成，停车
+    // TODO: 点亮绿色指示灯
+    car_state = CAR_STATE_INIT; // 复位状态机以便下次调用
+    target_room = 0;
+    break;
+  }
 }
 
 /**
- * @brief 控制小车行驶到第X个十字路口(X=1,2,3,4,5) 4为最上面左侧，5为最上面右侧
+ * @brief 通过状态机实现小车行驶到3,4号"病房"
+ * @note:地图介绍：3,4号病房分别在第二个路口的左右两侧,小车需要从药房出发,先循迹直行到达
+ * 第二个路口,再通过读取usart2_rx_buffer这个变量获取数字的排布(3,4病房的编号左右并非固定)
+ * 然后左转或右转,到达3,4号病房,然后等待取药(具体函数待完成),取药完成后,通过
+ * open_loop_steering_control旋转180度,然后循迹直行到路口,然后右转或左转,再直行通过两个路口
+ * 到达药房,任务结束
+ * @param 病房编号(3,4)
+ * @retval 1:完成 0:进行中
+ */
+
+/**
+ * @brief 控制小车行驶到第X个十字路口(X=1,2,3)
  * @param 十字路口编号(从1开始计数),中心的道路上上总共有3个路口从下至上分别即为1,2,3
  * @retval 1:完成 0:进行中
  */
@@ -53,40 +201,32 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   static uint8_t crossings_found = 0;
   static uint8_t is_on_crossing = 0;
   static uint8_t last_target = 0;
+  static uint8_t task_completed = 0; // 新增：任务完成标志
 
-  // 复位逻辑：如果目标改变，重置状态。
+  // 复位逻辑：如果目标路口编号改变，则重置整个状态机
   if (crossing_num != last_target)
   {
     crossings_found = 0;
     is_on_crossing = 0;
     last_target = crossing_num;
+    task_completed = 0;
   }
 
-  // 任务控制逻辑
   // 如果任务已经完成，保持小车停止并返回1
-  if (crossings_found >= crossing_num && is_on_crossing)
+  if (task_completed)
   {
     set_motor_speed(0, 0, 252);
     return 1;
   }
-  // 此段为crossing_nums = 0 的情况，这个是到达药房返回的逻辑
-  else if (!crossing_num)
-  {
-    //返回起点
-  }
-  else
-  {
-    line_following_task(); // 循迹 脱线会停车
-  }
 
-  // crossings_found 和 is_on_crossing 逻辑
-  // 检测到4个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一
-  static uint32_t pre_time = 0;      // (ms)
-  uint64_t now_time = HAL_GetTick(); // 两个时间进行处理
+  // crossings_found 和 is_on_crossing 状态更新逻辑
+  // 检测到4个或更多传感器，判定为到达了十字路口区域
+  static uint32_t pre_time = 0;
+  uint64_t now_time = HAL_GetTick();
   if (Calculate_Turn_Value() == INT16_MAX)
   {
-    // 间隔较长视为进一次直角弯 0-1也是间隔较长 无bug
-    if (now_time - pre_time > 1000) 
+    // 通过时间间隔判断是否为新进入一个路口，防止重复计数
+    if (now_time - pre_time > 1000)
     {
       crossings_found++;
     }
@@ -95,10 +235,29 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   }
   else
   {
-    if (now_time - pre_time > 1000)
+    // 如果之前在路口上，并且现在离开了，则更新is_on_crossing状态
+    if (is_on_crossing && (now_time - pre_time > 500)) // 离开路口0.5秒后
     {
       is_on_crossing = 0;
     }
+  }
+
+  // 任务完成判断
+  if (crossings_found >= crossing_num && is_on_crossing)
+  {
+    set_motor_speed(0, 0, 252); // 到达目标，停车
+    task_completed = 1;         // 标记任务完成
+    return 1;                   // 返回完成状态
+  }
+  // 任务自动重置逻辑：如果任务已完成且小车已离开路口，则重置计数器以备下次调用
+  else if (task_completed && !is_on_crossing)
+  {
+    crossings_found = 0;
+    task_completed = 0;
+  }
+  else
+  {
+    line_following_task(); // 任务未完成，继续循迹
   }
 
   return 0; // 任务进行中
