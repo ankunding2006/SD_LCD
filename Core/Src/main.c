@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
-#include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
 #include "tim.h"
@@ -32,10 +31,9 @@
 #include "my_menu.h"
 #include "delay.h"
 #include "usmart.h"
-#include "lfs_port.h"
 #include "Emm_V5.h"
-#include "car_config.h"
 #include "test.h"
+#include "control.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,35 +114,38 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
-  MX_FATFS_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
   MX_SPI2_Init();
   MX_USART3_UART_Init();
   MX_USART1_UART_Init();
   MX_TIM12_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
+
   delay_init(168);
   usmart_dev.init(84);
-  lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
 
+  lcd_init_dev(&lcd_desc, LCD_2_00_INCH, LCD_ROTATE_270);
   lcd_print(&lcd_desc, 0, 10, "> X Pulse");
   lcd_print(&lcd_desc, 0, 30, "> STM32 lcd demo");
   lcd_print(&lcd_desc, 0, 50, "> LCD 2.0 inch 320x240");
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
-
   led_off();
-  //! SDcard_Test();
-  initialize_and_test_LittleFS();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
+  //! SDcard_Test();
   Menu_Init();
   cotMenu_Task();
-#if BEFORE_MAIN_TEST == 1
-  before_main_test();
-#endif
   Before_Main();
+
   HAL_TIM_Base_Start_IT(&htim12);
+  visual_reception_init();
+
+#if BEFORE_MAIN_TEST == 1
+      before_main_test();
+#endif
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -240,7 +241,6 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
 #ifdef USE_FULL_ASSERT
 /**
  * @brief  Reports the name of the source file and the source line number

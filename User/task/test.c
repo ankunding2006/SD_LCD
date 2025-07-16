@@ -1,7 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
-#include "fatfs.h"
 #include "sdio.h"
 #include "spi.h"
 #include "tim.h"
@@ -14,9 +13,7 @@
 #include "my_menu.h"
 #include "delay.h"
 #include "usmart.h"
-#include "lfs_port.h"
 #include "Emm_V5.h"
-#include "car_config.h"
 #include "test.h"
 #include "gray_detection.h"
 

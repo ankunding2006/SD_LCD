@@ -75,7 +75,7 @@ int Calculate_Turn_Value(void)
     if (active_sensors == 0) {
         return INT16_MIN; // 返回一个极小值，表示没有有效的转向PWM
     }
-    else if (active_sensors >= 3) {
+    else if (active_sensors >= 6) {
         return INT16_MAX;
     }
 
