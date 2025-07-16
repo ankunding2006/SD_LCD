@@ -169,6 +169,7 @@ int Car_To_Room_1_2(uint8_t room_num)
     target_room = 0;
     break;
   }
+  return 0;
 }
 
 /**
