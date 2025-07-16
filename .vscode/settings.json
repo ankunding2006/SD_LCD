@@ -56,6 +56,11 @@
     "files.associations": {
         "test.h": "c",
         "car_config.h": "c",
-        "emm_v5.h": "c"
+        "emm_v5.h": "c",
+        "gray_detection.h": "c",
+        "usmart.h": "c",
+        "main.h": "c",
+        "control.h": "c",
+        "task.h": "c"
     }
 }

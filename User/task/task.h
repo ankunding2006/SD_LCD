@@ -1,0 +1,2 @@
+#define CAR_BASE_SPEED 100
+#define CAR_MAX_SPEED 400
