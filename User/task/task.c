@@ -80,7 +80,7 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   }
 
   // crossings_found 和 is_on_crossing 逻辑
-  // 检测到6个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一
+  // 检测到4个或更多传感器，判定为到达了直角弯区域，让直角弯计数加一
   static uint32_t pre_time = 0;      // (ms)
   uint64_t now_time = HAL_GetTick(); // 两个时间进行处理
   if (Calculate_Turn_Value() == INT16_MAX)

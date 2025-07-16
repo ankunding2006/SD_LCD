@@ -88,7 +88,7 @@ int Calculate_Turn_Value(void)
     {
         return INT16_MIN; // 返回一个极小值，表示没有有效的转向值
     }
-    else if (active_sensors >= 3)
+    else if (active_sensors >= 4)
     {
         return INT16_MAX; // 返回一个极大值，表示小车已经到达十字路口中心
     }
