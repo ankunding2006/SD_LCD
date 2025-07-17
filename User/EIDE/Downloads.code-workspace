@@ -3,6 +3,9 @@
         {
             "name": "SD_LCD",
             "path": "../.."
+        },
+        {
+            "path": "."
         }
     ],
     "settings": {
