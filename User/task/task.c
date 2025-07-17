@@ -3,6 +3,7 @@
 #include "task.h"
 #include "gray_detection.h"
 #include "tim.h"
+#include "car_config.h"
 /*
   此处说明比赛规则：八个病房，能循迹直角弯到达对应病房执行任务以及返回起点：
 
@@ -29,7 +30,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM12)
   {
     // TODO: 定时器周期溢出回调函数
-    visual_process_command();
   }
 }
 
@@ -54,7 +54,7 @@ uint8_t Car_To_Room(uint8_t room_num)
   }
 
   // 如果传入无效的病房编号，则停止
-  set_motor_speed(0, 0, 252);
+  set_motor_speed(0, 0, DEFAULT_ACCELERATION);
   return 0;
 }
 
@@ -98,7 +98,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   // 如果不是1号或2号病房，则停车并返回
   if (room_num != 1 && room_num != 2)
   {
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     return 0;
   }
 
@@ -117,9 +117,8 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   case TURNING_AT_CROSSING_1:
   {
     // 1号病房左转，2号病房右转。
-    // TODO:转向时间需要调试
-    int16_t turn_duration_ms = (target_room == 1) ? 500 : -500; // 500ms -> 90度
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = (target_room == 1) ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS;
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM; // 转向完成，进入下一个状态
     }
@@ -144,8 +143,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
 
   case TURNING_180_AT_ROOM:
     // 180度掉头，转向时间需要调试
-    // TODO:转向时间需要调试
-    if (open_loop_steering_control(1000, 150, 0)) // 1000ms -> 180度
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED)) // 1000ms -> 180度
     {
       car_state = RETURNING_TO_CROSSING_1;
     }
@@ -161,8 +159,8 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   case TURNING_AT_CROSSING_1_RETURN:
   {
     // 返回时，从1号病房回来需要右转，从2号病房回来需要左转
-    int16_t turn_duration_ms = (target_room == 1) ? -500 : 500;
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = (target_room == 1) ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS;
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
@@ -177,7 +175,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
     break;
 
   case TASK_COMPLETE:
-    set_motor_speed(0, 0, 252); // 任务完成，停车
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION); // 任务完成，停车
     // TODO: 点亮绿色指示灯
     car_state = CAR_STATE_INIT; // 复位状态机以便下次调用
     target_room = 0;
@@ -228,7 +226,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
   // 如果不是3号或4号病房，则停车并返回
   if (target_room != 3 && target_room != 4)
   {
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     return 0;
   }
 
@@ -260,10 +258,10 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
 
     if (!is_left_turn)
     {
-      turn_duration_ms = -500; // 右转
+      turn_duration_ms = -TURN_90_DURATION_MS; // 右转
     }
 
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM;
     }
@@ -286,7 +284,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
 
   case TURNING_180_AT_ROOM:
     // TODO: 180度掉头时间需要调试
-    if (open_loop_steering_control(1000, 150, 0))
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = RETURNING_TO_CROSSING_2;
     }
@@ -302,15 +300,15 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
   case TURNING_AT_CROSSING_2_RETURN:
   {
     // 返回时转向方向相反
-    int16_t turn_duration_ms = -500; // 默认右转
+    int16_t turn_duration_ms = -TURN_90_DURATION_MS; // 默认右转
     uint8_t is_left_turn = (room_layout_3_4 == 34 && target_room == 3) || (room_layout_3_4 == 43 && target_room == 4);
 
     if (!is_left_turn)
     {
-      turn_duration_ms = 500; // 左转
+      turn_duration_ms = TURN_90_DURATION_MS; // 左转
     }
 
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
@@ -325,7 +323,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
     break;
 
   case TASK_COMPLETE:
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     // TODO: 点亮绿色指示灯
     target_room = 0; // 重置目标，准备下次任务
     car_state = CAR_STATE_INIT;
@@ -381,7 +379,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
   // 如果不是5,6,7,8号病房，则停车并返回
   if (target_room < 5 || target_room > 8)
   {
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     return 0;
   }
 
@@ -405,8 +403,8 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     uint16_t left_rooms = layout_at_crossing_3 / 100;
     is_initial_turn_left = (target_room == (left_rooms / 10) || target_room == (left_rooms % 10));
 
-    int16_t turn_duration_ms = is_initial_turn_left ? 500 : -500; // 左转或右转
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = is_initial_turn_left ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS; // 左转或右转
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = GOING_TO_T_JUNCTION;
     }
@@ -425,8 +423,8 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     uint16_t area_layout = is_initial_turn_left ? (layout_at_crossing_3 / 100) : (layout_at_crossing_3 % 100);
     uint8_t is_final_turn_left = (target_room == (area_layout / 10));
 
-    int16_t turn_duration_ms = is_final_turn_left ? 500 : -500; // 左转或右转
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = is_final_turn_left ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS; // 左转或右转
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM_FINAL;
     }
@@ -446,7 +444,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     break;
 
   case TURNING_180_AT_ROOM:
-    if (open_loop_steering_control(1000, 150, 0)) // 180度掉头
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED)) // 180度掉头
     {
       car_state = RETURNING_TO_T_JUNCTION;
     }
@@ -463,8 +461,8 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
   {
     uint16_t area_layout = is_initial_turn_left ? (layout_at_crossing_3 / 100) : (layout_at_crossing_3 % 100);
     uint8_t is_final_turn_left = (target_room == (area_layout / 10));
-    int16_t turn_duration_ms = is_final_turn_left ? -500 : 500; // 返程时转向相反
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = is_final_turn_left ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS; // 返程时转向相反
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = RETURNING_TO_CROSSING_3;
     }
@@ -480,8 +478,8 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
 
   case MAKING_RETURN_TURN_2:
   {
-    int16_t turn_duration_ms = is_initial_turn_left ? -500 : 500; // 返程时转向相反
-    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    int16_t turn_duration_ms = is_initial_turn_left ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS; // 返程时转向相反
+    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
@@ -496,7 +494,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     break;
 
   case TASK_COMPLETE:
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     // TODO: 点亮绿色指示灯
     target_room = 0; // 重置目标，准备下次任务
     car_state = CAR_STATE_INIT;
@@ -530,7 +528,7 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   // 如果任务已经完成，保持小车停止并返回1
   if (task_completed)
   {
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
     return 1;
   }
 
@@ -541,7 +539,7 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   if (Calculate_Turn_Value() == INT16_MAX)
   {
     // 通过时间间隔判断是否为新进入一个路口，防止重复计数
-    if (now_time - pre_time > 1000)
+    if (now_time - pre_time > CROSSING_DEBOUNCE_MS)
     {
       crossings_found++;
     }
@@ -551,7 +549,7 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   else
   {
     // 如果之前在路口上，并且现在离开了，则更新is_on_crossing状态
-    if (is_on_crossing && (now_time - pre_time > 500)) // 离开路口0.5秒后
+    if (is_on_crossing && (now_time - pre_time > LEAVING_CROSSING_DELAY_MS)) // 离开路口0.5秒后
     {
       is_on_crossing = 0;
     }
@@ -560,9 +558,9 @@ uint8_t Car_To_Crossing(uint8_t crossing_num)
   // 任务完成判断
   if (crossings_found >= crossing_num && is_on_crossing)
   {
-    set_motor_speed(0, 0, 252); // 到达目标，停车
-    task_completed = 1;         // 标记任务完成
-    return 1;                   // 返回完成状态
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION); // 到达目标，停车
+    task_completed = 1;                          // 标记任务完成
+    return 1;                                    // 返回完成状态
   }
   // 任务自动重置逻辑：如果任务已完成且小车已离开路口，则重置计数器以备下次调用
   else if (task_completed && !is_on_crossing)

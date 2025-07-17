@@ -11,10 +11,11 @@
 #include <stdlib.h>
 #include "Emm_V5.h"
 #include "gray_detection.h"
+#include "car_config.h"
 
-uint8_t usart2_rx_buffer[2] = {9, 9}; // 双字节接收缓冲区
-volatile uint8_t crossroads = 0;      // 到十字路口的次数
-volatile uint16_t room_num = 0;       // 病房编号
+uint16_t usart2_rx_buffer = 9;   // 双字节接收缓冲区
+volatile uint8_t crossroads = 0; // 到十字路口的次数
+volatile uint16_t room_num = 0;  // 病房编号
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
 #define CAR_MAX_SPEED 400  // 小车最大速度
@@ -53,11 +54,11 @@ uint8_t line_following_task(void)
   {
     // 没有检测到线，可能脱轨了
     // 策略：原地停车
-    set_motor_speed(0, 0, 252);
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
   }
   else if (turn_value == INT16_MAX)
   {
-    set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, 252);
+    set_motor_speed(CAR_BASE_SPEED, CAR_BASE_SPEED, DEFAULT_ACCELERATION);
   }
   else
   {
@@ -77,7 +78,7 @@ uint8_t line_following_task(void)
     if (right_speed < 0)
       right_speed = 0;
 
-    set_motor_speed(left_speed, right_speed, 252); // 使用一个默认加速度
+    set_motor_speed(left_speed, right_speed, DEFAULT_ACCELERATION); // 使用一个默认加速度
   }
 
   return 0; // 循迹未完成
@@ -122,7 +123,7 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
       right_speed = Rotate_Speed_Base - Rotate_Speed;
     }
 
-    set_motor_speed(left_speed, right_speed, 252);
+    set_motor_speed(left_speed, right_speed, DEFAULT_ACCELERATION);
     turn_end_time = HAL_GetTick() + abs(angle);
     steering_state = STEERING;
     return 0; // Turn initiated, not complete yet.
@@ -133,9 +134,9 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
     // Ignore new angle/speed values until the current turn is complete.
     if (HAL_GetTick() >= turn_end_time)
     {
-      set_motor_speed(0, 0, 252);  // Stop motors
-      steering_state = STEER_IDLE; // Reset state for next command
-      return 1;                    // Turn completed
+      set_motor_speed(0, 0, DEFAULT_ACCELERATION); // Stop motors
+      steering_state = STEER_IDLE;                 // Reset state for next command
+      return 1;                                    // Turn completed
     }
     return 0; // Still turning
   }

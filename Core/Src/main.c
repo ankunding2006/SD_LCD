@@ -143,7 +143,7 @@ int main(void)
   visual_reception_init();
 
 #if BEFORE_MAIN_TEST == 1
-      before_main_test();
+  before_main_test();
 #endif
 
   /* USER CODE END 2 */
@@ -153,6 +153,7 @@ int main(void)
   while (1)
   {
     Lcd_MenuTask();
+    visual_process_command();
 #if MAIN_TEST == 1
     main_test();
 #endif

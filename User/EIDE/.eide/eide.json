@@ -483,7 +483,8 @@
           "../USMART/SYSTEM/sys",
           "../USMART/SYSTEM/usart",
           ".cmsis/include",
-          "../../MDK-ARM/RTE/_Downloads"
+          "../../MDK-ARM/RTE/_Downloads",
+          "../car_config"
         ],
         "libList": [],
         "defineList": [
