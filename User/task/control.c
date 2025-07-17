@@ -12,9 +12,9 @@
 #include "Emm_V5.h"
 #include "gray_detection.h"
 
-uint8_t usart2_rx_buffer = 9;    // 单字节接收缓冲区
-volatile uint8_t crossroads = 0; // 到十字路口的次数
-volatile uint8_t room_num = 0;   // 病房编号
+uint8_t usart2_rx_buffer[2] = {9, 9}; // 双字节接收缓冲区
+volatile uint8_t crossroads = 0;      // 到十字路口的次数
+volatile uint16_t room_num = 0;       // 病房编号
 
 #define CAR_BASE_SPEED 200 // 小车基础速度
 #define CAR_MAX_SPEED 400  // 小车最大速度
@@ -148,48 +148,55 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
  */
 void visual_reception_init()
 {
-  HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
+  // HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
 }
 
 /**
  * @brief 接收视觉传来的数据，接收到正确数据后会执行“一次”处理，然后重新启动中断接收
+ * 函数会把识别到的房间号以从左到右排列为一个1/2/4位数保存到room_num中,例如如果识别
+ * 到数字1在则room_num=1,如果识别到从左到右排列的数字1,2则room_num=12,如果从左到右
+ * 依次识别到数字7,5,6,8则room_num=7568
  * @param 无：懒得改，写死了
  * @return 1、2、3代表第几个十字路口，0为错误
  */
+/* TODO: 这个函数需要修改，现在识别到数字1，2，3，4，5，6，7，8，9，0，会分别使room_num=1，2，3，4，5，6，7，8，9，0
+ * 需要修改为当识别到1 2，3 4，5 6，7 8，会分别使room_num=12，34，56，78，,识别到5 6 7 8会使room_num=5678
+ */
 uint8_t visual_process_command(void) // 处理相应消息
 {
-  switch (usart2_rx_buffer)
-  {
-  case 1:
-  case 2:
-    room_num = usart2_rx_buffer;
-    printf("num: %d\n", usart2_rx_buffer);
-    usart2_rx_buffer = 9;                               // 清除接收缓冲区
-    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-    return 1;
-  case 3:
-  case 4:
-    room_num = usart2_rx_buffer;
-    printf("num: %d\n", usart2_rx_buffer);
-    usart2_rx_buffer = 9;                               // 清除接收缓冲区
-    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-    return 2;
-  case 5:
-  case 6:
-  case 7:
-  case 8:
-    room_num = usart2_rx_buffer;
-    printf("num: %d\n", usart2_rx_buffer);
-    usart2_rx_buffer = 9;                               // 清除接收缓冲区
-    HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-    return 3;
-  default:
-    if (usart2_rx_buffer != 9)
-    {
-      printf("bug \n");
-      usart2_rx_buffer = 9;                               // 清除接收缓冲区
-      HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-    }
-    return 0;
-  }
+  // switch (usart2_rx_buffer)
+  // {
+  // case 1:
+  // case 2:
+  //   room_num = usart2_rx_buffer;
+  //   printf("num: %d\n", usart2_rx_buffer);
+  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
+  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
+  //   return 1;
+  // case 3:
+  // case 4:
+  //   room_num = usart2_rx_buffer;
+  //   printf("num: %d\n", usart2_rx_buffer);
+  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
+  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
+  //   return 2;
+  // case 5:
+  // case 6:
+  // case 7:
+  // case 8:
+  //   room_num = usart2_rx_buffer;
+  //   printf("num: %d\n", usart2_rx_buffer);
+  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
+  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
+  //   return 3;
+  // default:
+  //   if (usart2_rx_buffer != 9)
+  //   {
+  //     printf("bug \n");
+  //     usart2_rx_buffer = 9;                               // 清除接收缓冲区
+  //     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
+  //   }
+  //   return 0;
+  // }
+  return 0;
 }

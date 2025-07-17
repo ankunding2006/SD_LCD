@@ -34,6 +34,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 
 /**
+ * @brief 通过状态机实现小车行驶到X号"病房"(X=1,2,3,4,5,6,7,8)
+ * @param 病房编号(1,2,3,4,5,6,7,8)
+ * @retval 1:完成 0:进行中
+ */
+uint8_t Car_To_Room(uint8_t room_num)
+{
+  if (room_num >= 1 && room_num <= 2)
+  {
+    return Car_To_Room_1_2(room_num);
+  }
+  else if (room_num >= 3 && room_num <= 4)
+  {
+    return Car_To_Room_3_4(room_num);
+  }
+  else if (room_num >= 5 && room_num <= 8)
+  {
+    return Car_To_Room_5_8(room_num);
+  }
+
+  // 如果传入无效的病房编号，则停止
+  set_motor_speed(0, 0, 252);
+  return 0;
+}
+
+/**
  * @brief 通过状态机实现小车行驶到1,2号"病房"
  * @note:地图介绍：1,2号病房分别在第一个路口的左右两侧,小车需要从药房出发,先循迹直行到达
  * 第一个路口,然后左转或右转,到达1,2号病房,然后等待取药(具体函数待完成),取药完成后,通过
@@ -42,7 +67,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  * @param 病房编号(1,2)
  * @retval 1:完成 0:进行中
  */
-int Car_To_Room_1_2(uint8_t room_num)
+uint8_t Car_To_Room_1_2(uint8_t room_num)
 {
   // 定义状态机的各个状态
   typedef enum
@@ -172,7 +197,7 @@ int Car_To_Room_1_2(uint8_t room_num)
  * @param 病房编号(3,4)
  * @retval 1:完成 0:进行中
  */
-int Car_To_Room_3_4(uint8_t room_num)
+uint8_t Car_To_Room_3_4(uint8_t room_num)
 {
   // 定义状态机的各个状态
   typedef enum
@@ -294,6 +319,177 @@ int Car_To_Room_3_4(uint8_t room_num)
 
   case RETURNING_TO_PHARMACY:
     if (Car_To_Crossing(2)) // 从第二个路口返回药房
+    {
+      car_state = TASK_COMPLETE;
+    }
+    break;
+
+  case TASK_COMPLETE:
+    set_motor_speed(0, 0, 252);
+    // TODO: 点亮绿色指示灯
+    target_room = 0; // 重置目标，准备下次任务
+    car_state = CAR_STATE_INIT;
+    return 1; // 任务完成
+  }
+
+  return 0; // 任务进行中
+}
+
+/**
+ * @brief 通过状态机实现小车行驶到5,6,7,8号"病房"
+ * @note 地图介绍：5,6,7,8号病房位于第三个十字路口的两侧。
+ *       该函数依赖视觉系统在到达第三路口前更新全局变量 `room_num` 为一个四位数，
+ *       例如 `5678`，表示左侧是5、6号病房，右侧是7、8号病房。
+ *       整个过程无需停车等待视觉识别。
+ * @param room_num 目标病房编号(5,6,7,8)
+ * @retval 1:任务完成 0:进行中
+ */
+uint8_t Car_To_Room_5_8(uint8_t room_num)
+{
+  // 定义状态机的各个状态
+  typedef enum
+  {
+    CAR_STATE_INIT,          // 初始状态
+    GOING_TO_CROSSING_3,     // 前往第三个路口
+    TURNING_AT_CROSSING_3,   // 在第三个路口转向
+    GOING_TO_T_JUNCTION,     // 前往T字路口
+    MAKING_FINAL_TURN,       // 在T字路口做最终转向
+    GOING_TO_ROOM_FINAL,     // 前往最终病房
+    AT_ROOM,                 // 到达病房，等待卸货
+    TURNING_180_AT_ROOM,     // 在病房门口180度掉头
+    RETURNING_TO_T_JUNCTION, // 返回T字路口
+    MAKING_RETURN_TURN_1,    // 在T字路口转向，返回第三路口
+    RETURNING_TO_CROSSING_3, // 返回第三个路口
+    MAKING_RETURN_TURN_2,    // 在第三路口转向，返回药房
+    RETURNING_TO_PHARMACY,   // 返回药房
+    TASK_COMPLETE            // 任务完成
+  } CarState_t;
+
+  static CarState_t car_state = CAR_STATE_INIT;
+  static uint8_t target_room = 0;
+  static uint16_t layout_at_crossing_3 = 0; // 保存到达第三路口时的布局
+  static uint8_t is_initial_turn_left = 0;  // 记录在第三路口的转向方向
+
+  // 如果目标病房改变，则重置状态机
+  if (room_num != target_room)
+  {
+    car_state = CAR_STATE_INIT;
+    target_room = room_num;
+    Car_To_Crossing(0); // 重置路口计数器
+  }
+
+  // 如果不是5,6,7,8号病房，则停车并返回
+  if (target_room < 5 || target_room > 8)
+  {
+    set_motor_speed(0, 0, 252);
+    return 0;
+  }
+
+  switch (car_state)
+  {
+  case CAR_STATE_INIT:
+    car_state = GOING_TO_CROSSING_3;
+    // intentional fall-through
+
+  case GOING_TO_CROSSING_3:
+    if (Car_To_Crossing(3))
+    {
+      layout_at_crossing_3 = room_num; // 到达时，读取视觉系统更新的布局
+      car_state = TURNING_AT_CROSSING_3;
+    }
+    break;
+
+  case TURNING_AT_CROSSING_3:
+  {
+    // 判断目标是在左侧区域还是右侧区域
+    uint16_t left_rooms = layout_at_crossing_3 / 100;
+    is_initial_turn_left = (target_room == (left_rooms / 10) || target_room == (left_rooms % 10));
+
+    int16_t turn_duration_ms = is_initial_turn_left ? 500 : -500; // 左转或右转
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = GOING_TO_T_JUNCTION;
+    }
+    break;
+  }
+
+  case GOING_TO_T_JUNCTION:
+    if (Car_To_Crossing(1)) // 到达T字路口
+    {
+      car_state = MAKING_FINAL_TURN;
+    }
+    break;
+
+  case MAKING_FINAL_TURN:
+  {
+    uint16_t area_layout = is_initial_turn_left ? (layout_at_crossing_3 / 100) : (layout_at_crossing_3 % 100);
+    uint8_t is_final_turn_left = (target_room == (area_layout / 10));
+
+    int16_t turn_duration_ms = is_final_turn_left ? 500 : -500; // 左转或右转
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = GOING_TO_ROOM_FINAL;
+    }
+    break;
+  }
+
+  case GOING_TO_ROOM_FINAL:
+    if (Car_To_Crossing(1)) // 到达病房门口
+    {
+      car_state = AT_ROOM;
+    }
+    break;
+
+  case AT_ROOM:
+    // TODO: 点亮红色指示灯, 等待卸货
+    car_state = TURNING_180_AT_ROOM;
+    break;
+
+  case TURNING_180_AT_ROOM:
+    if (open_loop_steering_control(1000, 150, 0)) // 180度掉头
+    {
+      car_state = RETURNING_TO_T_JUNCTION;
+    }
+    break;
+
+  case RETURNING_TO_T_JUNCTION:
+    if (Car_To_Crossing(1))
+    {
+      car_state = MAKING_RETURN_TURN_1;
+    }
+    break;
+
+  case MAKING_RETURN_TURN_1:
+  {
+    uint16_t area_layout = is_initial_turn_left ? (layout_at_crossing_3 / 100) : (layout_at_crossing_3 % 100);
+    uint8_t is_final_turn_left = (target_room == (area_layout / 10));
+    int16_t turn_duration_ms = is_final_turn_left ? -500 : 500; // 返程时转向相反
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = RETURNING_TO_CROSSING_3;
+    }
+    break;
+  }
+
+  case RETURNING_TO_CROSSING_3:
+    if (Car_To_Crossing(1))
+    {
+      car_state = MAKING_RETURN_TURN_2;
+    }
+    break;
+
+  case MAKING_RETURN_TURN_2:
+  {
+    int16_t turn_duration_ms = is_initial_turn_left ? -500 : 500; // 返程时转向相反
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = RETURNING_TO_PHARMACY;
+    }
+    break;
+  }
+
+  case RETURNING_TO_PHARMACY:
+    if (Car_To_Crossing(3)) // 返回药房
     {
       car_state = TASK_COMPLETE;
     }
