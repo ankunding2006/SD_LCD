@@ -3,10 +3,6 @@
         {
             "name": "SD_LCD",
             "path": "../.."
-        },
-        {
-            "name": "EIDE",
-            "path": "."
         }
     ],
     "settings": {
