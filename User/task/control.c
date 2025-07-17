@@ -17,8 +17,6 @@ uint16_t usart2_rx_buffer = 9;   // 双字节接收缓冲区
 volatile uint8_t crossroads = 0; // 到十字路口的次数
 volatile uint16_t room_num = 0;  // 病房编号
 
-#define CAR_BASE_SPEED 200 // 小车基础速度
-#define CAR_MAX_SPEED 400  // 小车最大速度
 /**
  * @brief 设置两个电机的速度
  * @param left_speed 左电机速度(单位:转/分钟)

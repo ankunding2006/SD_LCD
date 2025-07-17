@@ -29,7 +29,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM12)
   {
-    // TODO: 定时器周期溢出回调函数
+// TODO: 定时器周期溢出回调函数
+#if TEST_MODE == 1
+    test_car_to_room();
+#endif
   }
 }
 

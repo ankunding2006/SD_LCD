@@ -7,12 +7,8 @@
 #include "gray_detection.h"
 #include "control.h"
 #include "task.h"
+#include "car_config.h"
 
-/**********************************task_test***********************************/
-
-/********************************task_test_end*********************************/
-
-/**********************************main_test***********************************/
 void main_test(void)
 {
     Emm_V5_Vel_Control(0x01, 1, 500, 243, 0);
@@ -28,12 +24,8 @@ void before_main_test(void)
         /* code */
     }
 }
-/********************************main_test_end*********************************/
 
-// 假设这是中断调用的程序
-void test()
+void test_car_to_room(void)
 {
-    uint8_t cross_nums = visual_process_command(); // 处理消息
-    Car_To_Crossing(cross_nums);
-    
+    Car_To_Room(TEST_ROOM_NUM);
 }
