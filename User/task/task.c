@@ -50,14 +50,11 @@ int Car_To_Room_1_2(uint8_t room_num)
     CAR_STATE_INIT,               // 初始状态
     GOING_TO_CROSSING_1,          // 前往第一个路口
     TURNING_AT_CROSSING_1,        // 在第一个路口转向
-    CHECK_TURN_1_COMPLETE,        // 检查转向是否完成
     GOING_TO_ROOM,                // 前往病房
     AT_ROOM,                      // 到达病房，等待卸货
     TURNING_180_AT_ROOM,          // 在病房门口180度掉头
-    CHECK_TURN_180_COMPLETE,      // 检查180度掉头是否完成
     RETURNING_TO_CROSSING_1,      // 返回第一个路口
     TURNING_AT_CROSSING_1_RETURN, // 在路口转向药房方向
-    CHECK_TURN_RETURN_COMPLETE,   // 检查返回转向是否完成
     RETURNING_TO_PHARMACY,        // 返回药房
     TASK_COMPLETE                 // 任务完成
   } CarState_t;
@@ -97,14 +94,12 @@ int Car_To_Room_1_2(uint8_t room_num)
     // 1号病房左转，2号病房右转。
     // TODO:转向时间需要调试
     int16_t turn_duration_ms = (target_room == 1) ? 500 : -500; // 500ms -> 90度
-    open_loop_steering_control(turn_duration_ms, 150, 0);       // 启动转向
-    car_state = CHECK_TURN_1_COMPLETE;
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = GOING_TO_ROOM; // 转向完成，进入下一个状态
+    }
     break;
   }
-
-  case CHECK_TURN_1_COMPLETE:
-    car_state = GOING_TO_ROOM; // 转向完成，进入下一个状态
-    break;
 
   case GOING_TO_ROOM:
   {
@@ -127,12 +122,8 @@ int Car_To_Room_1_2(uint8_t room_num)
     // TODO:转向时间需要调试
     if (open_loop_steering_control(1000, 150, 0)) // 1000ms -> 180度
     {
-      car_state = CHECK_TURN_180_COMPLETE;
+      car_state = RETURNING_TO_CROSSING_1;
     }
-    break;
-
-  case CHECK_TURN_180_COMPLETE:
-    car_state = RETURNING_TO_CROSSING_1;
     break;
 
   case RETURNING_TO_CROSSING_1:
@@ -146,14 +137,12 @@ int Car_To_Room_1_2(uint8_t room_num)
   {
     // 返回时，从1号病房回来需要右转，从2号病房回来需要左转
     int16_t turn_duration_ms = (target_room == 1) ? -500 : 500;
-    open_loop_steering_control(turn_duration_ms, 150, 0);
-    car_state = CHECK_TURN_RETURN_COMPLETE;
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
+    {
+      car_state = RETURNING_TO_PHARMACY;
+    }
     break;
   }
-
-  case CHECK_TURN_RETURN_COMPLETE:
-    car_state = RETURNING_TO_PHARMACY;
-    break;
 
   case RETURNING_TO_PHARMACY:
     if (Car_To_Crossing(1)) // 返回药房
@@ -191,14 +180,11 @@ int Car_To_Room_3_4(uint8_t room_num)
     CAR_STATE_INIT,               // 初始状态
     GOING_TO_CROSSING_2,          // 前往第二个路口
     TURNING_AT_CROSSING_2,        // 在第二个路口转向
-    CHECK_TURN_2_COMPLETE,        // 检查转向是否完成
     GOING_TO_ROOM,                // 前往病房
     AT_ROOM,                      // 到达病房，等待卸货
     TURNING_180_AT_ROOM,          // 在病房门口180度掉头
-    CHECK_TURN_180_COMPLETE,      // 检查180度掉头是否完成
     RETURNING_TO_CROSSING_2,      // 返回第二个路口
     TURNING_AT_CROSSING_2_RETURN, // 在路口转向药房方向
-    CHECK_TURN_RETURN_COMPLETE,   // 检查返回转向是否完成
     RETURNING_TO_PHARMACY,        // 返回药房
     TASK_COMPLETE                 // 任务完成
   } CarState_t;
@@ -252,17 +238,12 @@ int Car_To_Room_3_4(uint8_t room_num)
       turn_duration_ms = -500; // 右转
     }
 
-    open_loop_steering_control(turn_duration_ms, 150, 0);
-    car_state = CHECK_TURN_2_COMPLETE;
-    break;
-  }
-
-  case CHECK_TURN_2_COMPLETE:
-    if (open_loop_steering_control(0, 0, 0))
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
     {
       car_state = GOING_TO_ROOM;
     }
     break;
+  }
 
   case GOING_TO_ROOM:
     if (Car_To_Crossing(1)) // 从路口行驶到病房门口
@@ -280,12 +261,7 @@ int Car_To_Room_3_4(uint8_t room_num)
 
   case TURNING_180_AT_ROOM:
     // TODO: 180度掉头时间需要调试
-    open_loop_steering_control(1000, 150, 0);
-    car_state = CHECK_TURN_180_COMPLETE;
-    break;
-
-  case CHECK_TURN_180_COMPLETE:
-    if (open_loop_steering_control(0, 0, 0))
+    if (open_loop_steering_control(1000, 150, 0))
     {
       car_state = RETURNING_TO_CROSSING_2;
     }
@@ -309,17 +285,12 @@ int Car_To_Room_3_4(uint8_t room_num)
       turn_duration_ms = 500; // 左转
     }
 
-    open_loop_steering_control(turn_duration_ms, 150, 0);
-    car_state = CHECK_TURN_RETURN_COMPLETE;
-    break;
-  }
-
-  case CHECK_TURN_RETURN_COMPLETE:
-    if (open_loop_steering_control(0, 0, 0))
+    if (open_loop_steering_control(turn_duration_ms, 150, 0))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
     break;
+  }
 
   case RETURNING_TO_PHARMACY:
     if (Car_To_Crossing(2)) // 从第二个路口返回药房

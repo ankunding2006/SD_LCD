@@ -86,18 +86,29 @@ uint8_t line_following_task(void)
 /**
  * @brief Open loop steering control function
  *
- * @param angle 小车旋转的时间(ms),逆时针旋转为正,顺时针旋转为负. 0表示查询状态
+ * @param angle 小车旋转的时间(ms),逆时针旋转为正,顺时针旋转为负.
  * @param Rotate_Speed 转向转速值(单位:转/分钟)
  * @param Rotate_Speed_Base 基础转速值(单位:转/分钟)
  * @return uint8_t 1:完成 0:小车正在转向中
  */
 uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t Rotate_Speed_Base)
 {
+  typedef enum
+  {
+    STEER_IDLE,
+    STEERING
+  } SteeringState_t;
+  static SteeringState_t steering_state = STEER_IDLE;
   static uint32_t turn_end_time = 0;
 
-  // A non-zero angle indicates a new turn command.
-  if (angle != 0)
+  if (steering_state == STEER_IDLE)
   {
+    if (angle == 0)
+    {
+      return 1; // Not told to do anything, so we are "done"
+    }
+
+    // New command received while idle, start turning.
     int16_t left_speed, right_speed;
 
     if (angle > 0)
@@ -111,25 +122,21 @@ uint8_t open_loop_steering_control(int16_t angle, int16_t Rotate_Speed, int16_t 
       right_speed = Rotate_Speed_Base - Rotate_Speed;
     }
 
-    set_motor_speed(left_speed, right_speed, 252); // Use a default acceleration
+    set_motor_speed(left_speed, right_speed, 252);
     turn_end_time = HAL_GetTick() + abs(angle);
-    return 0; // Turn initiated
+    steering_state = STEERING;
+    return 0; // Turn initiated, not complete yet.
   }
-  else
+  else // steering_state == STEERING
   {
-    // angle is 0, check status of the current turn.
-    if (turn_end_time == 0)
-    {
-      return 1; // No turn in progress, so it's "completed"
-    }
-
+    // A turn is in progress, check if it's time to stop.
+    // Ignore new angle/speed values until the current turn is complete.
     if (HAL_GetTick() >= turn_end_time)
     {
-      set_motor_speed(0, 0, 252); // Stop motors
-      turn_end_time = 0;          // Reset state
-      return 1;                   // Turn completed
+      set_motor_speed(0, 0, 252);  // Stop motors
+      steering_state = STEER_IDLE; // Reset state for next command
+      return 1;                    // Turn completed
     }
-
     return 0; // Still turning
   }
 }
@@ -155,12 +162,14 @@ uint8_t visual_process_command(void) // 处理相应消息
   {
   case 1:
   case 2:
+    room_num = usart2_rx_buffer;
     printf("num: %d\n", usart2_rx_buffer);
     usart2_rx_buffer = 9;                               // 清除接收缓冲区
     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
     return 1;
   case 3:
   case 4:
+    room_num = usart2_rx_buffer;
     printf("num: %d\n", usart2_rx_buffer);
     usart2_rx_buffer = 9;                               // 清除接收缓冲区
     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
@@ -169,6 +178,7 @@ uint8_t visual_process_command(void) // 处理相应消息
   case 6:
   case 7:
   case 8:
+    room_num = usart2_rx_buffer;
     printf("num: %d\n", usart2_rx_buffer);
     usart2_rx_buffer = 9;                               // 清除接收缓冲区
     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
@@ -177,7 +187,6 @@ uint8_t visual_process_command(void) // 处理相应消息
     if (usart2_rx_buffer != 9)
     {
       printf("bug \n");
-      room_num = usart2_rx_buffer;
       usart2_rx_buffer = 9;                               // 清除接收缓冲区
       HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
     }
