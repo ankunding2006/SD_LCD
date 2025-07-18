@@ -141,7 +141,7 @@ int main(void)
   Before_Main();
 
   HAL_TIM_Base_Start_IT(&htim12);
-  visual_reception_init();
+  // visual_reception_init();
 
 #if TEST_BEFORE_MAIN == 1
   before_main_test();

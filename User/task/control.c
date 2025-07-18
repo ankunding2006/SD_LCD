@@ -14,7 +14,7 @@
 #include "gray_detection.h"
 #include "car_config.h"
 
-uint16_t usart2_rx_buffer = 9;   // 双字节接收缓冲区
+uint8_t usart2_rx_buffer = 9;    // 双字节接收缓冲区
 volatile uint8_t crossroads = 0; // 到十字路口的次数
 volatile uint16_t room_num = 0;  // 病房编号
 
@@ -244,7 +244,7 @@ uint8_t open_loop_steering_control(int16_t steerTime, int16_t Rotate_Speed, int1
  */
 void visual_reception_init()
 {
-  // HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
+  HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1);
 }
 
 /**
@@ -252,47 +252,219 @@ void visual_reception_init()
  * 函数会把识别到的房间号以从左到右排列为一个1/2/4位数保存到room_num中,例如如果识别
  * 到数字1在则room_num=1,如果识别到从左到右排列的数字1,2则room_num=12,如果从左到右
  * 依次识别到数字7,5,6,8则room_num=7568
- * @param 无：懒得改，写死了
- * @return 1、2、3代表第几个十字路口，0为错误
+ * @param task：当前执行的任务
+ * @return 1、2、3代表十字路口，0为错误，记得写一下为零的时候的处理
  */
-/* TODO: 这个函数需要修改，现在识别到数字1，2，3，4，5，6，7，8，9，0，会分别使room_num=1，2，3，4，5，6，7，8，9，0
- * 需要修改为当识别到1 2，3 4，5 6，7 8，会分别使room_num=12，34，56，78，,识别到5 6 7 8会使room_num=5678
- */
-uint8_t visual_process_command(void) // 处理相应消息
+uint8_t visual_process_command(uint8_t task, uint8_t task_flag) // 处理相应消息
 {
-  // switch (usart2_rx_buffer)
-  // {
-  // case 1:
-  // case 2:
-  //   room_num = usart2_rx_buffer;
-  //   printf("num: %d\n", usart2_rx_buffer);
-  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
-  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-  //   return 1;
-  // case 3:
-  // case 4:
-  //   room_num = usart2_rx_buffer;
-  //   printf("num: %d\n", usart2_rx_buffer);
-  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
-  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-  //   return 2;
-  // case 5:
-  // case 6:
-  // case 7:
-  // case 8:
-  //   room_num = usart2_rx_buffer;
-  //   printf("num: %d\n", usart2_rx_buffer);
-  //   usart2_rx_buffer = 9;                               // 清除接收缓冲区
-  //   HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-  //   return 3;
-  // default:
-  //   if (usart2_rx_buffer != 9)
-  //   {
-  //     printf("bug \n");
-  //     usart2_rx_buffer = 9;                               // 清除接收缓冲区
-  //     HAL_UART_Receive_IT(&huart2, &usart2_rx_buffer, 1); // 重新开启中断接收
-  //   }
-  //   return 0;
-  // }
+  static uint16_t temp = 0;
+  temp = usart2_rx_buffer;
+  // 前两个任务的处理
+  if (temp != usart2_rx_buffer && task < 3)
+  {
+    switch (temp)
+    {
+    // task1 然后不存在12 21的情况
+    case 19:
+    case 91:
+      room_num = 1;
+      return 1;
+    case 29:
+    case 92:
+      room_num = 2;
+      return 1;
+
+    // task2 全列举出来就好了
+    case 34:
+    case 43:
+      room_num = temp;
+      return 2;
+    case 39:
+    case 94:
+      room_num = 34;
+      return 2;
+    case 93:
+    case 49:
+      room_num = 43;
+      return 2;
+
+    default:
+      printf("前两个任务识别抽风了,等下次识别,此次数字为 %d \n", temp);
+      return 0;
+    }
+  }
+
+  static int LL = 0, L = 0, R = 0, RR = 0; // LL L R RR 为十字路口的四个数字 对应了位置
+  // 需要task3_flag为一个摆头之前、之后的标志位 0为发车 1为摆头之前 2为摆头之后 3为回到路口准备走 4为他到了分支的那个十字路口  默认摆头是去看左侧的数字
+  // 发车时识别对应房间号
+  if (temp != usart2_rx_buffer && task == 3 && task_flag == 0)
+  {
+    if (temp % 10 == 9)
+      room_num = temp / 10;
+    else if (temp / 10 == 9)
+      room_num = temp % 10;
+    return 3;
+  }
+  else if (temp != usart2_rx_buffer && task == 3 && task_flag == 1)
+  {
+    if (temp % 10 == 9)
+      L = temp / 10;
+    else if (temp / 10 == 9)
+      R = temp % 10;
+    else
+    {
+      L = temp / 10;
+      R = temp % 10;
+    }
+
+    if (!L || !R)
+    {
+      printf("未完成十字路口处识别");
+      return 0;
+    }
+    else
+    {
+      return 3;
+    }
+  }
+  else if (temp != usart2_rx_buffer && task == 3 && task_flag == 2)
+  {
+    if (temp % 10 == 9)
+      LL = temp / 10;
+    else if (temp / 10 == 9)
+      L = temp % 10;
+    else
+    {
+      LL = temp / 10;
+      L = temp % 10;
+    }
+    if (!L || !LL)
+    {
+      printf("未完成左侧识别");
+      return 0;
+    }
+    else
+    {
+      return 3;
+    }
+  }
+  else if (temp != usart2_rx_buffer && task == 3 && task_flag == 3)
+  {
+    if (!L && !LL && !R)
+    {
+      RR = 26 - L - LL - R;
+      room_num = LL * 1000 + L * 100 + R * 10 + RR;
+      return 3;
+    }
+    else
+    {
+      printf("未得到标准数据");
+      return 0;
+    }
+  }
+  else if (temp != usart2_rx_buffer && task == 3 && task_flag == 4)
+  {
+    if (1) // 第一个十字路口左转，标志位自己传，我躺了
+    {
+      if (temp % 10 == 9) // 识别到一个数字在左侧
+      {
+        if (temp / 10 == L)
+        {
+          room_num = L * 10 + LL;
+        }
+        else if (temp / 10 == LL)
+        {
+          room_num = LL * 10 + L;
+        }
+        else
+        {
+          printf("分支路段与主干路段对不上");
+          return 0;
+        }
+      }
+      else if (temp / 10 == 9)
+      {
+        if (temp / 10 == LL)
+        {
+          room_num = L * 10 + LL;
+        }
+        else if (temp / 10 == L)
+        {
+          room_num = LL * 10 + L;
+        }
+        else
+        {
+          printf("分支路段与主干路段对不上");
+          return 0;
+        }
+      }
+      else if (temp == LL + L * 10 || temp == LL * 10 + L)
+      {
+        room_num = temp;
+      }
+      else if (temp != LL + L * 10 && temp != LL * 10 + L)
+      {
+        printf("分支路段与主干路段对不上");
+        return 0;
+      }
+      else
+      {
+        printf("视觉未识别到数字,等待识别正确");
+        return 100; // 意思是等待识别
+      }
+    }
+
+    if (1) // 第一个十字路口右转，标志位自己传，我躺了
+    {
+      if (temp % 10 == 9) // 识别到一个数字在左侧
+      {
+        if (temp / 10 == R)
+        {
+          room_num = R * 10 + RR;
+        }
+        else if (temp / 10 == RR)
+        {
+          room_num = RR * 10 + R;
+        }
+        else
+        {
+          printf("分支路段与主干路段对不上");
+          return 0;
+        }
+      }
+      else if (temp / 10 == 9)
+      {
+        if (temp / 10 == RR)
+        {
+          room_num = R * 10 + RR;
+        }
+        else if (temp / 10 == R)
+        {
+          room_num = RR * 10 + R;
+        }
+        else
+        {
+          printf("分支路段与主干路段对不上");
+          return 0;
+        }
+      }
+      else if (temp == RR + R * 10 || temp == RR * 10 + R)
+      {
+        room_num = temp;
+      }
+      else if (temp != RR + R * 10 && temp != RR * 10 + R)
+      {
+        printf("分支路段与主干路段对不上");
+        return 0;
+      }
+      else
+      {
+        printf("视觉未识别到数字,等待识别正确");
+        return 100; // 意思是等待识别
+      }
+    }
+  }
+  
+  printf("未进入相应处理程序");
   return 0;
 }
