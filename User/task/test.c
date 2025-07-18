@@ -11,10 +11,7 @@
 
 void main_test(void)
 {
-    Emm_V5_Vel_Control(0x01, 1, 500, 243, 0);
-    delay_ms(1000);
-    Emm_V5_Vel_Control(0x01, 0, 500, 243, 0);
-    delay_ms(1000);
+    line_following_task();
 }
 
 void before_main_test(void)

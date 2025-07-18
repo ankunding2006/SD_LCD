@@ -1,9 +1,10 @@
 #ifndef CAR_CONFIG
 #define CAR_CONFIG
 
-#define MAIN_TEST 0
+#define MAIN_TEST 1
 #define TEST_MODE 0
 #define TEST_ROOM_NUM 0
+#define BEFORE_MAIN_TEST 0
 
 // Motion parameters
 #define CAR_BASE_SPEED 200       // 基础循迹速度 (单位:转/分钟)

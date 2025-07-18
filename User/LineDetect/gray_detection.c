@@ -4,7 +4,7 @@ _gray_state gray_state;
 
 float gray_status[2] = {0}, gray_status_backup[2][20] = {0}; // 灰度传感器状态与历史值
 uint32_t gray_status_worse = 0;                              // 灰度管异常状态计数器
-u16 scaleFactor = 100;                                       // 比例系数，用于调整转向PWM的灵敏度
+u16 scaleFactor = 20;                                        // 比例系数
 
 /***************************************************
 函数名: int Calculate_Turn_Value(void)
@@ -106,7 +106,7 @@ int Calculate_Turn_Value(void)
     if (turn_pwm < -turn_PWM_Limit)
         turn_pwm = -turn_PWM_Limit;
 
-    return turn_pwm; // 返回转向PWM值，左转为负，右转为正
+    return turn_pwm; // 返回转向值，左转为负，右转为正
 }
 
 /***************************************************

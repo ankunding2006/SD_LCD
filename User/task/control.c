@@ -26,10 +26,13 @@ volatile uint16_t room_num = 0;  // ²¡·¿±àºÅ
  */
 void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc)
 {
+  int count = 10000;
   if (left_speed > 0)
     Emm_V5_Vel_Control(0x01, 1, left_speed, acc, 0);
   else
     Emm_V5_Vel_Control(0x01, 0, -left_speed, acc, 0);
+  while (count--)
+    ;
   if (right_speed > 0)
     Emm_V5_Vel_Control(0x02, 1, right_speed, acc, 0);
   else
