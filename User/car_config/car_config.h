@@ -19,8 +19,8 @@
 #define TEST_CROSSING_NUM 0
 #define TEST_OPEN_LOOP_STEERING 1
 #define TEST_OPEN_LOOP_STEERING_TIME 1000
-#define TEST_OPEN_LOOP_STEERING_SPEED 150
-#define TEST_OPEN_LOOP_STEERING_SPEED_BASE 300
+#define TEST_OPEN_LOOP_STEERING_SPEED 40
+#define TEST_OPEN_LOOP_STEERING_SPEED_BASE 70
 
 #define TEST_REPEAT_DELAY_S 5 // 两次测试任务之间的延迟时间（秒）
 
@@ -38,5 +38,8 @@
 // State machine timing parameters
 #define CROSSING_DEBOUNCE_MS 1000     // 识别为新路口的防抖时间 (ms)
 #define LEAVING_CROSSING_DELAY_MS 500 // 确认离开路口的延迟时间 (ms)
+
+// Gray sensor parameters
+#define CONSECUTIVE_GRAY_SENSORS 6 // 连续灰度传感器数量
 
 #endif

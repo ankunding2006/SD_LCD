@@ -1,4 +1,5 @@
 #include "gray_detection.h"
+#include "car_config.h"
 
 _gray_state gray_state;
 
@@ -17,80 +18,54 @@ u16 scaleFactor = 20;                                        // 比例系数
 ****************************************************/
 int Calculate_Turn_Value(void)
 {
-    // 计算权重和
+    // 将传感器状态和权重放入数组中，便于循环处理
+    const uint8_t sensors[12] = {
+        gray_state.gray.bit1, gray_state.gray.bit2, gray_state.gray.bit3,
+        gray_state.gray.bit4, gray_state.gray.bit5, gray_state.gray.bit6,
+        gray_state.gray.bit7, gray_state.gray.bit8, gray_state.gray.bit9,
+        gray_state.gray.bit10, gray_state.gray.bit11, gray_state.gray.bit12};
+    const int weights[12] = {-16, -11, -8, -5, -3, -1, 1, 3, 5, 8, 11, 16};
+
     int weighted_sum = 0;
     int active_sensors = 0;
-    // 为每个传感器分配权重，从右到左，权重从负到正
-    // bit1(最右侧)权重最小(负值)，bit12(最左侧)权重最大(正值)
-    if (gray_state.gray.bit1)
+    int consecutive_count = 0;
+    int max_consecutive = 0;
+
+    // 在一次循环中计算所有需要的值
+    for (int i = 0; i < 12; i++)
     {
-        weighted_sum += -16;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit2)
-    {
-        weighted_sum += -11;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit3)
-    {
-        weighted_sum += -8;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit4)
-    {
-        weighted_sum += -5;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit5)
-    {
-        weighted_sum += -3;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit6)
-    {
-        weighted_sum += -1;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit7)
-    {
-        weighted_sum += 1;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit8)
-    {
-        weighted_sum += 3;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit9)
-    {
-        weighted_sum += 5;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit10)
-    {
-        weighted_sum += 8;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit11)
-    {
-        weighted_sum += 11;
-        active_sensors++;
-    }
-    if (gray_state.gray.bit12)
-    {
-        weighted_sum += 16;
-        active_sensors++;
+        if (sensors[i])
+        {
+            weighted_sum += weights[i];
+            active_sensors++;
+            consecutive_count++;
+        }
+        else
+        {
+            if (consecutive_count > max_consecutive)
+            {
+                max_consecutive = consecutive_count;
+            }
+            consecutive_count = 0; // 重置连续计数
+        }
     }
 
-    // 如果没有传感器检测到黑线，返回0
-    if (active_sensors == 0)
+    // 循环结束后，再次检查以捕获结尾的连续序列
+    if (consecutive_count > max_consecutive)
     {
-        return INT16_MIN; // 返回一个极小值，表示没有有效的转向值
+        max_consecutive = consecutive_count;
     }
-    else if (active_sensors >= 4)
+
+    // 新的判断逻辑：只有当检测到CONSECUTIVE_GRAY_SENSORS个或更多 **连续** 的传感器时，才认为是十字路口
+    if (max_consecutive >= CONSECUTIVE_GRAY_SENSORS)
     {
         return INT16_MAX; // 返回一个极大值，表示小车已经到达十字路口中心
+    }
+
+    // 如果没有传感器检测到黑线，返回一个极小值
+    if (active_sensors == 0)
+    {
+        return INT16_MIN; // 表示没有有效的转向值
     }
 
     // 计算加权平均值
