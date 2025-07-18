@@ -143,7 +143,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim12);
   visual_reception_init();
 
-#if BEFORE_MAIN_TEST == 1
+#if TEST_BEFORE_MAIN == 1
   before_main_test();
 #endif
 
@@ -155,7 +155,8 @@ int main(void)
   {
     // Lcd_MenuTask();
     // visual_process_command();
-#if MAIN_TEST == 1
+    motor_speed_task_handler();
+#if TEST_IN_MAIN == 1
     main_test();
 #endif
     /* USER CODE END WHILE */

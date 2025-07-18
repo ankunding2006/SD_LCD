@@ -1,10 +1,28 @@
 #ifndef CAR_CONFIG
 #define CAR_CONFIG
 
-#define MAIN_TEST 1
-#define TEST_MODE 0
+#define TEST_IN_MAIN 0
+#define TEST_IN_INTERRUPT 1 // 在中断中进行测试
+#define TEST_BEFORE_MAIN 0
+
+#define TEST_TASK 1                    // 任务测试
+#define TEST_DRIVER 0                  // 驱动测试
+#define TEST_DRIVER_EMM_V5 0           // Emm_V5驱动直接测试
+#define TEST_CONTROL_SET_MOTOR_SPEED 1 //  set_motor_speed 函数测试
+
+#define TEST_MOTOR_ADDR 0x01 // 要测试的电机地址
+#define TEST_MOTOR_SPEED 200 // 驱动测试中的电机速度 (RPM)
+
+#define TEST_CAR_TO_ROOM 0
 #define TEST_ROOM_NUM 0
-#define BEFORE_MAIN_TEST 0
+#define TEST_CAR_TO_CROSSING 0
+#define TEST_CROSSING_NUM 0
+#define TEST_OPEN_LOOP_STEERING 1
+#define TEST_OPEN_LOOP_STEERING_TIME 1000
+#define TEST_OPEN_LOOP_STEERING_SPEED 150
+#define TEST_OPEN_LOOP_STEERING_SPEED_BASE 300
+
+#define TEST_REPEAT_DELAY_S 5 // 两次测试任务之间的延迟时间（秒）
 
 // Motion parameters
 #define CAR_BASE_SPEED 200       // 基础循迹速度 (单位:转/分钟)

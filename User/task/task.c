@@ -1,6 +1,7 @@
 #include "main.h"
 #include "control.h"
 #include "task.h"
+#include "test.h"
 #include "gray_detection.h"
 #include "tim.h"
 #include "car_config.h"
@@ -30,8 +31,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM12)
   {
 // TODO: 定时器周期溢出回调函数
-#if TEST_MODE == 1
-    test_car_to_room();
+#if TEST_IN_INTERRUPT == 1
+    test_in_interrupt();
 #endif
   }
 }
@@ -95,7 +96,6 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   {
     car_state = CAR_STATE_INIT;
     target_room = room_num;
-    Car_To_Crossing(0); // 通过传递一个不同的目标值来重置Car_To_Crossing函数的状态
   }
 
   // 如果不是1号或2号病房，则停车并返回
@@ -182,7 +182,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
     // TODO: 点亮绿色指示灯
     car_state = CAR_STATE_INIT; // 复位状态机以便下次调用
     target_room = 0;
-    break;
+    return 1; // 任务完成
   }
   return 0;
 }
@@ -376,7 +376,6 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
   {
     car_state = CAR_STATE_INIT;
     target_room = room_num;
-    Car_To_Crossing(0); // 重置路口计数器
   }
 
   // 如果不是5,6,7,8号病房，则停车并返回
@@ -509,72 +508,78 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
 
 /**
  * @brief 控制小车行驶到第X个十字路口(X=1,2,3)
- * @param 十字路口编号(从1开始计数),中心的道路上上总共有3个路口从下至上分别即为1,2,3
- * @retval 1:完成 0:进行中
+ * @note 该函数为自重置函数。当任务完成并返回1后，其内部状态会自动重置，
+ *       下次使用相同参数调用时会重新执行任务。
+ * @param crossing_num 目标十字路口编号(从1开始计数)。传入0会使函数保持空闲并停车。
+ * @retval 1:到达目标路口并停车 0:任务进行中或处于空闲状态
  */
 uint8_t Car_To_Crossing(uint8_t crossing_num)
 {
-  static uint8_t crossings_found = 0;
-  static uint8_t is_on_crossing = 0;
-  static uint8_t last_target = 0;
-  static uint8_t task_completed = 0; // 新增：任务完成标志
-
-  // 复位逻辑：如果目标路口编号改变，则重置整个状态机
-  if (crossing_num != last_target)
+  typedef enum
   {
-    crossings_found = 0;
-    is_on_crossing = 0;
-    last_target = crossing_num;
-    task_completed = 0;
-  }
+    STATE_IDLE,   // 空闲状态
+    STATE_RUNNING // 运行状态
+  } State_t;
 
-  // 如果任务已经完成，保持小车停止并返回1
-  if (task_completed)
-  {
-    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
-    return 1;
-  }
+  static State_t state = STATE_IDLE;
+  static uint8_t crossings_found = 0;           // 已找到的路口数量
+  static uint8_t is_on_crossing = 0;            // 是否在路口上
+  static uint32_t last_crossing_enter_time = 0; // 上次进入路口的时间
+  static uint8_t target_crossing_num = 0;       // 目标路口编号
 
-  // crossings_found 和 is_on_crossing 状态更新逻辑
-  // 检测到4个或更多传感器，判定为到达了十字路口区域
-  static uint32_t pre_time = 0;
-  uint64_t now_time = HAL_GetTick();
-  if (Calculate_Turn_Value() == INT16_MAX)
+  if (state == STATE_IDLE)
   {
-    // 通过时间间隔判断是否为新进入一个路口，防止重复计数
-    if (now_time - pre_time > CROSSING_DEBOUNCE_MS)
+    if (crossing_num > 0)
     {
-      crossings_found++;
-    }
-    is_on_crossing = 1;
-    pre_time = now_time;
-  }
-  else
-  {
-    // 如果之前在路口上，并且现在离开了，则更新is_on_crossing状态
-    if (is_on_crossing && (now_time - pre_time > LEAVING_CROSSING_DELAY_MS)) // 离开路口0.5秒后
-    {
+      // 收到新的任务指令
+      state = STATE_RUNNING;
+      target_crossing_num = crossing_num;
+      crossings_found = 0;
       is_on_crossing = 0;
+      last_crossing_enter_time = 0; // 重置时间以允许立即检测第一个路口
+    }
+    else
+    {
+      // crossing_num为0或无效，保持空闲状态并确保小车停止
+      set_motor_speed(0, 0, DEFAULT_ACCELERATION);
+      return 0;
     }
   }
 
-  // 任务完成判断
-  if (crossings_found >= crossing_num && is_on_crossing)
-  {
-    set_motor_speed(0, 0, DEFAULT_ACCELERATION); // 到达目标，停车
-    task_completed = 1;                          // 标记任务完成
-    return 1;                                    // 返回完成状态
-  }
-  // 任务自动重置逻辑：如果任务已完成且小车已离开路口，则重置计数器以备下次调用
-  else if (task_completed && !is_on_crossing)
-  {
-    crossings_found = 0;
-    task_completed = 0;
+  // 如果处于运行状态：
+  uint32_t now = HAL_GetTick();
+
+  // --- 路口检测逻辑 ---
+  if (Calculate_Turn_Value() == INT16_MAX)
+  { // 检测到路口传感器信号
+    if (!is_on_crossing)
+    { // 表示刚进入路口区域
+      is_on_crossing = 1;
+      // 防抖：只有当距离上次进入路口有一定时间间隔时才计数
+      if (last_crossing_enter_time == 0 || now - last_crossing_enter_time > CROSSING_DEBOUNCE_MS)
+      {
+        crossings_found++;
+        last_crossing_enter_time = now;
+      }
+    }
   }
   else
   {
-    line_following_task(); // 任务未完成，继续循迹
+    // 不再检测到路口线
+    is_on_crossing = 0;
   }
 
+  // --- 任务完成判断逻辑 ---
+  if (crossings_found >= target_crossing_num && is_on_crossing)
+  {
+    // 到达目标位置，停车
+    set_motor_speed(0, 0, DEFAULT_ACCELERATION);
+    // 为下次运行重置状态
+    state = STATE_IDLE;
+    return 1; // 任务完成！
+  }
+
+  // --- 运动控制逻辑 ---
+  line_following_task();
   return 0; // 任务进行中
 }

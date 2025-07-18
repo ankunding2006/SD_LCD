@@ -1,15 +1,15 @@
-#ifndef CONTROL_H
-#define CONTROL_H
+#ifndef __CONTROL_H
+#define __CONTROL_H
 
-#include <stdint.h>
+#include "main.h"
 
-void set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc);
+// 函数声明
 uint8_t line_following_task(void);
-uint8_t open_loop_steering_control(int16_t angle, int16_t PWM_Value, int16_t PWM_Base);
-
-// 嫌弃全局变量可以把extern放到需要的文件的.c里面
-extern volatile uint16_t room_num;
+uint8_t open_loop_steering_control(int16_t steerTime, int16_t Rotate_Speed, int16_t Rotate_Speed_Base);
 void visual_reception_init(void);
 uint8_t visual_process_command(void);
+int8_t set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc);
+void motor_speed_task_handler(void);
+void control_uart_tx_cplt_callback(UART_HandleTypeDef *huart);
 
-#endif // CONTROL_H
+#endif /* __CONTROL_H */
