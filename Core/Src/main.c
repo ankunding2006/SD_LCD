@@ -35,6 +35,7 @@
 #include "test.h"
 #include "control.h"
 #include "car_config.h"
+#include "gray_detection.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -156,6 +157,7 @@ int main(void)
     // Lcd_MenuTask();
     // visual_process_command();
     motor_speed_task_handler();
+    grey_sensor_Read();
 #if TEST_IN_MAIN == 1
     main_test();
 #endif

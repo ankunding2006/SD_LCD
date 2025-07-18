@@ -5,7 +5,7 @@ _gray_state gray_state;
 
 float gray_status[2] = {0}, gray_status_backup[2][20] = {0}; // 灰度传感器状态与历史值
 uint32_t gray_status_worse = 0;                              // 灰度管异常状态计数器
-u16 scaleFactor = 20;                                        // 比例系数
+u16 scaleFactor = SCALE_FACTOR;                               // 比例系数
 
 /***************************************************
 函数名: int Calculate_Turn_Value(void)

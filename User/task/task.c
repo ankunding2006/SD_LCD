@@ -121,7 +121,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   {
     // 1号病房左转，2号病房右转。
     int16_t turn_duration_ms = (target_room == 1) ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS;
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM; // 转向完成，进入下一个状态
     }
@@ -145,8 +145,8 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
     break;
 
   case TURNING_180_AT_ROOM:
-    // 180度掉头，转向时间需要调试
-    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED)) // 1000ms -> 180度
+    // 180度掉头
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_180_SPEED, TURN_180_BASE_SPEED))
     {
       car_state = RETURNING_TO_CROSSING_1;
     }
@@ -163,7 +163,7 @@ uint8_t Car_To_Room_1_2(uint8_t room_num)
   {
     // 返回时，从1号病房回来需要右转，从2号病房回来需要左转
     int16_t turn_duration_ms = (target_room == 1) ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS;
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
@@ -264,7 +264,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
       turn_duration_ms = -TURN_90_DURATION_MS; // 右转
     }
 
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM;
     }
@@ -286,8 +286,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
     break;
 
   case TURNING_180_AT_ROOM:
-    // TODO: 180度掉头时间需要调试
-    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_180_SPEED, TURN_180_BASE_SPEED))
     {
       car_state = RETURNING_TO_CROSSING_2;
     }
@@ -311,7 +310,7 @@ uint8_t Car_To_Room_3_4(uint8_t room_num)
       turn_duration_ms = TURN_90_DURATION_MS; // 左转
     }
 
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }
@@ -406,7 +405,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     is_initial_turn_left = (target_room == (left_rooms / 10) || target_room == (left_rooms % 10));
 
     int16_t turn_duration_ms = is_initial_turn_left ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS; // 左转或右转
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = GOING_TO_T_JUNCTION;
     }
@@ -426,7 +425,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     uint8_t is_final_turn_left = (target_room == (area_layout / 10));
 
     int16_t turn_duration_ms = is_final_turn_left ? TURN_90_DURATION_MS : -TURN_90_DURATION_MS; // 左转或右转
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = GOING_TO_ROOM_FINAL;
     }
@@ -446,7 +445,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     break;
 
   case TURNING_180_AT_ROOM:
-    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED)) // 180度掉头
+    if (open_loop_steering_control(TURN_180_DURATION_MS, TURN_180_SPEED, TURN_180_BASE_SPEED)) // 180度掉头
     {
       car_state = RETURNING_TO_T_JUNCTION;
     }
@@ -464,7 +463,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
     uint16_t area_layout = is_initial_turn_left ? (layout_at_crossing_3 / 100) : (layout_at_crossing_3 % 100);
     uint8_t is_final_turn_left = (target_room == (area_layout / 10));
     int16_t turn_duration_ms = is_final_turn_left ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS; // 返程时转向相反
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = RETURNING_TO_CROSSING_3;
     }
@@ -481,7 +480,7 @@ uint8_t Car_To_Room_5_8(uint8_t room_num)
   case MAKING_RETURN_TURN_2:
   {
     int16_t turn_duration_ms = is_initial_turn_left ? -TURN_90_DURATION_MS : TURN_90_DURATION_MS; // 返程时转向相反
-    if (open_loop_steering_control(turn_duration_ms, TURN_SPEED, OPEN_LOOP_STEERING_BASE_SPEED))
+    if (open_loop_steering_control(turn_duration_ms, TURN_90_SPEED, TURN_90_BASE_SPEED))
     {
       car_state = RETURNING_TO_PHARMACY;
     }

@@ -60,17 +60,12 @@ void test_in_interrupt(void)
     }
     case TEST_STATE_DELAY:
         // 等待延迟时间结束
+#if TASK_RUN_ONLY_ONCE == 0
         if (HAL_GetTick() >= delay_end_time)
         {
             test_state = TEST_STATE_RUNNING; // 延迟结束，准备重新开始任务
-
-            // 只有 Car_To_Crossing 需要被外部重置
-#if TEST_CAR_TO_CROSSING == 1
-            // 传递一个不同的值(0)来重置 Car_To_Crossing 的内部状态
-            Car_To_Crossing(0);
-#endif
-            // Car_To_Room 和 open_loop_steering_control 会自动重置，无需处理
         }
+#endif
         break;
     }
 #elif TEST_DRIVER == 1
