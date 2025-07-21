@@ -1,16 +1,21 @@
-#ifndef __CONTROL_H
-#define __CONTROL_H
+#ifndef CONTROL_H
+#define CONTROL_H
 
-#include "main.h"
+#include <stdint.h>
+
+// 全局变量声明
+extern volatile uint16_t room_num;    // 病房布局/编号
+extern volatile uint16_t room_target; // 目标病房
+extern volatile uint8_t usart2_rx_buffer;
 
 // 函数声明
+int8_t
+set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc);
+void motor_speed_task_handler(void);
 uint8_t line_following_task(void);
 uint8_t open_loop_steering_control(int16_t steerTime, int16_t Rotate_Speed, int16_t Rotate_Speed_Base);
-uint8_t open_loop_reversing_control(uint16_t reverseTime, int16_t Reverse_Speed, int16_t Turn_Speed);
 void visual_reception_init(void);
-uint8_t visual_process_command(uint8_t task, uint8_t task_flag);
-int8_t set_motor_speed(int16_t left_speed, int16_t right_speed, uint8_t acc);
-void motor_speed_task_handler(void);
-void control_uart_tx_cplt_callback(UART_HandleTypeDef *huart);
+void visual_process_command(void);
+void uart_rx_handler(uint8_t rx_data);
 
-#endif /* __CONTROL_H */
+#endif // CONTROL_H

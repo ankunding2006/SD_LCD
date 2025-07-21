@@ -123,6 +123,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM12_Init();
   MX_USART2_UART_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
 
@@ -142,7 +143,7 @@ int main(void)
   Before_Main();
 
   HAL_TIM_Base_Start_IT(&htim12);
-  // visual_reception_init();
+  visual_reception_init();
 
 #if TEST_BEFORE_MAIN == 1
   before_main_test();

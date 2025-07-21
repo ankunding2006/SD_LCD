@@ -34,7 +34,9 @@ void test_in_interrupt(void)
     } TestState_t;
 
     static TestState_t test_state = TEST_STATE_RUNNING;
+#if TASK_RUN_ONLY_ONCE == 0
     static uint32_t delay_end_time = 0;
+#endif
 
     switch (test_state)
     {
@@ -45,7 +47,8 @@ void test_in_interrupt(void)
 #if TEST_CAR_TO_CROSSING == 1
         task_finished = Car_To_Crossing(TEST_CROSSING_NUM);
 #elif TEST_CAR_TO_ROOM == 1
-        task_finished = Car_To_Room(TEST_ROOM_NUM);
+        room_target = TEST_ROOM_NUM; // 设置全局目标
+        task_finished = Car_To_Room();
 #elif TEST_OPEN_LOOP_STEERING == 1
         task_finished = open_loop_steering_control(TEST_OPEN_LOOP_STEERING_TIME, TEST_OPEN_LOOP_STEERING_SPEED, TEST_OPEN_LOOP_STEERING_SPEED_BASE);
 #endif
@@ -54,7 +57,9 @@ void test_in_interrupt(void)
         if (task_finished)
         {
             test_state = TEST_STATE_DELAY;
+#if TASK_RUN_ONLY_ONCE == 0
             delay_end_time = HAL_GetTick() + (TEST_REPEAT_DELAY_S * 1000);
+#endif
         }
         break;
     }
