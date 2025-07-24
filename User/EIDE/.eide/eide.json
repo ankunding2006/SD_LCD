@@ -258,24 +258,6 @@
         "files": [],
         "folders": [
           {
-            "name": "Third_Party",
-            "files": [
-              {
-                "path": "../../Middlewares/Third_Party/FatFs/src/diskio.c"
-              },
-              {
-                "path": "../../Middlewares/Third_Party/FatFs/src/ff.c"
-              },
-              {
-                "path": "../../Middlewares/Third_Party/FatFs/src/ff_gen_drv.c"
-              },
-              {
-                "path": "../../Middlewares/Third_Party/FatFs/src/option/syscall.c"
-              }
-            ],
-            "folders": []
-          },
-          {
             "name": "littleFS",
             "files": [
               {
@@ -442,7 +424,7 @@
       "uploadConfig": {
         "bin": "",
         "target": "stm32f4x",
-        "interface": "cmsis-dap",
+        "interface": "cmsis-dap-v1",
         "baseAddr": "0x08000000"
       },
       "uploadConfigMap": {

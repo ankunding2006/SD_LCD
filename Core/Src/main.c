@@ -36,6 +36,7 @@
 #include "control.h"
 #include "car_config.h"
 #include "gray_detection.h"
+#include "lfs_port.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -137,9 +138,9 @@ int main(void)
   lcd_print(&lcd_desc, 0, 70, "> 2024/9/1");
   led_off();
   lcd_set_font(&lcd_desc, FONT_3216, YELLOW, BLACK);
-  //! SDcard_Test();
   Menu_Init();
   cotMenu_Task();
+  initialize_and_test_LittleFS();
   Before_Main();
 
   HAL_TIM_Base_Start_IT(&htim12);
